@@ -7,6 +7,7 @@ import { SlalomResult } from '@/components/games/SlalomGame';
 import { MusicConfig } from '@/components/music/MusicSelector';
 import { useTracker } from '@/hooks/useTracker';
 import { useCamera } from '@/hooks/useCamera';
+import { useSpotify } from '@/hooks/useSpotify';
 import Link from 'next/link';
 
 const CalibrationWizard = dynamic(
@@ -36,6 +37,7 @@ export default function TreningPage() {
   const [musicConfig, setMusicConfig] = useState<MusicConfig | null>(null);
 
   const tracker = useTracker(inputMode);
+  const spotify = useSpotify();
   const videoRef = useRef<HTMLVideoElement>(null);
   const gameContainerRef = useRef<HTMLDivElement>(null);
   const { startCamera, stopCamera } = useCamera();
@@ -63,6 +65,10 @@ export default function TreningPage() {
     if (inputMode === 'demo') {
       tracker.startDemo();
       setPhase('playing');
+      // Start Spotify playback if configured
+      if (musicConfig?.mode === 'spotify' && musicConfig.track) {
+        spotify.play(musicConfig.track);
+      }
       return;
     }
 
@@ -79,16 +85,21 @@ export default function TreningPage() {
       if (info) {
         tracker.startTracking(video);
         setPhase('playing');
+        // Start Spotify playback if configured
+        if (musicConfig?.mode === 'spotify' && musicConfig.track) {
+          spotify.play(musicConfig.track);
+        }
       }
     }
-  }, [inputMode, calibration, tracker, startCamera]);
+  }, [inputMode, calibration, tracker, startCamera, musicConfig, spotify]);
 
   const handleFinish = useCallback((res: SlalomResult) => {
     setResult(res);
     setPhase('result');
     tracker.stopTracking();
     stopCamera();
-  }, [tracker, stopCamera]);
+    spotify.pause();
+  }, [tracker, stopCamera, spotify]);
 
   const handlePause = useCallback(() => {
     setIsPaused(true);
@@ -148,6 +159,7 @@ export default function TreningPage() {
           setPhase('setup');
         }}
         onCancel={() => setPhase('setup')}
+        spotify={spotify}
       />
     );
   }
@@ -191,6 +203,7 @@ export default function TreningPage() {
           onBackToMenu={() => {
             tracker.stopTracking();
             stopCamera();
+            spotify.pause();
             setMusicConfig(null);
             setPhase('setup');
           }}

@@ -1,13 +1,7 @@
 'use client';
 
 import { useState, useRef, useCallback } from 'react';
-import { useSpotify } from '@/hooks/useSpotify';
 import { SpotifyTrack, BeatMap } from '@/lib/spotify';
-
-interface MusicSelectorProps {
-  onSelect: (config: MusicConfig) => void;
-  onCancel: () => void;
-}
 
 export interface MusicConfig {
   mode: 'spotify' | 'tap' | 'metronome';
@@ -16,8 +10,13 @@ export interface MusicConfig {
   track?: SpotifyTrack;
 }
 
-export default function MusicSelector({ onSelect, onCancel }: MusicSelectorProps) {
-  const spotify = useSpotify();
+interface MusicSelectorProps {
+  onSelect: (config: MusicConfig) => void;
+  onCancel: () => void;
+  spotify: ReturnType<typeof import('@/hooks/useSpotify').useSpotify>;
+}
+
+export default function MusicSelector({ onSelect, onCancel, spotify }: MusicSelectorProps) {
   const [tab, setTab] = useState<'spotify' | 'manual'>('spotify');
   const [searchQuery, setSearchQuery] = useState('');
   const [manualBpm, setManualBpm] = useState(100);
