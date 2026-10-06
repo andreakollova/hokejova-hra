@@ -51,15 +51,15 @@ export default function AuthModal({ onClose }: AuthModalProps) {
   };
 
   return (
-    <div className="fixed inset-0 bg-black/70 flex items-center justify-center z-50 p-4">
-      <div className="bg-gray-900 rounded-2xl p-6 w-full max-w-sm">
+    <div className="fixed inset-0 bg-black/30 backdrop-blur-sm flex items-center justify-center z-50 p-4">
+      <div className="bg-white rounded-2xl p-6 w-full max-w-sm shadow-xl border border-gray-100">
         <div className="flex justify-between items-center mb-6">
-          <h2 className="text-xl font-bold text-white">
+          <h2 className="text-xl font-bold text-gray-900">
             {mode === 'login' ? 'Prihlásenie' : 'Registrácia'}
           </h2>
           <button
             onClick={onClose}
-            className="text-gray-400 hover:text-white text-xl"
+            className="text-gray-400 hover:text-gray-600 text-xl"
           >
             ×
           </button>
@@ -68,7 +68,7 @@ export default function AuthModal({ onClose }: AuthModalProps) {
         <form onSubmit={handleSubmit} className="space-y-4">
           {mode === 'register' && (
             <div>
-              <label className="text-sm text-gray-400 block mb-1">
+              <label className="text-sm text-gray-500 block mb-1">
                 Prezývka
               </label>
               <input
@@ -82,7 +82,7 @@ export default function AuthModal({ onClose }: AuthModalProps) {
             </div>
           )}
           <div>
-            <label className="text-sm text-gray-400 block mb-1">Email</label>
+            <label className="text-sm text-gray-500 block mb-1">Email</label>
             <input
               type="email"
               value={email}
@@ -93,7 +93,7 @@ export default function AuthModal({ onClose }: AuthModalProps) {
             />
           </div>
           <div>
-            <label className="text-sm text-gray-400 block mb-1">Heslo</label>
+            <label className="text-sm text-gray-500 block mb-1">Heslo</label>
             <input
               type="password"
               value={password}
@@ -105,7 +105,7 @@ export default function AuthModal({ onClose }: AuthModalProps) {
             />
           </div>
 
-          {error && <p className="text-red-400 text-sm">{error}</p>}
+          {error && <p className="text-red-500 text-sm">{error}</p>}
 
           <button
             type="submit"
@@ -123,7 +123,7 @@ export default function AuthModal({ onClose }: AuthModalProps) {
         <div className="mt-4 text-center">
           <button
             onClick={() => setMode(mode === 'login' ? 'register' : 'login')}
-            className="text-sm text-gray-400 hover:text-green-400 transition-colors"
+            className="text-sm text-gray-400 hover:text-green-600 transition-colors"
           >
             {mode === 'login'
               ? 'Nemáš účet? Registruj sa'

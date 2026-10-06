@@ -1,8 +1,8 @@
 @import "tailwindcss";
 
 @theme inline {
-  --color-background: #030712;
-  --color-foreground: #f9fafb;
+  --color-background: #ffffff;
+  --color-foreground: #111827;
   --color-green-500: #22c55e;
   --color-green-400: #4ade80;
   --font-sans: var(--font-inter);
@@ -15,24 +15,24 @@ body {
 
 /* Custom button styles */
 .btn-primary {
-  @apply bg-green-600 hover:bg-green-500 text-white font-semibold px-6 py-3.5 rounded-2xl transition-all duration-200 active:scale-[0.97] shadow-lg shadow-green-600/20 hover:shadow-green-500/30;
+  @apply bg-green-600 hover:bg-green-500 text-white font-semibold px-6 py-3.5 rounded-2xl transition-all duration-200 active:scale-[0.97] shadow-md shadow-green-600/15 hover:shadow-green-500/25;
 }
 
 .btn-secondary {
-  @apply bg-gray-800 hover:bg-gray-700 text-gray-200 font-medium px-6 py-3.5 rounded-2xl transition-all duration-200 border border-gray-700 hover:border-gray-600;
+  @apply bg-gray-50 hover:bg-gray-100 text-gray-700 font-medium px-6 py-3.5 rounded-2xl transition-all duration-200 border border-gray-200 hover:border-gray-300;
 }
 
 .input-field {
-  @apply w-full bg-gray-800/80 border border-gray-700 rounded-2xl px-4 py-3.5 text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-green-500/40 focus:border-green-500/60 transition-all;
+  @apply w-full bg-white border border-gray-200 rounded-2xl px-4 py-3.5 text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-green-500/30 focus:border-green-500/50 transition-all;
 }
 
 /* Card base */
 .card {
-  @apply bg-gray-900/80 border border-gray-800/60 rounded-2xl;
+  @apply bg-white border border-gray-200 rounded-2xl shadow-sm;
 }
 
 .card-hover {
-  @apply bg-gray-900/80 border border-gray-800/60 rounded-2xl hover:border-green-500/40 hover:bg-gray-900/90 transition-all duration-300;
+  @apply bg-white border border-gray-200 rounded-2xl shadow-sm hover:border-green-500/40 hover:shadow-md transition-all duration-300;
 }
 
 /* Smooth scrollbar */
@@ -45,7 +45,7 @@ body {
 }
 
 ::-webkit-scrollbar-thumb {
-  background: #333;
+  background: #d1d5db;
   border-radius: 3px;
 }
 

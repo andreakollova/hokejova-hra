@@ -49,18 +49,18 @@ export default function ProfilPage() {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-gray-950 flex items-center justify-center">
-        <div className="text-gray-400">Načítavam...</div>
+      <div className="min-h-screen bg-gray-50/50 flex items-center justify-center">
+        <div className="text-gray-500">Načítavam...</div>
       </div>
     );
   }
 
   if (!user) {
     return (
-      <div className="min-h-screen bg-gray-950 p-6">
+      <div className="min-h-screen bg-gray-50/50 p-6">
         <div className="max-w-lg mx-auto text-center pt-20">
-          <h1 className="text-2xl font-bold text-white mb-4">Môj profil</h1>
-          <p className="text-gray-400 mb-6">
+          <h1 className="text-2xl font-bold text-gray-900 mb-4">Môj profil</h1>
+          <p className="text-gray-500 mb-6">
             Prihlas sa, aby si videl svoju históriu a osobné rekordy.
           </p>
           <button
@@ -72,7 +72,7 @@ export default function ProfilPage() {
           <div className="mt-4">
             <Link
               href="/"
-              className="text-sm text-gray-500 hover:text-gray-300 transition-colors"
+              className="text-sm text-gray-400 hover:text-gray-600 transition-colors"
             >
               &larr; Späť
             </Link>
@@ -84,17 +84,17 @@ export default function ProfilPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-950 p-6">
+    <div className="min-h-screen bg-gray-50/50 p-6">
       <div className="max-w-2xl mx-auto">
         <Link
           href="/"
-          className="text-sm text-gray-500 hover:text-gray-300 transition-colors mb-8 inline-block"
+          className="text-sm text-gray-400 hover:text-gray-600 transition-colors mb-8 inline-block"
         >
           &larr; Späť
         </Link>
 
         {/* Profile header */}
-        <div className="bg-gray-900 rounded-2xl p-6 border border-gray-800 mb-8">
+        <div className="bg-white rounded-2xl p-6 border border-gray-200 shadow-sm mb-8">
           <div className="flex justify-between items-start">
             <div>
               {editNick ? (
@@ -112,7 +112,7 @@ export default function ProfilPage() {
                 </div>
               ) : (
                 <div className="flex items-center gap-3">
-                  <h1 className="text-2xl font-bold text-white">
+                  <h1 className="text-2xl font-bold text-gray-900">
                     {profile?.nickname || 'Hráč'}
                   </h1>
                   <button
@@ -120,19 +120,19 @@ export default function ProfilPage() {
                       setEditNick(true);
                       setNewNickname(profile?.nickname || '');
                     }}
-                    className="text-sm text-gray-500 hover:text-gray-300"
+                    className="text-sm text-gray-400 hover:text-gray-600"
                   >
                     Upraviť
                   </button>
                 </div>
               )}
-              <p className="text-sm text-gray-500 mt-1">
+              <p className="text-sm text-gray-400 mt-1">
                 {user.email}
               </p>
             </div>
             <button
               onClick={signOut}
-              className="text-sm text-gray-500 hover:text-red-400 transition-colors"
+              className="text-sm text-gray-400 hover:text-red-500 transition-colors"
             >
               Odhlásiť
             </button>
@@ -140,13 +140,13 @@ export default function ProfilPage() {
         </div>
 
         {/* Training history */}
-        <h2 className="text-lg font-semibold text-white mb-4">
+        <h2 className="text-lg font-semibold text-gray-900 mb-4">
           História tréningov
         </h2>
 
         {history.length === 0 ? (
-          <div className="bg-gray-900/50 rounded-xl p-8 text-center">
-            <p className="text-gray-400">Zatiaľ žiadne tréningy</p>
+          <div className="bg-white rounded-xl p-8 text-center border border-gray-200 shadow-sm">
+            <p className="text-gray-500">Zatiaľ žiadne tréningy</p>
             <Link href="/trening" className="btn-primary mt-4 inline-block">
               Začať trénovať
             </Link>
@@ -156,12 +156,12 @@ export default function ProfilPage() {
             {history.map((rec) => (
               <div
                 key={rec.id}
-                className="bg-gray-900 rounded-xl p-4 border border-gray-800 flex justify-between items-center"
+                className="bg-white rounded-xl p-4 border border-gray-200 shadow-sm flex justify-between items-center"
               >
                 <div>
-                  <div className="text-sm font-medium text-white">
+                  <div className="text-sm font-medium text-gray-900">
                     {rec.game_type === 'slalom' ? 'Slalom' : 'Osmičky'}{' '}
-                    <span className="text-gray-500">
+                    <span className="text-gray-400">
                       {rec.difficulty === 'easy'
                         ? 'Ľahká'
                         : rec.difficulty === 'medium'
@@ -170,7 +170,7 @@ export default function ProfilPage() {
                       / {rec.duration_seconds}s
                     </span>
                   </div>
-                  <div className="text-xs text-gray-500 mt-1">
+                  <div className="text-xs text-gray-400 mt-1">
                     {new Date(rec.created_at).toLocaleDateString('sk-SK', {
                       day: 'numeric',
                       month: 'short',
@@ -180,10 +180,10 @@ export default function ProfilPage() {
                   </div>
                 </div>
                 <div className="text-right">
-                  <div className="text-lg font-bold text-green-400 tabular-nums">
+                  <div className="text-lg font-bold text-green-600 tabular-nums">
                     {rec.score}
                   </div>
-                  <div className="text-xs text-gray-500">
+                  <div className="text-xs text-gray-400">
                     {rec.accuracy}% | Séria {rec.longest_streak}
                   </div>
                 </div>

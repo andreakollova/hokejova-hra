@@ -140,7 +140,7 @@ export default function OsmickyPage() {
         />
 
         {inputMode === 'camera' && (
-          <div className="absolute bottom-4 right-4 flex items-center gap-2 bg-black/50 backdrop-blur-sm rounded-lg px-3 py-2">
+          <div className="absolute bottom-4 right-4 flex items-center gap-2 bg-white/80 backdrop-blur-sm rounded-lg px-3 py-2 shadow-sm">
             <div
               className={`w-2.5 h-2.5 rounded-full ${
                 tracker.state.quality === 'good'
@@ -150,13 +150,13 @@ export default function OsmickyPage() {
                   : 'bg-red-500'
               }`}
             />
-            <span className="text-xs text-gray-400">{tracker.state.fps} fps</span>
+            <span className="text-xs text-gray-500">{tracker.state.fps} fps</span>
           </div>
         )}
 
         {inputMode === 'demo' && (
-          <div className="absolute bottom-4 left-4 bg-yellow-500/20 border border-yellow-500/30 rounded-lg px-3 py-2">
-            <span className="text-xs text-yellow-400">Demo režim - pohybuj myšou</span>
+          <div className="absolute bottom-4 left-4 bg-yellow-50/90 border border-yellow-200 rounded-lg px-3 py-2 backdrop-blur-sm">
+            <span className="text-xs text-yellow-700">Demo režim - pohybuj myšou</span>
           </div>
         )}
       </div>
@@ -164,17 +164,17 @@ export default function OsmickyPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-950 p-6">
+    <div className="min-h-screen bg-gray-50/50 p-6">
       <div className="max-w-2xl mx-auto">
         <Link
           href="/"
-          className="text-sm text-gray-500 hover:text-gray-300 transition-colors mb-8 inline-block"
+          className="text-sm text-gray-400 hover:text-gray-600 transition-colors mb-8 inline-block"
         >
           &larr; Späť
         </Link>
 
-        <h1 className="text-3xl font-bold text-white mb-2">Osmičky</h1>
-        <p className="text-gray-400 mb-8">
+        <h1 className="text-3xl font-bold text-gray-900 mb-2">Osmičky</h1>
+        <p className="text-gray-500 mb-8">
           Veď loptičku v tvare osmičky okolo dvoch bodov. Počíta sa počet
           dokončených osmičiek za zvolený čas.
         </p>
@@ -182,41 +182,41 @@ export default function OsmickyPage() {
         <div className="space-y-6">
           {/* Input mode */}
           <div>
-            <label className="text-sm font-medium text-gray-300 mb-3 block">
+            <label className="text-sm font-medium text-gray-500 mb-3 block">
               Režim vstupu
             </label>
             <div className="flex gap-3">
               <button
                 onClick={() => setInputMode('camera')}
-                className={`flex-1 rounded-xl p-4 border transition-all ${
+                className={`flex-1 rounded-xl p-4 border-2 transition-all ${
                   inputMode === 'camera'
-                    ? 'border-green-500 bg-green-500/10'
-                    : 'border-gray-700 bg-gray-900 hover:border-gray-600'
+                    ? 'border-green-500 bg-green-50'
+                    : 'border-gray-200 bg-white hover:border-gray-300'
                 }`}
               >
-                <div className="text-sm font-medium text-white">Kamera</div>
-                <div className="text-xs text-gray-400 mt-1">Sledovanie reálnej loptičky</div>
+                <div className="text-sm font-medium text-gray-900">Kamera</div>
+                <div className="text-xs text-gray-500 mt-1">Sledovanie reálnej loptičky</div>
               </button>
               <button
                 onClick={() => setInputMode('demo')}
-                className={`flex-1 rounded-xl p-4 border transition-all ${
+                className={`flex-1 rounded-xl p-4 border-2 transition-all ${
                   inputMode === 'demo'
-                    ? 'border-yellow-500 bg-yellow-500/10'
-                    : 'border-gray-700 bg-gray-900 hover:border-gray-600'
+                    ? 'border-yellow-500 bg-yellow-50'
+                    : 'border-gray-200 bg-white hover:border-gray-300'
                 }`}
               >
-                <div className="text-sm font-medium text-white">Demo (mys)</div>
-                <div className="text-xs text-gray-400 mt-1">Testovanie bez kamery</div>
+                <div className="text-sm font-medium text-gray-900">Demo (mys)</div>
+                <div className="text-xs text-gray-500 mt-1">Testovanie bez kamery</div>
               </button>
             </div>
           </div>
 
           {/* Calibration */}
           {inputMode === 'camera' && (
-            <div className="flex items-center justify-between bg-gray-900 rounded-xl p-4 border border-gray-800">
+            <div className="flex items-center justify-between bg-white rounded-xl p-4 border border-gray-200 shadow-sm">
               <div>
-                <div className="text-sm font-medium text-white">Kalibrácia kamery</div>
-                <div className="text-xs text-gray-400 mt-1">
+                <div className="text-sm font-medium text-gray-900">Kalibrácia kamery</div>
+                <div className="text-xs text-gray-500 mt-1">
                   {calibration
                     ? `Kalibrácia uložená (${calibration.resolution.width}x${calibration.resolution.height})`
                     : 'Nie je nastavená'}
@@ -224,7 +224,7 @@ export default function OsmickyPage() {
               </div>
               <button
                 onClick={() => setPhase('calibration')}
-                className="text-sm text-green-400 hover:text-green-300 transition-colors"
+                className="text-sm text-green-600 hover:text-green-700 transition-colors"
               >
                 {calibration ? 'Prekalibrovať' : 'Kalibrovať'}
               </button>
@@ -233,7 +233,7 @@ export default function OsmickyPage() {
 
           {/* Duration */}
           <div>
-            <label className="text-sm font-medium text-gray-300 mb-3 block">
+            <label className="text-sm font-medium text-gray-500 mb-3 block">
               Dĺžka tréningu
             </label>
             <div className="flex gap-3">
@@ -241,10 +241,10 @@ export default function OsmickyPage() {
                 <button
                   key={d}
                   onClick={() => setDuration(d)}
-                  className={`flex-1 rounded-xl py-3 border transition-all text-sm font-medium ${
+                  className={`flex-1 rounded-xl py-3 border-2 transition-all text-sm font-medium ${
                     duration === d
-                      ? 'border-green-500 bg-green-500/10 text-green-400'
-                      : 'border-gray-700 bg-gray-900 text-gray-300 hover:border-gray-600'
+                      ? 'border-green-500 bg-green-50 text-green-600'
+                      : 'border-gray-200 bg-white text-gray-500 hover:border-gray-300'
                   }`}
                 >
                   {d}s
@@ -253,7 +253,7 @@ export default function OsmickyPage() {
             </div>
           </div>
 
-          <div className="bg-gray-900/50 rounded-xl p-4 border border-gray-800/50 text-xs text-gray-500">
+          <div className="bg-gray-50 rounded-xl p-4 border border-gray-100 text-xs text-gray-500">
             Presnosť hodnotenia osmičiek závisí od kvality farebného sledovania.
             Pre najlepšie výsledky použi výrazne farebnú loptičku a dobré osvetlenie.
           </div>

@@ -213,7 +213,7 @@ export default function TreningPage() {
 
         {/* Tracking quality indicator */}
         {inputMode === 'camera' && (
-          <div className="absolute bottom-4 right-4 flex items-center gap-2 bg-black/50 backdrop-blur-sm rounded-lg px-3 py-2">
+          <div className="absolute bottom-4 right-4 flex items-center gap-2 bg-white/80 backdrop-blur-sm rounded-lg px-3 py-2 shadow-sm">
             <div
               className={`w-2.5 h-2.5 rounded-full ${
                 tracker.state.quality === 'good'
@@ -223,15 +223,15 @@ export default function TreningPage() {
                   : 'bg-red-500'
               }`}
             />
-            <span className="text-xs text-gray-400">
+            <span className="text-xs text-gray-500">
               {tracker.state.fps} fps
             </span>
           </div>
         )}
 
         {inputMode === 'demo' && !musicConfig && (
-          <div className="absolute bottom-4 left-4 bg-yellow-500/20 border border-yellow-500/30 rounded-2xl px-3 py-2">
-            <span className="text-xs text-yellow-400">
+          <div className="absolute bottom-4 left-4 bg-yellow-50/90 border border-yellow-200 rounded-2xl px-3 py-2 backdrop-blur-sm">
+            <span className="text-xs text-yellow-700">
               Demo režim - pohybuj myšou
             </span>
           </div>
@@ -239,7 +239,7 @@ export default function TreningPage() {
 
         {/* Spotify now playing */}
         {musicConfig?.mode === 'spotify' && musicConfig.track && (
-          <div className="absolute bottom-4 left-4 bg-black/50 backdrop-blur-md rounded-2xl px-4 py-3 flex items-center gap-3 pointer-events-none">
+          <div className="absolute bottom-4 left-4 bg-white/80 backdrop-blur-md rounded-2xl px-4 py-3 flex items-center gap-3 pointer-events-none shadow-sm">
             {/* Spotify logo */}
             <svg className="w-5 h-5 text-[#1DB954] flex-shrink-0" viewBox="0 0 24 24" fill="currentColor">
               <path d="M12 0C5.4 0 0 5.4 0 12s5.4 12 12 12 12-5.4 12-12S18.66 0 12 0zm5.521 17.34c-.24.359-.66.48-1.021.24-2.82-1.74-6.36-2.101-10.561-1.141-.418.122-.779-.179-.899-.539-.12-.421.18-.78.54-.9 4.56-1.021 8.52-.6 11.64 1.32.42.18.479.659.301 1.02zm1.44-3.3c-.301.42-.841.6-1.262.3-3.239-1.98-8.159-2.58-11.939-1.38-.479.12-1.02-.12-1.14-.6-.12-.48.12-1.021.6-1.141C9.6 9.9 15 10.561 18.72 12.84c.361.181.54.78.241 1.2zm.12-3.36C15.24 8.4 8.82 8.16 5.16 9.301c-.6.179-1.2-.181-1.38-.721-.18-.601.18-1.2.72-1.381 4.26-1.26 11.28-1.02 15.721 1.621.539.3.719 1.02.419 1.56-.299.421-1.02.599-1.559.3z" />
@@ -252,14 +252,14 @@ export default function TreningPage() {
               />
             )}
             <div className="min-w-0">
-              <div className="text-sm font-medium text-white truncate max-w-48">
+              <div className="text-sm font-medium text-gray-900 truncate max-w-48">
                 {musicConfig.track.name}
               </div>
-              <div className="text-xs text-gray-400 truncate max-w-48">
+              <div className="text-xs text-gray-500 truncate max-w-48">
                 {musicConfig.track.artists}
               </div>
             </div>
-            <div className="text-xs text-green-400 font-bold tabular-nums ml-2">
+            <div className="text-xs text-green-600 font-bold tabular-nums ml-2">
               {musicConfig.bpm} BPM
             </div>
           </div>
@@ -268,7 +268,7 @@ export default function TreningPage() {
         {/* Fullscreen button */}
         <button
           onClick={handleFullscreen}
-          className="absolute top-4 right-4 bg-black/50 backdrop-blur-sm rounded-lg p-2 text-gray-400 hover:text-white transition-colors"
+          className="absolute top-4 right-4 bg-white/80 backdrop-blur-sm rounded-lg p-2 text-gray-500 hover:text-gray-900 transition-colors shadow-sm"
         >
           <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 8V4m0 0h4M4 4l5 5m11-1V4m0 0h-4m4 0l-5 5M4 16v4m0 0h4m-4 0l5-5m11 5l-5-5m5 5v-4m0 4h-4" />
@@ -280,11 +280,11 @@ export default function TreningPage() {
 
   // Setup phase
   return (
-    <div className="min-h-screen bg-gray-950 px-6 py-8">
+    <div className="min-h-screen bg-gray-50/50 px-6 py-8">
       <div className="max-w-lg mx-auto">
         <Link
           href="/"
-          className="inline-flex items-center gap-1.5 text-sm text-gray-500 hover:text-gray-300 transition-colors mb-10"
+          className="inline-flex items-center gap-1.5 text-sm text-gray-400 hover:text-gray-600 transition-colors mb-10"
         >
           <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
             <path strokeLinecap="round" strokeLinejoin="round" d="M15 19l-7-7 7-7" />
@@ -293,8 +293,8 @@ export default function TreningPage() {
         </Link>
 
         <div className="mb-10">
-          <h1 className="text-4xl font-extrabold text-white mb-3 tracking-tight">Slalom</h1>
-          <p className="text-gray-400 leading-relaxed">
+          <h1 className="text-4xl font-extrabold text-gray-900 mb-3 tracking-tight">Slalom</h1>
+          <p className="text-gray-500 leading-relaxed">
             Vyhýbaj sa kužeľom striedavo zľava a sprava. Kužele sa priblížujú k tebe
             a ty musíš viesť loptičku na správnu stranu.
           </p>
@@ -303,7 +303,7 @@ export default function TreningPage() {
         <div className="space-y-7">
           {/* Input mode */}
           <div>
-            <label className="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-3 block">
+            <label className="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-3 block">
               Režim vstupu
             </label>
             <div className="flex gap-3">
@@ -311,23 +311,23 @@ export default function TreningPage() {
                 onClick={() => setInputMode('camera')}
                 className={`flex-1 rounded-2xl p-4 border-2 transition-all ${
                   inputMode === 'camera'
-                    ? 'border-green-500/60 bg-green-500/8'
-                    : 'border-gray-800 bg-gray-900/50 hover:border-gray-700'
+                    ? 'border-green-500 bg-green-50'
+                    : 'border-gray-200 bg-white hover:border-gray-300'
                 }`}
               >
-                <div className="text-sm font-semibold text-white">Kamera</div>
-                <div className="text-xs text-gray-400 mt-1">Sledovanie reálnej loptičky</div>
+                <div className="text-sm font-semibold text-gray-900">Kamera</div>
+                <div className="text-xs text-gray-500 mt-1">Sledovanie reálnej loptičky</div>
               </button>
               <button
                 onClick={() => setInputMode('demo')}
                 className={`flex-1 rounded-2xl p-4 border-2 transition-all ${
                   inputMode === 'demo'
-                    ? 'border-yellow-500/60 bg-yellow-500/8'
-                    : 'border-gray-800 bg-gray-900/50 hover:border-gray-700'
+                    ? 'border-yellow-500 bg-yellow-50'
+                    : 'border-gray-200 bg-white hover:border-gray-300'
                 }`}
               >
-                <div className="text-sm font-semibold text-white">Demo (myš)</div>
-                <div className="text-xs text-gray-400 mt-1">Testovanie bez kamery</div>
+                <div className="text-sm font-semibold text-gray-900">Demo (myš)</div>
+                <div className="text-xs text-gray-500 mt-1">Testovanie bez kamery</div>
               </button>
             </div>
           </div>
@@ -336,8 +336,8 @@ export default function TreningPage() {
           {inputMode === 'camera' && (
             <div className="flex items-center justify-between card p-5">
               <div>
-                <div className="text-sm font-semibold text-white">Kalibrácia kamery</div>
-                <div className="text-xs text-gray-400 mt-1.5">
+                <div className="text-sm font-semibold text-gray-900">Kalibrácia kamery</div>
+                <div className="text-xs text-gray-500 mt-1.5">
                   {calibration
                     ? `Uložená (${calibration.resolution.width}x${calibration.resolution.height})`
                     : 'Nie je nastavená'}
@@ -345,7 +345,7 @@ export default function TreningPage() {
               </div>
               <button
                 onClick={() => setPhase('calibration')}
-                className="text-sm font-medium text-green-400 hover:text-green-300 bg-green-500/10 hover:bg-green-500/15 px-4 py-2 rounded-xl transition-all"
+                className="text-sm font-medium text-green-600 hover:text-green-700 bg-green-50 hover:bg-green-100 px-4 py-2 rounded-xl transition-all"
               >
                 {calibration ? 'Prekalibrovať' : 'Kalibrovať'}
               </button>
@@ -354,7 +354,7 @@ export default function TreningPage() {
 
           {/* Difficulty */}
           <div>
-            <label className="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-3 block">
+            <label className="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-3 block">
               Obťažnosť
             </label>
             <div className="flex gap-2.5">
@@ -364,8 +364,8 @@ export default function TreningPage() {
                   onClick={() => setDifficulty(d)}
                   className={`flex-1 rounded-2xl py-3.5 border-2 transition-all text-sm font-semibold ${
                     difficulty === d
-                      ? 'border-green-500/60 bg-green-500/8 text-green-400'
-                      : 'border-gray-800 bg-gray-900/50 text-gray-400 hover:border-gray-700 hover:text-gray-300'
+                      ? 'border-green-500 bg-green-50 text-green-600'
+                      : 'border-gray-200 bg-white text-gray-500 hover:border-gray-300 hover:text-gray-700'
                   }`}
                 >
                   {d === 'easy' ? 'Ľahká' : d === 'medium' ? 'Stredná' : 'Ťažká'}
@@ -376,7 +376,7 @@ export default function TreningPage() {
 
           {/* Duration */}
           <div>
-            <label className="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-3 block">
+            <label className="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-3 block">
               Dĺžka tréningu
             </label>
             <div className="flex gap-2.5">
@@ -386,8 +386,8 @@ export default function TreningPage() {
                   onClick={() => setDuration(d)}
                   className={`flex-1 rounded-2xl py-3.5 border-2 transition-all text-sm font-semibold ${
                     duration === d
-                      ? 'border-green-500/60 bg-green-500/8 text-green-400'
-                      : 'border-gray-800 bg-gray-900/50 text-gray-400 hover:border-gray-700 hover:text-gray-300'
+                      ? 'border-green-500 bg-green-50 text-green-600'
+                      : 'border-gray-200 bg-white text-gray-500 hover:border-gray-300 hover:text-gray-700'
                   }`}
                 >
                   {d} sekúnd
@@ -398,46 +398,46 @@ export default function TreningPage() {
 
           {/* Beat mode */}
           <div>
-            <label className="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-3 block">
+            <label className="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-3 block">
               Hudba
             </label>
             <button
               onClick={() => setPhase('music')}
               className={`w-full rounded-2xl p-4 border-2 transition-all text-left ${
                 musicConfig
-                  ? 'border-green-500/60 bg-green-500/8'
-                  : 'border-gray-800 bg-gray-900/50 hover:border-gray-700'
+                  ? 'border-green-500 bg-green-50'
+                  : 'border-gray-200 bg-white hover:border-gray-300'
               }`}
             >
               {musicConfig ? (
                 <div className="flex items-center justify-between">
                   <div>
-                    <div className="text-sm font-semibold text-white">
+                    <div className="text-sm font-semibold text-gray-900">
                       {musicConfig.track?.name || `${musicConfig.bpm} BPM`}
                     </div>
-                    <div className="text-xs text-gray-400 mt-0.5">
+                    <div className="text-xs text-gray-500 mt-0.5">
                       {musicConfig.track?.artists || (musicConfig.mode === 'tap' ? 'Tap tempo' : 'Metronóm')}
                       {' - '}{musicConfig.bpm} BPM
                     </div>
                   </div>
-                  <span className="text-xs text-green-400">Zmeniť</span>
+                  <span className="text-xs text-green-600">Zmeniť</span>
                 </div>
               ) : (
                 <div className="flex items-center justify-between">
                   <div>
-                    <div className="text-sm font-semibold text-white">Beat mód</div>
-                    <div className="text-xs text-gray-400 mt-0.5">
+                    <div className="text-sm font-semibold text-gray-900">Beat mód</div>
+                    <div className="text-xs text-gray-500 mt-0.5">
                       Kužele syncnuté na rytmus hudby
                     </div>
                   </div>
-                  <span className="text-xs text-gray-500">Nastaviť</span>
+                  <span className="text-xs text-gray-400">Nastaviť</span>
                 </div>
               )}
             </button>
             {musicConfig && (
               <button
                 onClick={() => setMusicConfig(null)}
-                className="text-xs text-gray-600 hover:text-gray-400 mt-2 transition-colors"
+                className="text-xs text-gray-400 hover:text-gray-600 mt-2 transition-colors"
               >
                 Vypnúť beat mód
               </button>
@@ -450,7 +450,7 @@ export default function TreningPage() {
           </button>
 
           {inputMode === 'demo' && (
-            <p className="text-center text-xs text-gray-600">
+            <p className="text-center text-xs text-gray-400">
               Výsledky z demo režimu sa neukladajú do rebríčka.
             </p>
           )}

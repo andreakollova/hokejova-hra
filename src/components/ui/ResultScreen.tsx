@@ -86,19 +86,19 @@ export default function ResultScreen({
   const f8Result = result as FigureEightResult;
 
   return (
-    <div className="min-h-screen bg-gray-950 flex items-center justify-center p-6">
+    <div className="min-h-screen bg-gray-50/50 flex items-center justify-center p-6">
       <div className="max-w-md w-full space-y-8">
         <div className="text-center">
           {isNewRecord && (
-            <div className="inline-flex items-center gap-2 bg-yellow-500/10 border border-yellow-500/20 rounded-full px-4 py-1.5 text-xs text-yellow-400 font-semibold mb-4">
+            <div className="inline-flex items-center gap-2 bg-yellow-50 border border-yellow-200 rounded-full px-4 py-1.5 text-xs text-yellow-600 font-semibold mb-4">
               Nový osobný rekord!
             </div>
           )}
-          <h1 className="text-3xl font-extrabold text-white mb-1">
+          <h1 className="text-3xl font-extrabold text-gray-900 mb-1">
             {isSlalom ? 'Slalom dokončený' : 'Osmičky dokončené'}
           </h1>
           {result.inputMode === 'demo' && (
-            <span className="inline-block bg-gray-800 text-gray-400 text-xs px-3 py-1 rounded-full mt-2">
+            <span className="inline-block bg-gray-100 text-gray-500 text-xs px-3 py-1 rounded-full mt-2">
               Demo režim - neukladá sa do rebríčka
             </span>
           )}
@@ -127,8 +127,8 @@ export default function ResultScreen({
         </div>
 
         {personalBest !== null && !isNewRecord && (
-          <div className="text-center text-sm text-gray-500">
-            Osobný rekord: <span className="text-gray-300 font-semibold">{personalBest}</span>
+          <div className="text-center text-sm text-gray-400">
+            Osobný rekord: <span className="text-gray-700 font-semibold">{personalBest}</span>
           </div>
         )}
 
@@ -169,10 +169,10 @@ function StatCard({
 }) {
   return (
     <div className="card p-4">
-      <div className={`text-2xl font-bold ${highlight ? 'text-green-400' : 'text-white'} tabular-nums`}>
+      <div className={`text-2xl font-bold ${highlight ? 'text-green-600' : 'text-gray-900'} tabular-nums`}>
         {value}
       </div>
-      <div className="text-xs text-gray-500 mt-1.5">{label}</div>
+      <div className="text-xs text-gray-400 mt-1.5">{label}</div>
     </div>
   );
 }

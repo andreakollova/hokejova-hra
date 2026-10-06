@@ -247,8 +247,8 @@ export default function CalibrationWizard({
       case 'camera':
         return (
           <div className="space-y-6">
-            <h2 className="text-2xl font-semibold text-white">Nastavenie kamery</h2>
-            <p className="text-gray-400">
+            <h2 className="text-2xl font-semibold text-gray-900">Nastavenie kamery</h2>
+            <p className="text-gray-500">
               Povoľ prístup ku kamere a vyber zariadenie. Kameru polož nižšie a nasmeruj
               na tréningovú plochu.
             </p>
@@ -262,7 +262,7 @@ export default function CalibrationWizard({
               </button>
             ) : (
               <div className="space-y-4">
-                <label className="block text-sm text-gray-300">Vyber kameru</label>
+                <label className="block text-sm text-gray-500">Vyber kameru</label>
                 <select
                   className="input-field"
                   value={selectedDevice}
@@ -286,11 +286,11 @@ export default function CalibrationWizard({
             )}
 
             {cameraError && (
-              <p className="text-red-400 text-sm">{cameraError}</p>
+              <p className="text-red-500 text-sm">{cameraError}</p>
             )}
 
             {permission === 'denied' && (
-              <p className="text-red-400 text-sm">
+              <p className="text-red-500 text-sm">
                 Prístup ku kamere je zakázaný. Skontroluj nastavenia prehliadača.
               </p>
             )}
@@ -300,7 +300,7 @@ export default function CalibrationWizard({
       case 'preview':
         return (
           <div className="space-y-4">
-            <h2 className="text-2xl font-semibold text-white">Náhľadovanie kamery</h2>
+            <h2 className="text-2xl font-semibold text-gray-900">Náhľadovanie kamery</h2>
             <p className="text-gray-400">
               Skontroluj, či kamera sníma tréningovú plochu. Loptička by mala byť dobre viditeľná.
             </p>
@@ -314,7 +314,7 @@ export default function CalibrationWizard({
             <div className="relative max-w-2xl">
               <canvas
                 ref={canvasRef}
-                className="w-full rounded-lg border border-gray-700"
+                className="w-full rounded-lg border border-gray-200"
               />
             </div>
             <button onClick={() => setStep('corners')} className="btn-primary">
@@ -326,7 +326,7 @@ export default function CalibrationWizard({
       case 'corners':
         return (
           <div className="space-y-4">
-            <h2 className="text-2xl font-semibold text-white">Oblasť tréningu</h2>
+            <h2 className="text-2xl font-semibold text-gray-900">Oblasť tréningu</h2>
             <p className="text-gray-400">
               Klikni na 4 rohy tréningovej plochy v poradí: ľavý horný, pravý horný,
               pravý dolný, ľavý dolný. ({corners.length}/4)
@@ -334,7 +334,7 @@ export default function CalibrationWizard({
             <div className="relative max-w-2xl">
               <canvas
                 ref={canvasRef}
-                className="w-full rounded-lg border border-gray-700 cursor-crosshair"
+                className="w-full rounded-lg border border-gray-200 cursor-crosshair"
                 onClick={handleCornerClick}
               />
             </div>
@@ -359,14 +359,14 @@ export default function CalibrationWizard({
       case 'color':
         return (
           <div className="space-y-4">
-            <h2 className="text-2xl font-semibold text-white">Farba loptičky</h2>
+            <h2 className="text-2xl font-semibold text-gray-900">Farba loptičky</h2>
             <p className="text-gray-400">
               Klikni na loptičku v obraze. Zvýraznia sa oblasti s podobnou farbou.
             </p>
             <div className="relative max-w-2xl">
               <canvas
                 ref={canvasRef}
-                className="w-full rounded-lg border border-gray-700 cursor-crosshair"
+                className="w-full rounded-lg border border-gray-200 cursor-crosshair"
                 onClick={handleColorPick}
               />
               <canvas
@@ -392,14 +392,14 @@ export default function CalibrationWizard({
       case 'tolerance':
         return (
           <div className="space-y-4">
-            <h2 className="text-2xl font-semibold text-white">Tolerancia farby</h2>
+            <h2 className="text-2xl font-semibold text-gray-900">Tolerancia farby</h2>
             <p className="text-gray-400">
               Nastav toleranciu, kým zelená oblasť pokrýva iba loptičku.
             </p>
             <div className="relative max-w-2xl">
               <canvas
                 ref={canvasRef}
-                className="w-full rounded-lg border border-gray-700"
+                className="w-full rounded-lg border border-gray-200"
               />
               <canvas
                 ref={overlayRef}
@@ -468,7 +468,7 @@ export default function CalibrationWizard({
       case 'range':
         return (
           <div className="space-y-4">
-            <h2 className="text-2xl font-semibold text-white">Rozsah pohybu</h2>
+            <h2 className="text-2xl font-semibold text-gray-900">Rozsah pohybu</h2>
             <p className="text-gray-400">
               Nastav pohodlný ľavý a pravý rozsah pohybu loptičky.
             </p>
@@ -510,7 +510,7 @@ export default function CalibrationWizard({
                 />
               </div>
             </div>
-            <label className="flex items-center gap-2 text-gray-300">
+            <label className="flex items-center gap-2 text-gray-600">
               <input
                 type="checkbox"
                 checked={mirrorX}
@@ -528,14 +528,14 @@ export default function CalibrationWizard({
       case 'test':
         return (
           <div className="space-y-4">
-            <h2 className="text-2xl font-semibold text-white">Skuska sledovania</h2>
+            <h2 className="text-2xl font-semibold text-gray-900">Skuska sledovania</h2>
             <p className="text-gray-400">
               Pohybuj loptičkou a over, či zelený krúžok sleduje jej pohyb.
             </p>
             <div className="relative max-w-2xl">
               <canvas
                 ref={canvasRef}
-                className="w-full rounded-lg border border-gray-700"
+                className="w-full rounded-lg border border-gray-200"
               />
             </div>
             <div className="flex items-center gap-3">
@@ -570,7 +570,7 @@ export default function CalibrationWizard({
   };
 
   return (
-    <div className="min-h-screen bg-gray-950 p-6">
+    <div className="min-h-screen bg-gray-50/50 p-6">
       <div className="max-w-4xl mx-auto">
         {/* Progress bar */}
         <div className="flex items-center gap-1 mb-8">
@@ -580,14 +580,14 @@ export default function CalibrationWizard({
               className={`h-1 flex-1 rounded-full transition-colors ${
                 Object.keys(STEP_LABELS).indexOf(step) >= i
                   ? 'bg-green-500'
-                  : 'bg-gray-800'
+                  : 'bg-gray-200'
               }`}
             />
           ))}
         </div>
 
         {/* Step label */}
-        <p className="text-sm text-gray-500 mb-2">{STEP_LABELS[step]}</p>
+        <p className="text-sm text-gray-400 mb-2">{STEP_LABELS[step]}</p>
 
         {/* Hidden video element */}
         <video
@@ -605,7 +605,7 @@ export default function CalibrationWizard({
             stopCamera();
             onCancel();
           }}
-          className="mt-8 text-sm text-gray-600 hover:text-gray-400 transition-colors"
+          className="mt-8 text-sm text-gray-400 hover:text-gray-600 transition-colors"
         >
           Zrušiť kalibráciu
         </button>

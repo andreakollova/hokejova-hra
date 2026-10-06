@@ -73,7 +73,7 @@ function Cone({
 }) {
   const color = passed
     ? correct ? '#22c55e' : '#ef4444'
-    : '#f59e0b';
+    : '#fb923c';
   // Arrow points AWAY from center = direction to pass
   const arrowX = side === 'left' ? -1.0 : 1.0;
 
@@ -82,7 +82,7 @@ function Cone({
       {/* Cone body */}
       <mesh castShadow>
         <coneGeometry args={[0.25, 0.7, 8]} />
-        <meshStandardMaterial color={color} roughness={0.5} metalness={0.05} />
+        <meshStandardMaterial color={color} roughness={0.35} metalness={0.1} emissive={color} emissiveIntensity={0.15} />
       </mesh>
       {/* Cone base */}
       <mesh position={[0, -0.35, 0]} receiveShadow>
@@ -179,16 +179,16 @@ function TurfSurface() {
     canvas.height = size;
     const ctx = canvas.getContext('2d')!;
 
-    // Base green
-    ctx.fillStyle = '#2d7a3a';
+    // Brighter base green
+    ctx.fillStyle = '#3a9a4a';
     ctx.fillRect(0, 0, size, size);
 
-    // Grass grain noise
+    // Grass grain noise - brighter
     for (let i = 0; i < 3000; i++) {
       const x = Math.random() * size;
       const y = Math.random() * size;
-      const brightness = 35 + Math.random() * 30;
-      ctx.fillStyle = `rgb(${brightness}, ${90 + Math.random() * 40}, ${brightness})`;
+      const brightness = 45 + Math.random() * 35;
+      ctx.fillStyle = `rgb(${brightness}, ${110 + Math.random() * 50}, ${brightness})`;
       ctx.fillRect(x, y, 1, 2 + Math.random() * 2);
     }
 
@@ -206,7 +206,7 @@ function TurfSurface() {
         map={turfTexture}
         roughness={0.95}
         metalness={0}
-        color="#3a8a4a"
+        color="#4aaa5a"
       />
     </mesh>
   );
@@ -478,11 +478,11 @@ function GameScene({
       <CameraSetup />
 
       {/* Warm outdoor-ish lighting */}
-      <ambientLight intensity={0.5} color="#f5f0e0" />
+      <ambientLight intensity={0.7} color="#f8f8f0" />
       <directionalLight
         position={[5, 10, 5]}
-        intensity={1.0}
-        color="#fff8e8"
+        intensity={1.2}
+        color="#ffffff"
         castShadow
         shadow-mapSize={[1024, 1024]}
         shadow-camera-far={50}
@@ -492,7 +492,7 @@ function GameScene({
         shadow-camera-bottom={-20}
       />
       <hemisphereLight
-        args={['#87ceeb', '#3a8a4a', 0.3]}
+        args={['#b0d4f1', '#4aaa5a', 0.4]}
       />
 
       {/* Green turf */}
@@ -514,7 +514,7 @@ function GameScene({
       ))}
 
       {/* Green-tinted fog */}
-      <fog attach="fog" args={['#1a3a1a', 20, TRACK_DEPTH]} />
+      <fog attach="fog" args={['#c8dce8', 25, TRACK_DEPTH + 5]} />
     </>
   );
 }
@@ -562,7 +562,7 @@ export default function SlalomGame(props: SlalomGameProps) {
       <Canvas
         shadows
         gl={{ antialias: true, alpha: false }}
-        style={{ background: '#1a3a1a' }}
+        style={{ background: 'linear-gradient(to bottom, #b0cfe0, #c8dce8)' }}
       >
         <GameScene {...props} hudRef={hudRef} />
       </Canvas>
@@ -570,22 +570,22 @@ export default function SlalomGame(props: SlalomGameProps) {
       {/* HUD */}
       <div className="absolute top-0 left-0 right-0 p-4 pointer-events-none">
         <div className="flex justify-between items-start max-w-3xl mx-auto">
-          <div className="bg-black/40 backdrop-blur-md rounded-2xl px-5 py-3">
-            <div className="text-3xl font-bold text-white tabular-nums">{hud.score}</div>
-            <div className="text-xs text-white/50 uppercase tracking-wider">Skóre</div>
+          <div className="bg-white/80 backdrop-blur-md rounded-2xl px-5 py-3 shadow-sm">
+            <div className="text-3xl font-bold text-gray-900 tabular-nums">{hud.score}</div>
+            <div className="text-xs text-gray-400 uppercase tracking-wider">Skóre</div>
           </div>
-          <div className="bg-black/40 backdrop-blur-md rounded-2xl px-5 py-3 text-center">
-            <div className="text-3xl font-bold text-white tabular-nums">{Math.ceil(hud.timeLeft)}s</div>
-            <div className="text-xs text-white/50 uppercase tracking-wider">{config.label}</div>
+          <div className="bg-white/80 backdrop-blur-md rounded-2xl px-5 py-3 text-center shadow-sm">
+            <div className="text-3xl font-bold text-gray-900 tabular-nums">{Math.ceil(hud.timeLeft)}s</div>
+            <div className="text-xs text-gray-400 uppercase tracking-wider">{config.label}</div>
           </div>
-          <div className="bg-black/40 backdrop-blur-md rounded-2xl px-5 py-3 text-right">
-            <div className="text-3xl font-bold text-white tabular-nums">{hud.streak}</div>
-            <div className="text-xs text-white/50 uppercase tracking-wider">Séria</div>
+          <div className="bg-white/80 backdrop-blur-md rounded-2xl px-5 py-3 text-right shadow-sm">
+            <div className="text-3xl font-bold text-gray-900 tabular-nums">{hud.streak}</div>
+            <div className="text-xs text-gray-400 uppercase tracking-wider">Séria</div>
           </div>
           {hud.bpm > 0 && (
-            <div className={`bg-black/40 backdrop-blur-md rounded-2xl px-5 py-3 text-center transition-all ${hud.beatPulse ? 'ring-2 ring-green-400/50 scale-105' : ''}`}>
-              <div className="text-3xl font-bold text-white tabular-nums">{hud.bpm}</div>
-              <div className="text-xs text-white/50 uppercase tracking-wider">BPM</div>
+            <div className={`bg-white/80 backdrop-blur-md rounded-2xl px-5 py-3 text-center shadow-sm transition-all ${hud.beatPulse ? 'ring-2 ring-green-400/50 scale-105' : ''}`}>
+              <div className="text-3xl font-bold text-gray-900 tabular-nums">{hud.bpm}</div>
+              <div className="text-xs text-gray-400 uppercase tracking-wider">BPM</div>
             </div>
           )}
         </div>
@@ -593,7 +593,7 @@ export default function SlalomGame(props: SlalomGameProps) {
 
       {/* Back-to-menu progress indicator */}
       {hud.backProgress > 0.05 && (
-        <div className="absolute top-16 right-4 flex items-center gap-2 bg-black/50 backdrop-blur-md rounded-2xl px-4 py-2 pointer-events-none">
+        <div className="absolute top-16 right-4 flex items-center gap-2 bg-white/80 backdrop-blur-md rounded-2xl px-4 py-2 pointer-events-none shadow-sm">
           <svg className="w-5 h-5" viewBox="0 0 36 36">
             <circle cx="18" cy="18" r="15" fill="none" stroke="#333" strokeWidth="3" />
             <circle
@@ -604,23 +604,23 @@ export default function SlalomGame(props: SlalomGameProps) {
               transform="rotate(-90 18 18)"
             />
           </svg>
-          <span className="text-xs text-yellow-400">Návrat do menu</span>
+          <span className="text-xs text-yellow-600">Návrat do menu</span>
         </div>
       )}
 
       {/* Countdown */}
       {hud.countdown > 0 && (
-        <div className="absolute inset-0 flex items-center justify-center bg-black/50">
-          <div className="text-9xl font-black text-white drop-shadow-lg">{hud.countdown}</div>
+        <div className="absolute inset-0 flex items-center justify-center bg-white/40 backdrop-blur-sm">
+          <div className="text-9xl font-black text-gray-900 drop-shadow-lg">{hud.countdown}</div>
         </div>
       )}
 
       {/* Pause */}
       {isPaused && hud.countdown <= 0 && (
-        <div className="absolute inset-0 flex items-center justify-center bg-black/60">
-          <div className="text-center bg-black/40 backdrop-blur-md rounded-3xl px-10 py-8">
-            <div className="text-2xl font-bold text-yellow-400 mb-3">Sledovanie stratené</div>
-            <p className="text-gray-300">Vráť loptičku do viditeľnej oblasti kamery</p>
+        <div className="absolute inset-0 flex items-center justify-center bg-white/50 backdrop-blur-sm">
+          <div className="text-center bg-white/90 backdrop-blur-md rounded-3xl px-10 py-8 shadow-lg">
+            <div className="text-2xl font-bold text-yellow-600 mb-3">Sledovanie stratené</div>
+            <p className="text-gray-600">Vráť loptičku do viditeľnej oblasti kamery</p>
           </div>
         </div>
       )}

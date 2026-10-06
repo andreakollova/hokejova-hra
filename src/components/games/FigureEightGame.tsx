@@ -204,12 +204,12 @@ export default function FigureEightGame({
       const w = canvas.width;
       const h = canvas.height;
 
-      // Clear
-      ctx.fillStyle = '#0a0a1a';
+      // Clear - light background
+      ctx.fillStyle = '#f5f5f0';
       ctx.fillRect(0, 0, w, h);
 
       // Draw figure-8 path
-      ctx.strokeStyle = '#333';
+      ctx.strokeStyle = '#c0c0b8';
       ctx.lineWidth = 2;
       ctx.setLineDash([8, 4]);
 
@@ -248,20 +248,20 @@ export default function FigureEightGame({
         ctx.arc(px, py, CHECKPOINT_RADIUS * Math.min(w, h), 0, Math.PI * 2);
 
         if (isNext) {
-          ctx.fillStyle = 'rgba(34, 197, 94, 0.2)';
+          ctx.fillStyle = 'rgba(34, 197, 94, 0.15)';
           ctx.fill();
-          ctx.strokeStyle = '#22c55e';
+          ctx.strokeStyle = '#16a34a';
           ctx.lineWidth = 2;
         } else {
-          ctx.fillStyle = 'rgba(100, 100, 100, 0.1)';
+          ctx.fillStyle = 'rgba(0, 0, 0, 0.03)';
           ctx.fill();
-          ctx.strokeStyle = '#444';
+          ctx.strokeStyle = '#d0d0c8';
           ctx.lineWidth = 1;
         }
         ctx.stroke();
 
         // Label
-        ctx.fillStyle = isNext ? '#22c55e' : '#555';
+        ctx.fillStyle = isNext ? '#16a34a' : '#999';
         ctx.font = '12px sans-serif';
         ctx.textAlign = 'center';
         ctx.fillText(CHECKPOINTS[i].label, px, py - CHECKPOINT_RADIUS * Math.min(w, h) - 5);
@@ -315,28 +315,28 @@ export default function FigureEightGame({
       <canvas
         ref={canvasRef}
         className="w-full h-full"
-        style={{ background: '#0a0a1a' }}
+        style={{ background: '#f5f5f0' }}
       />
 
       {/* HUD */}
       <div className="absolute top-0 left-0 right-0 p-4 pointer-events-none">
         <div className="flex justify-between items-start max-w-3xl mx-auto">
-          <div className="bg-black/50 backdrop-blur-sm rounded-lg px-4 py-2">
-            <div className="text-3xl font-bold text-white tabular-nums">
+          <div className="bg-white/80 backdrop-blur-sm rounded-lg px-4 py-2 shadow-sm">
+            <div className="text-3xl font-bold text-gray-900 tabular-nums">
               {hud.completedEights}
             </div>
             <div className="text-xs text-gray-400">Osmičky</div>
           </div>
 
-          <div className="bg-black/50 backdrop-blur-sm rounded-lg px-4 py-2 text-center">
-            <div className="text-3xl font-bold text-white tabular-nums">
+          <div className="bg-white/80 backdrop-blur-sm rounded-lg px-4 py-2 text-center shadow-sm">
+            <div className="text-3xl font-bold text-gray-900 tabular-nums">
               {Math.ceil(hud.timeLeft)}s
             </div>
             <div className="text-xs text-gray-400">Čas</div>
           </div>
 
-          <div className="bg-black/50 backdrop-blur-sm rounded-lg px-4 py-2 text-right">
-            <div className="text-3xl font-bold text-white tabular-nums">
+          <div className="bg-white/80 backdrop-blur-sm rounded-lg px-4 py-2 text-right shadow-sm">
+            <div className="text-3xl font-bold text-gray-900 tabular-nums">
               {hud.tempo}
             </div>
             <div className="text-xs text-gray-400">Tempo/min</div>
@@ -346,16 +346,16 @@ export default function FigureEightGame({
 
       {/* Countdown */}
       {hud.countdown > 0 && (
-        <div className="absolute inset-0 flex items-center justify-center bg-black/60">
-          <div className="text-8xl font-bold text-white animate-pulse">
+        <div className="absolute inset-0 flex items-center justify-center bg-white/50 backdrop-blur-sm">
+          <div className="text-8xl font-bold text-gray-900 animate-pulse">
             {hud.countdown}
           </div>
         </div>
       )}
 
       {/* Scale control */}
-      <div className="absolute bottom-4 left-4 bg-black/50 backdrop-blur-sm rounded-lg px-3 py-2 pointer-events-auto">
-        <label className="text-xs text-gray-400 block mb-1">
+      <div className="absolute bottom-4 left-4 bg-white/80 backdrop-blur-sm rounded-lg px-3 py-2 pointer-events-auto shadow-sm">
+        <label className="text-xs text-gray-500 block mb-1">
           Veľkosť dráhy: {Math.round(scale * 100)}%
         </label>
         <input
@@ -370,12 +370,12 @@ export default function FigureEightGame({
 
       {/* Pause overlay */}
       {isPaused && hud.countdown <= 0 && (
-        <div className="absolute inset-0 flex items-center justify-center bg-black/70">
-          <div className="text-center">
-            <div className="text-2xl font-bold text-yellow-400 mb-2">
+        <div className="absolute inset-0 flex items-center justify-center bg-white/50 backdrop-blur-sm">
+          <div className="text-center bg-white/90 rounded-3xl px-10 py-8 shadow-lg">
+            <div className="text-2xl font-bold text-yellow-600 mb-2">
               Sledovanie stratené
             </div>
-            <p className="text-gray-300">
+            <p className="text-gray-600">
               Vráť loptičku do viditeľnej oblasti kamery
             </p>
           </div>

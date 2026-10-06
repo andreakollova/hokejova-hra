@@ -81,16 +81,16 @@ export default function RebricekPage() {
   };
 
   return (
-    <div className="min-h-screen bg-gray-950 p-6">
+    <div className="min-h-screen bg-gray-50/50 p-6">
       <div className="max-w-2xl mx-auto">
         <Link
           href="/"
-          className="text-sm text-gray-500 hover:text-gray-300 transition-colors mb-8 inline-block"
+          className="text-sm text-gray-400 hover:text-gray-600 transition-colors mb-8 inline-block"
         >
           &larr; Späť
         </Link>
 
-        <h1 className="text-3xl font-bold text-white mb-6">Rebríček</h1>
+        <h1 className="text-3xl font-bold text-gray-900 mb-6">Rebríček</h1>
 
         {/* Filters */}
         <div className="space-y-4 mb-8">
@@ -100,8 +100,8 @@ export default function RebricekPage() {
               onClick={() => setGameType('slalom')}
               className={`px-4 py-2 rounded-lg text-sm font-medium transition-all ${
                 gameType === 'slalom'
-                  ? 'bg-green-500/20 text-green-400 border border-green-500/30'
-                  : 'bg-gray-800 text-gray-400 border border-gray-700'
+                  ? 'bg-green-50 text-green-600 border border-green-200'
+                  : 'bg-white text-gray-500 border border-gray-200'
               }`}
             >
               Slalom
@@ -110,8 +110,8 @@ export default function RebricekPage() {
               onClick={() => setGameType('figure_eight')}
               className={`px-4 py-2 rounded-lg text-sm font-medium transition-all ${
                 gameType === 'figure_eight'
-                  ? 'bg-green-500/20 text-green-400 border border-green-500/30'
-                  : 'bg-gray-800 text-gray-400 border border-gray-700'
+                  ? 'bg-green-50 text-green-600 border border-green-200'
+                  : 'bg-white text-gray-500 border border-gray-200'
               }`}
             >
               Osmičky
@@ -128,8 +128,8 @@ export default function RebricekPage() {
                     onClick={() => setDifficulty(d)}
                     className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-all ${
                       difficulty === d
-                        ? 'bg-gray-700 text-white'
-                        : 'bg-gray-800/50 text-gray-500 hover:text-gray-300'
+                        ? 'bg-gray-200 text-gray-900'
+                        : 'bg-white text-gray-400 hover:text-gray-600 border border-gray-100'
                     }`}
                   >
                     {d === 'easy' ? 'Ľahká' : d === 'medium' ? 'Stredná' : 'Ťažká'}
@@ -146,8 +146,8 @@ export default function RebricekPage() {
                   onClick={() => setDuration(d)}
                   className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-all ${
                     duration === d
-                      ? 'bg-gray-700 text-white'
-                      : 'bg-gray-800/50 text-gray-500 hover:text-gray-300'
+                      ? 'bg-gray-200 text-gray-900'
+                      : 'bg-white text-gray-400 hover:text-gray-600 border border-gray-100'
                   }`}
                 >
                   {d}s
@@ -159,8 +159,8 @@ export default function RebricekPage() {
 
         {/* User rank */}
         {userRank && (
-          <div className="bg-green-500/10 border border-green-500/20 rounded-xl p-4 mb-6">
-            <span className="text-sm text-green-400">
+          <div className="bg-green-50 border border-green-200 rounded-xl p-4 mb-6">
+            <span className="text-sm text-green-600">
               Tvoje umiestnenie: <strong>#{userRank}</strong>
             </span>
           </div>
@@ -168,9 +168,9 @@ export default function RebricekPage() {
 
         {/* Leaderboard */}
         {loading ? (
-          <div className="text-center text-gray-400 py-12">Načítavam...</div>
+          <div className="text-center text-gray-500 py-12">Načítavam...</div>
         ) : entries.length === 0 ? (
-          <div className="text-center text-gray-500 py-12">
+          <div className="text-center text-gray-400 py-12">
             Zatiaľ žiadne výsledky v tejto kategórii
           </div>
         ) : (
@@ -180,20 +180,20 @@ export default function RebricekPage() {
                 key={entry.id}
                 className={`flex items-center gap-4 rounded-xl p-4 ${
                   idx < 3
-                    ? 'bg-gray-900 border border-gray-700'
-                    : 'bg-gray-900/50 border border-gray-800/50'
+                    ? 'bg-white border border-gray-200 shadow-sm'
+                    : 'bg-white border border-gray-100'
                 }`}
               >
                 {/* Rank */}
                 <div
                   className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-bold ${
                     idx === 0
-                      ? 'bg-yellow-500/20 text-yellow-400'
+                      ? 'bg-yellow-50 text-yellow-600'
                       : idx === 1
-                      ? 'bg-gray-400/20 text-gray-300'
+                      ? 'bg-gray-100 text-gray-500'
                       : idx === 2
-                      ? 'bg-orange-500/20 text-orange-400'
-                      : 'bg-gray-800 text-gray-500'
+                      ? 'bg-orange-50 text-orange-500'
+                      : 'bg-gray-50 text-gray-400'
                   }`}
                 >
                   {idx + 1}
@@ -201,16 +201,16 @@ export default function RebricekPage() {
 
                 {/* Name */}
                 <div className="flex-1 min-w-0">
-                  <div className="text-sm font-medium text-white truncate">
+                  <div className="text-sm font-medium text-gray-900 truncate">
                     {entry.profiles?.nickname || 'Anonymný'}
                   </div>
-                  <div className="text-xs text-gray-500">
+                  <div className="text-xs text-gray-400">
                     {entry.accuracy}% presnosť | Séria {entry.longest_streak}
                   </div>
                 </div>
 
                 {/* Score */}
-                <div className="text-xl font-bold text-green-400 tabular-nums">
+                <div className="text-xl font-bold text-green-600 tabular-nums">
                   {entry.score}
                 </div>
               </div>
