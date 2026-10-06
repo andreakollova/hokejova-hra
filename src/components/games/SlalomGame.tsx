@@ -22,6 +22,10 @@ interface SlalomGameProps {
   onResume: () => void;
   isPaused: boolean;
   onBackToMenu?: () => void;
+  /** Beat timestamps in seconds - if provided, cones sync to beats */
+  beatTimestamps?: number[];
+  /** BPM for display */
+  bpm?: number;
 }
 
 export interface SlalomResult {
@@ -49,7 +53,9 @@ interface HudData {
   timeLeft: number;
   countdown: number;
   feedback: 'success' | 'error' | null;
-  backProgress: number; // 0-1, how long ball held in exit zone
+  backProgress: number;
+  beatPulse: boolean; // flash on beat
+  bpm: number;
 }
 
 // --- 3D Components ---
@@ -260,16 +266,30 @@ function GameScene({
   inputMode,
   hudRef,
   onBackToMenu,
+  beatTimestamps,
+  bpm,
 }: GameSceneProps) {
   const config = SLALOM_CONFIGS[difficulty];
   const challengeKey = `slalom-${difficulty}-${duration}`;
   const challengeVersion = CHALLENGE_VERSIONS[challengeKey] || 'v1';
   const sessionIdRef = useRef(crypto.randomUUID());
 
-  const coneSequence = useMemo(
-    () => generateConeSequence(duration, difficulty, challengeVersion),
-    [duration, difficulty, challengeVersion]
-  );
+  // Generate cone sequence: from beats if available, otherwise from seeded PRNG
+  const coneSequence = useMemo(() => {
+    if (beatTimestamps && beatTimestamps.length > 0) {
+      // Beat-synced: one cone per beat, alternating sides
+      const cones: ConeDefinition[] = [];
+      let lastSide: 'left' | 'right' = 'right';
+      for (const t of beatTimestamps) {
+        if (t < 2 || t > duration - 1) continue;
+        const side: 'left' | 'right' = lastSide === 'left' ? 'right' : 'left';
+        lastSide = side;
+        cones.push({ time: t, side, scored: false });
+      }
+      return cones;
+    }
+    return generateConeSequence(duration, difficulty, challengeVersion);
+  }, [duration, difficulty, challengeVersion, beatTimestamps]);
 
   const stateRef = useRef({
     score: 0,
@@ -418,6 +438,17 @@ function GameScene({
 
     s.cones = s.cones.filter((c) => c.z < ballZ + 5);
 
+    // Check if current time is near a beat (for visual pulse)
+    let onBeat = false;
+    if (beatTimestamps) {
+      for (const bt of beatTimestamps) {
+        if (Math.abs(s.elapsedTime - bt) < 0.08) {
+          onBeat = true;
+          break;
+        }
+      }
+    }
+
     hudRef.current = {
       score: s.score,
       streak: s.streak,
@@ -425,6 +456,8 @@ function GameScene({
       countdown: 0,
       feedback: feedbackType,
       backProgress: s.backTimer / 3,
+      beatPulse: onBeat,
+      bpm: bpm || 0,
     };
 
     setCones([...s.cones]);
@@ -498,6 +531,8 @@ export default function SlalomGame(props: SlalomGameProps) {
     countdown: 3,
     feedback: null,
     backProgress: 0,
+    beatPulse: false,
+    bpm: props.bpm || 0,
   });
 
   const [hud, setHud] = useState<HudData>(hudRef.current);
@@ -537,6 +572,12 @@ export default function SlalomGame(props: SlalomGameProps) {
             <div className="text-3xl font-bold text-white tabular-nums">{hud.streak}</div>
             <div className="text-xs text-white/50 uppercase tracking-wider">Séria</div>
           </div>
+          {hud.bpm > 0 && (
+            <div className={`bg-black/40 backdrop-blur-md rounded-2xl px-5 py-3 text-center transition-all ${hud.beatPulse ? 'ring-2 ring-green-400/50 scale-105' : ''}`}>
+              <div className="text-3xl font-bold text-white tabular-nums">{hud.bpm}</div>
+              <div className="text-xs text-white/50 uppercase tracking-wider">BPM</div>
+            </div>
+          )}
         </div>
       </div>
 

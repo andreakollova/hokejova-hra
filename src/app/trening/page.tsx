@@ -4,6 +4,7 @@ import { useState, useRef, useCallback, useEffect } from 'react';
 import dynamic from 'next/dynamic';
 import { CalibrationData, InputMode, GameInput } from '@/lib/tracking';
 import { SlalomResult } from '@/components/games/SlalomGame';
+import { MusicConfig } from '@/components/music/MusicSelector';
 import { useTracker } from '@/hooks/useTracker';
 import { useCamera } from '@/hooks/useCamera';
 import Link from 'next/link';
@@ -18,8 +19,11 @@ const SlalomGame = dynamic(() => import('@/components/games/SlalomGame'), {
 const ResultScreen = dynamic(() => import('@/components/ui/ResultScreen'), {
   ssr: false,
 });
+const MusicSelector = dynamic(() => import('@/components/music/MusicSelector'), {
+  ssr: false,
+});
 
-type Phase = 'setup' | 'calibration' | 'playing' | 'result';
+type Phase = 'setup' | 'calibration' | 'music' | 'playing' | 'result';
 
 export default function TreningPage() {
   const [phase, setPhase] = useState<Phase>('setup');
@@ -29,6 +33,7 @@ export default function TreningPage() {
   const [result, setResult] = useState<SlalomResult | null>(null);
   const [isPaused, setIsPaused] = useState(false);
   const [calibration, setCalibration] = useState<CalibrationData | null>(null);
+  const [musicConfig, setMusicConfig] = useState<MusicConfig | null>(null);
 
   const tracker = useTracker(inputMode);
   const videoRef = useRef<HTMLVideoElement>(null);
@@ -135,6 +140,18 @@ export default function TreningPage() {
     );
   }
 
+  if (phase === 'music') {
+    return (
+      <MusicSelector
+        onSelect={(config) => {
+          setMusicConfig(config);
+          setPhase('setup');
+        }}
+        onCancel={() => setPhase('setup')}
+      />
+    );
+  }
+
   if (phase === 'result' && result) {
     return (
       <ResultScreen
@@ -174,8 +191,11 @@ export default function TreningPage() {
           onBackToMenu={() => {
             tracker.stopTracking();
             stopCamera();
+            setMusicConfig(null);
             setPhase('setup');
           }}
+          beatTimestamps={musicConfig?.beatMap?.beats}
+          bpm={musicConfig?.bpm}
         />
 
         {/* Tracking quality indicator */}
@@ -335,9 +355,57 @@ export default function TreningPage() {
             </div>
           </div>
 
+          {/* Beat mode */}
+          <div>
+            <label className="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-3 block">
+              Hudba
+            </label>
+            <button
+              onClick={() => setPhase('music')}
+              className={`w-full rounded-2xl p-4 border-2 transition-all text-left ${
+                musicConfig
+                  ? 'border-green-500/60 bg-green-500/8'
+                  : 'border-gray-800 bg-gray-900/50 hover:border-gray-700'
+              }`}
+            >
+              {musicConfig ? (
+                <div className="flex items-center justify-between">
+                  <div>
+                    <div className="text-sm font-semibold text-white">
+                      {musicConfig.track?.name || `${musicConfig.bpm} BPM`}
+                    </div>
+                    <div className="text-xs text-gray-400 mt-0.5">
+                      {musicConfig.track?.artists || (musicConfig.mode === 'tap' ? 'Tap tempo' : 'Metronóm')}
+                      {' - '}{musicConfig.bpm} BPM
+                    </div>
+                  </div>
+                  <span className="text-xs text-green-400">Zmeniť</span>
+                </div>
+              ) : (
+                <div className="flex items-center justify-between">
+                  <div>
+                    <div className="text-sm font-semibold text-white">Beat mód</div>
+                    <div className="text-xs text-gray-400 mt-0.5">
+                      Kužele syncnuté na rytmus hudby
+                    </div>
+                  </div>
+                  <span className="text-xs text-gray-500">Nastaviť</span>
+                </div>
+              )}
+            </button>
+            {musicConfig && (
+              <button
+                onClick={() => setMusicConfig(null)}
+                className="text-xs text-gray-600 hover:text-gray-400 mt-2 transition-colors"
+              >
+                Vypnúť beat mód
+              </button>
+            )}
+          </div>
+
           {/* Start button */}
           <button onClick={startGame} className="btn-primary w-full text-lg py-4 mt-2">
-            Spustiť tréning
+            {musicConfig ? `Hrať na ${musicConfig.bpm} BPM` : 'Spustiť tréning'}
           </button>
 
           {inputMode === 'demo' && (
