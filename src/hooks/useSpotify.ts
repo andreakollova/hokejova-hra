@@ -167,16 +167,33 @@ export function useSpotify() {
     setCurrentTrack(track);
     setBeatMap(null);
 
-    // Fetch audio analysis
+    // Try audio-features for BPM (audio-analysis was deprecated by Spotify)
+    let tempo = 120; // default
     try {
-      const res = await fetch(`/api/spotify/analysis?id=${track.id}`);
+      const res = await fetch(`/api/spotify/analysis?id=${track.id}&type=features`);
       if (res.ok) {
         const data = await res.json();
-        setBeatMap(parseAnalysis(data));
+        if (data.tempo) {
+          tempo = Math.round(data.tempo);
+        }
       }
-    } catch (e) {
-      console.error('Failed to get audio analysis:', e);
+    } catch {}
+
+    // Generate evenly-spaced beat timestamps from BPM
+    const durationS = track.durationMs / 1000;
+    const beatInterval = 60 / tempo;
+    const beats: number[] = [];
+    for (let t = 0; t < durationS; t += beatInterval) {
+      beats.push(t);
     }
+
+    setBeatMap({
+      tempo,
+      beats,
+      bars: [],
+      sections: [],
+      durationS,
+    });
   }, []);
 
   const play = useCallback(async (track?: SpotifyTrack) => {
