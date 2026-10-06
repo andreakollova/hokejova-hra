@@ -74,31 +74,32 @@ function Cone({
   const color = passed
     ? correct ? '#22c55e' : '#ef4444'
     : '#f59e0b';
+  // Arrow points AWAY from center = direction to pass
   const arrowX = side === 'left' ? -1.0 : 1.0;
 
   return (
     <group position={position}>
       {/* Cone body */}
       <mesh castShadow>
-        <coneGeometry args={[0.22, 0.65, 8]} />
+        <coneGeometry args={[0.25, 0.7, 8]} />
         <meshStandardMaterial color={color} roughness={0.5} metalness={0.05} />
       </mesh>
       {/* Cone base */}
-      <mesh position={[0, -0.33, 0]} receiveShadow>
-        <cylinderGeometry args={[0.32, 0.32, 0.04, 8]} />
+      <mesh position={[0, -0.35, 0]} receiveShadow>
+        <cylinderGeometry args={[0.35, 0.35, 0.05, 8]} />
         <meshStandardMaterial color={color} roughness={0.7} />
       </mesh>
-      {/* Gate corridor - glowing line showing which side to pass */}
+      {/* Glowing corridor toward the side player should go */}
       {!passed && (
         <group position={[arrowX, 0.02, 0]}>
           <mesh rotation={[-Math.PI / 2, 0, 0]}>
-            <planeGeometry args={[0.8, 0.2]} />
+            <planeGeometry args={[1.2, 0.25]} />
             <meshStandardMaterial
               color="#4ade80"
               emissive="#4ade80"
-              emissiveIntensity={0.5}
+              emissiveIntensity={0.6}
               transparent
-              opacity={0.5}
+              opacity={0.45}
               side={THREE.DoubleSide}
             />
           </mesh>
@@ -269,7 +270,11 @@ function GameScene({
   beatTimestamps,
   bpm,
 }: GameSceneProps) {
-  const config = SLALOM_CONFIGS[difficulty];
+  const baseConfig = SLALOM_CONFIGS[difficulty];
+  // In beat mode, slow down cone speed so they're more spaced visually
+  const config = beatTimestamps
+    ? { ...baseConfig, coneSpeed: Math.min(baseConfig.coneSpeed, 2.5) }
+    : baseConfig;
   const challengeKey = `slalom-${difficulty}-${duration}`;
   const challengeVersion = CHALLENGE_VERSIONS[challengeKey] || 'v1';
   const sessionIdRef = useRef(crypto.randomUUID());
@@ -277,11 +282,16 @@ function GameScene({
   // Generate cone sequence: from beats if available, otherwise from seeded PRNG
   const coneSequence = useMemo(() => {
     if (beatTimestamps && beatTimestamps.length > 0) {
-      // Beat-synced: one cone per beat, alternating sides
+      // For fast BPM, skip beats so player has time to move
+      // Easy: every 4th beat, Medium: every 2nd, Hard: every beat
+      const skipFactor = difficulty === 'easy' ? 4 : difficulty === 'medium' ? 2 : 1;
       const cones: ConeDefinition[] = [];
       let lastSide: 'left' | 'right' = 'right';
+      let beatIdx = 0;
       for (const t of beatTimestamps) {
-        if (t < 2 || t > duration - 1) continue;
+        if (t < 3 || t > duration - 1) { beatIdx++; continue; }
+        if (beatIdx % skipFactor !== 0) { beatIdx++; continue; }
+        beatIdx++;
         const side: 'left' | 'right' = lastSide === 'left' ? 'right' : 'left';
         lastSide = side;
         cones.push({ time: t, side, scored: false });
@@ -496,7 +506,7 @@ function GameScene({
       {cones.map((cone) => (
         <Cone
           key={cone.id}
-          position={[0, CONE_Y + 0.33, cone.z]}
+          position={[cone.side === 'left' ? -1.2 : 1.2, CONE_Y + 0.33, cone.z]}
           side={cone.side}
           passed={cone.passed}
           correct={cone.correct}
