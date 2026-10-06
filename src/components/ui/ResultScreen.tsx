@@ -19,7 +19,7 @@ export default function ResultScreen({
   onPlayAgain,
   onMenu,
 }: ResultScreenProps) {
-  const { user, profile } = useAuth();
+  const { user } = useAuth();
   const [personalBest, setPersonalBest] = useState<number | null>(null);
   const [isNewRecord, setIsNewRecord] = useState(false);
   const [saved, setSaved] = useState(false);
@@ -29,7 +29,7 @@ export default function ResultScreen({
   }, []);
 
   const saveResult = async () => {
-    if (result.inputMode === 'demo') return; // Demo results don't save to leaderboard
+    if (result.inputMode === 'demo') return;
     if (!user) return;
 
     try {
@@ -40,7 +40,6 @@ export default function ResultScreen({
       const score = isSlalom ? slalomResult.score : f8Result.completedEights;
       const accuracy = isSlalom ? slalomResult.accuracy : 100;
 
-      // Check personal best
       const { data: existing } = await supabase
         .from('training_results')
         .select('score')
@@ -58,7 +57,6 @@ export default function ResultScreen({
         setIsNewRecord(true);
       }
 
-      // Save result via API to validate server-side
       const res = await fetch('/api/scores', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -89,97 +87,67 @@ export default function ResultScreen({
 
   return (
     <div className="min-h-screen bg-gray-950 flex items-center justify-center p-6">
-      <div className="max-w-lg w-full bg-gray-900 rounded-2xl p-8 space-y-6">
+      <div className="max-w-md w-full space-y-8">
         <div className="text-center">
           {isNewRecord && (
-            <div className="text-yellow-400 text-sm font-medium mb-2">
-              Novy osobny rekord!
+            <div className="inline-flex items-center gap-2 bg-yellow-500/10 border border-yellow-500/20 rounded-full px-4 py-1.5 text-xs text-yellow-400 font-semibold mb-4">
+              Nový osobný rekord!
             </div>
           )}
-          <h1 className="text-3xl font-bold text-white mb-1">
-            {isSlalom ? 'Slalom dokonceny' : 'Osmicky dokoncene'}
+          <h1 className="text-3xl font-extrabold text-white mb-1">
+            {isSlalom ? 'Slalom dokončený' : 'Osmičky dokončené'}
           </h1>
           {result.inputMode === 'demo' && (
-            <span className="inline-block bg-gray-700 text-gray-300 text-xs px-2 py-1 rounded mt-1">
-              Demo rezim - neuklada sa do rebricka
+            <span className="inline-block bg-gray-800 text-gray-400 text-xs px-3 py-1 rounded-full mt-2">
+              Demo režim - neukladá sa do rebríčka
             </span>
           )}
         </div>
 
-        {/* Stats */}
-        <div className="grid grid-cols-2 gap-4">
+        <div className="grid grid-cols-2 gap-3">
           {isSlalom ? (
             <>
+              <StatCard label="Skóre" value={slalomResult.score.toString()} highlight />
+              <StatCard label="Úspešnosť" value={`${slalomResult.accuracy}%`} />
+              <StatCard label="Správne prejazdy" value={`${slalomResult.correctPasses}/${slalomResult.totalCones}`} />
+              <StatCard label="Najdlhšia séria" value={slalomResult.longestStreak.toString()} />
+              <StatCard label="Chyby" value={slalomResult.errors.toString()} />
               <StatCard
-                label="Skore"
-                value={slalomResult.score.toString()}
-                highlight
-              />
-              <StatCard
-                label="Uspesnost"
-                value={`${slalomResult.accuracy}%`}
-              />
-              <StatCard
-                label="Spravne prejazdy"
-                value={`${slalomResult.correctPasses}/${slalomResult.totalCones}`}
-              />
-              <StatCard
-                label="Najdlhsia seria"
-                value={slalomResult.longestStreak.toString()}
-              />
-              <StatCard
-                label="Chyby"
-                value={slalomResult.errors.toString()}
-              />
-              <StatCard
-                label="Obtaznost"
-                value={slalomResult.difficulty === 'easy' ? 'Lahka' : slalomResult.difficulty === 'medium' ? 'Stredna' : 'Tazka'}
+                label="Obťažnosť"
+                value={slalomResult.difficulty === 'easy' ? 'Ľahká' : slalomResult.difficulty === 'medium' ? 'Stredná' : 'Ťažká'}
               />
             </>
           ) : (
             <>
-              <StatCard
-                label="Osmicky"
-                value={f8Result.completedEights.toString()}
-                highlight
-              />
-              <StatCard
-                label="Tempo"
-                value={`${f8Result.tempo}/min`}
-              />
-              <StatCard
-                label="Cas"
-                value={`${f8Result.duration}s`}
-              />
+              <StatCard label="Osmičky" value={f8Result.completedEights.toString()} highlight />
+              <StatCard label="Tempo" value={`${f8Result.tempo}/min`} />
+              <StatCard label="Čas" value={`${f8Result.duration}s`} />
             </>
           )}
         </div>
 
-        {/* Personal best comparison */}
         {personalBest !== null && !isNewRecord && (
-          <div className="text-center text-sm text-gray-400">
-            Osobny rekord: {personalBest}
+          <div className="text-center text-sm text-gray-500">
+            Osobný rekord: <span className="text-gray-300 font-semibold">{personalBest}</span>
           </div>
         )}
 
-        {/* Score explanation */}
         {isSlalom && (
-          <details className="text-xs text-gray-500">
-            <summary className="cursor-pointer hover:text-gray-400">
-              Ako sa pocita skore?
+          <details className="text-xs text-gray-500 card p-4">
+            <summary className="cursor-pointer hover:text-gray-400 font-medium">
+              Ako sa počíta skóre?
             </summary>
-            <p className="mt-2">
-              Za kazdy spravny prejazd ziskas zakladne body (10) nasobene
-              obtaznostou. K tomu sa pripocita bonus za nepretrzitu seriu
-              spravnych prejazdov. Seria sa resetuje pri chybe.
+            <p className="mt-2 leading-relaxed">
+              Za každý správny prejazd získaš základné body (10) násobené
+              obťažnosťou. K tomu sa pripočíta bonus za nepretržitú sériu
+              správnych prejazdov. Séria sa resetuje pri chybe.
             </p>
           </details>
         )}
 
-        {/* Actions */}
         <div className="flex gap-3">
           <button onClick={onPlayAgain} className="btn-primary flex-1">
-            Hrat znova
+            Hrať znova
           </button>
           <button onClick={onMenu} className="btn-secondary flex-1">
             Menu
@@ -200,11 +168,11 @@ function StatCard({
   highlight?: boolean;
 }) {
   return (
-    <div className="bg-gray-800 rounded-xl p-4">
+    <div className="card p-4">
       <div className={`text-2xl font-bold ${highlight ? 'text-green-400' : 'text-white'} tabular-nums`}>
         {value}
       </div>
-      <div className="text-xs text-gray-400 mt-1">{label}</div>
+      <div className="text-xs text-gray-500 mt-1.5">{label}</div>
     </div>
   );
 }

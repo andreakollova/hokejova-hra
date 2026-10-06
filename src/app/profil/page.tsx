@@ -50,7 +50,7 @@ export default function ProfilPage() {
   if (loading) {
     return (
       <div className="min-h-screen bg-gray-950 flex items-center justify-center">
-        <div className="text-gray-400">Nacitavam...</div>
+        <div className="text-gray-400">Načítavam...</div>
       </div>
     );
   }
@@ -59,22 +59,22 @@ export default function ProfilPage() {
     return (
       <div className="min-h-screen bg-gray-950 p-6">
         <div className="max-w-lg mx-auto text-center pt-20">
-          <h1 className="text-2xl font-bold text-white mb-4">Moj profil</h1>
+          <h1 className="text-2xl font-bold text-white mb-4">Môj profil</h1>
           <p className="text-gray-400 mb-6">
-            Prihlas sa, aby si videl svoju historiu a osobne rekordy.
+            Prihlas sa, aby si videl svoju históriu a osobné rekordy.
           </p>
           <button
             onClick={() => setShowAuth(true)}
             className="btn-primary"
           >
-            Prihlasit sa
+            Prihlásiť sa
           </button>
           <div className="mt-4">
             <Link
               href="/"
               className="text-sm text-gray-500 hover:text-gray-300 transition-colors"
             >
-              &larr; Spat
+              &larr; Späť
             </Link>
           </div>
           {showAuth && <AuthModal onClose={() => setShowAuth(false)} />}
@@ -90,7 +90,7 @@ export default function ProfilPage() {
           href="/"
           className="text-sm text-gray-500 hover:text-gray-300 transition-colors mb-8 inline-block"
         >
-          &larr; Spat
+          &larr; Späť
         </Link>
 
         {/* Profile header */}
@@ -104,16 +104,16 @@ export default function ProfilPage() {
                     value={newNickname}
                     onChange={(e) => setNewNickname(e.target.value)}
                     className="input-field w-48"
-                    placeholder="Nova prezyvka"
+                    placeholder="Nová prezývka"
                   />
                   <button onClick={handleSaveNickname} className="btn-primary text-sm px-3 py-2">
-                    Ulozit
+                    Uložiť
                   </button>
                 </div>
               ) : (
                 <div className="flex items-center gap-3">
                   <h1 className="text-2xl font-bold text-white">
-                    {profile?.nickname || 'Hrac'}
+                    {profile?.nickname || 'Hráč'}
                   </h1>
                   <button
                     onClick={() => {
@@ -122,7 +122,7 @@ export default function ProfilPage() {
                     }}
                     className="text-sm text-gray-500 hover:text-gray-300"
                   >
-                    Upravit
+                    Upraviť
                   </button>
                 </div>
               )}
@@ -134,21 +134,21 @@ export default function ProfilPage() {
               onClick={signOut}
               className="text-sm text-gray-500 hover:text-red-400 transition-colors"
             >
-              Odhlasit
+              Odhlásiť
             </button>
           </div>
         </div>
 
         {/* Training history */}
         <h2 className="text-lg font-semibold text-white mb-4">
-          Historia treningov
+          História tréningov
         </h2>
 
         {history.length === 0 ? (
           <div className="bg-gray-900/50 rounded-xl p-8 text-center">
-            <p className="text-gray-400">Zatial ziadne treningy</p>
+            <p className="text-gray-400">Zatiaľ žiadne tréningy</p>
             <Link href="/trening" className="btn-primary mt-4 inline-block">
-              Zacat trenovat
+              Začať trénovať
             </Link>
           </div>
         ) : (
@@ -160,13 +160,13 @@ export default function ProfilPage() {
               >
                 <div>
                   <div className="text-sm font-medium text-white">
-                    {rec.game_type === 'slalom' ? 'Slalom' : 'Osmicky'}{' '}
+                    {rec.game_type === 'slalom' ? 'Slalom' : 'Osmičky'}{' '}
                     <span className="text-gray-500">
                       {rec.difficulty === 'easy'
-                        ? 'Lahka'
+                        ? 'Ľahká'
                         : rec.difficulty === 'medium'
-                        ? 'Stredna'
-                        : 'Tazka'}{' '}
+                        ? 'Stredná'
+                        : 'Ťažká'}{' '}
                       / {rec.duration_seconds}s
                     </span>
                   </div>
@@ -184,7 +184,7 @@ export default function ProfilPage() {
                     {rec.score}
                   </div>
                   <div className="text-xs text-gray-500">
-                    {rec.accuracy}% | Seria {rec.longest_streak}
+                    {rec.accuracy}% | Séria {rec.longest_streak}
                   </div>
                 </div>
               </div>

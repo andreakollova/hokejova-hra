@@ -26,13 +26,13 @@ export default function AuthModal({ onClose }: AuthModalProps) {
       if (mode === 'login') {
         const err = await signInWithEmail(email, password);
         if (err) {
-          setError('Nespravny email alebo heslo');
+          setError('Nesprávny email alebo heslo');
         } else {
           onClose();
         }
       } else {
         if (nickname.length < 2) {
-          setError('Prezyvka musi mat aspon 2 znaky');
+          setError('Prezývka musí mať aspoň 2 znaky');
           setLoading(false);
           return;
         }
@@ -44,7 +44,7 @@ export default function AuthModal({ onClose }: AuthModalProps) {
         }
       }
     } catch {
-      setError('Neocakavana chyba');
+      setError('Neočakávaná chyba');
     } finally {
       setLoading(false);
     }
@@ -55,7 +55,7 @@ export default function AuthModal({ onClose }: AuthModalProps) {
       <div className="bg-gray-900 rounded-2xl p-6 w-full max-w-sm">
         <div className="flex justify-between items-center mb-6">
           <h2 className="text-xl font-bold text-white">
-            {mode === 'login' ? 'Prihlasenie' : 'Registracia'}
+            {mode === 'login' ? 'Prihlásenie' : 'Registrácia'}
           </h2>
           <button
             onClick={onClose}
@@ -69,14 +69,14 @@ export default function AuthModal({ onClose }: AuthModalProps) {
           {mode === 'register' && (
             <div>
               <label className="text-sm text-gray-400 block mb-1">
-                Prezyvka
+                Prezývka
               </label>
               <input
                 type="text"
                 value={nickname}
                 onChange={(e) => setNickname(e.target.value)}
                 className="input-field"
-                placeholder="Tvoja prezyvka"
+                placeholder="Tvoja prezývka"
                 required
               />
             </div>
@@ -113,10 +113,10 @@ export default function AuthModal({ onClose }: AuthModalProps) {
             className="btn-primary w-full disabled:opacity-50"
           >
             {loading
-              ? 'Nacitavam...'
+              ? 'Načítavam...'
               : mode === 'login'
-              ? 'Prihlasit sa'
-              : 'Registrovat sa'}
+              ? 'Prihlásiť sa'
+              : 'Registrovať sa'}
           </button>
         </form>
 
@@ -126,8 +126,8 @@ export default function AuthModal({ onClose }: AuthModalProps) {
             className="text-sm text-gray-400 hover:text-green-400 transition-colors"
           >
             {mode === 'login'
-              ? 'Nemas ucet? Registruj sa'
-              : 'Mas ucet? Prihlas sa'}
+              ? 'Nemáš účet? Registruj sa'
+              : 'Máš účet? Prihlas sa'}
           </button>
         </div>
       </div>

@@ -35,7 +35,7 @@ export function useCamera() {
       setDevices(videoDevices);
       return videoDevices;
     } catch {
-      setError('Nepodarilo sa nacitat kamery');
+      setError('Nepodarilo sa načítať kamery');
       return [];
     }
   }, []);
@@ -49,7 +49,7 @@ export function useCamera() {
       return true;
     } catch {
       setPermission('denied');
-      setError('Pristup ku kamere bol zamietnuty');
+      setError('Prístup ku kamere bol zamietnutý');
       return false;
     }
   }, [enumerateDevices]);
@@ -93,7 +93,7 @@ export function useCamera() {
         setError(null);
         return info;
       } catch (e) {
-        const msg = e instanceof Error ? e.message : 'Neznama chyba kamery';
+        const msg = e instanceof Error ? e.message : 'Neznáma chyba kamery';
         setError(msg);
         return null;
       }

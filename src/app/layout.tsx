@@ -8,9 +8,9 @@ const inter = Inter({
 });
 
 export const metadata: Metadata = {
-  title: "Hokejovy Trener - Trening pozemneho hokeja",
+  title: "Hokejový Tréner - Tréning pozemného hokeja",
   description:
-    "Trenuj techniku miesania lopticky v interaktivnom treningovom prostredi s kamerou v realnom case.",
+    "Trénuj techniku miešania loptičky v interaktívnom tréningovom prostredí s kamerou v reálnom čase.",
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {

@@ -15,15 +15,24 @@ body {
 
 /* Custom button styles */
 .btn-primary {
-  @apply bg-green-600 hover:bg-green-500 text-white font-medium px-6 py-3 rounded-xl transition-all duration-200 active:scale-95;
+  @apply bg-green-600 hover:bg-green-500 text-white font-semibold px-6 py-3.5 rounded-2xl transition-all duration-200 active:scale-[0.97] shadow-lg shadow-green-600/20 hover:shadow-green-500/30;
 }
 
 .btn-secondary {
-  @apply bg-gray-800 hover:bg-gray-700 text-gray-200 font-medium px-6 py-3 rounded-xl transition-all duration-200 border border-gray-700;
+  @apply bg-gray-800 hover:bg-gray-700 text-gray-200 font-medium px-6 py-3.5 rounded-2xl transition-all duration-200 border border-gray-700 hover:border-gray-600;
 }
 
 .input-field {
-  @apply w-full bg-gray-800 border border-gray-700 rounded-xl px-4 py-3 text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-green-500/50 focus:border-green-500 transition-colors;
+  @apply w-full bg-gray-800/80 border border-gray-700 rounded-2xl px-4 py-3.5 text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-green-500/40 focus:border-green-500/60 transition-all;
+}
+
+/* Card base */
+.card {
+  @apply bg-gray-900/80 border border-gray-800/60 rounded-2xl;
+}
+
+.card-hover {
+  @apply bg-gray-900/80 border border-gray-800/60 rounded-2xl hover:border-green-500/40 hover:bg-gray-900/90 transition-all duration-300;
 }
 
 /* Smooth scrollbar */

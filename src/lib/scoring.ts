@@ -121,21 +121,21 @@ export const SLALOM_CONFIGS: Record<string, SlalomConfig> = {
     minGap: 1.8,
     maxGap: 2.8,
     movementRange: 0.3,
-    label: 'Lahka',
+    label: 'Ľahká',
   },
   medium: {
     coneSpeed: 4.5,
     minGap: 1.3,
     maxGap: 2.2,
     movementRange: 0.4,
-    label: 'Stredna',
+    label: 'Stredná',
   },
   hard: {
     coneSpeed: 6.0,
     minGap: 0.9,
     maxGap: 1.6,
     movementRange: 0.5,
-    label: 'Tazka',
+    label: 'Ťažká',
   },
 };
 

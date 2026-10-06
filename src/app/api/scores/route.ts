@@ -59,23 +59,23 @@ export async function POST(request: NextRequest) {
 
     // Validate required fields
     if (!game_type || !difficulty || !duration_seconds || score === undefined || !session_id) {
-      return NextResponse.json({ error: 'Chybajuce polia' }, { status: 400 });
+      return NextResponse.json({ error: 'Chýbajúce polia' }, { status: 400 });
     }
 
     // Validate game configuration
     if (!VALID_GAME_TYPES.includes(game_type)) {
-      return NextResponse.json({ error: 'Neplatny typ hry' }, { status: 400 });
+      return NextResponse.json({ error: 'Neplatný typ hry' }, { status: 400 });
     }
     if (!VALID_DIFFICULTIES.includes(difficulty)) {
-      return NextResponse.json({ error: 'Neplatna obtaznost' }, { status: 400 });
+      return NextResponse.json({ error: 'Neplatná obťažnosť' }, { status: 400 });
     }
     if (!VALID_DURATIONS.includes(duration_seconds)) {
-      return NextResponse.json({ error: 'Neplatna dlzka' }, { status: 400 });
+      return NextResponse.json({ error: 'Neplatná dĺžka' }, { status: 400 });
     }
 
     // Validate score bounds
     if (score < 0 || score > duration_seconds * MAX_SCORE_PER_SECOND) {
-      return NextResponse.json({ error: 'Skore mimo rozsahu' }, { status: 400 });
+      return NextResponse.json({ error: 'Skóre mimo rozsahu' }, { status: 400 });
     }
 
     // Check for duplicate session
@@ -87,7 +87,7 @@ export async function POST(request: NextRequest) {
         .limit(1);
 
       if (existing && existing.length > 0) {
-        return NextResponse.json({ error: 'Session uz existuje' }, { status: 409 });
+        return NextResponse.json({ error: 'Session už existuje' }, { status: 409 });
       }
 
       // Demo results don't go to leaderboard
@@ -108,7 +108,7 @@ export async function POST(request: NextRequest) {
 
       if (error) {
         console.error('DB insert error:', error);
-        return NextResponse.json({ error: 'Chyba pri ukladani' }, { status: 500 });
+        return NextResponse.json({ error: 'Chyba pri ukladaní' }, { status: 500 });
       }
     }
 

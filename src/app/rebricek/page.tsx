@@ -87,10 +87,10 @@ export default function RebricekPage() {
           href="/"
           className="text-sm text-gray-500 hover:text-gray-300 transition-colors mb-8 inline-block"
         >
-          &larr; Spat
+          &larr; Späť
         </Link>
 
-        <h1 className="text-3xl font-bold text-white mb-6">Rebricek</h1>
+        <h1 className="text-3xl font-bold text-white mb-6">Rebríček</h1>
 
         {/* Filters */}
         <div className="space-y-4 mb-8">
@@ -114,7 +114,7 @@ export default function RebricekPage() {
                   : 'bg-gray-800 text-gray-400 border border-gray-700'
               }`}
             >
-              Osmicky
+              Osmičky
             </button>
           </div>
 
@@ -132,7 +132,7 @@ export default function RebricekPage() {
                         : 'bg-gray-800/50 text-gray-500 hover:text-gray-300'
                     }`}
                   >
-                    {d === 'easy' ? 'Lahka' : d === 'medium' ? 'Stredna' : 'Tazka'}
+                    {d === 'easy' ? 'Ľahká' : d === 'medium' ? 'Stredná' : 'Ťažká'}
                   </button>
                 ))}
               </div>
@@ -168,10 +168,10 @@ export default function RebricekPage() {
 
         {/* Leaderboard */}
         {loading ? (
-          <div className="text-center text-gray-400 py-12">Nacitavam...</div>
+          <div className="text-center text-gray-400 py-12">Načítavam...</div>
         ) : entries.length === 0 ? (
           <div className="text-center text-gray-500 py-12">
-            Zatial ziadne vysledky v tejto kategorii
+            Zatiaľ žiadne výsledky v tejto kategórii
           </div>
         ) : (
           <div className="space-y-2">
@@ -202,10 +202,10 @@ export default function RebricekPage() {
                 {/* Name */}
                 <div className="flex-1 min-w-0">
                   <div className="text-sm font-medium text-white truncate">
-                    {entry.profiles?.nickname || 'Anonymny'}
+                    {entry.profiles?.nickname || 'Anonymný'}
                   </div>
                   <div className="text-xs text-gray-500">
-                    {entry.accuracy}% presnost | Seria {entry.longest_streak}
+                    {entry.accuracy}% presnosť | Séria {entry.longest_streak}
                   </div>
                 </div>
 

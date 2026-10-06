@@ -171,6 +171,11 @@ export default function TreningPage() {
           onPause={handlePause}
           onResume={handleResume}
           isPaused={isPaused}
+          onBackToMenu={() => {
+            tracker.stopTracking();
+            stopCamera();
+            setPhase('setup');
+          }}
         />
 
         {/* Tracking quality indicator */}
@@ -194,7 +199,7 @@ export default function TreningPage() {
         {inputMode === 'demo' && (
           <div className="absolute bottom-4 left-4 bg-yellow-500/20 border border-yellow-500/30 rounded-lg px-3 py-2">
             <span className="text-xs text-yellow-400">
-              Demo rezim - pohybuj mysou
+              Demo režim - pohybuj myšou
             </span>
           </div>
         )}
@@ -214,98 +219,95 @@ export default function TreningPage() {
 
   // Setup phase
   return (
-    <div className="min-h-screen bg-gray-950 p-6">
-      <div className="max-w-2xl mx-auto">
+    <div className="min-h-screen bg-gray-950 px-6 py-8">
+      <div className="max-w-lg mx-auto">
         <Link
           href="/"
-          className="text-sm text-gray-500 hover:text-gray-300 transition-colors mb-8 inline-block"
+          className="inline-flex items-center gap-1.5 text-sm text-gray-500 hover:text-gray-300 transition-colors mb-10"
         >
-          &larr; Spat
+          <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+            <path strokeLinecap="round" strokeLinejoin="round" d="M15 19l-7-7 7-7" />
+          </svg>
+          Späť
         </Link>
 
-        <h1 className="text-3xl font-bold text-white mb-2">Slalom</h1>
-        <p className="text-gray-400 mb-8">
-          Vyhybaj sa kuzelom striedavo zlava a sprava. Kuzele sa priblizuju k tebe
-          a ty musys viest lopticku na spravnu stranu.
-        </p>
+        <div className="mb-10">
+          <h1 className="text-4xl font-extrabold text-white mb-3 tracking-tight">Slalom</h1>
+          <p className="text-gray-400 leading-relaxed">
+            Vyhýbaj sa kužeľom striedavo zľava a sprava. Kužele sa priblížujú k tebe
+            a ty musíš viesť loptičku na správnu stranu.
+          </p>
+        </div>
 
-        {/* Input mode */}
-        <div className="space-y-6">
+        <div className="space-y-7">
+          {/* Input mode */}
           <div>
-            <label className="text-sm font-medium text-gray-300 mb-3 block">
-              Rezim vstupu
+            <label className="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-3 block">
+              Režim vstupu
             </label>
             <div className="flex gap-3">
               <button
                 onClick={() => setInputMode('camera')}
-                className={`flex-1 rounded-xl p-4 border transition-all ${
+                className={`flex-1 rounded-2xl p-4 border-2 transition-all ${
                   inputMode === 'camera'
-                    ? 'border-green-500 bg-green-500/10'
-                    : 'border-gray-700 bg-gray-900 hover:border-gray-600'
+                    ? 'border-green-500/60 bg-green-500/8'
+                    : 'border-gray-800 bg-gray-900/50 hover:border-gray-700'
                 }`}
               >
-                <div className="text-sm font-medium text-white">Kamera</div>
-                <div className="text-xs text-gray-400 mt-1">
-                  Sledovanie realnej lopticky
-                </div>
+                <div className="text-sm font-semibold text-white">Kamera</div>
+                <div className="text-xs text-gray-400 mt-1">Sledovanie reálnej loptičky</div>
               </button>
               <button
                 onClick={() => setInputMode('demo')}
-                className={`flex-1 rounded-xl p-4 border transition-all ${
+                className={`flex-1 rounded-2xl p-4 border-2 transition-all ${
                   inputMode === 'demo'
-                    ? 'border-yellow-500 bg-yellow-500/10'
-                    : 'border-gray-700 bg-gray-900 hover:border-gray-600'
+                    ? 'border-yellow-500/60 bg-yellow-500/8'
+                    : 'border-gray-800 bg-gray-900/50 hover:border-gray-700'
                 }`}
               >
-                <div className="text-sm font-medium text-white">
-                  Demo (mys)
-                </div>
-                <div className="text-xs text-gray-400 mt-1">
-                  Testovanie bez kamery
-                </div>
+                <div className="text-sm font-semibold text-white">Demo (myš)</div>
+                <div className="text-xs text-gray-400 mt-1">Testovanie bez kamery</div>
               </button>
             </div>
           </div>
 
           {/* Calibration status */}
           {inputMode === 'camera' && (
-            <div className="flex items-center justify-between bg-gray-900 rounded-xl p-4 border border-gray-800">
+            <div className="flex items-center justify-between card p-5">
               <div>
-                <div className="text-sm font-medium text-white">
-                  Kalibracia kamery
-                </div>
-                <div className="text-xs text-gray-400 mt-1">
+                <div className="text-sm font-semibold text-white">Kalibrácia kamery</div>
+                <div className="text-xs text-gray-400 mt-1.5">
                   {calibration
-                    ? `Kalibracia ulozena (${calibration.resolution.width}x${calibration.resolution.height})`
-                    : 'Nie je nastavena - kalibracia sa spusti automaticky'}
+                    ? `Uložená (${calibration.resolution.width}x${calibration.resolution.height})`
+                    : 'Nie je nastavená'}
                 </div>
               </div>
               <button
                 onClick={() => setPhase('calibration')}
-                className="text-sm text-green-400 hover:text-green-300 transition-colors"
+                className="text-sm font-medium text-green-400 hover:text-green-300 bg-green-500/10 hover:bg-green-500/15 px-4 py-2 rounded-xl transition-all"
               >
-                {calibration ? 'Prekalibrovat' : 'Kalibrovat'}
+                {calibration ? 'Prekalibrovať' : 'Kalibrovať'}
               </button>
             </div>
           )}
 
           {/* Difficulty */}
           <div>
-            <label className="text-sm font-medium text-gray-300 mb-3 block">
-              Obtaznost
+            <label className="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-3 block">
+              Obťažnosť
             </label>
-            <div className="flex gap-3">
+            <div className="flex gap-2.5">
               {(['easy', 'medium', 'hard'] as const).map((d) => (
                 <button
                   key={d}
                   onClick={() => setDifficulty(d)}
-                  className={`flex-1 rounded-xl py-3 border transition-all text-sm font-medium ${
+                  className={`flex-1 rounded-2xl py-3.5 border-2 transition-all text-sm font-semibold ${
                     difficulty === d
-                      ? 'border-green-500 bg-green-500/10 text-green-400'
-                      : 'border-gray-700 bg-gray-900 text-gray-300 hover:border-gray-600'
+                      ? 'border-green-500/60 bg-green-500/8 text-green-400'
+                      : 'border-gray-800 bg-gray-900/50 text-gray-400 hover:border-gray-700 hover:text-gray-300'
                   }`}
                 >
-                  {d === 'easy' ? 'Lahka' : d === 'medium' ? 'Stredna' : 'Tazka'}
+                  {d === 'easy' ? 'Ľahká' : d === 'medium' ? 'Stredná' : 'Ťažká'}
                 </button>
               ))}
             </div>
@@ -313,30 +315,36 @@ export default function TreningPage() {
 
           {/* Duration */}
           <div>
-            <label className="text-sm font-medium text-gray-300 mb-3 block">
-              Dlzka treningu
+            <label className="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-3 block">
+              Dĺžka tréningu
             </label>
-            <div className="flex gap-3">
+            <div className="flex gap-2.5">
               {([30, 60, 90] as const).map((d) => (
                 <button
                   key={d}
                   onClick={() => setDuration(d)}
-                  className={`flex-1 rounded-xl py-3 border transition-all text-sm font-medium ${
+                  className={`flex-1 rounded-2xl py-3.5 border-2 transition-all text-sm font-semibold ${
                     duration === d
-                      ? 'border-green-500 bg-green-500/10 text-green-400'
-                      : 'border-gray-700 bg-gray-900 text-gray-300 hover:border-gray-600'
+                      ? 'border-green-500/60 bg-green-500/8 text-green-400'
+                      : 'border-gray-800 bg-gray-900/50 text-gray-400 hover:border-gray-700 hover:text-gray-300'
                   }`}
                 >
-                  {d}s
+                  {d} sekúnd
                 </button>
               ))}
             </div>
           </div>
 
           {/* Start button */}
-          <button onClick={startGame} className="btn-primary w-full text-lg py-4">
-            Spustit trening
+          <button onClick={startGame} className="btn-primary w-full text-lg py-4 mt-2">
+            Spustiť tréning
           </button>
+
+          {inputMode === 'demo' && (
+            <p className="text-center text-xs text-gray-600">
+              Výsledky z demo režimu sa neukladajú do rebríčka.
+            </p>
+          )}
         </div>
       </div>
     </div>

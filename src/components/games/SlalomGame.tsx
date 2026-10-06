@@ -21,6 +21,7 @@ interface SlalomGameProps {
   onPause: (reason: string) => void;
   onResume: () => void;
   isPaused: boolean;
+  onBackToMenu?: () => void;
 }
 
 export interface SlalomResult {
@@ -39,7 +40,7 @@ export interface SlalomResult {
 
 const TRACK_WIDTH = 8;
 const TRACK_DEPTH = 40;
-const BALL_Y = 0.15;
+const BALL_Y = 0.12;
 const CONE_Y = 0;
 
 interface HudData {
@@ -48,7 +49,10 @@ interface HudData {
   timeLeft: number;
   countdown: number;
   feedback: 'success' | 'error' | null;
+  backProgress: number; // 0-1, how long ball held in exit zone
 }
+
+// --- 3D Components ---
 
 function Cone({
   position,
@@ -64,28 +68,32 @@ function Cone({
   const color = passed
     ? correct ? '#22c55e' : '#ef4444'
     : '#f59e0b';
-  const arrowX = side === 'left' ? -0.8 : 0.8;
+  const arrowX = side === 'left' ? -1.0 : 1.0;
 
   return (
     <group position={position}>
+      {/* Cone body */}
       <mesh castShadow>
-        <coneGeometry args={[0.25, 0.7, 8]} />
-        <meshStandardMaterial color={color} roughness={0.6} />
+        <coneGeometry args={[0.22, 0.65, 8]} />
+        <meshStandardMaterial color={color} roughness={0.5} metalness={0.05} />
       </mesh>
-      <mesh position={[0, -0.35, 0]} receiveShadow>
-        <cylinderGeometry args={[0.35, 0.35, 0.05, 8]} />
-        <meshStandardMaterial color={color} roughness={0.8} />
+      {/* Cone base */}
+      <mesh position={[0, -0.33, 0]} receiveShadow>
+        <cylinderGeometry args={[0.32, 0.32, 0.04, 8]} />
+        <meshStandardMaterial color={color} roughness={0.7} />
       </mesh>
+      {/* Gate corridor - glowing line showing which side to pass */}
       {!passed && (
-        <group position={[arrowX, 0.1, 0]}>
-          <mesh>
-            <boxGeometry args={[0.6, 0.02, 0.15]} />
+        <group position={[arrowX, 0.02, 0]}>
+          <mesh rotation={[-Math.PI / 2, 0, 0]}>
+            <planeGeometry args={[0.8, 0.2]} />
             <meshStandardMaterial
-              color="#22c55e"
-              emissive="#22c55e"
-              emissiveIntensity={0.3}
+              color="#4ade80"
+              emissive="#4ade80"
+              emissiveIntensity={0.5}
               transparent
-              opacity={0.6}
+              opacity={0.5}
+              side={THREE.DoubleSide}
             />
           </mesh>
         </group>
@@ -94,37 +102,143 @@ function Cone({
   );
 }
 
-function Ball({ posRef }: { posRef: MutableRefObject<number> }) {
+/** White field hockey ball with dimple texture */
+function HockeyBall({ posRef }: { posRef: MutableRefObject<number> }) {
   const meshRef = useRef<THREE.Mesh>(null);
+  const materialRef = useRef<THREE.MeshStandardMaterial>(null);
+
+  // Create a dimple normal map procedurally
+  const normalMap = useMemo(() => {
+    const size = 128;
+    const canvas = document.createElement('canvas');
+    canvas.width = size;
+    canvas.height = size;
+    const ctx = canvas.getContext('2d')!;
+
+    // Base
+    ctx.fillStyle = '#8080ff';
+    ctx.fillRect(0, 0, size, size);
+
+    // Dimples
+    const dimpleCount = 40;
+    for (let i = 0; i < dimpleCount; i++) {
+      const x = Math.random() * size;
+      const y = Math.random() * size;
+      const r = 3 + Math.random() * 4;
+      const gradient = ctx.createRadialGradient(x, y, 0, x, y, r);
+      gradient.addColorStop(0, '#6060d0');
+      gradient.addColorStop(0.7, '#7070e0');
+      gradient.addColorStop(1, '#8080ff');
+      ctx.fillStyle = gradient;
+      ctx.beginPath();
+      ctx.arc(x, y, r, 0, Math.PI * 2);
+      ctx.fill();
+    }
+
+    const texture = new THREE.CanvasTexture(canvas);
+    texture.wrapS = THREE.RepeatWrapping;
+    texture.wrapT = THREE.RepeatWrapping;
+    return texture;
+  }, []);
 
   useFrame(() => {
     if (meshRef.current) {
       meshRef.current.position.x = posRef.current;
+      meshRef.current.rotation.z -= 0.02;
     }
   });
 
   return (
     <mesh ref={meshRef} position={[0, BALL_Y, 2]} castShadow>
-      <sphereGeometry args={[0.2, 16, 16]} />
+      <sphereGeometry args={[0.18, 24, 24]} />
       <meshStandardMaterial
-        color="#ff6b35"
-        emissive="#ff6b35"
-        emissiveIntensity={0.15}
-        roughness={0.3}
-        metalness={0.1}
+        ref={materialRef}
+        color="#f0f0f0"
+        roughness={0.45}
+        metalness={0.05}
+        normalMap={normalMap}
+        normalScale={new THREE.Vector2(0.3, 0.3)}
       />
     </mesh>
   );
 }
 
-function TrackSurface() {
+/** Green artificial turf surface */
+function TurfSurface() {
+  const turfTexture = useMemo(() => {
+    const size = 256;
+    const canvas = document.createElement('canvas');
+    canvas.width = size;
+    canvas.height = size;
+    const ctx = canvas.getContext('2d')!;
+
+    // Base green
+    ctx.fillStyle = '#2d7a3a';
+    ctx.fillRect(0, 0, size, size);
+
+    // Grass grain noise
+    for (let i = 0; i < 3000; i++) {
+      const x = Math.random() * size;
+      const y = Math.random() * size;
+      const brightness = 35 + Math.random() * 30;
+      ctx.fillStyle = `rgb(${brightness}, ${90 + Math.random() * 40}, ${brightness})`;
+      ctx.fillRect(x, y, 1, 2 + Math.random() * 2);
+    }
+
+    const texture = new THREE.CanvasTexture(canvas);
+    texture.wrapS = THREE.RepeatWrapping;
+    texture.wrapT = THREE.RepeatWrapping;
+    texture.repeat.set(4, 8);
+    return texture;
+  }, []);
+
   return (
     <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, -0.01, -TRACK_DEPTH / 2]} receiveShadow>
-      <planeGeometry args={[TRACK_WIDTH + 2, TRACK_DEPTH + 10]} />
-      <meshStandardMaterial color="#1a1a2e" roughness={0.9} metalness={0} />
+      <planeGeometry args={[TRACK_WIDTH + 4, TRACK_DEPTH + 10]} />
+      <meshStandardMaterial
+        map={turfTexture}
+        roughness={0.95}
+        metalness={0}
+        color="#3a8a4a"
+      />
     </mesh>
   );
 }
+
+/** Side boundary lines on the turf */
+function TurfLines() {
+  const lineTexture = useMemo(() => {
+    const canvas = document.createElement('canvas');
+    canvas.width = 4;
+    canvas.height = 4;
+    const ctx = canvas.getContext('2d')!;
+    ctx.fillStyle = '#ffffff';
+    ctx.fillRect(0, 0, 4, 4);
+    return new THREE.CanvasTexture(canvas);
+  }, []);
+
+  return (
+    <group>
+      {/* Left line */}
+      <mesh rotation={[-Math.PI / 2, 0, 0]} position={[-TRACK_WIDTH / 2, 0.001, -TRACK_DEPTH / 2]}>
+        <planeGeometry args={[0.08, TRACK_DEPTH + 10]} />
+        <meshStandardMaterial color="#ffffff" transparent opacity={0.4} side={THREE.DoubleSide} />
+      </mesh>
+      {/* Right line */}
+      <mesh rotation={[-Math.PI / 2, 0, 0]} position={[TRACK_WIDTH / 2, 0.001, -TRACK_DEPTH / 2]}>
+        <planeGeometry args={[0.08, TRACK_DEPTH + 10]} />
+        <meshStandardMaterial color="#ffffff" transparent opacity={0.4} side={THREE.DoubleSide} />
+      </mesh>
+      {/* Center line (dashed effect via opacity) */}
+      <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, 0.001, -TRACK_DEPTH / 2]}>
+        <planeGeometry args={[0.05, TRACK_DEPTH + 10]} />
+        <meshStandardMaterial color="#ffffff" transparent opacity={0.15} side={THREE.DoubleSide} />
+      </mesh>
+    </group>
+  );
+}
+
+// --- Game Logic ---
 
 interface ActiveCone extends ConeDefinition {
   z: number;
@@ -145,6 +259,7 @@ function GameScene({
   isPaused,
   inputMode,
   hudRef,
+  onBackToMenu,
 }: GameSceneProps) {
   const config = SLALOM_CONFIGS[difficulty];
   const challengeKey = `slalom-${difficulty}-${duration}`;
@@ -164,10 +279,12 @@ function GameScene({
     errors: 0,
     elapsedTime: 0,
     ballX: 0,
+    ballY: 0.5,
     cones: [] as ActiveCone[],
     finished: false,
     started: false,
     countdown: 3,
+    backTimer: 0,
   });
 
   const ballPosRef = useRef(0);
@@ -195,10 +312,35 @@ function GameScene({
     const s = stateRef.current;
     if (s.finished) return;
 
+    // Get input first (needed for back-to-menu even during countdown)
+    const input = getGameInput();
+    if (input.active) {
+      s.ballX = (input.x - 0.5) * TRACK_WIDTH;
+      s.ballY = input.y;
+      ballPosRef.current = s.ballX;
+    }
+
+    // Back-to-menu: ball in top-right corner for 3 seconds
+    const inExitZone = input.active && input.x > 0.85 && input.y < 0.15;
+    if (inExitZone) {
+      s.backTimer += delta;
+      if (s.backTimer >= 3 && onBackToMenu) {
+        s.finished = true;
+        onBackToMenu();
+        return;
+      }
+    } else {
+      s.backTimer = 0;
+    }
+
     // Countdown
     if (!s.started) {
       s.countdown -= delta;
-      hudRef.current = { ...hudRef.current, countdown: Math.ceil(Math.max(0, s.countdown)) };
+      hudRef.current = {
+        ...hudRef.current,
+        countdown: Math.ceil(Math.max(0, s.countdown)),
+        backProgress: s.backTimer / 3,
+      };
       if (s.countdown <= 0) s.started = true;
       return;
     }
@@ -225,12 +367,6 @@ function GameScene({
         sessionId: sessionIdRef.current,
       });
       return;
-    }
-
-    const input = getGameInput();
-    if (input.active) {
-      s.ballX = (input.x - 0.5) * TRACK_WIDTH;
-      ballPosRef.current = s.ballX;
     }
 
     // Spawn cones
@@ -282,45 +418,60 @@ function GameScene({
 
     s.cones = s.cones.filter((c) => c.z < ballZ + 5);
 
-    // Update HUD ref (cheap - no React render)
     hudRef.current = {
       score: s.score,
       streak: s.streak,
       timeLeft: Math.max(0, duration - s.elapsedTime),
       countdown: 0,
       feedback: feedbackType,
+      backProgress: s.backTimer / 3,
     };
 
-    // Update cone meshes at 30fps to save renders
     setCones([...s.cones]);
   });
 
   return (
     <>
       <CameraSetup />
-      <ambientLight intensity={0.4} />
+
+      {/* Warm outdoor-ish lighting */}
+      <ambientLight intensity={0.5} color="#f5f0e0" />
       <directionalLight
-        position={[5, 8, 5]}
-        intensity={0.8}
+        position={[5, 10, 5]}
+        intensity={1.0}
+        color="#fff8e8"
         castShadow
         shadow-mapSize={[1024, 1024]}
+        shadow-camera-far={50}
+        shadow-camera-left={-10}
+        shadow-camera-right={10}
+        shadow-camera-top={10}
+        shadow-camera-bottom={-20}
       />
-      <pointLight position={[0, 5, 0]} intensity={0.3} color="#e0e0ff" />
+      <hemisphereLight
+        args={['#87ceeb', '#3a8a4a', 0.3]}
+      />
 
-      <TrackSurface />
-      <Ball posRef={ballPosRef} />
+      {/* Green turf */}
+      <TurfSurface />
+      <TurfLines />
 
+      {/* White hockey ball with dimples */}
+      <HockeyBall posRef={ballPosRef} />
+
+      {/* Cones */}
       {cones.map((cone) => (
         <Cone
           key={cone.id}
-          position={[0, CONE_Y + 0.35, cone.z]}
+          position={[0, CONE_Y + 0.33, cone.z]}
           side={cone.side}
           passed={cone.passed}
           correct={cone.correct}
         />
       ))}
 
-      <fog attach="fog" args={['#0a0a1a', 15, TRACK_DEPTH]} />
+      {/* Green-tinted fog */}
+      <fog attach="fog" args={['#1a3a1a', 20, TRACK_DEPTH]} />
     </>
   );
 }
@@ -328,11 +479,13 @@ function GameScene({
 function CameraSetup() {
   const { camera } = useThree();
   useEffect(() => {
-    camera.position.set(0, 6, 8);
-    camera.lookAt(0, 0, -5);
+    camera.position.set(0, 5.5, 8);
+    camera.lookAt(0, 0, -6);
   }, [camera]);
   return null;
 }
+
+// --- Main Wrapper ---
 
 export default function SlalomGame(props: SlalomGameProps) {
   const { difficulty, duration, isPaused } = props;
@@ -344,19 +497,16 @@ export default function SlalomGame(props: SlalomGameProps) {
     timeLeft: duration,
     countdown: 3,
     feedback: null,
+    backProgress: 0,
   });
 
-  // Poll HUD ref to update DOM overlay at 15fps
   const [hud, setHud] = useState<HudData>(hudRef.current);
 
   useEffect(() => {
     const interval = setInterval(() => {
       setHud({ ...hudRef.current });
-      // Clear feedback after showing
       if (hudRef.current.feedback) {
-        setTimeout(() => {
-          hudRef.current.feedback = null;
-        }, 400);
+        setTimeout(() => { hudRef.current.feedback = null; }, 400);
       }
     }, 66);
     return () => clearInterval(interval);
@@ -367,7 +517,7 @@ export default function SlalomGame(props: SlalomGameProps) {
       <Canvas
         shadows
         gl={{ antialias: true, alpha: false }}
-        style={{ background: '#0a0a1a' }}
+        style={{ background: '#1a3a1a' }}
       >
         <GameScene {...props} hudRef={hudRef} />
       </Canvas>
@@ -375,34 +525,51 @@ export default function SlalomGame(props: SlalomGameProps) {
       {/* HUD */}
       <div className="absolute top-0 left-0 right-0 p-4 pointer-events-none">
         <div className="flex justify-between items-start max-w-3xl mx-auto">
-          <div className="bg-black/50 backdrop-blur-sm rounded-lg px-4 py-2">
+          <div className="bg-black/40 backdrop-blur-md rounded-2xl px-5 py-3">
             <div className="text-3xl font-bold text-white tabular-nums">{hud.score}</div>
-            <div className="text-xs text-gray-400">Skore</div>
+            <div className="text-xs text-white/50 uppercase tracking-wider">Skóre</div>
           </div>
-          <div className="bg-black/50 backdrop-blur-sm rounded-lg px-4 py-2 text-center">
+          <div className="bg-black/40 backdrop-blur-md rounded-2xl px-5 py-3 text-center">
             <div className="text-3xl font-bold text-white tabular-nums">{Math.ceil(hud.timeLeft)}s</div>
-            <div className="text-xs text-gray-400">{config.label}</div>
+            <div className="text-xs text-white/50 uppercase tracking-wider">{config.label}</div>
           </div>
-          <div className="bg-black/50 backdrop-blur-sm rounded-lg px-4 py-2 text-right">
+          <div className="bg-black/40 backdrop-blur-md rounded-2xl px-5 py-3 text-right">
             <div className="text-3xl font-bold text-white tabular-nums">{hud.streak}</div>
-            <div className="text-xs text-gray-400">Seria</div>
+            <div className="text-xs text-white/50 uppercase tracking-wider">Séria</div>
           </div>
         </div>
       </div>
 
+      {/* Back-to-menu progress indicator */}
+      {hud.backProgress > 0.05 && (
+        <div className="absolute top-16 right-4 flex items-center gap-2 bg-black/50 backdrop-blur-md rounded-2xl px-4 py-2 pointer-events-none">
+          <svg className="w-5 h-5" viewBox="0 0 36 36">
+            <circle cx="18" cy="18" r="15" fill="none" stroke="#333" strokeWidth="3" />
+            <circle
+              cx="18" cy="18" r="15" fill="none"
+              stroke="#f59e0b" strokeWidth="3"
+              strokeDasharray={`${hud.backProgress * 94.2} 94.2`}
+              strokeLinecap="round"
+              transform="rotate(-90 18 18)"
+            />
+          </svg>
+          <span className="text-xs text-yellow-400">Návrat do menu</span>
+        </div>
+      )}
+
       {/* Countdown */}
       {hud.countdown > 0 && (
-        <div className="absolute inset-0 flex items-center justify-center bg-black/60">
-          <div className="text-8xl font-bold text-white animate-pulse">{hud.countdown}</div>
+        <div className="absolute inset-0 flex items-center justify-center bg-black/50">
+          <div className="text-9xl font-black text-white drop-shadow-lg">{hud.countdown}</div>
         </div>
       )}
 
       {/* Pause */}
       {isPaused && hud.countdown <= 0 && (
-        <div className="absolute inset-0 flex items-center justify-center bg-black/70">
-          <div className="text-center">
-            <div className="text-2xl font-bold text-yellow-400 mb-2">Sledovanie stratene</div>
-            <p className="text-gray-300">Vrat lopticku do viditelnej oblasti kamery</p>
+        <div className="absolute inset-0 flex items-center justify-center bg-black/60">
+          <div className="text-center bg-black/40 backdrop-blur-md rounded-3xl px-10 py-8">
+            <div className="text-2xl font-bold text-yellow-400 mb-3">Sledovanie stratené</div>
+            <p className="text-gray-300">Vráť loptičku do viditeľnej oblasti kamery</p>
           </div>
         </div>
       )}
@@ -410,11 +577,12 @@ export default function SlalomGame(props: SlalomGameProps) {
       {/* Feedback flash */}
       {hud.feedback && (
         <div
-          className={`absolute inset-0 pointer-events-none ${
+          className={`absolute inset-0 pointer-events-none transition-opacity ${
             hud.feedback === 'success'
-              ? 'bg-green-500/10 border-2 border-green-500/30'
-              : 'bg-red-500/10 border-2 border-red-500/30'
+              ? 'bg-green-500/8 border-2 border-green-400/20'
+              : 'bg-red-500/8 border-2 border-red-400/20'
           }`}
+          style={{ borderRadius: 0 }}
         />
       )}
     </div>

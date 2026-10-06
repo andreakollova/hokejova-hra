@@ -156,7 +156,7 @@ export default function OsmickyPage() {
 
         {inputMode === 'demo' && (
           <div className="absolute bottom-4 left-4 bg-yellow-500/20 border border-yellow-500/30 rounded-lg px-3 py-2">
-            <span className="text-xs text-yellow-400">Demo rezim - pohybuj mysou</span>
+            <span className="text-xs text-yellow-400">Demo režim - pohybuj myšou</span>
           </div>
         )}
       </div>
@@ -170,20 +170,20 @@ export default function OsmickyPage() {
           href="/"
           className="text-sm text-gray-500 hover:text-gray-300 transition-colors mb-8 inline-block"
         >
-          &larr; Spat
+          &larr; Späť
         </Link>
 
-        <h1 className="text-3xl font-bold text-white mb-2">Osmicky</h1>
+        <h1 className="text-3xl font-bold text-white mb-2">Osmičky</h1>
         <p className="text-gray-400 mb-8">
-          Ved lopticku v tvare osmicky okolo dvoch bodov. Pocita sa pocet
-          dokoncenich osmiciek za zvoleny cas.
+          Veď loptičku v tvare osmičky okolo dvoch bodov. Počíta sa počet
+          dokončených osmičiek za zvolený čas.
         </p>
 
         <div className="space-y-6">
           {/* Input mode */}
           <div>
             <label className="text-sm font-medium text-gray-300 mb-3 block">
-              Rezim vstupu
+              Režim vstupu
             </label>
             <div className="flex gap-3">
               <button
@@ -195,7 +195,7 @@ export default function OsmickyPage() {
                 }`}
               >
                 <div className="text-sm font-medium text-white">Kamera</div>
-                <div className="text-xs text-gray-400 mt-1">Sledovanie realnej lopticky</div>
+                <div className="text-xs text-gray-400 mt-1">Sledovanie reálnej loptičky</div>
               </button>
               <button
                 onClick={() => setInputMode('demo')}
@@ -215,18 +215,18 @@ export default function OsmickyPage() {
           {inputMode === 'camera' && (
             <div className="flex items-center justify-between bg-gray-900 rounded-xl p-4 border border-gray-800">
               <div>
-                <div className="text-sm font-medium text-white">Kalibracia kamery</div>
+                <div className="text-sm font-medium text-white">Kalibrácia kamery</div>
                 <div className="text-xs text-gray-400 mt-1">
                   {calibration
-                    ? `Kalibracia ulozena (${calibration.resolution.width}x${calibration.resolution.height})`
-                    : 'Nie je nastavena'}
+                    ? `Kalibrácia uložená (${calibration.resolution.width}x${calibration.resolution.height})`
+                    : 'Nie je nastavená'}
                 </div>
               </div>
               <button
                 onClick={() => setPhase('calibration')}
                 className="text-sm text-green-400 hover:text-green-300 transition-colors"
               >
-                {calibration ? 'Prekalibrovat' : 'Kalibrovat'}
+                {calibration ? 'Prekalibrovať' : 'Kalibrovať'}
               </button>
             </div>
           )}
@@ -234,7 +234,7 @@ export default function OsmickyPage() {
           {/* Duration */}
           <div>
             <label className="text-sm font-medium text-gray-300 mb-3 block">
-              Dlzka treningu
+              Dĺžka tréningu
             </label>
             <div className="flex gap-3">
               {([30, 60, 90] as const).map((d) => (
@@ -254,12 +254,12 @@ export default function OsmickyPage() {
           </div>
 
           <div className="bg-gray-900/50 rounded-xl p-4 border border-gray-800/50 text-xs text-gray-500">
-            Presnost hodnotenia osmiciek zavisi od kvality farebneho sledovania.
-            Pre najlepsie vysledky pouzi vyrazne farebnu lopticku a dobre osvetlenie.
+            Presnosť hodnotenia osmičiek závisí od kvality farebného sledovania.
+            Pre najlepšie výsledky použi výrazne farebnú loptičku a dobré osvetlenie.
           </div>
 
           <button onClick={startGame} className="btn-primary w-full text-lg py-4">
-            Spustit trening
+            Spustiť tréning
           </button>
         </div>
       </div>
