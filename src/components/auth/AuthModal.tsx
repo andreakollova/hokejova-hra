@@ -51,8 +51,8 @@ export default function AuthModal({ onClose }: AuthModalProps) {
   };
 
   return (
-    <div className="fixed inset-0 bg-black/30 backdrop-blur-sm flex items-center justify-center z-50 p-4">
-      <div className="bg-white rounded-2xl p-6 w-full max-w-sm shadow-xl border border-gray-100">
+    <div className="fixed inset-0 bg-black/20 backdrop-blur-sm flex items-center justify-center z-50 p-4">
+      <div className="bg-white rounded-3xl p-8 w-full max-w-sm shadow-2xl">
         <div className="flex justify-between items-center mb-6">
           <h2 className="text-xl font-bold text-gray-900">
             {mode === 'login' ? 'Prihlásenie' : 'Registrácia'}
@@ -123,7 +123,7 @@ export default function AuthModal({ onClose }: AuthModalProps) {
         <div className="mt-4 text-center">
           <button
             onClick={() => setMode(mode === 'login' ? 'register' : 'login')}
-            className="text-sm text-gray-400 hover:text-green-600 transition-colors"
+            className="text-sm text-gray-400 hover:text-gray-900 transition-colors"
           >
             {mode === 'login'
               ? 'Nemáš účet? Registruj sa'
