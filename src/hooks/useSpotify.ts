@@ -167,34 +167,46 @@ export function useSpotify() {
     setCurrentTrack(track);
     setBeatMap(null);
 
-    // Try audio-features for BPM (audio-analysis was deprecated by Spotify)
-    let tempo = 120; // default
+    // Try audio-features for BPM (may be deprecated for new apps)
+    let tempo = 0;
     try {
       const res = await fetch(`/api/spotify/analysis?id=${track.id}&type=features`);
       if (res.ok) {
         const data = await res.json();
-        if (data.tempo) {
+        if (data.tempo && data.tempo > 0) {
           tempo = Math.round(data.tempo);
         }
       }
     } catch {}
 
-    // Generate evenly-spaced beat timestamps from BPM
-    const durationS = track.durationMs / 1000;
+    // If no tempo from API, set null so MusicSelector asks user
+    if (tempo === 0) {
+      setBeatMap({
+        tempo: 0,
+        beats: [],
+        bars: [],
+        sections: [],
+        durationS: track.durationMs / 1000,
+      });
+      return;
+    }
+
+    generateBeatsFromBpm(tempo, track.durationMs / 1000);
+  }, []);
+
+  const generateBeatsFromBpm = useCallback((tempo: number, durationS: number) => {
     const beatInterval = 60 / tempo;
     const beats: number[] = [];
     for (let t = 0; t < durationS; t += beatInterval) {
       beats.push(t);
     }
-
-    setBeatMap({
-      tempo,
-      beats,
-      bars: [],
-      sections: [],
-      durationS,
-    });
+    setBeatMap({ tempo, beats, bars: [], sections: [], durationS });
   }, []);
+
+  const updateBpm = useCallback((newBpm: number) => {
+    if (!currentTrack) return;
+    generateBeatsFromBpm(newBpm, currentTrack.durationMs / 1000);
+  }, [currentTrack, generateBeatsFromBpm]);
 
   const play = useCallback(async (track?: SpotifyTrack) => {
     const token = getCookie('spotify_token_client');
@@ -249,6 +261,7 @@ export function useSpotify() {
     pause,
     seek,
     getPositionMs,
+    updateBpm,
   };
 }
 

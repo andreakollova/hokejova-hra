@@ -186,9 +186,9 @@ export default function MusicSelector({ onSelect, onCancel, spotify }: MusicSele
                   </div>
                 )}
 
-                {/* Selected track info */}
+                {/* Selected track info + BPM adjustment */}
                 {spotify.currentTrack && spotify.beatMap && (
-                  <div className="card p-5 space-y-3">
+                  <div className="card p-5 space-y-4">
                     <div className="flex items-center gap-3">
                       {spotify.currentTrack.albumArt && (
                         <img
@@ -206,19 +206,58 @@ export default function MusicSelector({ onSelect, onCancel, spotify }: MusicSele
                         </div>
                       </div>
                     </div>
-                    <div className="flex gap-4 text-sm">
-                      <div>
-                        <span className="text-gray-400">Tempo: </span>
-                        <span className="text-green-600 font-bold">{spotify.beatMap.tempo} BPM</span>
+
+                    {/* BPM - show slider to adjust */}
+                    <div>
+                      <label className="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-2 block">
+                        {spotify.beatMap.tempo === 0 ? 'Nastav tempo pesničky' : 'Tempo'}
+                      </label>
+                      <div className="flex items-center gap-3">
+                        <input
+                          type="range"
+                          min="60"
+                          max="200"
+                          value={spotify.beatMap.tempo || 120}
+                          onChange={(e) => spotify.updateBpm(parseInt(e.target.value))}
+                          className="flex-1"
+                        />
+                        <span className="text-2xl font-bold text-green-600 tabular-nums w-16 text-right">
+                          {spotify.beatMap.tempo || 120}
+                        </span>
+                        <span className="text-xs text-gray-400">BPM</span>
                       </div>
-                      <div>
-                        <span className="text-gray-400">Beaty: </span>
-                        <span className="text-gray-900">{spotify.beatMap.beats.length}</span>
-                      </div>
+                      {spotify.beatMap.tempo === 0 && (
+                        <p className="text-xs text-gray-400 mt-2">
+                          Pusti pesničku a naklepaj tempo, alebo nastav sliderom.
+                        </p>
+                      )}
                     </div>
+
+                    {/* Tap tempo for this track */}
+                    <div className="flex items-center gap-3">
+                      <button
+                        onClick={handleTap}
+                        className="flex-1 rounded-xl py-2.5 bg-gray-50 border border-gray-200 hover:bg-gray-100 active:scale-95 transition-all text-sm font-medium text-gray-700"
+                      >
+                        Naklepaj tempo ({tapBpm ? `${tapBpm} BPM` : 'klepni'})
+                      </button>
+                      {tapBpm && (
+                        <button
+                          onClick={() => {
+                            spotify.updateBpm(tapBpm);
+                            setTapTimes([]);
+                            setTapBpm(null);
+                          }}
+                          className="text-sm font-medium text-green-600 hover:text-green-700 bg-green-50 hover:bg-green-100 px-3 py-2.5 rounded-xl transition-all"
+                        >
+                          Pouziť {tapBpm}
+                        </button>
+                      )}
+                    </div>
+
                     <button
                       onClick={handleConfirmSpotify}
-                      disabled={!spotify.isReady}
+                      disabled={!spotify.isReady || (spotify.beatMap.tempo === 0)}
                       className="btn-primary w-full disabled:opacity-50"
                     >
                       Hrať so Spotify

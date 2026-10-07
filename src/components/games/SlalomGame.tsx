@@ -42,7 +42,7 @@ export interface SlalomResult {
   sessionId: string;
 }
 
-const TRACK_WIDTH = 8;
+const TRACK_WIDTH = 10;
 const TRACK_DEPTH = 40;
 const BALL_Y = 0.12;
 const CONE_Y = 0;
@@ -72,34 +72,36 @@ function Cone({
   correct: boolean | null;
 }) {
   const color = passed
-    ? correct ? '#22c55e' : '#ef4444'
-    : '#fb923c';
-  // Arrow points AWAY from center = direction to pass
+    ? correct ? '#34d399' : '#f87171'
+    : '#f8fafc';
+  const accent = passed
+    ? correct ? '#059669' : '#dc2626'
+    : '#94a3b8';
   const arrowX = side === 'left' ? -1.0 : 1.0;
 
   return (
     <group position={position}>
-      {/* Cone body */}
-      <mesh castShadow>
-        <coneGeometry args={[0.25, 0.7, 8]} />
-        <meshStandardMaterial color={color} roughness={0.35} metalness={0.1} emissive={color} emissiveIntensity={0.15} />
+      {/* Modern pill/capsule marker */}
+      <mesh castShadow position={[0, 0.2, 0]}>
+        <capsuleGeometry args={[0.12, 0.35, 8, 16]} />
+        <meshStandardMaterial color={color} roughness={0.2} metalness={0.3} />
       </mesh>
-      {/* Cone base */}
-      <mesh position={[0, -0.35, 0]} receiveShadow>
-        <cylinderGeometry args={[0.35, 0.35, 0.05, 8]} />
-        <meshStandardMaterial color={color} roughness={0.7} />
+      {/* Colored ring at base */}
+      <mesh position={[0, 0, 0]} receiveShadow rotation={[-Math.PI / 2, 0, 0]}>
+        <ringGeometry args={[0.2, 0.35, 24]} />
+        <meshStandardMaterial color={accent} roughness={0.3} side={THREE.DoubleSide} />
       </mesh>
-      {/* Glowing corridor toward the side player should go */}
+      {/* Direction indicator - subtle line on ground */}
       {!passed && (
-        <group position={[arrowX, 0.02, 0]}>
+        <group position={[arrowX * 0.7, 0.01, 0]}>
           <mesh rotation={[-Math.PI / 2, 0, 0]}>
-            <planeGeometry args={[1.2, 0.25]} />
+            <planeGeometry args={[0.8, 0.12]} />
             <meshStandardMaterial
-              color="#4ade80"
-              emissive="#4ade80"
-              emissiveIntensity={0.6}
+              color="#22c55e"
+              emissive="#22c55e"
+              emissiveIntensity={0.4}
               transparent
-              opacity={0.45}
+              opacity={0.5}
               side={THREE.DoubleSide}
             />
           </mesh>
@@ -170,6 +172,16 @@ function HockeyBall({ posRef }: { posRef: MutableRefObject<number> }) {
   );
 }
 
+/** White ground plane behind everything */
+function GroundPlane() {
+  return (
+    <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, -0.03, -TRACK_DEPTH / 2]} receiveShadow>
+      <planeGeometry args={[80, TRACK_DEPTH + 40]} />
+      <meshStandardMaterial color="#f1f5f9" roughness={1} metalness={0} />
+    </mesh>
+  );
+}
+
 /** Green artificial turf surface */
 function TurfSurface() {
   const turfTexture = useMemo(() => {
@@ -179,17 +191,17 @@ function TurfSurface() {
     canvas.height = size;
     const ctx = canvas.getContext('2d')!;
 
-    // Brighter base green
-    ctx.fillStyle = '#3a9a4a';
+    // Clean bright green
+    ctx.fillStyle = '#4abb5e';
     ctx.fillRect(0, 0, size, size);
 
-    // Grass grain noise - brighter
-    for (let i = 0; i < 3000; i++) {
+    // Subtle grass grain
+    for (let i = 0; i < 2000; i++) {
       const x = Math.random() * size;
       const y = Math.random() * size;
-      const brightness = 45 + Math.random() * 35;
-      ctx.fillStyle = `rgb(${brightness}, ${110 + Math.random() * 50}, ${brightness})`;
-      ctx.fillRect(x, y, 1, 2 + Math.random() * 2);
+      const g = 140 + Math.random() * 50;
+      ctx.fillStyle = `rgba(${40 + Math.random() * 20}, ${g}, ${40 + Math.random() * 20}, 0.3)`;
+      ctx.fillRect(x, y, 1, 1.5 + Math.random() * 1.5);
     }
 
     const texture = new THREE.CanvasTexture(canvas);
@@ -201,12 +213,12 @@ function TurfSurface() {
 
   return (
     <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, -0.01, -TRACK_DEPTH / 2]} receiveShadow>
-      <planeGeometry args={[TRACK_WIDTH + 4, TRACK_DEPTH + 10]} />
+      <planeGeometry args={[TRACK_WIDTH + 2, TRACK_DEPTH + 10]} />
       <meshStandardMaterial
         map={turfTexture}
-        roughness={0.95}
+        roughness={0.85}
         metalness={0}
-        color="#4aaa5a"
+        color="#5cc46e"
       />
     </mesh>
   );
@@ -477,25 +489,26 @@ function GameScene({
     <>
       <CameraSetup />
 
-      {/* Warm outdoor-ish lighting */}
-      <ambientLight intensity={0.7} color="#f8f8f0" />
+      {/* Bright clean lighting */}
+      <ambientLight intensity={0.9} color="#ffffff" />
       <directionalLight
-        position={[5, 10, 5]}
-        intensity={1.2}
+        position={[5, 12, 5]}
+        intensity={1.0}
         color="#ffffff"
         castShadow
         shadow-mapSize={[1024, 1024]}
         shadow-camera-far={50}
-        shadow-camera-left={-10}
-        shadow-camera-right={10}
+        shadow-camera-left={-12}
+        shadow-camera-right={12}
         shadow-camera-top={10}
         shadow-camera-bottom={-20}
       />
       <hemisphereLight
-        args={['#b0d4f1', '#4aaa5a', 0.4]}
+        args={['#e0f2fe', '#dcfce7', 0.5]}
       />
 
-      {/* Green turf */}
+      {/* Ground + turf */}
+      <GroundPlane />
       <TurfSurface />
       <TurfLines />
 
@@ -513,8 +526,8 @@ function GameScene({
         />
       ))}
 
-      {/* Green-tinted fog */}
-      <fog attach="fog" args={['#c8dce8', 25, TRACK_DEPTH + 5]} />
+      {/* White fog - scene fades to white */}
+      <fog attach="fog" args={['#f0f4f8', 20, TRACK_DEPTH]} />
     </>
   );
 }
@@ -562,7 +575,7 @@ export default function SlalomGame(props: SlalomGameProps) {
       <Canvas
         shadows
         gl={{ antialias: true, alpha: false }}
-        style={{ background: 'linear-gradient(to bottom, #b0cfe0, #c8dce8)' }}
+        style={{ background: '#f0f4f8' }}
       >
         <GameScene {...props} hudRef={hudRef} />
       </Canvas>
