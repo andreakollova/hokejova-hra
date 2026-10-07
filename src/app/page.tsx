@@ -22,21 +22,14 @@ export default function Home() {
       {/* Sticky header */}
       <header className={`sticky top-0 z-40 bg-white/90 backdrop-blur-md px-6 sm:px-10 transition-all duration-300 ${scrolled ? 'py-3 shadow-sm' : 'py-6'}`}>
         <div className="max-w-6xl mx-auto flex justify-between items-center">
-          <Link href="/" className="flex items-center gap-2">
-            {scrolled ? (
-              <svg className="h-7 w-auto" viewBox="0 0 80 40" fill="none">
-                <path d="M20 0C8.95 0 0 8.95 0 20s8.95 20 20 20c7.1 0 13.33-3.7 16.87-9.28L40 35V40h6V20C46 8.95 37.05 0 26 0h-6zm20 20c0 7.73-6.27 14-14 14-3.17 0-6.1-1.05-8.45-2.83A13.94 13.94 0 0112 20c0-7.73 6.27-14 14-14s14 6.27 14 14z" fill="#111"/>
-                <path d="M60 0C48.95 0 40 8.95 40 20s8.95 20 20 20 20-8.95 20-20S71.05 0 60 0zm0 34c-7.73 0-14-6.27-14-14s6.27-14 14-14 14 6.27 14 14-6.27 14-14 14z" fill="#111"/>
-              </svg>
-            ) : (
-              <>
-                <svg className="w-7 h-7" viewBox="0 0 32 32" fill="none">
-                  <circle cx="16" cy="16" r="14" fill="#111" />
-                  <circle cx="16" cy="16" r="4.5" fill="white" />
-                </svg>
-                <span className="text-xl font-bold text-gray-900 tracking-tight">sportqo</span>
-              </>
-            )}
+          <Link href="/">
+            <Image
+              src={scrolled ? '/images/logo-qo.png' : '/images/logo-sportqo.png'}
+              alt="sportqo"
+              width={scrolled ? 40 : 120}
+              height={scrolled ? 24 : 32}
+              className={`transition-all duration-300 ${scrolled ? 'h-6 w-auto' : 'h-8 w-auto'}`}
+            />
           </Link>
           <nav className="flex items-center gap-6">
             <Link href="/trening" className="text-sm text-gray-500 hover:text-gray-900 transition-colors hidden sm:block">Tréning</Link>
@@ -58,7 +51,7 @@ export default function Home() {
         <section className="max-w-6xl mx-auto px-6 sm:px-10 pt-16 sm:pt-24 pb-20">
           <div className="grid lg:grid-cols-2 gap-12 items-center">
             <div>
-              <h1 className="text-5xl sm:text-7xl font-bold text-gray-900 leading-[1.05] tracking-tight">
+              <h1 className="text-3xl sm:text-5xl font-bold text-gray-900 leading-[1.05] tracking-tight">
                 Trénuj techniku<br />
                 miešania loptičky<br />
                 s hlavou hore.
@@ -104,7 +97,7 @@ export default function Home() {
                   className="object-cover opacity-60 group-hover:opacity-70 group-hover:scale-105 transition-all duration-500"
                 />
                 <div className="absolute inset-0 flex flex-col justify-end p-7">
-                  <h3 className="text-2xl font-bold text-white mb-1">Slalom</h3>
+                  <h3 className="text-xl font-bold text-white mb-1">Slalom</h3>
                   <p className="text-sm text-white/70">
                     Vyhýbaj sa kužeľom striedavo zľava a sprava.
                   </p>
@@ -128,7 +121,7 @@ export default function Home() {
                   className="object-cover opacity-60 group-hover:opacity-70 group-hover:scale-105 transition-all duration-500"
                 />
                 <div className="absolute inset-0 flex flex-col justify-end p-7">
-                  <h3 className="text-2xl font-bold text-white mb-1">Osmičky</h3>
+                  <h3 className="text-xl font-bold text-white mb-1">Osmičky</h3>
                   <p className="text-sm text-white/70">
                     Veď loptičku v tvare osmičky. Plynulosť a kontrola.
                   </p>
@@ -144,7 +137,7 @@ export default function Home() {
 
             {/* Coming soon */}
             <div className="rounded-3xl bg-gray-50 h-72 flex flex-col justify-end p-7 opacity-50">
-              <h3 className="text-2xl font-bold text-gray-400 mb-1">Space Invaders</h3>
+              <h3 className="text-xl font-bold text-gray-400 mb-1">Space Invaders</h3>
               <p className="text-sm text-gray-400">
                 Pohyb loptičky bude ovládať vesmírnu loď.
               </p>
@@ -158,19 +151,19 @@ export default function Home() {
           <div className="max-w-6xl mx-auto px-6 sm:px-10">
             <div className="grid sm:grid-cols-3 gap-12">
               <div>
-                <div className="text-3xl font-bold text-gray-900 mb-3">Kamera</div>
+                <div className="text-xl font-bold text-gray-900 mb-2">Kamera</div>
                 <p className="text-gray-400 leading-relaxed">
                   Stačí bežná USB webkamera alebo vstavaná kamera notebooku. Žiadny špeciálny senzor.
                 </p>
               </div>
               <div>
-                <div className="text-3xl font-bold text-gray-900 mb-3">Beat mód</div>
+                <div className="text-xl font-bold text-gray-900 mb-2">Beat mód</div>
                 <p className="text-gray-400 leading-relaxed">
                   Pripoj Spotify a miešaj loptičku do rytmu obľúbenej pesničky.
                 </p>
               </div>
               <div>
-                <div className="text-3xl font-bold text-gray-900 mb-3">Rebríček</div>
+                <div className="text-xl font-bold text-gray-900 mb-2">Rebríček</div>
                 <p className="text-gray-400 leading-relaxed">
                   Porovnaj sa s ostatnými hráčmi. Sleduj svoj progres a osobné rekordy.
                 </p>
@@ -182,7 +175,7 @@ export default function Home() {
         {/* Bottom CTA */}
         <section className="border-t border-gray-100 py-24">
           <div className="max-w-6xl mx-auto px-6 sm:px-10 text-center">
-            <h2 className="text-4xl sm:text-5xl font-bold text-gray-900 tracking-tight">
+            <h2 className="text-2xl sm:text-4xl font-bold text-gray-900 tracking-tight">
               Začni za 30 sekúnd.
             </h2>
             <p className="mt-5 text-lg text-gray-400 max-w-md mx-auto">
@@ -200,13 +193,7 @@ export default function Home() {
       {/* Footer */}
       <footer className="border-t border-gray-100 px-6 sm:px-10 py-8">
         <div className="max-w-6xl mx-auto flex flex-col sm:flex-row justify-between items-center gap-4">
-          <div className="flex items-center gap-2">
-            <svg className="w-5 h-5" viewBox="0 0 32 32" fill="none">
-              <circle cx="16" cy="16" r="14" fill="#111" />
-              <circle cx="16" cy="16" r="4.5" fill="white" />
-            </svg>
-            <span className="text-sm font-semibold text-gray-900">sportqo</span>
-          </div>
+          <Image src="/images/logo-qo.png" alt="sportqo" width={32} height={20} className="h-5 w-auto" />
           <div className="flex gap-6 text-sm text-gray-400">
             <Link href="/trening" className="hover:text-gray-900 transition-colors">Tréning</Link>
             <Link href="/osmicky" className="hover:text-gray-900 transition-colors">Osmičky</Link>
