@@ -67,11 +67,12 @@ export default function TreningPage() {
   // Called by SlalomGame when countdown finishes (3-2-1-GO)
   const handleGameStart = useCallback(async () => {
     if (musicConfig?.mode === 'spotify' && musicConfig.track) {
-      // Wait for Spotify API to confirm playback started
+      const requestStart = performance.now();
       await spotify.play(musicConfig.track);
-      // Music started when we SENT the request, not when response arrived
-      // HTTP round-trip is ~300ms, so music is already 300ms ahead
-      gameStartWallTimeRef.current = performance.now() - 300;
+      const roundTrip = performance.now() - requestStart;
+      // Music started when Spotify SERVER got the request
+      // That's approximately: requestStart + roundTrip / 2
+      gameStartWallTimeRef.current = requestStart + roundTrip / 2;
     } else {
       gameStartWallTimeRef.current = performance.now();
     }
