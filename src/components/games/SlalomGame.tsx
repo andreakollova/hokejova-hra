@@ -331,21 +331,6 @@ function GameScene({
     return offsets;
   }, [coneSequence, isBeatMode]);
 
-  // In beat mode, sync game time to Spotify playback position
-  const spotifyTimeRef = useRef(0); // last known Spotify position in seconds
-  const spotifyPollRef = useRef(0); // when we last polled
-  useEffect(() => {
-    if (!isBeatMode || !getSpotifyPositionMs) return;
-    const poll = setInterval(async () => {
-      try {
-        const ms = await getSpotifyPositionMs();
-        spotifyTimeRef.current = ms / 1000;
-        spotifyPollRef.current = performance.now();
-      } catch {}
-    }, 150);
-    return () => clearInterval(poll);
-  }, [isBeatMode, getSpotifyPositionMs]);
-
   const stateRef = useRef({
     score: 0,
     streak: 0,
@@ -426,13 +411,7 @@ function GameScene({
 
     if (isPaused) return;
 
-    if (isBeatMode && spotifyTimeRef.current > 0) {
-      // In beat mode: sync to Spotify position (interpolated between polls)
-      const timeSincePoll = (performance.now() - spotifyPollRef.current) / 1000;
-      s.elapsedTime = spotifyTimeRef.current + timeSincePoll;
-    } else {
-      s.elapsedTime += delta;
-    }
+    s.elapsedTime += delta;
 
     if (s.elapsedTime >= duration) {
       s.finished = true;
