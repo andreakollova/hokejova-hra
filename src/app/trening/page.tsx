@@ -70,7 +70,7 @@ export default function TreningPage() {
       // Register callback BEFORE play() - SDK will fire it when music actually starts
       spotify.onPlaybackStart((timestamp) => {
         // +100ms for audio pipeline latency (SDK event → speaker)
-        gameStartWallTimeRef.current = timestamp + 100;
+        gameStartWallTimeRef.current = timestamp + 200;
       });
       spotify.play(musicConfig.track);
     } else {
