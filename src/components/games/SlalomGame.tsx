@@ -335,6 +335,7 @@ function GameScene({
     correctPasses: 0,
     errors: 0,
     elapsedTime: 0,
+    gameStartWallTime: 0, // performance.now() when game actually starts
     ballX: 0,
     ballY: 0.5,
     cones: [] as ActiveCone[],
@@ -401,6 +402,7 @@ function GameScene({
       };
       if (s.countdown <= 0) {
         s.started = true;
+        s.gameStartWallTime = performance.now();
         onGameStart?.();
       }
       return;
@@ -408,7 +410,9 @@ function GameScene({
 
     if (isPaused) return;
 
-    s.elapsedTime += delta;
+    // Use absolute wall clock time instead of accumulated delta
+    // This prevents ANY drift over time
+    s.elapsedTime = (performance.now() - s.gameStartWallTime) / 1000;
 
     if (s.elapsedTime >= duration) {
       s.finished = true;

@@ -225,7 +225,7 @@ export function useSpotify() {
         Authorization: `Bearer ${token}`,
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify({ uris: [uri] }),
+      body: JSON.stringify({ uris: [uri], position_ms: 0 }),
     });
 
     setIsPlaying(true);
