@@ -569,8 +569,9 @@ function GameScene({
         );
       })}
 
-      {/* White fog - scene fades to white */}
-      <fog attach="fog" args={['#f0f4f8', 20, TRACK_DEPTH]} />
+      {/* Scene background + fog = same color so no black anywhere */}
+      <color attach="background" args={['#f0f4f8']} />
+      <fog attach="fog" args={['#f0f4f8', 15, TRACK_DEPTH]} />
     </>
   );
 }
