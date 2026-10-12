@@ -414,9 +414,8 @@ function GameScene({
 
     if (isPaused) return;
 
-    // In beat mode: use Spotify position directly (written by parent into ref)
-    // In normal mode: accumulate delta
-    if (isBeatMode) {
+    // In beat mode with Spotify: use Spotify position if available, else fallback to delta
+    if (isBeatMode && spotifyPosRef.current > 0.01) {
       s.elapsedTime = spotifyPosRef.current;
     } else {
       s.elapsedTime += delta;
