@@ -25,10 +25,6 @@ interface SlalomGameProps {
   onGameStart?: () => void;
   beatTimestamps?: number[];
   bpm?: number;
-  /** Ref: true when Spotify music is actually playing */
-  musicPlayingRef?: React.MutableRefObject<boolean>;
-  /** Ref: Spotify playback position in seconds (polled every 500ms for drift correction) */
-  spotifyDriftRef?: React.MutableRefObject<number>;
 }
 
 export interface SlalomResult {
@@ -286,8 +282,6 @@ function GameScene({
   onGameStart,
   beatTimestamps,
   bpm,
-  musicPlayingRef,
-  spotifyDriftRef,
 }: GameSceneProps) {
   const baseConfig = SLALOM_CONFIGS[difficulty];
   const config = beatTimestamps
@@ -354,6 +348,7 @@ function GameScene({
   const [cones, setCones] = useState<ActiveCone[]>([]);
   const coneIdRef = useRef(0);
   const nextConeIdx = useRef(0);
+  const renderThrottle = useRef(0); // throttle React re-renders
 
   const playSound = useCallback((type: 'success' | 'error') => {
     try {
@@ -413,23 +408,7 @@ function GameScene({
 
     if (isPaused) return;
 
-    // In beat mode: wait for music to actually start before counting
-    if (isBeatMode && musicPlayingRef && !musicPlayingRef.current) {
-      return; // music not playing yet, freeze timer
-    }
-
     s.elapsedTime += delta;
-
-    // Drift correction: gradually sync game timer to Spotify position
-    // This prevents the two clocks from drifting apart over time
-    if (isBeatMode && spotifyDriftRef && spotifyDriftRef.current > 0.1) {
-      const drift = spotifyDriftRef.current - s.elapsedTime;
-      // Smoothly correct: move 20% toward Spotify position each frame
-      // This avoids jumps but keeps them in sync
-      if (Math.abs(drift) > 0.05) {
-        s.elapsedTime += drift * 0.2;
-      }
-    }
 
     if (s.elapsedTime >= duration) {
       s.finished = true;
@@ -540,7 +519,12 @@ function GameScene({
       bpm: bpm || 0,
     };
 
-    setCones([...s.cones]);
+    // Throttle React re-renders to ~20fps (every 3rd frame at 60fps)
+    renderThrottle.current++;
+    if (renderThrottle.current >= 3) {
+      renderThrottle.current = 0;
+      setCones([...s.cones]);
+    }
   });
 
   return (
