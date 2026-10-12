@@ -70,9 +70,9 @@ export default function TreningPage() {
       const requestStart = performance.now();
       await spotify.play(musicConfig.track);
       const roundTrip = performance.now() - requestStart;
-      // Music started when Spotify SERVER got the request
-      // That's approximately: requestStart + roundTrip / 2
-      gameStartWallTimeRef.current = requestStart + roundTrip / 2;
+      // Music starts after server processes + audio begins streaming
+      // Roughly 70% of round-trip (server processing + stream start)
+      gameStartWallTimeRef.current = requestStart + roundTrip * 0.7;
     } else {
       gameStartWallTimeRef.current = performance.now();
     }
