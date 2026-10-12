@@ -42,6 +42,28 @@ export default function TreningPage() {
   const gameContainerRef = useRef<HTMLDivElement>(null);
   const { startCamera, stopCamera } = useCamera();
 
+  // Ref for Spotify position - written by poll, read by game
+  const spotifyPosRef = useRef(0);
+  const spotifyPollRef = useRef<ReturnType<typeof setInterval>>(undefined);
+
+  // Poll Spotify position every 80ms when playing in beat mode
+  useEffect(() => {
+    if (phase === 'playing' && musicConfig?.mode === 'spotify') {
+      spotifyPosRef.current = 0;
+      spotifyPollRef.current = setInterval(async () => {
+        try {
+          const ms = await spotify.getPositionMs();
+          spotifyPosRef.current = ms / 1000;
+        } catch {}
+      }, 80);
+    } else {
+      if (spotifyPollRef.current) clearInterval(spotifyPollRef.current);
+    }
+    return () => {
+      if (spotifyPollRef.current) clearInterval(spotifyPollRef.current);
+    };
+  }, [phase, musicConfig, spotify]);
+
   // Load saved calibration
   useEffect(() => {
     const saved = localStorage.getItem('ballTracker_calibration');
@@ -211,7 +233,7 @@ export default function TreningPage() {
           onGameStart={handleGameStart}
           beatTimestamps={musicConfig?.beatMap?.beats}
           bpm={musicConfig?.bpm}
-          getSpotifyPositionMs={musicConfig?.mode === 'spotify' ? spotify.getPositionMs : undefined}
+          spotifyPosRef={musicConfig?.mode === 'spotify' ? spotifyPosRef : undefined}
         />
 
         {/* Tracking quality indicator */}

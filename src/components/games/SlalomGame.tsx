@@ -25,8 +25,8 @@ interface SlalomGameProps {
   onGameStart?: () => void;
   beatTimestamps?: number[];
   bpm?: number;
-  /** Returns current Spotify playback position in ms - used for beat sync */
-  getSpotifyPositionMs?: () => Promise<number>;
+  /** Ref that parent writes Spotify position into (seconds) */
+  spotifyPosRef?: React.MutableRefObject<number>;
 }
 
 export interface SlalomResult {
@@ -284,7 +284,7 @@ function GameScene({
   onGameStart,
   beatTimestamps,
   bpm,
-  getSpotifyPositionMs,
+  spotifyPosRef: externalSpotifyPosRef,
 }: GameSceneProps) {
   const baseConfig = SLALOM_CONFIGS[difficulty];
   const config = beatTimestamps
@@ -331,8 +331,9 @@ function GameScene({
     return offsets;
   }, [coneSequence, isBeatMode]);
 
-  // In beat mode, wait for music to actually start before counting time
-  const musicStartedRef = useRef(false);
+  // In beat mode: parent writes Spotify position into this ref every ~100ms
+  const localSpotifyPos = useRef(0);
+  const spotifyPosRef = externalSpotifyPosRef || localSpotifyPos;
 
   const stateRef = useRef({
     score: 0,
@@ -348,7 +349,6 @@ function GameScene({
     started: false,
     countdown: 3,
     backTimer: 0,
-    musicDelay: 0,
   });
 
   const ballPosRef = useRef(0);
@@ -407,33 +407,20 @@ function GameScene({
       };
       if (s.countdown <= 0) {
         s.started = true;
-        if (isBeatMode) {
-          // In beat mode: fire callback, wait for music to start, THEN count time
-          musicStartedRef.current = false;
-          if (onGameStart) {
-            // Parent calls spotify.play() and sets musicStartedRef when done
-            onGameStart();
-          }
-        } else {
-          onGameStart?.();
-          musicStartedRef.current = true;
-        }
-      }
-      return;
-    }
-
-    // In beat mode, wait ~500ms for Spotify play() to actually start
-    if (isBeatMode && !musicStartedRef.current) {
-      s.musicDelay += delta;
-      if (s.musicDelay > 0.5) {
-        musicStartedRef.current = true;
+        onGameStart?.();
       }
       return;
     }
 
     if (isPaused) return;
 
-    s.elapsedTime += delta;
+    // In beat mode: use Spotify position directly (written by parent into ref)
+    // In normal mode: accumulate delta
+    if (isBeatMode) {
+      s.elapsedTime = spotifyPosRef.current;
+    } else {
+      s.elapsedTime += delta;
+    }
 
     if (s.elapsedTime >= duration) {
       s.finished = true;
