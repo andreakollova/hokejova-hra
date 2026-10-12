@@ -72,7 +72,7 @@ export default function TreningPage() {
       const roundTrip = performance.now() - requestStart;
       // Music starts after server processes + audio begins streaming
       // Roughly 70% of round-trip (server processing + stream start)
-      gameStartWallTimeRef.current = requestStart + roundTrip * 0.9;
+      gameStartWallTimeRef.current = performance.now() + 200;
     } else {
       gameStartWallTimeRef.current = performance.now();
     }
