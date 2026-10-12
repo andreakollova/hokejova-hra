@@ -25,8 +25,8 @@ interface SlalomGameProps {
   onGameStart?: () => void;
   beatTimestamps?: number[];
   bpm?: number;
-  /** Ref that parent writes Spotify position into (seconds) */
-  spotifyPosRef?: React.MutableRefObject<number>;
+  /** Ref: true when Spotify music is actually playing */
+  musicPlayingRef?: React.MutableRefObject<boolean>;
 }
 
 export interface SlalomResult {
@@ -284,7 +284,7 @@ function GameScene({
   onGameStart,
   beatTimestamps,
   bpm,
-  spotifyPosRef: externalSpotifyPosRef,
+  musicPlayingRef,
 }: GameSceneProps) {
   const baseConfig = SLALOM_CONFIGS[difficulty];
   const config = beatTimestamps
@@ -330,10 +330,6 @@ function GameScene({
     }
     return offsets;
   }, [coneSequence, isBeatMode]);
-
-  // In beat mode: parent writes Spotify position into this ref every ~100ms
-  const localSpotifyPos = useRef(0);
-  const spotifyPosRef = externalSpotifyPosRef || localSpotifyPos;
 
   const stateRef = useRef({
     score: 0,
@@ -414,12 +410,12 @@ function GameScene({
 
     if (isPaused) return;
 
-    // In beat mode with Spotify: use Spotify position if available, else fallback to delta
-    if (isBeatMode && spotifyPosRef.current > 0.01) {
-      s.elapsedTime = spotifyPosRef.current;
-    } else {
-      s.elapsedTime += delta;
+    // In beat mode: wait for music to actually start before counting
+    if (isBeatMode && musicPlayingRef && !musicPlayingRef.current) {
+      return; // music not playing yet, freeze timer
     }
+
+    s.elapsedTime += delta;
 
     if (s.elapsedTime >= duration) {
       s.finished = true;
