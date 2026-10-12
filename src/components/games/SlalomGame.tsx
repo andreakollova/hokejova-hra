@@ -22,12 +22,11 @@ interface SlalomGameProps {
   onResume: () => void;
   isPaused: boolean;
   onBackToMenu?: () => void;
-  /** Called when countdown finishes and game actually starts */
   onGameStart?: () => void;
-  /** Beat timestamps in seconds - if provided, cones sync to beats */
   beatTimestamps?: number[];
-  /** BPM for display */
   bpm?: number;
+  /** Returns current Spotify playback position in ms - used for beat sync */
+  getSpotifyPositionMs?: () => Promise<number>;
 }
 
 export interface SlalomResult {
@@ -285,6 +284,7 @@ function GameScene({
   onGameStart,
   beatTimestamps,
   bpm,
+  getSpotifyPositionMs,
 }: GameSceneProps) {
   const baseConfig = SLALOM_CONFIGS[difficulty];
   const config = beatTimestamps
@@ -330,6 +330,21 @@ function GameScene({
     }
     return offsets;
   }, [coneSequence, isBeatMode]);
+
+  // In beat mode, sync game time to Spotify playback position
+  const spotifyTimeRef = useRef(0); // last known Spotify position in seconds
+  const spotifyPollRef = useRef(0); // when we last polled
+  useEffect(() => {
+    if (!isBeatMode || !getSpotifyPositionMs) return;
+    const poll = setInterval(async () => {
+      try {
+        const ms = await getSpotifyPositionMs();
+        spotifyTimeRef.current = ms / 1000;
+        spotifyPollRef.current = performance.now();
+      } catch {}
+    }, 150);
+    return () => clearInterval(poll);
+  }, [isBeatMode, getSpotifyPositionMs]);
 
   const stateRef = useRef({
     score: 0,
@@ -411,7 +426,13 @@ function GameScene({
 
     if (isPaused) return;
 
-    s.elapsedTime += delta;
+    if (isBeatMode && spotifyTimeRef.current > 0) {
+      // In beat mode: sync to Spotify position (interpolated between polls)
+      const timeSincePoll = (performance.now() - spotifyPollRef.current) / 1000;
+      s.elapsedTime = spotifyTimeRef.current + timeSincePoll;
+    } else {
+      s.elapsedTime += delta;
+    }
 
     if (s.elapsedTime >= duration) {
       s.finished = true;

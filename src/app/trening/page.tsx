@@ -211,6 +211,7 @@ export default function TreningPage() {
           onGameStart={handleGameStart}
           beatTimestamps={musicConfig?.beatMap?.beats}
           bpm={musicConfig?.bpm}
+          getSpotifyPositionMs={musicConfig?.mode === 'spotify' ? spotify.getPositionMs : undefined}
         />
 
         {/* Tracking quality indicator */}
