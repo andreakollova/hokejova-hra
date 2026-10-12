@@ -22,6 +22,8 @@ interface SlalomGameProps {
   onResume: () => void;
   isPaused: boolean;
   onBackToMenu?: () => void;
+  /** Called when countdown finishes and game actually starts */
+  onGameStart?: () => void;
   /** Beat timestamps in seconds - if provided, cones sync to beats */
   beatTimestamps?: number[];
   /** BPM for display */
@@ -280,6 +282,7 @@ function GameScene({
   inputMode,
   hudRef,
   onBackToMenu,
+  onGameStart,
   beatTimestamps,
   bpm,
 }: GameSceneProps) {
@@ -398,7 +401,11 @@ function GameScene({
         countdown: Math.ceil(Math.max(0, s.countdown)),
         backProgress: s.backTimer / 3,
       };
-      if (s.countdown <= 0) s.started = true;
+      if (s.countdown <= 0) {
+        s.started = true;
+        // Fire callback ONCE so parent starts music NOW (after 3-2-1)
+        onGameStart?.();
+      }
       return;
     }
 

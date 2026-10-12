@@ -99,15 +99,16 @@ export default function BeatBuilderPage() {
     }
   };
 
-  // Handle spacebar tap
+  // Handle spacebar tap - use Spotify playback position for accuracy
   useEffect(() => {
-    const handleKey = (e: KeyboardEvent) => {
+    const handleKey = async (e: KeyboardEvent) => {
       if (e.code === 'Space' && isRecording) {
         e.preventDefault();
-        const elapsed = (performance.now() - recordStartTime) / 1000;
+        // Get actual Spotify playback position (more accurate than performance.now)
+        const posMs = await spotify.getPositionMs();
+        const elapsed = posMs / 1000;
         setBeats((prev) => {
-          const newBeats = [...prev, Math.round(elapsed * 1000) / 1000];
-          // Calculate BPM from last few taps
+          const newBeats = [...prev, Math.round(elapsed * 100) / 100];
           if (newBeats.length >= 2) {
             const recent = newBeats.slice(-8);
             const intervals: number[] = [];

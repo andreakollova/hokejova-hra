@@ -61,14 +61,18 @@ export default function TreningPage() {
     [tracker]
   );
 
+  // Called by SlalomGame when countdown finishes (3-2-1-GO)
+  const handleGameStart = useCallback(() => {
+    if (musicConfig?.mode === 'spotify' && musicConfig.track) {
+      spotify.play(musicConfig.track);
+    }
+  }, [musicConfig, spotify]);
+
   const startGame = useCallback(async () => {
     if (inputMode === 'demo') {
       tracker.startDemo();
       setPhase('playing');
-      // Start Spotify playback if configured
-      if (musicConfig?.mode === 'spotify' && musicConfig.track) {
-        spotify.play(musicConfig.track);
-      }
+      // Music starts after countdown via onGameStart
       return;
     }
 
@@ -85,10 +89,7 @@ export default function TreningPage() {
       if (info) {
         tracker.startTracking(video);
         setPhase('playing');
-        // Start Spotify playback if configured
-        if (musicConfig?.mode === 'spotify' && musicConfig.track) {
-          spotify.play(musicConfig.track);
-        }
+        // Music starts after countdown via onGameStart
       }
     }
   }, [inputMode, calibration, tracker, startCamera, musicConfig, spotify]);
@@ -207,6 +208,7 @@ export default function TreningPage() {
             setMusicConfig(null);
             setPhase('setup');
           }}
+          onGameStart={handleGameStart}
           beatTimestamps={musicConfig?.beatMap?.beats}
           bpm={musicConfig?.bpm}
         />
