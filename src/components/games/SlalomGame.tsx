@@ -298,17 +298,27 @@ function GameScene({
   // Beat-synced cones with variable xOffset based on interval
   const coneSequence = useMemo(() => {
     if (isBeatMode && beatTimestamps) {
-      // Filter beats within playable range
-      const validBeats = beatTimestamps.filter(t => t >= 2 && t <= duration - 0.5);
-      if (validBeats.length === 0) return [];
+      // Sort beats (recording might have out-of-order timestamps)
+      const sorted = [...beatTimestamps].sort((a, b) => a - b);
+
+      // Remove duplicates and beats too close together (< 0.15s = accidental double taps)
+      const cleaned: number[] = [];
+      for (const t of sorted) {
+        if (t < 1) continue; // skip very early beats (before song starts)
+        if (t > duration - 0.5) continue;
+        if (cleaned.length > 0 && t - cleaned[cleaned.length - 1] < 0.15) continue;
+        cleaned.push(t);
+      }
+
+      if (cleaned.length === 0) return [];
 
       const cones: ConeDefinition[] = [];
       let lastSide: 'left' | 'right' = 'right';
 
-      for (let i = 0; i < validBeats.length; i++) {
+      for (let i = 0; i < cleaned.length; i++) {
         const side: 'left' | 'right' = lastSide === 'left' ? 'right' : 'left';
         lastSide = side;
-        cones.push({ time: validBeats[i], side, scored: false });
+        cones.push({ time: cleaned[i], side, scored: false });
       }
       return cones;
     }
