@@ -65,14 +65,13 @@ export default function TreningPage() {
   );
 
   // Called by SlalomGame when countdown finishes (3-2-1-GO)
-  const handleGameStart = useCallback(async () => {
+  const handleGameStart = useCallback(() => {
     if (musicConfig?.mode === 'spotify' && musicConfig.track) {
-      const requestStart = performance.now();
-      await spotify.play(musicConfig.track);
-      const roundTrip = performance.now() - requestStart;
-      // Music starts after server processes + audio begins streaming
-      // Roughly 70% of round-trip (server processing + stream start)
-      gameStartWallTimeRef.current = performance.now() + 650;
+      // Register callback BEFORE play() - SDK will fire it when music actually starts
+      spotify.onPlaybackStart((timestamp) => {
+        gameStartWallTimeRef.current = timestamp;
+      });
+      spotify.play(musicConfig.track);
     } else {
       gameStartWallTimeRef.current = performance.now();
     }

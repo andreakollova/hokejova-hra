@@ -38,6 +38,8 @@ export function useSpotify() {
   const [isReady, setIsReady] = useState(false);
   const [deviceId, setDeviceId] = useState<string | null>(null);
   const [isPlaying, setIsPlaying] = useState(false);
+  const isPlayingRef = useRef(false);
+  const onPlaybackStartRef = useRef<((timestamp: number) => void) | null>(null);
   const [currentTrack, setCurrentTrack] = useState<SpotifyTrack | null>(null);
   const [beatMap, setBeatMap] = useState<BeatMap | null>(null);
   const [searchResults, setSearchResults] = useState<SpotifyTrack[]>([]);
@@ -118,8 +120,17 @@ export function useSpotify() {
 
     player.addListener('player_state_changed', (state) => {
       if (!state) return;
-      setIsPlaying(!state.paused);
+      const wasPlaying = isPlayingRef.current;
+      const nowPlaying = !state.paused;
+      isPlayingRef.current = nowPlaying;
+      setIsPlaying(nowPlaying);
       setPosition((state as unknown as { position: number }).position);
+
+      // Detect exact moment playback starts
+      if (!wasPlaying && nowPlaying && onPlaybackStartRef.current) {
+        onPlaybackStartRef.current(performance.now());
+        onPlaybackStartRef.current = null;
+      }
     });
 
     player.connect();
@@ -246,6 +257,11 @@ export function useSpotify() {
     return state?.position || 0;
   }, []);
 
+  /** Set a one-time callback for when playback actually starts */
+  const onPlaybackStart = useCallback((cb: (timestamp: number) => void) => {
+    onPlaybackStartRef.current = cb;
+  }, []);
+
   return {
     isConnected,
     isReady,
@@ -264,6 +280,7 @@ export function useSpotify() {
     seek,
     getPositionMs,
     updateBpm,
+    onPlaybackStart,
   };
 }
 
