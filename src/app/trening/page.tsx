@@ -91,18 +91,26 @@ export default function TreningPage() {
       return;
     }
 
-    // Start camera and tracking
+    // Switch to playing phase FIRST so <video> element renders
     tracker.setCalibration(calibration);
-    const video = videoRef.current;
-    if (video) {
-      const info = await startCamera(calibration.cameraDeviceId, video);
-      if (info) {
-        tracker.startTracking(video);
-        setPhase('playing');
-        // Music starts after countdown via onGameStart
+    setPhase('playing');
+  }, [inputMode, calibration, tracker, startCamera]);
+
+  // Start camera when playing phase begins with camera mode
+  useEffect(() => {
+    if (phase !== 'playing' || inputMode !== 'camera' || !calibration) return;
+    // Wait a frame for video element to render
+    const timeout = setTimeout(async () => {
+      const video = videoRef.current;
+      if (video) {
+        const info = await startCamera(calibration.cameraDeviceId, video);
+        if (info) {
+          tracker.startTracking(video);
+        }
       }
-    }
-  }, [inputMode, calibration, tracker, startCamera, musicConfig, spotify]);
+    }, 100);
+    return () => clearTimeout(timeout);
+  }, [phase, inputMode, calibration, startCamera, tracker]);
 
   const handleFinish = useCallback((res: SlalomResult) => {
     setResult(res);
