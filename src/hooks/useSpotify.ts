@@ -56,6 +56,8 @@ export function useSpotify() {
   }, []);
 
   const connect = useCallback(() => {
+    // Save current path so callback redirects back here
+    document.cookie = `spotify_return_to=${window.location.pathname}; path=/; max-age=300`;
     window.location.href = getSpotifyAuthUrl();
   }, []);
 

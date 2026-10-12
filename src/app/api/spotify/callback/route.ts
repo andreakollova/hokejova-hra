@@ -4,8 +4,11 @@ export async function GET(request: NextRequest) {
   const code = request.nextUrl.searchParams.get('code');
   const error = request.nextUrl.searchParams.get('error');
 
+  // Remember where user came from
+  const returnTo = request.cookies.get('spotify_return_to')?.value || '/trening';
+
   if (error || !code) {
-    return NextResponse.redirect(new URL('/trening?spotify=error', request.url));
+    return NextResponse.redirect(new URL(`${returnTo}?spotify=error`, request.url));
   }
 
   const redirectUri = `${request.nextUrl.origin}/api/spotify/callback`;
@@ -31,8 +34,9 @@ export async function GET(request: NextRequest) {
 
   const tokens = await tokenRes.json();
 
-  // Store tokens in a secure httpOnly cookie
-  const response = NextResponse.redirect(new URL('/trening?spotify=connected', request.url));
+  // Redirect back to original page
+  const response = NextResponse.redirect(new URL(`${returnTo}?spotify=connected`, request.url));
+  response.cookies.delete('spotify_return_to');
 
   response.cookies.set('spotify_access_token', tokens.access_token, {
     httpOnly: true,
