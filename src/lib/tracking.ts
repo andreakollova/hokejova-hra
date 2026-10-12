@@ -68,8 +68,8 @@ export const DEFAULT_TRACKING_CONFIG: TrackingConfig = {
   smoothing: 0.3,
   maxJumpDistance: 0.15,
   lostThreshold: 15,
-  minBlobArea: 100,
-  maxBlobArea: 50000,
+  minBlobArea: 50,
+  maxBlobArea: 500000,
 };
 
 export type InputMode = 'camera' | 'demo';
