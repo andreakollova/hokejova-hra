@@ -264,6 +264,7 @@ interface ActiveCone extends ConeDefinition {
   passed: boolean;
   correct: boolean | null;
   id: number;
+  xOffset: number; // lateral distance from center
 }
 
 interface GameSceneProps extends SlalomGameProps {
@@ -283,35 +284,49 @@ function GameScene({
   bpm,
 }: GameSceneProps) {
   const baseConfig = SLALOM_CONFIGS[difficulty];
-  // In beat mode, slow down cone speed so they're more spaced visually
   const config = beatTimestamps
-    ? { ...baseConfig, coneSpeed: Math.min(baseConfig.coneSpeed, 2.5) }
+    ? { ...baseConfig, coneSpeed: 3.0 }
     : baseConfig;
+  const isBeatMode = !!(beatTimestamps && beatTimestamps.length > 0);
   const challengeKey = `slalom-${difficulty}-${duration}`;
   const challengeVersion = CHALLENGE_VERSIONS[challengeKey] || 'v1';
   const sessionIdRef = useRef(crypto.randomUUID());
 
-  // Generate cone sequence: from beats if available, otherwise from seeded PRNG
+  // Beat-synced cones with variable xOffset based on interval
   const coneSequence = useMemo(() => {
-    if (beatTimestamps && beatTimestamps.length > 0) {
-      // For fast BPM, skip beats so player has time to move
-      // Easy: every 4th beat, Medium: every 2nd, Hard: every beat
-      const skipFactor = difficulty === 'easy' ? 4 : difficulty === 'medium' ? 2 : 1;
+    if (isBeatMode && beatTimestamps) {
+      // Filter beats within playable range
+      const validBeats = beatTimestamps.filter(t => t >= 2 && t <= duration - 0.5);
+      if (validBeats.length === 0) return [];
+
       const cones: ConeDefinition[] = [];
       let lastSide: 'left' | 'right' = 'right';
-      let beatIdx = 0;
-      for (const t of beatTimestamps) {
-        if (t < 3 || t > duration - 1) { beatIdx++; continue; }
-        if (beatIdx % skipFactor !== 0) { beatIdx++; continue; }
-        beatIdx++;
+
+      for (let i = 0; i < validBeats.length; i++) {
         const side: 'left' | 'right' = lastSide === 'left' ? 'right' : 'left';
         lastSide = side;
-        cones.push({ time: t, side, scored: false });
+        cones.push({ time: validBeats[i], side, scored: false });
       }
       return cones;
     }
     return generateConeSequence(duration, difficulty, challengeVersion);
-  }, [duration, difficulty, challengeVersion, beatTimestamps]);
+  }, [duration, difficulty, challengeVersion, beatTimestamps, isBeatMode]);
+
+  // Pre-compute xOffset for each cone based on time gap to next/prev cone
+  const coneXOffsets = useMemo(() => {
+    if (!isBeatMode || coneSequence.length === 0) return [];
+    const offsets: number[] = [];
+    const MIN_X = 0.4; // close to center for fast beats
+    const MAX_X = 2.0; // far out for slow beats
+    for (let i = 0; i < coneSequence.length; i++) {
+      // Time to previous cone (or default)
+      const prevGap = i > 0 ? coneSequence[i].time - coneSequence[i - 1].time : 0.5;
+      // Map gap to xOffset: 0.2s gap = MIN_X, 1.5s+ gap = MAX_X
+      const t = Math.max(0, Math.min(1, (prevGap - 0.2) / 1.3));
+      offsets.push(MIN_X + t * (MAX_X - MIN_X));
+    }
+    return offsets;
+  }, [coneSequence, isBeatMode]);
 
   const stateRef = useRef({
     score: 0,
@@ -411,35 +426,53 @@ function GameScene({
       return;
     }
 
+    // Ball Z position (constant)
+    const ballZ = 2;
+
     // Spawn cones
+    const LOOK_AHEAD = isBeatMode ? 4.0 : TRACK_DEPTH / config.coneSpeed;
     while (
       nextConeIdx.current < coneSequence.length &&
-      coneSequence[nextConeIdx.current].time <= s.elapsedTime + TRACK_DEPTH / config.coneSpeed
+      coneSequence[nextConeIdx.current].time <= s.elapsedTime + LOOK_AHEAD
     ) {
-      const def = coneSequence[nextConeIdx.current];
+      const idx = nextConeIdx.current;
+      const def = coneSequence[idx];
+      const xOff = coneXOffsets[idx] ?? 1.2;
       const timeUntil = def.time - s.elapsedTime;
       s.cones.push({
         ...def,
-        z: -timeUntil * config.coneSpeed,
+        z: isBeatMode
+          ? ballZ - timeUntil * config.coneSpeed  // will arrive at ballZ at beat time
+          : -timeUntil * config.coneSpeed,
         passed: false,
         correct: null,
         id: coneIdRef.current++,
+        xOffset: xOff,
       });
       nextConeIdx.current++;
     }
 
     // Move cones
-    const ballZ = 2;
     let feedbackType: 'success' | 'error' | null = null;
 
     for (const cone of s.cones) {
-      cone.z += config.coneSpeed * delta;
+      if (isBeatMode) {
+        // In beat mode: cone z is calculated from its beat time
+        // It arrives at ballZ exactly when elapsedTime == cone.time
+        const timeUntil = cone.time - s.elapsedTime;
+        cone.z = ballZ - timeUntil * config.coneSpeed;
+      } else {
+        cone.z += config.coneSpeed * delta;
+      }
 
-      if (!cone.passed && cone.z >= ballZ - 0.3 && cone.z <= ballZ + 0.3) {
+      // Check pass - tighter window in beat mode for precise feel
+      const passWindow = isBeatMode ? 0.15 : 0.3;
+      if (!cone.passed && cone.z >= ballZ - passWindow && cone.z <= ballZ + passWindow) {
         cone.passed = true;
         const ballSide = s.ballX < 0 ? 'left' : 'right';
         const isCorrect = ballSide === cone.side;
-        const minDist = config.movementRange * TRACK_WIDTH * 0.3;
+        // In beat mode, check against the cone's xOffset
+        const minDist = isBeatMode ? cone.xOffset * 0.4 : config.movementRange * TRACK_WIDTH * 0.3;
         cone.correct = isCorrect && Math.abs(s.ballX) > minDist;
 
         if (cone.correct) {
@@ -516,15 +549,18 @@ function GameScene({
       <HockeyBall posRef={ballPosRef} />
 
       {/* Cones */}
-      {cones.map((cone) => (
-        <Cone
-          key={cone.id}
-          position={[cone.side === 'left' ? -1.2 : 1.2, CONE_Y + 0.33, cone.z]}
-          side={cone.side}
-          passed={cone.passed}
-          correct={cone.correct}
-        />
-      ))}
+      {cones.map((cone) => {
+        const x = cone.side === 'left' ? -(cone.xOffset || 1.2) : (cone.xOffset || 1.2);
+        return (
+          <Cone
+            key={cone.id}
+            position={[x, CONE_Y + 0.33, cone.z]}
+            side={cone.side}
+            passed={cone.passed}
+            correct={cone.correct}
+          />
+        );
+      })}
 
       {/* White fog - scene fades to white */}
       <fog attach="fog" args={['#f0f4f8', 20, TRACK_DEPTH]} />
