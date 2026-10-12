@@ -42,20 +42,43 @@ export default function TreningPage() {
   const gameContainerRef = useRef<HTMLDivElement>(null);
   const { startCamera, stopCamera } = useCamera();
 
-  // Ref for Spotify position - written by poll, read by game
+  // Spotify position sync for beat mode
+  // We poll the real position and interpolate between polls for smooth 60fps
   const spotifyPosRef = useRef(0);
   const spotifyPollRef = useRef<ReturnType<typeof setInterval>>(undefined);
+  const lastPollTimeRef = useRef(0);
+  const lastPollPosRef = useRef(0);
 
-  // Poll Spotify position every 80ms when playing in beat mode
   useEffect(() => {
     if (phase === 'playing' && musicConfig?.mode === 'spotify') {
       spotifyPosRef.current = 0;
+      lastPollTimeRef.current = performance.now();
+      lastPollPosRef.current = 0;
+
+      // Poll Spotify position and interpolate
       spotifyPollRef.current = setInterval(async () => {
         try {
           const ms = await spotify.getPositionMs();
-          spotifyPosRef.current = ms / 1000;
+          lastPollPosRef.current = ms / 1000;
+          lastPollTimeRef.current = performance.now();
         } catch {}
-      }, 80);
+      }, 100);
+
+      // High-frequency interpolation: update ref every frame via rAF
+      let running = true;
+      const interpolate = () => {
+        if (!running) return;
+        const elapsed = (performance.now() - lastPollTimeRef.current) / 1000;
+        // Interpolate: last known position + time since last poll
+        spotifyPosRef.current = lastPollPosRef.current + elapsed;
+        requestAnimationFrame(interpolate);
+      };
+      requestAnimationFrame(interpolate);
+
+      return () => {
+        running = false;
+        if (spotifyPollRef.current) clearInterval(spotifyPollRef.current);
+      };
     } else {
       if (spotifyPollRef.current) clearInterval(spotifyPollRef.current);
     }
