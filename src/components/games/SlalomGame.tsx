@@ -27,6 +27,8 @@ interface SlalomGameProps {
   bpm?: number;
   /** Ref: true when Spotify music is actually playing */
   musicPlayingRef?: React.MutableRefObject<boolean>;
+  /** Ref: Spotify playback position in seconds (polled every 500ms for drift correction) */
+  spotifyDriftRef?: React.MutableRefObject<number>;
 }
 
 export interface SlalomResult {
@@ -285,6 +287,7 @@ function GameScene({
   beatTimestamps,
   bpm,
   musicPlayingRef,
+  spotifyDriftRef,
 }: GameSceneProps) {
   const baseConfig = SLALOM_CONFIGS[difficulty];
   const config = beatTimestamps
@@ -403,9 +406,6 @@ function GameScene({
       };
       if (s.countdown <= 0) {
         s.started = true;
-        // Spotify play() has ~550ms head start before timer starts
-        // Compensate by starting elapsed time at that offset
-        if (isBeatMode) s.elapsedTime = 0.55;
         onGameStart?.();
       }
       return;
@@ -419,6 +419,17 @@ function GameScene({
     }
 
     s.elapsedTime += delta;
+
+    // Drift correction: gradually sync game timer to Spotify position
+    // This prevents the two clocks from drifting apart over time
+    if (isBeatMode && spotifyDriftRef && spotifyDriftRef.current > 0.1) {
+      const drift = spotifyDriftRef.current - s.elapsedTime;
+      // Smoothly correct: move 20% toward Spotify position each frame
+      // This avoids jumps but keeps them in sync
+      if (Math.abs(drift) > 0.05) {
+        s.elapsedTime += drift * 0.2;
+      }
+    }
 
     if (s.elapsedTime >= duration) {
       s.finished = true;

@@ -42,10 +42,21 @@ export default function TreningPage() {
   const gameContainerRef = useRef<HTMLDivElement>(null);
   const { startCamera, stopCamera } = useCamera();
 
-  // Signal ref: set to true when Spotify confirms music is playing
+  // Signal ref: set to true when music starts
   const musicPlayingRef = useRef(false);
+  // Spotify position ref for drift correction (polled every 500ms)
+  const spotifyDriftRef = useRef(0);
 
-  // No more Spotify position polling - just detect when music starts
+  useEffect(() => {
+    if (phase !== 'playing' || musicConfig?.mode !== 'spotify') return;
+    const poll = setInterval(async () => {
+      try {
+        const ms = await spotify.getPositionMs();
+        spotifyDriftRef.current = ms / 1000;
+      } catch {}
+    }, 500);
+    return () => clearInterval(poll);
+  }, [phase, musicConfig, spotify]);
 
   // Load saved calibration
   useEffect(() => {
@@ -220,6 +231,7 @@ export default function TreningPage() {
           beatTimestamps={musicConfig?.beatMap?.beats}
           bpm={musicConfig?.bpm}
           musicPlayingRef={musicConfig?.mode === 'spotify' ? musicPlayingRef : undefined}
+          spotifyDriftRef={musicConfig?.mode === 'spotify' ? spotifyDriftRef : undefined}
         />
 
         {/* Tracking quality indicator */}
