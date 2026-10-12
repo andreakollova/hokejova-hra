@@ -618,7 +618,8 @@ export default function SlalomGame(props: SlalomGameProps) {
     <div className="relative w-full h-full">
       <Canvas
         shadows
-        gl={{ antialias: true, alpha: false }}
+        gl={{ antialias: true }}
+        onCreated={({ gl }) => gl.setClearColor('#f0f4f8')}
         style={{ background: '#f0f4f8' }}
       >
         <GameScene {...props} hudRef={hudRef} />
