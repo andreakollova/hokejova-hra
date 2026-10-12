@@ -42,7 +42,8 @@ export default function TreningPage() {
   const gameContainerRef = useRef<HTMLDivElement>(null);
   const { startCamera, stopCamera } = useCamera();
 
-  // No polling, no drift correction - just play and go
+  // Wall time ref: set when Spotify actually starts playing (after await)
+  const gameStartWallTimeRef = useRef(0);
 
   // Load saved calibration
   useEffect(() => {
@@ -64,10 +65,14 @@ export default function TreningPage() {
   );
 
   // Called by SlalomGame when countdown finishes (3-2-1-GO)
-  // Just play the song. Timer starts in the same frame.
-  const handleGameStart = useCallback(() => {
+  const handleGameStart = useCallback(async () => {
     if (musicConfig?.mode === 'spotify' && musicConfig.track) {
-      spotify.play(musicConfig.track);
+      // Wait for Spotify API to confirm playback started
+      await spotify.play(musicConfig.track);
+      // NOW music is starting - set the wall time HERE, not at countdown end
+      gameStartWallTimeRef.current = performance.now();
+    } else {
+      gameStartWallTimeRef.current = performance.now();
     }
   }, [musicConfig, spotify]);
 
@@ -214,6 +219,7 @@ export default function TreningPage() {
           onGameStart={handleGameStart}
           beatTimestamps={musicConfig?.beatMap?.beats}
           bpm={musicConfig?.bpm}
+          externalWallTimeRef={musicConfig?.mode === 'spotify' ? gameStartWallTimeRef : undefined}
         />
 
         {/* Tracking quality indicator */}

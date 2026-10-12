@@ -25,6 +25,8 @@ interface SlalomGameProps {
   onGameStart?: () => void;
   beatTimestamps?: number[];
   bpm?: number;
+  /** Parent sets this ref when Spotify actually starts playing */
+  externalWallTimeRef?: React.MutableRefObject<number>;
 }
 
 export interface SlalomResult {
@@ -282,6 +284,7 @@ function GameScene({
   onGameStart,
   beatTimestamps,
   bpm,
+  externalWallTimeRef,
 }: GameSceneProps) {
   const baseConfig = SLALOM_CONFIGS[difficulty];
   const config = beatTimestamps
@@ -410,9 +413,15 @@ function GameScene({
 
     if (isPaused) return;
 
-    // Use absolute wall clock time instead of accumulated delta
-    // This prevents ANY drift over time
-    s.elapsedTime = (performance.now() - s.gameStartWallTime) / 1000;
+    // In beat mode with Spotify: use parent's wall time (set AFTER play() resolves)
+    // In normal mode: use own wall time (set at countdown end)
+    const wallTime = (externalWallTimeRef && externalWallTimeRef.current > 0)
+      ? externalWallTimeRef.current
+      : s.gameStartWallTime;
+
+    if (wallTime === 0) return; // waiting for music to start
+
+    s.elapsedTime = (performance.now() - wallTime) / 1000;
 
     if (s.elapsedTime >= duration) {
       s.finished = true;
