@@ -67,16 +67,13 @@ export default function TreningPage() {
   );
 
   // Called by SlalomGame when countdown finishes (3-2-1-GO)
-  const handleGameStart = useCallback(async () => {
+  const handleGameStart = useCallback(() => {
     if (musicConfig?.mode === 'spotify' && musicConfig.track) {
-      musicPlayingRef.current = false;
-      await spotify.play(musicConfig.track);
-      // Small delay to let Spotify actually start streaming audio
-      await new Promise(r => setTimeout(r, 300));
-      musicPlayingRef.current = true;
-    } else {
-      musicPlayingRef.current = true;
+      // Fire play and start timer at the same moment
+      // Music starts ~100ms after play() call, timer starts next frame
+      spotify.play(musicConfig.track);
     }
+    musicPlayingRef.current = true;
   }, [musicConfig, spotify]);
 
   const startGame = useCallback(async () => {
