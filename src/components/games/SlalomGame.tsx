@@ -403,6 +403,9 @@ function GameScene({
       };
       if (s.countdown <= 0) {
         s.started = true;
+        // Spotify play() has ~550ms head start before timer starts
+        // Compensate by starting elapsed time at that offset
+        if (isBeatMode) s.elapsedTime = 0.55;
         onGameStart?.();
       }
       return;
