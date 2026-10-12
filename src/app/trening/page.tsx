@@ -69,8 +69,9 @@ export default function TreningPage() {
     if (musicConfig?.mode === 'spotify' && musicConfig.track) {
       // Wait for Spotify API to confirm playback started
       await spotify.play(musicConfig.track);
-      // NOW music is starting - set the wall time HERE, not at countdown end
-      gameStartWallTimeRef.current = performance.now();
+      // Music started when we SENT the request, not when response arrived
+      // HTTP round-trip is ~300ms, so music is already 300ms ahead
+      gameStartWallTimeRef.current = performance.now() - 300;
     } else {
       gameStartWallTimeRef.current = performance.now();
     }
