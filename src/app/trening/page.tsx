@@ -128,22 +128,25 @@ export default function TreningPage() {
     setIsPaused(false);
   }, []);
 
-  // Monitor tracking quality during game
+  // Monitor tracking quality during game (with 5s warmup delay)
   useEffect(() => {
     if (phase !== 'playing' || inputMode === 'demo') return;
 
-    const interval = setInterval(() => {
-      const state = tracker.state;
-      if (state.quality === 'lost' && !isPaused) {
-        setIsPaused(true);
-      } else if (state.quality !== 'lost' && isPaused) {
-        // Resume after 2s countdown
-        setTimeout(() => setIsPaused(false), 2000);
-      }
-    }, 200);
+    // Wait 5s for camera to warm up before monitoring
+    const delay = setTimeout(() => {
+      const interval = setInterval(() => {
+        const input = tracker.getGameInput();
+        if (!input.active && !isPaused) {
+          setIsPaused(true);
+        } else if (input.active && isPaused) {
+          setTimeout(() => setIsPaused(false), 1000);
+        }
+      }, 500);
+      return () => clearInterval(interval);
+    }, 5000);
 
-    return () => clearInterval(interval);
-  }, [phase, inputMode, tracker.state, isPaused]);
+    return () => clearTimeout(delay);
+  }, [phase, inputMode, tracker, isPaused]);
 
   // Handle demo mouse input on game container
   const handleMouseMove = useCallback(
