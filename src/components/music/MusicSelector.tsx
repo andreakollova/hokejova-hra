@@ -21,7 +21,6 @@ interface SavedBeatMap {
   beats: number[];
 }
 
-// 5 BPM templates for songs without admin beat maps
 const BPM_TEMPLATES = [80, 100, 120, 140, 160];
 
 function generateBeatsForBpm(bpm: number, durationS: number): number[] {
@@ -33,12 +32,6 @@ function generateBeatsForBpm(bpm: number, durationS: number): number[] {
   return beats;
 }
 
-function closestBpm(target: number): number {
-  return BPM_TEMPLATES.reduce((prev, curr) =>
-    Math.abs(curr - target) < Math.abs(prev - target) ? curr : prev
-  );
-}
-
 interface MusicSelectorProps {
   onSelect: (config: MusicConfig) => void;
   onCancel: () => void;
@@ -46,17 +39,13 @@ interface MusicSelectorProps {
 }
 
 export default function MusicSelector({ onSelect, onCancel, spotify }: MusicSelectorProps) {
-  const [tab, setTab] = useState<'songs' | 'search' | 'manual'>('songs');
   const [availableSongs, setAvailableSongs] = useState<SavedBeatMap[]>([]);
   const [loading, setLoading] = useState(true);
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedBpm, setSelectedBpm] = useState(120);
-  const [manualBpm, setManualBpm] = useState(100);
-  const [tapTimes, setTapTimes] = useState<number[]>([]);
-  const [tapBpm, setTapBpm] = useState<number | null>(null);
-  const searchTimeout = useRef<ReturnType<typeof setTimeout>>(undefined);
-  // Track IDs that have admin beat maps
+  const [showBpmPicker, setShowBpmPicker] = useState<SpotifyTrack | null>(null);
   const [mappedIds, setMappedIds] = useState<Set<string>>(new Set());
+  const searchTimeout = useRef<ReturnType<typeof setTimeout>>(undefined);
 
   useEffect(() => {
     loadSongs();
@@ -75,7 +64,6 @@ export default function MusicSelector({ onSelect, onCancel, spotify }: MusicSele
     setLoading(false);
   };
 
-  // Select song WITH admin beat map (perfect sync)
   const handleSelectMapped = (song: SavedBeatMap) => {
     onSelect({
       mode: 'spotify',
@@ -99,50 +87,35 @@ export default function MusicSelector({ onSelect, onCancel, spotify }: MusicSele
     });
   };
 
-  // Select ANY song with auto-generated BPM template
-  const handleSelectAny = (track: SpotifyTrack) => {
-    // Check if this track has an admin beat map
+  const handleSelectTrack = (track: SpotifyTrack) => {
+    // If it has an admin beat map, use it directly
     const mapped = availableSongs.find(s => s.spotify_track_id === track.id);
     if (mapped) {
       handleSelectMapped(mapped);
       return;
     }
+    // Otherwise show BPM picker
+    setShowBpmPicker(track);
+  };
 
-    const bpm = selectedBpm;
+  const handleConfirmBpm = () => {
+    if (!showBpmPicker) return;
+    const track = showBpmPicker;
     const durationS = track.durationMs / 1000;
-    const beats = generateBeatsForBpm(bpm, durationS);
-
+    const beats = generateBeatsForBpm(selectedBpm, durationS);
     onSelect({
       mode: 'spotify',
-      bpm,
-      beatMap: { tempo: bpm, beats, bars: [], sections: [], durationS },
+      bpm: selectedBpm,
+      beatMap: { tempo: selectedBpm, beats, bars: [], sections: [], durationS },
       track,
     });
   };
 
   const handleSearch = (q: string) => {
     setSearchQuery(q);
+    setShowBpmPicker(null);
     if (searchTimeout.current) clearTimeout(searchTimeout.current);
     searchTimeout.current = setTimeout(() => spotify.search(q), 400);
-  };
-
-  const handleTap = () => {
-    const now = performance.now();
-    setTapTimes((prev) => {
-      const times = [...prev, now].slice(-8);
-      if (times.length >= 2) {
-        const intervals = [];
-        for (let i = 1; i < times.length; i++) intervals.push(times[i] - times[i - 1]);
-        const avgInterval = intervals.reduce((a, b) => a + b, 0) / intervals.length;
-        setTapBpm(Math.max(40, Math.min(220, Math.round(60000 / avgInterval))));
-      }
-      return times;
-    });
-  };
-
-  const handleConfirmManual = () => {
-    const bpm = tapBpm || manualBpm;
-    onSelect({ mode: tapBpm ? 'tap' : 'metronome', bpm });
   };
 
   return (
@@ -158,101 +131,43 @@ export default function MusicSelector({ onSelect, onCancel, spotify }: MusicSele
           Spat
         </button>
 
-        <h1 className="text-3xl font-bold text-gray-900 mb-2 tracking-tight">Beat mod</h1>
+        <h1 className="text-3xl font-bold text-gray-900 mb-2 tracking-tight">Vyber pesnicku</h1>
         <p className="text-gray-400 mb-8 leading-relaxed">
-          Miesaj lopticku do rytmu hudby.
+          Kuzele pojdu do rytmu hudby.
         </p>
 
-        {/* Tabs */}
-        <div className="flex gap-2 mb-8">
-          <button
-            onClick={() => setTab('songs')}
-            className={`flex-1 rounded-full py-2.5 text-sm font-medium transition-all ${
-              tab === 'songs' ? 'bg-gray-900 text-white' : 'bg-gray-100 text-gray-500 hover:bg-gray-200'
-            }`}
-          >
-            Pesnicky ({availableSongs.length})
-          </button>
-          <button
-            onClick={() => setTab('search')}
-            className={`flex-1 rounded-full py-2.5 text-sm font-medium transition-all ${
-              tab === 'search' ? 'bg-gray-900 text-white' : 'bg-gray-100 text-gray-500 hover:bg-gray-200'
-            }`}
-          >
-            Spotify
-          </button>
-          <button
-            onClick={() => setTab('manual')}
-            className={`flex-1 rounded-full py-2.5 text-sm font-medium transition-all ${
-              tab === 'manual' ? 'bg-gray-900 text-white' : 'bg-gray-100 text-gray-500 hover:bg-gray-200'
-            }`}
-          >
-            Tempo
-          </button>
-        </div>
-
-        {/* Tab: Admin-mapped songs (perfect sync) */}
-        {tab === 'songs' && (
-          <div className="space-y-4">
-            {!spotify.isConnected && (
-              <div className="card p-5 text-center space-y-3">
-                <p className="text-sm text-gray-500">Pripoj Spotify Premium pre prehravanie.</p>
-                <button onClick={spotify.connect} className="btn-primary text-sm">Pripojit Spotify</button>
-              </div>
-            )}
-
-            {loading ? (
-              <div className="text-center text-gray-400 text-sm py-8">Nacitavam...</div>
-            ) : availableSongs.length === 0 ? (
-              <div className="text-center text-gray-400 text-sm py-8">Zatial ziadne pesnicky s beat mapou.</div>
-            ) : (
-              <div className="space-y-2">
-                {availableSongs.map((song) => (
-                  <button
-                    key={song.id}
-                    onClick={() => handleSelectMapped(song)}
-                    className="w-full flex items-center gap-3 rounded-2xl p-4 text-left bg-white border border-gray-100 hover:border-gray-300 hover:shadow-sm transition-all"
-                  >
-                    {song.track_album_art && (
-                      <img src={song.track_album_art} alt="" className="w-12 h-12 rounded-xl object-cover" />
-                    )}
-                    <div className="flex-1 min-w-0">
-                      <div className="text-sm font-semibold text-gray-900 truncate">{song.track_name}</div>
-                      <div className="text-xs text-gray-500 truncate">{song.track_artist}</div>
-                    </div>
-                    <div className="text-right">
-                      <div className="text-sm font-bold text-gray-900 tabular-nums">{song.bpm}</div>
-                      <div className="text-xs text-gray-400">BPM</div>
-                    </div>
-                  </button>
-                ))}
-              </div>
-            )}
+        {/* Spotify connection */}
+        {!spotify.isConnected ? (
+          <div className="card p-6 text-center space-y-3">
+            <p className="text-sm text-gray-500">Pripoj Spotify Premium pre prehravanie.</p>
+            <button onClick={spotify.connect} className="btn-primary text-sm">Pripojit Spotify</button>
           </div>
-        )}
+        ) : (
+          <div className="space-y-6">
+            {/* Search */}
+            <input
+              type="text"
+              value={searchQuery}
+              onChange={(e) => handleSearch(e.target.value)}
+              className="input-field"
+              placeholder="Hladat pesnicku..."
+            />
 
-        {/* Tab: Spotify search (any song, BPM template) */}
-        {tab === 'search' && (
-          <div className="space-y-5">
-            {!spotify.isConnected ? (
-              <div className="card p-5 text-center space-y-3">
-                <p className="text-sm text-gray-500">Pripoj Spotify Premium.</p>
-                <button onClick={spotify.connect} className="btn-primary text-sm">Pripojit Spotify</button>
-              </div>
-            ) : (
-              <>
-                <input
-                  type="text"
-                  value={searchQuery}
-                  onChange={(e) => handleSearch(e.target.value)}
-                  className="input-field"
-                  placeholder="Hladat akukolvek pesnicku..."
-                />
-
-                {/* BPM template selector */}
+            {/* BPM picker for unmapped track */}
+            {showBpmPicker && (
+              <div className="card p-5 space-y-4">
+                <div className="flex items-center gap-3">
+                  {showBpmPicker.albumArt && (
+                    <img src={showBpmPicker.albumArt} alt="" className="w-12 h-12 rounded-xl object-cover" />
+                  )}
+                  <div className="flex-1 min-w-0">
+                    <div className="text-sm font-semibold text-gray-900 truncate">{showBpmPicker.name}</div>
+                    <div className="text-xs text-gray-500 truncate">{showBpmPicker.artists}</div>
+                  </div>
+                </div>
                 <div>
                   <label className="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-2 block">
-                    Tempo pre pesnicku
+                    Vyber tempo
                   </label>
                   <div className="flex gap-2">
                     {BPM_TEMPLATES.map((bpm) => (
@@ -270,99 +185,91 @@ export default function MusicSelector({ onSelect, onCancel, spotify }: MusicSele
                     ))}
                   </div>
                   <p className="text-xs text-gray-400 mt-2">
-                    Beaty nebudu presne v rytme, ale kuzele pojdu v zvolenom tempe.
+                    Kuzele pojdu v zvolenom tempe, nie presne v rytme pesicky.
                   </p>
                 </div>
+                <button onClick={handleConfirmBpm} className="btn-primary w-full">
+                  Hrat na {selectedBpm} BPM
+                </button>
+              </div>
+            )}
 
-                {/* Search results */}
-                {spotify.searching && (
-                  <div className="text-center text-gray-400 text-sm py-4">Hladam...</div>
-                )}
+            {/* Search results */}
+            {spotify.searching && (
+              <div className="text-center text-gray-400 text-sm py-4">Hladam...</div>
+            )}
 
-                {spotify.searchResults.length > 0 && (
-                  <div className="space-y-2 max-h-64 overflow-y-auto">
-                    {spotify.searchResults.map((track) => {
-                      const hasBeatMap = mappedIds.has(track.id);
-                      return (
-                        <button
-                          key={track.id}
-                          onClick={() => handleSelectAny(track)}
-                          className="w-full flex items-center gap-3 rounded-2xl p-3 text-left bg-white border border-gray-100 hover:border-gray-300 hover:shadow-sm transition-all"
-                        >
-                          {track.albumArt && (
-                            <img src={track.albumArt} alt="" className="w-10 h-10 rounded-lg object-cover" />
-                          )}
-                          <div className="flex-1 min-w-0">
-                            <div className="text-sm font-medium text-gray-900 truncate">
-                              {track.name}
-                              {hasBeatMap && (
-                                <span className="ml-2 text-xs text-green-600 bg-green-50 px-1.5 py-0.5 rounded-full">
-                                  beat mapa
-                                </span>
-                              )}
-                            </div>
-                            <div className="text-xs text-gray-500 truncate">{track.artists}</div>
+            {searchQuery && spotify.searchResults.length > 0 && (
+              <div className="space-y-2 max-h-64 overflow-y-auto">
+                {spotify.searchResults.map((track) => {
+                  const hasBeatMap = mappedIds.has(track.id);
+                  return (
+                    <button
+                      key={track.id}
+                      onClick={() => handleSelectTrack(track)}
+                      className={`w-full flex items-center gap-3 rounded-2xl p-3 text-left transition-all ${
+                        showBpmPicker?.id === track.id
+                          ? 'bg-gray-100 border-2 border-gray-300'
+                          : 'bg-white border border-gray-100 hover:border-gray-300 hover:shadow-sm'
+                      }`}
+                    >
+                      {track.albumArt && (
+                        <img src={track.albumArt} alt="" className="w-10 h-10 rounded-lg object-cover" />
+                      )}
+                      <div className="flex-1 min-w-0">
+                        <div className="text-sm font-medium text-gray-900 truncate">
+                          {hasBeatMap && <span className="text-yellow-500 mr-1">&#9733;</span>}
+                          {track.name}
+                        </div>
+                        <div className="text-xs text-gray-500 truncate">{track.artists}</div>
+                      </div>
+                      <div className="text-xs text-gray-400">
+                        {Math.floor(track.durationMs / 60000)}:{String(Math.floor((track.durationMs % 60000) / 1000)).padStart(2, '0')}
+                      </div>
+                    </button>
+                  );
+                })}
+              </div>
+            )}
+
+            {/* Recommended songs (admin beat maps) */}
+            {!searchQuery && (
+              <div>
+                <label className="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-3 block">
+                  Odporucane pesnicky
+                </label>
+                {loading ? (
+                  <div className="text-center text-gray-400 text-sm py-6">Nacitavam...</div>
+                ) : availableSongs.length === 0 ? (
+                  <div className="text-center text-gray-400 text-sm py-6">Zatial ziadne odporucane pesnicky.</div>
+                ) : (
+                  <div className="space-y-2">
+                    {availableSongs.map((song) => (
+                      <button
+                        key={song.id}
+                        onClick={() => handleSelectMapped(song)}
+                        className="w-full flex items-center gap-3 rounded-2xl p-4 text-left bg-white border border-gray-100 hover:border-gray-300 hover:shadow-sm transition-all"
+                      >
+                        {song.track_album_art && (
+                          <img src={song.track_album_art} alt="" className="w-12 h-12 rounded-xl object-cover" />
+                        )}
+                        <div className="flex-1 min-w-0">
+                          <div className="text-sm font-semibold text-gray-900 truncate">
+                            <span className="text-yellow-500 mr-1">&#9733;</span>
+                            {song.track_name}
                           </div>
-                          <div className="text-xs text-gray-400">
-                            {Math.floor(track.durationMs / 60000)}:{String(Math.floor((track.durationMs % 60000) / 1000)).padStart(2, '0')}
-                          </div>
-                        </button>
-                      );
-                    })}
+                          <div className="text-xs text-gray-500 truncate">{song.track_artist}</div>
+                        </div>
+                        <div className="text-right">
+                          <div className="text-sm font-bold text-gray-900 tabular-nums">{song.bpm}</div>
+                          <div className="text-xs text-gray-400">BPM</div>
+                        </div>
+                      </button>
+                    ))}
                   </div>
                 )}
-              </>
-            )}
-          </div>
-        )}
-
-        {/* Tab: Manual tempo */}
-        {tab === 'manual' && (
-          <div className="space-y-6">
-            <div className="text-center">
-              <p className="text-sm text-gray-500 mb-4">
-                Pusti si pesnicku a klepaj na tlacidlo v rytme.
-              </p>
-              <button
-                onClick={handleTap}
-                className="w-32 h-32 rounded-full bg-white border-4 border-gray-200 hover:border-gray-400 active:scale-95 active:bg-gray-50 transition-all flex flex-col items-center justify-center mx-auto shadow-sm"
-              >
-                <span className="text-2xl font-bold text-gray-900">{tapBpm || '---'}</span>
-                <span className="text-xs text-gray-400 mt-1">BPM</span>
-              </button>
-              <p className="text-xs text-gray-400 mt-3">Klepni aspon 4x na beat</p>
-              {tapTimes.length > 0 && (
-                <button
-                  onClick={() => { setTapTimes([]); setTapBpm(null); }}
-                  className="text-xs text-gray-400 hover:text-gray-600 mt-2"
-                >
-                  Resetovat
-                </button>
-              )}
-            </div>
-
-            <div className="card p-5">
-              <label className="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-3 block">
-                Alebo nastav manualne
-              </label>
-              <div className="flex items-center gap-4">
-                <input
-                  type="range"
-                  min="60"
-                  max="180"
-                  value={tapBpm || manualBpm}
-                  onChange={(e) => { setManualBpm(parseInt(e.target.value)); setTapBpm(null); setTapTimes([]); }}
-                  className="flex-1"
-                />
-                <span className="text-2xl font-bold text-gray-900 tabular-nums w-16 text-right">
-                  {tapBpm || manualBpm}
-                </span>
               </div>
-            </div>
-
-            <button onClick={handleConfirmManual} className="btn-primary w-full">
-              Hrat s tempom {tapBpm || manualBpm} BPM
-            </button>
+            )}
           </div>
         )}
       </div>
