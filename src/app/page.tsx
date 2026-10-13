@@ -135,14 +135,21 @@ export default function Home() {
               </div>
             </Link>
 
-            {/* Coming soon */}
-            <div className="rounded-3xl bg-gray-50 h-72 flex flex-col justify-end p-7 opacity-50">
-              <h3 className="text-xl font-bold text-gray-400 mb-1">Space Invaders</h3>
-              <p className="text-sm text-gray-400">
-                Pohyb loptičky bude ovládať vesmírnu loď.
-              </p>
-              <div className="mt-4 text-sm text-gray-400">Pripravujeme</div>
-            </div>
+            {/* Terciky */}
+            <Link href="/terciky" className="group block">
+              <div className="rounded-3xl bg-blue-50 h-72 flex flex-col justify-end p-7 group-hover:bg-blue-100 transition-colors duration-300">
+                <h3 className="text-xl font-bold text-gray-900 mb-1">Terciky</h3>
+                <p className="text-sm text-gray-500">
+                  Triafaj terciky loptickou co najrychlejsie.
+                </p>
+                <div className="mt-4 flex items-center gap-2 text-sm font-medium text-gray-900">
+                  Spustit
+                  <svg className="w-4 h-4 group-hover:translate-x-1 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" />
+                  </svg>
+                </div>
+              </div>
+            </Link>
           </div>
         </section>
 
