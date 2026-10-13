@@ -146,7 +146,7 @@ export default function TercikyPage() {
             </div>
           </div>
           <div className="flex gap-3">
-            <button onClick={() => { setResult(null); setPhase('setup'); }} className="btn-primary flex-1">Hrat znova</button>
+            <button onClick={() => { setResult(null); setPhase('playing'); }} className="btn-primary flex-1">Hrat znova</button>
             <Link href="/" className="btn-secondary flex-1 text-center">Menu</Link>
           </div>
         </div>

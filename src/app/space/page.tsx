@@ -83,7 +83,7 @@ export default function SpacePage() {
             <div className="bg-white/10 rounded-2xl p-4"><div className="text-2xl font-bold text-red-400 tabular-nums">{'❤'.repeat(result.lives)}{result.lives === 0 && '💀'}</div><div className="text-xs text-white/50 mt-1">Zivoty</div></div>
           </div>
           <div className="flex gap-3">
-            <button onClick={() => { setResult(null); setPhase('setup'); }} className="flex-1 bg-cyan-500 hover:bg-cyan-400 text-white font-medium py-3.5 rounded-full transition-all">Hrat znova</button>
+            <button onClick={() => { setResult(null); setPhase('playing'); }} className="flex-1 bg-cyan-500 hover:bg-cyan-400 text-white font-medium py-3.5 rounded-full transition-all">Hrat znova</button>
             <Link href="/" className="flex-1 bg-white/10 hover:bg-white/20 text-white font-medium py-3.5 rounded-full transition-all text-center">Menu</Link>
           </div>
         </div>

@@ -228,7 +228,7 @@ export default function TreningPage() {
         result={result}
         onPlayAgain={() => {
           setResult(null);
-          setPhase('setup');
+          setPhase('playing');
         }}
         onMenu={() => {
           setResult(null);
