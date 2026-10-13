@@ -38,6 +38,11 @@ export default function SpacePage() {
   }, [inputMode, calibration, tracker]);
 
   useEffect(() => {
+    if (phase !== 'playing') return;
+    if (inputMode === 'demo') { tracker.startDemo(); return; }
+  }, [phase, inputMode, tracker]);
+
+  useEffect(() => {
     if (phase !== 'playing' || inputMode !== 'camera' || !calibration) return;
     let cancelled = false;
     const start = async () => {

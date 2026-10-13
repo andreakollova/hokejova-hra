@@ -96,6 +96,12 @@ export default function TreningPage() {
     setPhase('playing');
   }, [inputMode, calibration, tracker, startCamera]);
 
+  // Re-init demo when entering playing phase
+  useEffect(() => {
+    if (phase !== 'playing') return;
+    if (inputMode === 'demo') { tracker.startDemo(); return; }
+  }, [phase, inputMode, tracker]);
+
   // Start camera when playing phase begins with camera mode
   useEffect(() => {
     if (phase !== 'playing' || inputMode !== 'camera' || !calibration) return;

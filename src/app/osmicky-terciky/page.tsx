@@ -37,6 +37,12 @@ export default function OsmickyTercikyPage() {
     setPhase('playing');
   }, [inputMode, calibration, tracker]);
 
+  // Re-init demo/camera when entering playing phase
+  useEffect(() => {
+    if (phase !== 'playing') return;
+    if (inputMode === 'demo') { tracker.startDemo(); return; }
+  }, [phase, inputMode, tracker]);
+
   useEffect(() => {
     if (phase !== 'playing' || inputMode !== 'camera' || !calibration) return;
     let cancelled = false;
