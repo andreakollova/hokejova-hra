@@ -99,17 +99,52 @@ export default function TreningPage() {
   // Start camera when playing phase begins with camera mode
   useEffect(() => {
     if (phase !== 'playing' || inputMode !== 'camera' || !calibration) return;
-    // Wait a frame for video element to render
-    const timeout = setTimeout(async () => {
+
+    let cancelled = false;
+    const startCameraTracking = async () => {
+      // Wait for video element to render
+      await new Promise(r => setTimeout(r, 200));
+      if (cancelled) return;
+
       const video = videoRef.current;
-      if (video) {
-        const info = await startCamera(calibration.cameraDeviceId, video);
-        if (info) {
-          tracker.startTracking(video);
+      if (!video) {
+        console.error('Video element not found');
+        return;
+      }
+
+      // Re-apply calibration to tracker
+      tracker.setCalibration(calibration);
+
+      // Try saved device, fallback to any camera
+      let info = await startCamera(calibration.cameraDeviceId, video);
+      if (!info) {
+        // Device ID might have changed - try any camera
+        try {
+          const stream = await navigator.mediaDevices.getUserMedia({
+            video: { width: { ideal: 1280 }, height: { ideal: 720 }, frameRate: { ideal: 60 } },
+          });
+          video.srcObject = stream;
+          await video.play();
+          info = {
+            width: video.videoWidth,
+            height: video.videoHeight,
+            fps: 30,
+            deviceId: 'fallback',
+            label: 'Fallback camera',
+          };
+        } catch (e) {
+          console.error('Camera failed:', e);
+          return;
         }
       }
-    }, 100);
-    return () => clearTimeout(timeout);
+
+      if (!cancelled && info) {
+        tracker.startTracking(video);
+      }
+    };
+
+    startCameraTracking();
+    return () => { cancelled = true; };
   }, [phase, inputMode, calibration, startCamera, tracker]);
 
   const handleFinish = useCallback((res: SlalomResult) => {
