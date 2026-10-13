@@ -166,6 +166,28 @@ export default function Home() {
                 </div>
               </div>
             </Link>
+
+            {/* Space Invaders */}
+            <Link href="/space" className="group block md:col-span-2 lg:col-span-4">
+              <div className="rounded-3xl bg-[#0f172a] h-48 flex flex-col justify-end p-7 group-hover:bg-[#1e293b] transition-colors duration-300 relative overflow-hidden">
+                {/* Stars decoration */}
+                <div className="absolute inset-0 opacity-30">
+                  {[...Array(20)].map((_, i) => (
+                    <div key={i} className="absolute w-1 h-1 bg-white rounded-full" style={{ left: `${(i * 17) % 100}%`, top: `${(i * 23) % 100}%` }} />
+                  ))}
+                </div>
+                <h3 className="text-xl font-bold text-white mb-1 relative">Space Invaders</h3>
+                <p className="text-sm text-white/50 relative">
+                  Ovladaj vesmirnu lod loptickou. Znic bloky a vyhybaj sa asteroidom.
+                </p>
+                <div className="mt-4 flex items-center gap-2 text-sm font-medium text-cyan-400 relative">
+                  Spustit misiu
+                  <svg className="w-4 h-4 group-hover:translate-x-1 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" />
+                  </svg>
+                </div>
+              </div>
+            </Link>
           </div>
         </section>
 
