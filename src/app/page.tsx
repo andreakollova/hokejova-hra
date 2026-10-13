@@ -86,7 +86,7 @@ export default function Home() {
 
         {/* Game cards with images */}
         <section className="max-w-6xl mx-auto px-6 sm:px-10 pb-24">
-          <div className="grid md:grid-cols-3 gap-6">
+          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-5">
             {/* Slalom */}
             <Link href="/trening" className="group block">
               <div className="rounded-3xl overflow-hidden relative h-72 bg-gray-900">
@@ -131,6 +131,22 @@ export default function Home() {
                       <path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" />
                     </svg>
                   </div>
+                </div>
+              </div>
+            </Link>
+
+            {/* Osmicky s tercikmi */}
+            <Link href="/osmicky-terciky" className="group block">
+              <div className="rounded-3xl bg-purple-50 h-72 flex flex-col justify-end p-7 group-hover:bg-purple-100 transition-colors duration-300">
+                <h3 className="text-xl font-bold text-gray-900 mb-1">Osmicky</h3>
+                <p className="text-sm text-gray-500">
+                  Ved lopticku v osmicke cez terciky.
+                </p>
+                <div className="mt-4 flex items-center gap-2 text-sm font-medium text-gray-900">
+                  Spustit
+                  <svg className="w-4 h-4 group-hover:translate-x-1 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" />
+                  </svg>
                 </div>
               </div>
             </Link>
