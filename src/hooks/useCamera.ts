@@ -15,6 +15,9 @@ export interface CameraInfo {
   label: string;
 }
 
+const isMobile = () =>
+  typeof navigator !== 'undefined' && /Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
+
 export function useCamera() {
   const [devices, setDevices] = useState<CameraDevice[]>([]);
   const [activeCamera, setActiveCamera] = useState<CameraInfo | null>(null);
@@ -32,6 +35,26 @@ export function useCamera() {
           deviceId: d.deviceId,
           label: d.label || `Kamera ${d.deviceId.slice(0, 8)}`,
         }));
+
+      // On mobile, add friendly names if labels are empty
+      if (isMobile() && videoDevices.length >= 2) {
+        // Usually: first = front, second = back
+        if (!videoDevices[0].label || videoDevices[0].label.startsWith('Kamera')) {
+          videoDevices[0].label = 'Predná kamera';
+        }
+        if (videoDevices.length > 1 && (!videoDevices[1].label || videoDevices[1].label.startsWith('Kamera'))) {
+          videoDevices[1].label = 'Zadná kamera';
+        }
+      }
+
+      // On mobile, add virtual entries for facingMode if no devices found
+      if (isMobile() && videoDevices.length === 0) {
+        videoDevices.push(
+          { deviceId: '__front__', label: 'Predná kamera' },
+          { deviceId: '__back__', label: 'Zadná kamera' }
+        );
+      }
+
       setDevices(videoDevices);
       return videoDevices;
     } catch {
@@ -42,7 +65,11 @@ export function useCamera() {
 
   const requestPermission = useCallback(async () => {
     try {
-      const stream = await navigator.mediaDevices.getUserMedia({ video: true });
+      // On mobile, request with facingMode to get proper permissions
+      const constraints = isMobile()
+        ? { video: { facingMode: 'environment' } }
+        : { video: true };
+      const stream = await navigator.mediaDevices.getUserMedia(constraints);
       stream.getTracks().forEach((t) => t.stop());
       setPermission('granted');
       await enumerateDevices();
@@ -62,16 +89,49 @@ export function useCamera() {
       }
 
       try {
-        const stream = await navigator.mediaDevices.getUserMedia({
-          video: {
+        // Build constraints based on device type
+        let videoConstraints: MediaTrackConstraints;
+
+        if (deviceId === '__back__') {
+          videoConstraints = {
+            facingMode: { exact: 'environment' },
+            width: { ideal: 1280 },
+            height: { ideal: 720 },
+            frameRate: { ideal: 30 },
+          };
+        } else if (deviceId === '__front__') {
+          videoConstraints = {
+            facingMode: { exact: 'user' },
+            width: { ideal: 1280 },
+            height: { ideal: 720 },
+            frameRate: { ideal: 30 },
+          };
+        } else {
+          // Desktop: use exact deviceId
+          videoConstraints = {
             deviceId: { exact: deviceId },
             width: { ideal: 1280 },
             height: { ideal: 720 },
             frameRate: { ideal: 60, min: 30 },
-          },
-        });
+          };
+        }
+
+        let stream: MediaStream;
+        try {
+          stream = await navigator.mediaDevices.getUserMedia({ video: videoConstraints });
+        } catch {
+          // Fallback: try without exact constraint
+          stream = await navigator.mediaDevices.getUserMedia({
+            video: {
+              facingMode: 'environment',
+              width: { ideal: 1280 },
+              height: { ideal: 720 },
+            },
+          });
+        }
 
         video.srcObject = stream;
+        video.setAttribute('playsinline', 'true');
         await video.play();
         streamRef.current = stream;
         videoRef.current = video;
@@ -85,7 +145,9 @@ export function useCamera() {
           fps: settings.frameRate || 30,
           deviceId,
           label:
-            devices.find((d) => d.deviceId === deviceId)?.label || 'Kamera',
+            devices.find((d) => d.deviceId === deviceId)?.label ||
+            track.label ||
+            'Kamera',
         };
 
         setActiveCamera(info);
