@@ -312,10 +312,14 @@ function GameScene({
 
       if (cleaned.length === 0) return [];
 
+      // Difficulty: hard = every beat, medium = every 2nd, easy = every 4th
+      const skip = difficulty === 'easy' ? 4 : difficulty === 'medium' ? 2 : 1;
+
       const cones: ConeDefinition[] = [];
       let lastSide: 'left' | 'right' = 'right';
 
       for (let i = 0; i < cleaned.length; i++) {
+        if (i % skip !== 0) continue;
         const side: 'left' | 'right' = lastSide === 'left' ? 'right' : 'left';
         lastSide = side;
         cones.push({ time: cleaned[i], side, scored: false });
