@@ -159,9 +159,28 @@ export default function SpaceGame({
 
       s.elapsedTime = (performance.now() - s.gameStartWallTime) / 1000;
 
-      // Time or lives up
+      // Respawn blocks when all destroyed
       const allBlocksDead = s.blocks.every(b => !b.active);
-      if (s.elapsedTime >= duration || s.lives <= 0 || allBlocksDead) {
+      if (allBlocksDead) {
+        const startX = (CANVAS_W - BLOCK_COLS * (BLOCK_W + 6)) / 2 + BLOCK_W / 2;
+        const startY = 60;
+        s.blocks = [];
+        for (let row = 0; row < BLOCK_ROWS; row++) {
+          for (let col = 0; col < BLOCK_COLS; col++) {
+            s.blocks.push({
+              x: startX + col * (BLOCK_W + 6),
+              y: startY + row * (BLOCK_H + 6),
+              hp: config.blockHp,
+              maxHp: config.blockHp,
+              active: true,
+              color: BLOCK_COLORS[(row * BLOCK_COLS + col) % BLOCK_COLORS.length],
+            });
+          }
+        }
+      }
+
+      // Time or lives up
+      if (s.elapsedTime >= duration || s.lives <= 0) {
         s.finished = true;
         onFinish({
           score: s.score,
