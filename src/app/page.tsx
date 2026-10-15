@@ -1,14 +1,16 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { useAuth } from '@/hooks/useAuth';
-import AuthModal from '@/components/auth/AuthModal';
+import { useSettings } from '@/hooks/useSettings';
 import Link from 'next/link';
 import Image from 'next/image';
 
 export default function Home() {
-  const { user, profile, loading, signOut } = useAuth();
+  const { settings, isLoggedIn, login, logout } = useSettings();
   const [showAuth, setShowAuth] = useState(false);
+  const [loginUsername, setLoginUsername] = useState('');
+  const [loginPassword, setLoginPassword] = useState('');
+  const [loginError, setLoginError] = useState('');
   const [scrolled, setScrolled] = useState(false);
 
   useEffect(() => {
@@ -16,6 +18,19 @@ export default function Home() {
     window.addEventListener('scroll', onScroll, { passive: true });
     return () => window.removeEventListener('scroll', onScroll);
   }, []);
+
+  const handleLogin = (e: React.FormEvent) => {
+    e.preventDefault();
+    setLoginError('');
+    const err = login(loginUsername, loginPassword);
+    if (err) {
+      setLoginError(err);
+    } else {
+      setShowAuth(false);
+      setLoginUsername('');
+      setLoginPassword('');
+    }
+  };
 
   return (
     <div className="min-h-screen bg-white flex flex-col">
@@ -34,13 +49,13 @@ export default function Home() {
           <nav className="flex items-center gap-6">
             <Link href="/trening" className="text-sm text-gray-500 hover:text-gray-900 transition-colors hidden sm:block">Tréning</Link>
             <Link href="/rebricek" className="text-sm text-gray-500 hover:text-gray-900 transition-colors hidden sm:block">Rebríček</Link>
-            {user ? (
+            {isLoggedIn ? (
               <>
-                <Link href="/profil" className="text-sm text-gray-500 hover:text-gray-900 transition-colors">{profile?.nickname || 'Profil'}</Link>
-                <button onClick={signOut} className="text-sm text-gray-400 hover:text-gray-600 transition-colors">Odhlásiť</button>
+                <Link href="/nastavenia" className="text-sm text-gray-500 hover:text-gray-900 transition-colors">{settings.username}</Link>
+                <button onClick={logout} className="text-sm text-gray-400 hover:text-gray-600 transition-colors">Odhlasit</button>
               </>
             ) : (
-              <button onClick={() => setShowAuth(true)} className="btn-primary text-sm px-5 py-2.5">Prihlásiť sa</button>
+              <button onClick={() => setShowAuth(true)} className="btn-primary text-sm px-5 py-2.5">Prihlasit sa</button>
             )}
           </nav>
         </div>
@@ -243,12 +258,55 @@ export default function Home() {
             <Link href="/trening" className="hover:text-gray-900 transition-colors">Tréning</Link>
             <Link href="/osmicky" className="hover:text-gray-900 transition-colors">Osmičky</Link>
             <Link href="/rebricek" className="hover:text-gray-900 transition-colors">Rebríček</Link>
-            {user && <Link href="/profil" className="hover:text-gray-900 transition-colors">Profil</Link>}
+            {isLoggedIn && <Link href="/nastavenia" className="hover:text-gray-900 transition-colors">Nastavenia</Link>}
           </div>
         </div>
       </footer>
 
-      {showAuth && <AuthModal onClose={() => setShowAuth(false)} />}
+      {/* Simple login modal */}
+      {showAuth && (
+        <div className="fixed inset-0 bg-black/20 backdrop-blur-sm flex items-center justify-center z-50 p-4">
+          <div className="bg-white rounded-3xl p-8 w-full max-w-sm shadow-2xl">
+            <div className="flex justify-between items-center mb-6">
+              <h2 className="text-xl font-bold text-gray-900">Prihlasenie</h2>
+              <button
+                onClick={() => { setShowAuth(false); setLoginError(''); }}
+                className="text-gray-400 hover:text-gray-600 text-xl"
+              >
+                x
+              </button>
+            </div>
+            <form onSubmit={handleLogin} className="space-y-4">
+              <div>
+                <label className="text-sm text-gray-500 block mb-1">Meno</label>
+                <input
+                  type="text"
+                  value={loginUsername}
+                  onChange={(e) => setLoginUsername(e.target.value)}
+                  className="input-field"
+                  placeholder="Pouzivatelske meno"
+                  required
+                />
+              </div>
+              <div>
+                <label className="text-sm text-gray-500 block mb-1">Heslo</label>
+                <input
+                  type="password"
+                  value={loginPassword}
+                  onChange={(e) => setLoginPassword(e.target.value)}
+                  className="input-field"
+                  placeholder="Heslo"
+                  required
+                />
+              </div>
+              {loginError && <p className="text-red-500 text-sm">{loginError}</p>}
+              <button type="submit" className="btn-primary w-full">
+                Prihlasit sa
+              </button>
+            </form>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
