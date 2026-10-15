@@ -237,8 +237,10 @@ export default function CalibrationWizard({
       },
       fps: activeCamera?.fps || 30,
     };
-    // Save to localStorage
-    localStorage.setItem('ballTracker_calibration', JSON.stringify(cal));
+    // Save to localStorage + sessionStorage as backup
+    const calJson = JSON.stringify(cal);
+    try { localStorage.setItem('ballTracker_calibration', calJson); } catch {}
+    try { sessionStorage.setItem('ballTracker_calibration', calJson); } catch {}
     onComplete(cal);
   };
 

@@ -41,7 +41,7 @@ export default function OsmickyPage() {
   const { startCamera, stopCamera } = useCamera();
 
   useEffect(() => {
-    const saved = localStorage.getItem('ballTracker_calibration');
+    const saved = localStorage.getItem('ballTracker_calibration') || sessionStorage.getItem('ballTracker_calibration');
     if (saved) {
       try {
         setCalibration(JSON.parse(saved));
