@@ -45,8 +45,9 @@ export default function SpacePage() {
 
   useEffect(() => {
     if (phase !== 'playing') return;
-    if (inputMode === 'demo') { tracker.startDemo(); return; }
-  }, [phase, inputMode]);
+    if (inputMode === 'demo') tracker.startDemo();
+    if (bgTrack) spotify.play(bgTrack);
+  }, [phase, inputMode]); // eslint-disable-line react-hooks/exhaustive-deps
 
   useEffect(() => {
     if (phase !== 'playing' || inputMode !== 'camera' || !calibration) return;

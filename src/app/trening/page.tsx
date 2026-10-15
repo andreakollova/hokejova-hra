@@ -96,11 +96,12 @@ export default function TreningPage() {
     setPhase('playing');
   }, [inputMode, calibration, tracker, startCamera]);
 
-  // Re-init demo when entering playing phase
+  // Re-init demo + play music when entering playing phase (covers play again)
   useEffect(() => {
     if (phase !== 'playing') return;
-    if (inputMode === 'demo') { tracker.startDemo(); return; }
-  }, [phase, inputMode]);
+    if (inputMode === 'demo') tracker.startDemo();
+    // For beat mode, music starts via onGameStart. For non-beat, nothing extra needed.
+  }, [phase, inputMode]); // eslint-disable-line react-hooks/exhaustive-deps
 
   // Start camera when playing phase begins with camera mode
   useEffect(() => {

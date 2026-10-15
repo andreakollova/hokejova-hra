@@ -68,11 +68,12 @@ export default function TercikyPage() {
     setPhase('playing');
   }, [inputMode, calibration, tracker, bgTrack, spotify]);
 
-  // Re-init demo when entering playing phase
+  // Re-init demo + play music when entering playing phase
   useEffect(() => {
     if (phase !== 'playing') return;
-    if (inputMode === 'demo') { tracker.startDemo(); return; }
-  }, [phase, inputMode]);
+    if (inputMode === 'demo') tracker.startDemo();
+    if (bgTrack) spotify.play(bgTrack);
+  }, [phase, inputMode]); // eslint-disable-line react-hooks/exhaustive-deps
 
   // Start camera when playing
   useEffect(() => {
