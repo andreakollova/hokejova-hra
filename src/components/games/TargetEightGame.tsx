@@ -178,6 +178,7 @@ function Field() {
 function GameScene({
   duration,
   difficulty,
+  inputMode,
   getGameInput,
   onFinish,
   onBackToMenu,
@@ -322,19 +323,21 @@ function GameScene({
       <Field />
       <PathLine points={eightPoints} />
 
-      {/* Invisible plane for accurate mouse-to-ground raycasting */}
-      <mesh
-        rotation={[-Math.PI / 2, 0, 0]}
-        position={[0, 0.05, 0]}
-        onPointerMove={(e) => {
-          e.stopPropagation();
-          ballPosRef.current.x = e.point.x;
-          ballPosRef.current.z = e.point.z;
-        }}
-      >
-        <planeGeometry args={[20, 20]} />
-        <meshBasicMaterial transparent opacity={0} />
-      </mesh>
+      {/* Invisible plane for mouse-to-ground raycasting (demo mode only) */}
+      {inputMode === 'demo' && (
+        <mesh
+          rotation={[-Math.PI / 2, 0, 0]}
+          position={[0, 0.05, 0]}
+          onPointerMove={(e) => {
+            e.stopPropagation();
+            ballPosRef.current.x = e.point.x;
+            ballPosRef.current.z = e.point.z;
+          }}
+        >
+          <planeGeometry args={[20, 20]} />
+          <meshBasicMaterial transparent opacity={0} />
+        </mesh>
+      )}
 
       <Ball posRef={ballPosRef} />
 
