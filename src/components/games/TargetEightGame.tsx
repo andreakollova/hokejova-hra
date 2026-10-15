@@ -29,7 +29,7 @@ const FIELD_SIZE = 8;
 // Generate figure-8 checkpoints as a smooth lemniscate curve
 function generateEightPoints(scale: number, numPoints: number): { x: number; z: number }[] {
   const points: { x: number; z: number }[] = [];
-  const a = 2.5 * scale; // size
+  const a = 3.5 * scale; // size
 
   for (let i = 0; i < numPoints; i++) {
     // Parametric lemniscate of Bernoulli
@@ -54,9 +54,9 @@ interface HudData {
 }
 
 const DIFFICULTY = {
-  easy: { scale: 1.2, checkpointRadius: 0.7, points: 8 },
-  medium: { scale: 1.0, checkpointRadius: 0.5, points: 12 },
-  hard: { scale: 0.85, checkpointRadius: 0.4, points: 16 },
+  easy: { scale: 1.3, checkpointRadius: 0.8, points: 8 },
+  medium: { scale: 1.1, checkpointRadius: 0.6, points: 12 },
+  hard: { scale: 0.9, checkpointRadius: 0.45, points: 16 },
 };
 
 function Checkpoint({
