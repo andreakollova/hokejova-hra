@@ -247,6 +247,9 @@ export default function TreningPage() {
           setResult(null);
           setPhase('setup');
         }}
+        songName={musicConfig?.track?.name}
+        songArtist={musicConfig?.track?.artists}
+        songBpm={musicConfig?.bpm}
       />
     );
   }
