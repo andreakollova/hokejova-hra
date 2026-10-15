@@ -53,28 +53,42 @@ export default function OsmickyPage() {
     [tracker]
   );
 
-  const startGame = useCallback(async () => {
-    if (inputMode === 'demo') {
-      tracker.startDemo();
-      setPhase('playing');
-      return;
-    }
-
-    if (!calibration) {
-      setPhase('calibration');
-      return;
-    }
-
+  const startGame = useCallback(() => {
+    if (inputMode === 'demo') { tracker.startDemo(); setPhase('playing'); return; }
+    if (!calibration) { setPhase('calibration'); return; }
     tracker.setCalibration(calibration);
-    const video = videoRef.current;
-    if (video) {
-      const info = await startCamera(calibration.cameraDeviceId, video);
-      if (info) {
-        tracker.startTracking(video);
-        setPhase('playing');
+    setPhase('playing');
+  }, [inputMode, calibration, tracker]);
+
+  // Re-init demo/camera when entering playing phase
+  useEffect(() => {
+    if (phase !== 'playing') return;
+    if (inputMode === 'demo') { tracker.startDemo(); return; }
+  }, [phase, inputMode, tracker]);
+
+  // Start camera
+  useEffect(() => {
+    if (phase !== 'playing' || inputMode !== 'camera' || !calibration) return;
+    let cancelled = false;
+    const start = async () => {
+      await new Promise(r => setTimeout(r, 200));
+      if (cancelled) return;
+      const video = videoRef.current;
+      if (!video) return;
+      tracker.setCalibration(calibration);
+      let info = await startCamera(calibration.cameraDeviceId, video);
+      if (!info) {
+        try {
+          const stream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: 'environment', width: { ideal: 1280 } } });
+          video.srcObject = stream; await video.play();
+          info = { width: video.videoWidth, height: video.videoHeight, fps: 30, deviceId: 'fb', label: 'Fallback' };
+        } catch { return; }
       }
-    }
-  }, [inputMode, calibration, tracker, startCamera]);
+      if (!cancelled && info) tracker.startTracking(video);
+    };
+    start();
+    return () => { cancelled = true; };
+  }, [phase, inputMode, calibration, startCamera, tracker]);
 
   const handleFinish = useCallback(
     (res: FigureEightResult) => {
@@ -86,14 +100,21 @@ export default function OsmickyPage() {
     [tracker, stopCamera]
   );
 
-  const handleMouseMove = useCallback(
-    (e: React.MouseEvent<HTMLDivElement>) => {
-      if (inputMode !== 'demo' || phase !== 'playing') return;
-      const rect = e.currentTarget.getBoundingClientRect();
-      tracker.handleDemoMouseMove(e, rect);
-    },
-    [inputMode, phase, tracker]
-  );
+  // Window-level mouse tracking for demo
+  useEffect(() => {
+    if (phase !== 'playing' || inputMode !== 'demo') return;
+    const handler = (e: MouseEvent) => {
+      tracker.gameInputRef.current = {
+        x: Math.max(0, Math.min(1, e.clientX / window.innerWidth)),
+        y: Math.max(0, Math.min(1, e.clientY / window.innerHeight)),
+        confidence: 1,
+        mode: 'demo',
+        active: true,
+      };
+    };
+    window.addEventListener('mousemove', handler);
+    return () => window.removeEventListener('mousemove', handler);
+  }, [phase, inputMode, tracker]);
 
   if (phase === 'calibration') {
     return (
@@ -111,7 +132,7 @@ export default function OsmickyPage() {
         result={result}
         onPlayAgain={() => {
           setResult(null);
-          setPhase('setup');
+          setPhase('playing');
         }}
         onMenu={() => {
           setResult(null);
@@ -126,7 +147,6 @@ export default function OsmickyPage() {
       <div
         ref={gameContainerRef}
         className="w-screen h-screen relative"
-        onMouseMove={handleMouseMove}
       >
         <video ref={videoRef} className="hidden" playsInline muted autoPlay />
 

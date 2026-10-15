@@ -189,15 +189,21 @@ export default function TreningPage() {
     return () => clearTimeout(delay);
   }, [phase, inputMode, tracker, isPaused]);
 
-  // Handle demo mouse input on game container
-  const handleMouseMove = useCallback(
-    (e: React.MouseEvent<HTMLDivElement>) => {
-      if (inputMode !== 'demo' || phase !== 'playing') return;
-      const rect = e.currentTarget.getBoundingClientRect();
-      tracker.handleDemoMouseMove(e, rect);
-    },
-    [inputMode, phase, tracker]
-  );
+  // Window-level mouse tracking for demo
+  useEffect(() => {
+    if (phase !== 'playing' || inputMode !== 'demo') return;
+    const handler = (e: MouseEvent) => {
+      tracker.gameInputRef.current = {
+        x: Math.max(0, Math.min(1, e.clientX / window.innerWidth)),
+        y: Math.max(0, Math.min(1, e.clientY / window.innerHeight)),
+        confidence: 1,
+        mode: 'demo',
+        active: true,
+      };
+    };
+    window.addEventListener('mousemove', handler);
+    return () => window.removeEventListener('mousemove', handler);
+  }, [phase, inputMode, tracker]);
 
   const handleFullscreen = () => {
     if (gameContainerRef.current) {
@@ -249,7 +255,6 @@ export default function TreningPage() {
       <div
         ref={gameContainerRef}
         className="w-screen h-screen relative"
-        onMouseMove={handleMouseMove}
       >
         {/* Hidden video for camera tracking */}
         <video ref={videoRef} className="hidden" playsInline muted autoPlay />
