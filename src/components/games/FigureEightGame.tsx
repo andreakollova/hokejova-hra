@@ -308,7 +308,8 @@ export default function FigureEightGame({
       window.removeEventListener('resize', resize);
       if (animFrameRef.current) cancelAnimationFrame(animFrameRef.current);
     };
-  }, [duration, isPaused, getGameInput, inputMode, onFinish, scale, getScaledCheckpoint]);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [duration, isPaused, scale]);
 
   return (
     <div className="relative w-full h-full">

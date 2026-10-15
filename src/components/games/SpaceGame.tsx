@@ -271,7 +271,8 @@ export default function SpaceGame({
 
     requestAnimationFrame(loop);
     return () => { running = false; };
-  }, [duration, difficulty, config, getGameInput, onFinish, onBackToMenu, inputMode]);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [duration, difficulty]);
 
   const drawGame = (ctx: CanvasRenderingContext2D, s: typeof stateRef.current, countdown: number) => {
     const w = CANVAS_W;
