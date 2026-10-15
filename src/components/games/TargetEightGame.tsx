@@ -26,32 +26,18 @@ export interface TargetEightResult {
 
 const FIELD_SIZE = 8;
 
-// Figure-8 checkpoint positions (normalized 0-1, converted to field coords)
-// Path: top-left → bottom-left → bottom-right → top-right → repeat
-function generateEightPoints(scale: number): { x: number; z: number }[] {
-  const cx = 0;
-  const cz = 0;
-  const rx = 2.0 * scale;
-  const rz = 1.5 * scale;
+// Generate figure-8 checkpoints as a smooth lemniscate curve
+function generateEightPoints(scale: number, numPoints: number): { x: number; z: number }[] {
   const points: { x: number; z: number }[] = [];
-  const segments = 12;
+  const a = 2.5 * scale; // size
 
-  // Left loop (counterclockwise)
-  for (let i = 0; i < segments; i++) {
-    const angle = (i / segments) * Math.PI * 2;
-    points.push({
-      x: cx - rx + Math.cos(angle) * rx,
-      z: cz + Math.sin(angle) * rz,
-    });
-  }
-
-  // Right loop (clockwise)
-  for (let i = 0; i < segments; i++) {
-    const angle = -(i / segments) * Math.PI * 2;
-    points.push({
-      x: cx + rx + Math.cos(angle) * rx,
-      z: cz + Math.sin(angle) * rz,
-    });
+  for (let i = 0; i < numPoints; i++) {
+    // Parametric lemniscate of Bernoulli
+    const t = (i / numPoints) * Math.PI * 2;
+    const denom = 1 + Math.sin(t) * Math.sin(t);
+    const x = (a * Math.cos(t)) / denom;
+    const z = (a * Math.sin(t) * Math.cos(t)) / denom;
+    points.push({ x, z });
   }
 
   return points;
@@ -69,8 +55,8 @@ interface HudData {
 
 const DIFFICULTY = {
   easy: { scale: 1.2, checkpointRadius: 0.7, points: 8 },
-  medium: { scale: 1.0, checkpointRadius: 0.55, points: 12 },
-  hard: { scale: 0.8, checkpointRadius: 0.4, points: 16 },
+  medium: { scale: 1.0, checkpointRadius: 0.5, points: 12 },
+  hard: { scale: 0.85, checkpointRadius: 0.4, points: 16 },
 };
 
 function Checkpoint({
@@ -200,16 +186,9 @@ function GameScene({
   const config = DIFFICULTY[difficulty];
   const sessionIdRef = useRef(crypto.randomUUID());
 
-  // Generate figure-8 checkpoints
+  // Generate figure-8 checkpoints directly with desired count
   const eightPoints = useMemo(() => {
-    const allPoints = generateEightPoints(config.scale);
-    // Take evenly spaced subset
-    const step = Math.max(1, Math.floor(allPoints.length / config.points));
-    const subset: { x: number; z: number }[] = [];
-    for (let i = 0; i < allPoints.length && subset.length < config.points; i += step) {
-      subset.push(allPoints[i]);
-    }
-    return subset;
+    return generateEightPoints(config.scale, config.points);
   }, [config]);
 
   const stateRef = useRef({
@@ -342,6 +321,21 @@ function GameScene({
 
       <Field />
       <PathLine points={eightPoints} />
+
+      {/* Invisible plane for accurate mouse-to-ground raycasting */}
+      <mesh
+        rotation={[-Math.PI / 2, 0, 0]}
+        position={[0, 0.05, 0]}
+        onPointerMove={(e) => {
+          e.stopPropagation();
+          ballPosRef.current.x = e.point.x;
+          ballPosRef.current.z = e.point.z;
+        }}
+      >
+        <planeGeometry args={[20, 20]} />
+        <meshBasicMaterial transparent opacity={0} />
+      </mesh>
+
       <Ball posRef={ballPosRef} />
 
       {eightPoints.map((p, i) => (

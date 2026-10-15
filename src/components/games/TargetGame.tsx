@@ -362,6 +362,21 @@ function GameScene({
       <hemisphereLight args={['#e0f2fe', '#dcfce7', 0.5]} />
 
       <Field />
+
+      {/* Invisible plane for accurate mouse-to-ground raycasting */}
+      <mesh
+        rotation={[-Math.PI / 2, 0, 0]}
+        position={[0, 0.05, 0]}
+        onPointerMove={(e) => {
+          e.stopPropagation();
+          ballPosRef.current.x = e.point.x;
+          ballPosRef.current.z = e.point.z;
+        }}
+      >
+        <planeGeometry args={[20, 20]} />
+        <meshBasicMaterial transparent opacity={0} />
+      </mesh>
+
       <Ball posRef={ballPosRef} />
 
       {targets.map((t) => {
