@@ -237,7 +237,7 @@ function GameScene({
     const input = getGameInput();
     if (input.active && input.mode === 'camera') {
       ballPosRef.current.x = (input.x - 0.5) * FIELD_SIZE;
-      ballPosRef.current.z = (input.y - 0.5) * FIELD_SIZE;
+      ballPosRef.current.z = -(input.y - 0.5) * FIELD_SIZE; // invert Y→Z
     }
 
     // Back to menu gesture

@@ -65,9 +65,9 @@ export interface TrackingConfig {
 }
 
 export const DEFAULT_TRACKING_CONFIG: TrackingConfig = {
-  smoothing: 0.3,
-  maxJumpDistance: 0.15,
-  lostThreshold: 15,
+  smoothing: 0.25,
+  maxJumpDistance: 0.4,
+  lostThreshold: 30,
   minBlobArea: 50,
   maxBlobArea: 500000,
 };
