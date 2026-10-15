@@ -41,7 +41,7 @@ export default function OsmickyTercikyPage() {
   useEffect(() => {
     if (phase !== 'playing') return;
     if (inputMode === 'demo') { tracker.startDemo(); return; }
-  }, [phase, inputMode, tracker]);
+  }, [phase, inputMode]);
 
   useEffect(() => {
     if (phase !== 'playing' || inputMode !== 'camera' || !calibration) return;
@@ -64,7 +64,7 @@ export default function OsmickyTercikyPage() {
     };
     start();
     return () => { cancelled = true; };
-  }, [phase, inputMode, calibration, startCamera, tracker]);
+  }, [phase, inputMode, calibration, startCamera]);
 
   // Use window-level mouse tracking (Canvas blocks div events)
   useEffect(() => {
@@ -80,7 +80,7 @@ export default function OsmickyTercikyPage() {
     };
     window.addEventListener('mousemove', handler);
     return () => window.removeEventListener('mousemove', handler);
-  }, [phase, inputMode, tracker]);
+  }, [phase, inputMode]);
 
   if (phase === 'calibration') {
     return <CalibrationWizard onComplete={(cal) => { setCalibration(cal); tracker.setCalibration(cal); setPhase('setup'); }} onCancel={() => setPhase('setup')} />;

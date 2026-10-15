@@ -68,7 +68,7 @@ export default function TercikyPage() {
   useEffect(() => {
     if (phase !== 'playing') return;
     if (inputMode === 'demo') { tracker.startDemo(); return; }
-  }, [phase, inputMode, tracker]);
+  }, [phase, inputMode]);
 
   // Start camera when playing
   useEffect(() => {
@@ -95,7 +95,7 @@ export default function TercikyPage() {
     };
     start();
     return () => { cancelled = true; };
-  }, [phase, inputMode, calibration, startCamera, tracker]);
+  }, [phase, inputMode, calibration, startCamera]);
 
   const handleFinish = useCallback((res: TargetResult) => {
     setResult(res);
@@ -118,7 +118,7 @@ export default function TercikyPage() {
     };
     window.addEventListener('mousemove', handler);
     return () => window.removeEventListener('mousemove', handler);
-  }, [phase, inputMode, tracker]);
+  }, [phase, inputMode]);
 
   if (phase === 'calibration') {
     return <CalibrationWizard onComplete={handleCalibrationComplete} onCancel={() => setPhase('setup')} />;

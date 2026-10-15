@@ -64,7 +64,7 @@ export default function OsmickyPage() {
   useEffect(() => {
     if (phase !== 'playing') return;
     if (inputMode === 'demo') { tracker.startDemo(); return; }
-  }, [phase, inputMode, tracker]);
+  }, [phase, inputMode]);
 
   // Start camera
   useEffect(() => {
@@ -88,7 +88,7 @@ export default function OsmickyPage() {
     };
     start();
     return () => { cancelled = true; };
-  }, [phase, inputMode, calibration, startCamera, tracker]);
+  }, [phase, inputMode, calibration, startCamera]);
 
   const handleFinish = useCallback(
     (res: FigureEightResult) => {
@@ -114,7 +114,7 @@ export default function OsmickyPage() {
     };
     window.addEventListener('mousemove', handler);
     return () => window.removeEventListener('mousemove', handler);
-  }, [phase, inputMode, tracker]);
+  }, [phase, inputMode]);
 
   if (phase === 'calibration') {
     return (
