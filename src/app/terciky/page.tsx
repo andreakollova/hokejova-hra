@@ -105,14 +105,20 @@ export default function TercikyPage() {
     spotify.pause();
   }, [tracker, stopCamera, spotify]);
 
-  const handleMouseMove = useCallback(
-    (e: React.MouseEvent<HTMLDivElement>) => {
-      if (inputMode !== 'demo' || phase !== 'playing') return;
-      const rect = e.currentTarget.getBoundingClientRect();
-      tracker.handleDemoMouseMove(e, rect);
-    },
-    [inputMode, phase, tracker]
-  );
+  useEffect(() => {
+    if (phase !== 'playing' || inputMode !== 'demo') return;
+    const handler = (e: MouseEvent) => {
+      tracker.gameInputRef.current = {
+        x: Math.max(0, Math.min(1, e.clientX / window.innerWidth)),
+        y: Math.max(0, Math.min(1, e.clientY / window.innerHeight)),
+        confidence: 1,
+        mode: 'demo',
+        active: true,
+      };
+    };
+    window.addEventListener('mousemove', handler);
+    return () => window.removeEventListener('mousemove', handler);
+  }, [phase, inputMode, tracker]);
 
   if (phase === 'calibration') {
     return <CalibrationWizard onComplete={handleCalibrationComplete} onCancel={() => setPhase('setup')} />;
@@ -162,7 +168,7 @@ export default function TercikyPage() {
 
   if (phase === 'playing') {
     return (
-      <div ref={gameContainerRef} className="w-screen h-screen relative" onMouseMove={handleMouseMove}>
+      <div ref={gameContainerRef} className="w-screen h-screen relative">
         <video ref={videoRef} className="hidden" playsInline muted autoPlay />
         <TargetGame
           duration={duration}

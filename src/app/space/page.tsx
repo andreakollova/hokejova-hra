@@ -65,10 +65,20 @@ export default function SpacePage() {
     return () => { cancelled = true; };
   }, [phase, inputMode, calibration, startCamera, tracker]);
 
-  const handleMouseMove = useCallback((e: React.MouseEvent<HTMLDivElement>) => {
-    if (inputMode !== 'demo' || phase !== 'playing') return;
-    tracker.handleDemoMouseMove(e, e.currentTarget.getBoundingClientRect());
-  }, [inputMode, phase, tracker]);
+  useEffect(() => {
+    if (phase !== 'playing' || inputMode !== 'demo') return;
+    const handler = (e: MouseEvent) => {
+      tracker.gameInputRef.current = {
+        x: Math.max(0, Math.min(1, e.clientX / window.innerWidth)),
+        y: Math.max(0, Math.min(1, e.clientY / window.innerHeight)),
+        confidence: 1,
+        mode: 'demo',
+        active: true,
+      };
+    };
+    window.addEventListener('mousemove', handler);
+    return () => window.removeEventListener('mousemove', handler);
+  }, [phase, inputMode, tracker]);
 
   if (phase === 'calibration') {
     return <CalibrationWizard onComplete={(cal) => { setCalibration(cal); tracker.setCalibration(cal); setPhase('setup'); }} onCancel={() => setPhase('setup')} />;
@@ -98,7 +108,7 @@ export default function SpacePage() {
 
   if (phase === 'playing') {
     return (
-      <div className="w-screen h-screen relative" onMouseMove={handleMouseMove}>
+      <div className="w-screen h-screen relative">
         <video ref={videoRef} className="hidden" playsInline muted autoPlay />
         <SpaceGame
           duration={duration} difficulty={difficulty} inputMode={inputMode}
