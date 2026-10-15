@@ -7,6 +7,7 @@ import { SpaceResult } from '@/components/games/SpaceGame';
 import { useTracker } from '@/hooks/useTracker';
 import { useCamera } from '@/hooks/useCamera';
 import { useSpotify } from '@/hooks/useSpotify';
+import { useMusicPlayer } from '@/hooks/useMusicPlayer';
 import { SpotifyTrack } from '@/lib/spotify';
 import Link from 'next/link';
 
@@ -27,6 +28,7 @@ export default function SpacePage() {
 
   const tracker = useTracker(inputMode);
   const spotify = useSpotify();
+  const { play: playMusic, pause: pauseMusic } = useMusicPlayer();
   const videoRef = useRef<HTMLVideoElement>(null);
   const { startCamera, stopCamera } = useCamera();
 
@@ -36,17 +38,17 @@ export default function SpacePage() {
   }, []);
 
   const startGame = useCallback(() => {
-    if (inputMode === 'demo') { tracker.startDemo(); if (bgTrack) spotify.play(bgTrack); setPhase('playing'); return; }
+    if (inputMode === 'demo') { tracker.startDemo(); if (bgTrack) playMusic(bgTrack); setPhase('playing'); return; }
     if (!calibration) { setPhase('calibration'); return; }
     tracker.setCalibration(calibration);
-    if (bgTrack) spotify.play(bgTrack);
+    if (bgTrack) playMusic(bgTrack);
     setPhase('playing');
   }, [inputMode, calibration, tracker, bgTrack, spotify]);
 
   useEffect(() => {
     if (phase !== 'playing') return;
     if (inputMode === 'demo') tracker.startDemo();
-    if (bgTrack) spotify.play(bgTrack);
+    if (bgTrack) playMusic(bgTrack);
   }, [phase, inputMode]); // eslint-disable-line react-hooks/exhaustive-deps
 
   useEffect(() => {
@@ -120,8 +122,8 @@ export default function SpacePage() {
         <SpaceGame
           duration={duration} difficulty={difficulty} inputMode={inputMode}
           getGameInput={tracker.getGameInput}
-          onFinish={(res) => { setResult(res); setPhase('result'); tracker.stopTracking(); stopCamera(); spotify.pause(); }}
-          onBackToMenu={() => { tracker.stopTracking(); stopCamera(); spotify.pause(); setPhase('setup'); }}
+          onFinish={(res) => { setResult(res); setPhase('result'); tracker.stopTracking(); stopCamera(); pauseMusic(); }}
+          onBackToMenu={() => { tracker.stopTracking(); stopCamera(); pauseMusic(); setPhase('setup'); }}
         />
         {inputMode === 'demo' && (
           <div className="absolute bottom-4 left-4 bg-cyan-500/20 border border-cyan-500/30 rounded-2xl px-3 py-2">

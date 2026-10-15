@@ -7,6 +7,7 @@ import { FigureEightResult } from '@/components/games/FigureEightGame';
 import { useTracker } from '@/hooks/useTracker';
 import { useCamera } from '@/hooks/useCamera';
 import { useSpotify } from '@/hooks/useSpotify';
+import { useMusicPlayer } from '@/hooks/useMusicPlayer';
 import { SpotifyTrack } from '@/lib/spotify';
 import Link from 'next/link';
 
@@ -36,6 +37,7 @@ export default function OsmickyPage() {
 
   const tracker = useTracker(inputMode);
   const spotify = useSpotify();
+  const { play: playMusic, pause: pauseMusic } = useMusicPlayer();
   const videoRef = useRef<HTMLVideoElement>(null);
   const gameContainerRef = useRef<HTMLDivElement>(null);
   const { startCamera, stopCamera } = useCamera();
@@ -59,10 +61,10 @@ export default function OsmickyPage() {
   );
 
   const startGame = useCallback(() => {
-    if (inputMode === 'demo') { tracker.startDemo(); if (bgTrack) spotify.play(bgTrack); setPhase('playing'); return; }
+    if (inputMode === 'demo') { tracker.startDemo(); if (bgTrack) playMusic(bgTrack); setPhase('playing'); return; }
     if (!calibration) { setPhase('calibration'); return; }
     tracker.setCalibration(calibration);
-    if (bgTrack) spotify.play(bgTrack);
+    if (bgTrack) playMusic(bgTrack);
     setPhase('playing');
   }, [inputMode, calibration, tracker, bgTrack, spotify]);
 
@@ -70,7 +72,7 @@ export default function OsmickyPage() {
   useEffect(() => {
     if (phase !== 'playing') return;
     if (inputMode === 'demo') tracker.startDemo();
-    if (bgTrack) spotify.play(bgTrack);
+    if (bgTrack) playMusic(bgTrack);
   }, [phase, inputMode]); // eslint-disable-line react-hooks/exhaustive-deps
 
   // Start camera
@@ -103,7 +105,7 @@ export default function OsmickyPage() {
       setPhase('result');
       tracker.stopTracking();
       stopCamera();
-      spotify.pause();
+      pauseMusic();
     },
     [tracker, stopCamera, spotify]
   );
@@ -144,7 +146,7 @@ export default function OsmickyPage() {
         }}
         onMenu={() => {
           setResult(null);
-          spotify.pause();
+          pauseMusic();
           setPhase('setup');
         }}
       />

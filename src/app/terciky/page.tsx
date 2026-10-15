@@ -7,6 +7,7 @@ import { TargetResult } from '@/components/games/TargetGame';
 import { useTracker } from '@/hooks/useTracker';
 import { useCamera } from '@/hooks/useCamera';
 import { useSpotify } from '@/hooks/useSpotify';
+import { useMusicPlayer } from '@/hooks/useMusicPlayer';
 import { SpotifyTrack } from '@/lib/spotify';
 import Link from 'next/link';
 
@@ -32,6 +33,7 @@ export default function TercikyPage() {
 
   const tracker = useTracker(inputMode);
   const spotify = useSpotify();
+  const { play: playMusic, pause: pauseMusic } = useMusicPlayer();
   const videoRef = useRef<HTMLVideoElement>(null);
   const gameContainerRef = useRef<HTMLDivElement>(null);
   const { startCamera, stopCamera } = useCamera();
@@ -55,7 +57,7 @@ export default function TercikyPage() {
   const startGame = useCallback(() => {
     if (inputMode === 'demo') {
       tracker.startDemo();
-      if (bgTrack) spotify.play(bgTrack);
+      if (bgTrack) playMusic(bgTrack);
       setPhase('playing');
       return;
     }
@@ -64,7 +66,7 @@ export default function TercikyPage() {
       return;
     }
     tracker.setCalibration(calibration);
-    if (bgTrack) spotify.play(bgTrack);
+    if (bgTrack) playMusic(bgTrack);
     setPhase('playing');
   }, [inputMode, calibration, tracker, bgTrack, spotify]);
 
@@ -72,7 +74,7 @@ export default function TercikyPage() {
   useEffect(() => {
     if (phase !== 'playing') return;
     if (inputMode === 'demo') tracker.startDemo();
-    if (bgTrack) spotify.play(bgTrack);
+    if (bgTrack) playMusic(bgTrack);
   }, [phase, inputMode]); // eslint-disable-line react-hooks/exhaustive-deps
 
   // Start camera when playing
@@ -107,7 +109,7 @@ export default function TercikyPage() {
     setPhase('result');
     tracker.stopTracking();
     stopCamera();
-    spotify.pause();
+    pauseMusic();
   }, [tracker, stopCamera, spotify]);
 
   useEffect(() => {
@@ -184,7 +186,7 @@ export default function TercikyPage() {
           onBackToMenu={() => {
             tracker.stopTracking();
             stopCamera();
-            spotify.pause();
+            pauseMusic();
             setPhase('setup');
           }}
         />
