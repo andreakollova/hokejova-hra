@@ -222,7 +222,16 @@ export function useSpotify() {
   }, [currentTrack, generateBeatsFromBpm]);
 
   const play = useCallback(async (track?: SpotifyTrack) => {
-    const token = getCookie('spotify_token_client');
+    let token = getCookie('spotify_token_client');
+
+    // Try refresh if token missing
+    if (!token) {
+      try {
+        await fetch('/api/spotify/token', { method: 'POST' });
+        token = getCookie('spotify_token_client');
+      } catch {}
+    }
+
     if (!token || !deviceId) return;
 
     const uri = track?.uri || currentTrack?.uri;
