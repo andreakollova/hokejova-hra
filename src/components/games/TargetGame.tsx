@@ -231,8 +231,10 @@ function GameScene({
     const s = stateRef.current;
     if (s.finished) return;
 
+    // In camera mode: update ball from tracker input
+    // In demo mode: raycasting plane handles position directly
     const input = getGameInput();
-    if (input.active) {
+    if (input.active && input.mode === 'camera') {
       ballPosRef.current.x = (input.x - 0.5) * FIELD_SIZE;
       ballPosRef.current.z = (input.y - 0.5) * FIELD_SIZE;
     }
