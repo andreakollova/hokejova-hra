@@ -7,6 +7,7 @@ import { TargetResult } from '@/components/games/TargetGame';
 import { useTracker } from '@/hooks/useTracker';
 import { useCamera } from '@/hooks/useCamera';
 import { useSpotify } from '@/hooks/useSpotify';
+import { SpotifyTrack } from '@/lib/spotify';
 import Link from 'next/link';
 
 const CalibrationWizard = dynamic(
@@ -16,6 +17,7 @@ const CalibrationWizard = dynamic(
 const TargetGame = dynamic(() => import('@/components/games/TargetGame'), {
   ssr: false,
 });
+const BackgroundMusic = dynamic(() => import('@/components/music/BackgroundMusic'), { ssr: false });
 
 type Phase = 'setup' | 'calibration' | 'playing' | 'result';
 
@@ -26,7 +28,7 @@ export default function TercikyPage() {
   const [duration, setDuration] = useState<30 | 60 | 90>(60);
   const [result, setResult] = useState<TargetResult | null>(null);
   const [calibration, setCalibration] = useState<CalibrationData | null>(null);
-  const [playMusic, setPlayMusic] = useState(false);
+  const [bgTrack, setBgTrack] = useState<SpotifyTrack | null>(null);
 
   const tracker = useTracker(inputMode);
   const spotify = useSpotify();
@@ -53,6 +55,7 @@ export default function TercikyPage() {
   const startGame = useCallback(() => {
     if (inputMode === 'demo') {
       tracker.startDemo();
+      if (bgTrack) spotify.play(bgTrack);
       setPhase('playing');
       return;
     }
@@ -61,8 +64,9 @@ export default function TercikyPage() {
       return;
     }
     tracker.setCalibration(calibration);
+    if (bgTrack) spotify.play(bgTrack);
     setPhase('playing');
-  }, [inputMode, calibration, tracker]);
+  }, [inputMode, calibration, tracker, bgTrack, spotify]);
 
   // Re-init demo when entering playing phase
   useEffect(() => {
@@ -281,6 +285,8 @@ export default function TercikyPage() {
               ))}
             </div>
           </div>
+
+          <BackgroundMusic spotify={spotify} onSelect={setBgTrack} selectedTrack={bgTrack} />
 
           <button onClick={startGame} className="btn-primary w-full text-lg py-4 mt-2">
             Spustit trening

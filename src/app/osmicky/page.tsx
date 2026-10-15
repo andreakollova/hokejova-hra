@@ -6,6 +6,8 @@ import { CalibrationData, InputMode } from '@/lib/tracking';
 import { FigureEightResult } from '@/components/games/FigureEightGame';
 import { useTracker } from '@/hooks/useTracker';
 import { useCamera } from '@/hooks/useCamera';
+import { useSpotify } from '@/hooks/useSpotify';
+import { SpotifyTrack } from '@/lib/spotify';
 import Link from 'next/link';
 
 const CalibrationWizard = dynamic(
@@ -19,6 +21,7 @@ const FigureEightGame = dynamic(
 const ResultScreen = dynamic(() => import('@/components/ui/ResultScreen'), {
   ssr: false,
 });
+const BackgroundMusic = dynamic(() => import('@/components/music/BackgroundMusic'), { ssr: false });
 
 type Phase = 'setup' | 'calibration' | 'playing' | 'result';
 
@@ -29,8 +32,10 @@ export default function OsmickyPage() {
   const [result, setResult] = useState<FigureEightResult | null>(null);
   const [isPaused, setIsPaused] = useState(false);
   const [calibration, setCalibration] = useState<CalibrationData | null>(null);
+  const [bgTrack, setBgTrack] = useState<SpotifyTrack | null>(null);
 
   const tracker = useTracker(inputMode);
+  const spotify = useSpotify();
   const videoRef = useRef<HTMLVideoElement>(null);
   const gameContainerRef = useRef<HTMLDivElement>(null);
   const { startCamera, stopCamera } = useCamera();
@@ -54,11 +59,12 @@ export default function OsmickyPage() {
   );
 
   const startGame = useCallback(() => {
-    if (inputMode === 'demo') { tracker.startDemo(); setPhase('playing'); return; }
+    if (inputMode === 'demo') { tracker.startDemo(); if (bgTrack) spotify.play(bgTrack); setPhase('playing'); return; }
     if (!calibration) { setPhase('calibration'); return; }
     tracker.setCalibration(calibration);
+    if (bgTrack) spotify.play(bgTrack);
     setPhase('playing');
-  }, [inputMode, calibration, tracker]);
+  }, [inputMode, calibration, tracker, bgTrack, spotify]);
 
   // Re-init demo/camera when entering playing phase
   useEffect(() => {
@@ -96,8 +102,9 @@ export default function OsmickyPage() {
       setPhase('result');
       tracker.stopTracking();
       stopCamera();
+      spotify.pause();
     },
-    [tracker, stopCamera]
+    [tracker, stopCamera, spotify]
   );
 
   // Window-level mouse tracking for demo
@@ -136,6 +143,7 @@ export default function OsmickyPage() {
         }}
         onMenu={() => {
           setResult(null);
+          spotify.pause();
           setPhase('setup');
         }}
       />
@@ -277,6 +285,8 @@ export default function OsmickyPage() {
             Presnosť hodnotenia osmičiek závisí od kvality farebného sledovania.
             Pre najlepšie výsledky použi výrazne farebnú loptičku a dobré osvetlenie.
           </div>
+
+          <BackgroundMusic spotify={spotify} onSelect={setBgTrack} selectedTrack={bgTrack} />
 
           <button onClick={startGame} className="btn-primary w-full text-lg py-4">
             Spustiť tréning

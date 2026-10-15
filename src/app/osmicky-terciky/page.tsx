@@ -6,10 +6,13 @@ import { CalibrationData, InputMode } from '@/lib/tracking';
 import { TargetEightResult } from '@/components/games/TargetEightGame';
 import { useTracker } from '@/hooks/useTracker';
 import { useCamera } from '@/hooks/useCamera';
+import { useSpotify } from '@/hooks/useSpotify';
+import { SpotifyTrack } from '@/lib/spotify';
 import Link from 'next/link';
 
 const CalibrationWizard = dynamic(() => import('@/components/tracking/CalibrationWizard'), { ssr: false });
 const TargetEightGame = dynamic(() => import('@/components/games/TargetEightGame'), { ssr: false });
+const BackgroundMusic = dynamic(() => import('@/components/music/BackgroundMusic'), { ssr: false });
 
 type Phase = 'setup' | 'calibration' | 'playing' | 'result';
 
@@ -20,8 +23,10 @@ export default function OsmickyTercikyPage() {
   const [duration, setDuration] = useState<30 | 60 | 90>(60);
   const [result, setResult] = useState<TargetEightResult | null>(null);
   const [calibration, setCalibration] = useState<CalibrationData | null>(null);
+  const [bgTrack, setBgTrack] = useState<SpotifyTrack | null>(null);
 
   const tracker = useTracker(inputMode);
+  const spotify = useSpotify();
   const videoRef = useRef<HTMLVideoElement>(null);
   const { startCamera, stopCamera } = useCamera();
 
@@ -31,11 +36,12 @@ export default function OsmickyTercikyPage() {
   }, []);
 
   const startGame = useCallback(() => {
-    if (inputMode === 'demo') { tracker.startDemo(); setPhase('playing'); return; }
+    if (inputMode === 'demo') { tracker.startDemo(); if (bgTrack) spotify.play(bgTrack); setPhase('playing'); return; }
     if (!calibration) { setPhase('calibration'); return; }
     tracker.setCalibration(calibration);
+    if (bgTrack) spotify.play(bgTrack);
     setPhase('playing');
-  }, [inputMode, calibration, tracker]);
+  }, [inputMode, calibration, tracker, bgTrack, spotify]);
 
   // Re-init demo/camera when entering playing phase
   useEffect(() => {
@@ -115,8 +121,8 @@ export default function OsmickyTercikyPage() {
         <TargetEightGame
           duration={duration} difficulty={difficulty} inputMode={inputMode}
           getGameInput={tracker.getGameInput}
-          onFinish={(res) => { setResult(res); setPhase('result'); tracker.stopTracking(); stopCamera(); }}
-          onBackToMenu={() => { tracker.stopTracking(); stopCamera(); setPhase('setup'); }}
+          onFinish={(res) => { setResult(res); setPhase('result'); tracker.stopTracking(); stopCamera(); spotify.pause(); }}
+          onBackToMenu={() => { tracker.stopTracking(); stopCamera(); spotify.pause(); setPhase('setup'); }}
         />
         {inputMode === 'demo' && (
           <div className="absolute bottom-4 left-4 bg-yellow-50/90 border border-yellow-200 rounded-2xl px-3 py-2">
@@ -184,6 +190,8 @@ export default function OsmickyTercikyPage() {
               ))}
             </div>
           </div>
+          <BackgroundMusic spotify={spotify} onSelect={setBgTrack} selectedTrack={bgTrack} />
+
           <button onClick={startGame} className="btn-primary w-full text-lg py-4 mt-2">Spustit</button>
         </div>
       </div>
