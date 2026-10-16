@@ -36,11 +36,11 @@ export default function Home() {
         <div className="max-w-6xl mx-auto flex justify-between items-center">
           <Link href="/">
             <Image
-              src={scrolled ? '/images/hb-icon.png' : '/images/hb-logo.png'}
+              src={scrolled ? '/images/hb-icon.png' : '/images/hb-logo-stacked.png'}
               alt="HockeyBeats"
-              width={scrolled ? 44 : 200}
-              height={scrolled ? 28 : 44}
-              className={`transition-all duration-300 ${scrolled ? 'h-7 w-auto' : 'h-10 w-auto'}`}
+              width={scrolled ? 44 : 120}
+              height={scrolled ? 28 : 80}
+              className={`transition-all duration-300 ${scrolled ? 'h-7 w-auto' : 'h-14 w-auto'}`}
             />
           </Link>
           <nav className="flex items-center gap-5 sm:gap-7">
@@ -474,7 +474,7 @@ export default function Home() {
         <div className="max-w-6xl mx-auto">
           <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-6">
             <div>
-              <Image src="/images/hb-logo.png" alt="HockeyBeats" width={140} height={32} className="h-7 w-auto mb-2" />
+              <Image src="/images/hb-logo-stacked.png" alt="HockeyBeats" width={100} height={70} className="h-12 w-auto mb-2" />
               <p className="text-xs text-gray-400">Field hockey practice, played to your music.</p>
             </div>
             <div className="flex flex-wrap gap-5 text-sm text-gray-400">
