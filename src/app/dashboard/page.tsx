@@ -142,7 +142,7 @@ export default function DashboardPage() {
         <div className="mb-12">
           <h2 className="text-xs font-bold uppercase tracking-[0.2em] text-gray-400 mb-5">Games</h2>
           {/* Main games - PS5 style cards */}
-          <div className="grid sm:grid-cols-2 gap-5 mb-5">
+          <div className="grid grid-cols-2 sm:grid-cols-2 gap-5 mb-5">
             <Link href="/trening" className="group block">
               <div className="game-tile rounded-3xl overflow-hidden relative aspect-[4/5] bg-gray-100">
                 <Image src="/images/game-hockeybeats.png" alt="HockeyBeats" fill className="object-cover group-hover:scale-105 transition-all duration-500" />
@@ -154,6 +154,22 @@ export default function DashboardPage() {
             <Link href="/space" className="group block">
               <div className="game-tile rounded-3xl overflow-hidden relative aspect-[4/5] bg-[#0f172a]">
                 <Image src="/images/game-spaceinvaders.png" alt="Space Invaders" fill className="object-cover group-hover:scale-105 transition-all duration-500" />
+                <div className="absolute bottom-0 left-0 right-0 p-5 bg-gradient-to-t from-black/50 to-transparent">
+                  <div className="text-sm font-bold text-white">Play</div>
+                </div>
+              </div>
+            </Link>
+            <Link href="/jelly-stack" className="group block">
+              <div className="game-tile rounded-3xl overflow-hidden relative aspect-[4/5] bg-[#faf5eb]">
+                <Image src="/images/game-jellystack.png" alt="Jelly Stack" fill className="object-cover group-hover:scale-105 transition-all duration-500" />
+                <div className="absolute bottom-0 left-0 right-0 p-5 bg-gradient-to-t from-black/50 to-transparent">
+                  <div className="text-sm font-bold text-white">Play</div>
+                </div>
+              </div>
+            </Link>
+            <Link href="/orbit-hop" className="group block">
+              <div className="game-tile rounded-3xl overflow-hidden relative aspect-[4/5] bg-[#ede9fe]">
+                <Image src="/images/game-orbithop.png" alt="Orbit Hop" fill className="object-cover group-hover:scale-105 transition-all duration-500" />
                 <div className="absolute bottom-0 left-0 right-0 p-5 bg-gradient-to-t from-black/50 to-transparent">
                   <div className="text-sm font-bold text-white">Play</div>
                 </div>

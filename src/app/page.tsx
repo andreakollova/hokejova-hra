@@ -525,48 +525,61 @@ function HeroBanner() {
 
   return (
     <>
-      <section className="relative min-h-screen flex flex-col overflow-hidden bg-[#f0f2f5]">
-        {/* Top section - light bg with text */}
-        <div className="relative z-10 flex flex-col items-center text-center pt-28 sm:pt-36 pb-10 px-6">
-          <h1 className="text-4xl sm:text-6xl lg:text-7xl font-extrabold text-gray-900 leading-[1.05] tracking-tight">
-            Your game. Your rhythm.
+      <section className="relative h-screen flex flex-col overflow-hidden bg-[#eef0f4]">
+        {/* Text overlay on top */}
+        <div className="relative z-20 flex flex-col items-center text-center pt-28 sm:pt-32 px-6">
+          <p className="text-[10px] sm:text-xs font-bold uppercase tracking-[0.3em] text-gray-400 mb-5">Stickhandling. In play.</p>
+          <h1 className="text-5xl sm:text-7xl lg:text-8xl font-black text-gray-900 leading-[0.95] tracking-tight">
+            All play.<br />More game.
           </h1>
-          <p className="mt-4 text-base sm:text-lg text-gray-400">
-            A game you want to play. Practice your coach will notice.
+          <p className="mt-5 text-sm sm:text-base text-gray-400 max-w-lg">
+            The game you&apos;ll come back to. The practice that stays with you.
           </p>
-
-          {/* CTA */}
-          <div className="mt-8">
-            <button
-              onClick={() => setShowPlatform(true)}
-              className="group bg-gray-900 text-white font-bold text-base px-10 py-4 rounded-full hover:bg-gray-800 hover:shadow-xl active:scale-[0.97] transition-all duration-300 flex items-center gap-3"
-            >
-              <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
-              Play now — it&apos;s free
-            </button>
-          </div>
-
-          <p className="mt-4 text-xs text-gray-400">iOS · Android · Web</p>
         </div>
 
-        {/* Bottom section - gameplay video, natural size */}
-        <div className="relative flex-1 min-h-[50vh]">
+        {/* Video fills bottom portion, bleeds behind text */}
+        <div className="relative flex-1 mt-[-2vh]">
           <div className="absolute inset-0 overflow-hidden">
-            {/* 16:9 video that covers full width, overflow hidden clips top/bottom */}
             <iframe
               src="https://www.youtube.com/embed/7mGtwXDxupA?autoplay=1&mute=1&loop=1&controls=0&showinfo=0&rel=0&playlist=7mGtwXDxupA&playsinline=1&modestbranding=1&iv_load_policy=3&disablekb=1"
-              className="absolute left-0 w-full pointer-events-none"
-              style={{ top: '-10%', height: '120%', aspectRatio: '16/9', minWidth: '100%' }}
+              className="absolute inset-0 w-full h-full pointer-events-none"
               allow="autoplay; encrypted-media"
               title="Background"
             />
           </div>
-          {/* Gradient fade from light bg to video */}
-          <div className="absolute inset-x-0 top-0 h-32 bg-gradient-to-b from-[#f0f2f5] to-transparent z-10" />
-          {/* "Real gameplay" badge */}
-          <div className="absolute bottom-6 left-6 z-10 flex items-center gap-2">
-            <span className="w-2 h-2 bg-emerald-500 rounded-full animate-pulse" />
-            <span className="text-[10px] font-bold uppercase tracking-[0.15em] text-white/70">Real gameplay</span>
+          {/* Fade from bg color into video */}
+          <div className="absolute inset-x-0 top-0 h-28 bg-gradient-to-b from-[#eef0f4] to-transparent z-10" />
+
+          {/* Bottom bar - CTA */}
+          <div className="absolute bottom-8 left-1/2 -translate-x-1/2 z-20 w-[90%] max-w-2xl">
+            <div className="bg-white/90 backdrop-blur-xl rounded-2xl px-6 py-4 flex items-center justify-between shadow-lg shadow-black/5">
+              <div className="flex items-center gap-3">
+                <span className="w-3 h-3 bg-emerald-500 rounded-full animate-pulse" />
+                <div>
+                  <div className="text-sm font-bold text-gray-900">Ready when you are.</div>
+                  <div className="text-xs text-gray-400">Your stick. Your ball. Let&apos;s play.</div>
+                </div>
+              </div>
+              <div className="flex flex-col items-end gap-1">
+                <button
+                  onClick={() => setShowPlatform(true)}
+                  className="bg-gray-900 text-white font-bold text-sm px-6 py-2.5 rounded-full hover:bg-gray-800 active:scale-[0.97] transition-all flex items-center gap-2"
+                >
+                  Play for free
+                  <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}><path strokeLinecap="round" strokeLinejoin="round" d="M7 17L17 7M17 7H7M17 7v10" /></svg>
+                </button>
+                <span className="text-[10px] text-gray-400">iOS · Android · Web</span>
+              </div>
+            </div>
+          </div>
+
+          {/* Sports bar bottom left */}
+          <div className="absolute bottom-4 left-6 z-10 flex items-center gap-3">
+            <span className="text-[10px] font-bold uppercase tracking-[0.15em] text-white/60">Ice Hockey</span>
+            <span className="text-white/30">/</span>
+            <span className="text-[10px] font-bold uppercase tracking-[0.15em] text-white/60">Field Hockey</span>
+            <span className="text-white/30">/</span>
+            <span className="text-[10px] font-bold uppercase tracking-[0.15em] text-white/60">Floorball</span>
           </div>
         </div>
       </section>
