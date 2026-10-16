@@ -549,20 +549,20 @@ function HeroBanner() {
           <p className="mt-4 text-xs text-gray-400">iOS · Android · Web</p>
         </div>
 
-        {/* Bottom section - gameplay video/image */}
+        {/* Bottom section - gameplay video, natural size */}
         <div className="relative flex-1 min-h-[50vh]">
-          {/* Video background */}
           <div className="absolute inset-0 overflow-hidden">
+            {/* 16:9 video that covers full width, overflow hidden clips top/bottom */}
             <iframe
               src="https://www.youtube.com/embed/7mGtwXDxupA?autoplay=1&mute=1&loop=1&controls=0&showinfo=0&rel=0&playlist=7mGtwXDxupA&playsinline=1&modestbranding=1&iv_load_policy=3&disablekb=1"
-              className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 pointer-events-none"
-              style={{ width: '300vw', height: '300vh', minWidth: '100vw', minHeight: '100vh' }}
+              className="absolute left-0 w-full pointer-events-none"
+              style={{ top: '-10%', height: '120%', aspectRatio: '16/9', minWidth: '100%' }}
               allow="autoplay; encrypted-media"
               title="Background"
             />
           </div>
           {/* Gradient fade from light bg to video */}
-          <div className="absolute inset-x-0 top-0 h-24 bg-gradient-to-b from-[#f0f2f5] to-transparent z-10" />
+          <div className="absolute inset-x-0 top-0 h-32 bg-gradient-to-b from-[#f0f2f5] to-transparent z-10" />
           {/* "Real gameplay" badge */}
           <div className="absolute bottom-6 left-6 z-10 flex items-center gap-2">
             <span className="w-2 h-2 bg-emerald-500 rounded-full animate-pulse" />
