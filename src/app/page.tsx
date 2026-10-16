@@ -306,7 +306,7 @@ export default function Home() {
               <div className="flex items-center justify-center gap-8">
                 <svg className="w-14 h-14 text-[#1DB954]" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.4 0 0 5.4 0 12s5.4 12 12 12 12-5.4 12-12S18.66 0 12 0zm5.521 17.34c-.24.359-.66.48-1.021.24-2.82-1.74-6.36-2.101-10.561-1.141-.418.122-.779-.179-.899-.539-.12-.421.18-.78.54-.9 4.56-1.021 8.52-.6 11.64 1.32.42.18.479.659.301 1.02zm1.44-3.3c-.301.42-.841.6-1.262.3-3.239-1.98-8.159-2.58-11.939-1.38-.479.12-1.02-.12-1.14-.6-.12-.48.12-1.021.6-1.141C9.6 9.9 15 10.561 18.72 12.84c.361.181.54.78.241 1.2zm.12-3.36C15.24 8.4 8.82 8.16 5.16 9.301c-.6.179-1.2-.181-1.38-.721-.18-.601.18-1.2.72-1.381 4.26-1.26 11.28-1.02 15.721 1.621.539.3.719 1.02.419 1.56-.299.421-1.02.599-1.559.3z"/></svg>
                 <span className="text-2xl text-gray-300">+</span>
-                <svg className="w-14 h-14 text-gray-900" viewBox="0 0 24 24" fill="currentColor"><path d="M23.994 6.124a9.23 9.23 0 00-.24-2.19c-.317-1.31-1.062-2.31-2.18-3.043a5.022 5.022 0 00-1.877-.726 10.496 10.496 0 00-1.564-.15c-.04-.003-.083-.01-.124-.013H5.986c-.152.01-.303.017-.455.026-.747.043-1.49.123-2.193.4-1.336.53-2.3 1.452-2.865 2.78-.192.448-.292.925-.363 1.408-.056.392-.088.785-.1 1.18 0 .032-.007.062-.01.093v12.223c.01.14.017.283.027.424.05.815.154 1.624.497 2.373.65 1.42 1.738 2.353 3.234 2.801.42.127.856.187 1.293.228.555.053 1.11.06 1.667.06h11.03a12.5 12.5 0 001.57-.1c.822-.106 1.596-.35 2.296-.81a5.046 5.046 0 001.88-2.207c.186-.42.293-.87.37-1.324.113-.675.138-1.358.137-2.04-.002-3.8 0-7.595-.003-11.393z"/></svg>
+                <svg className="w-14 h-14 text-[#FA243C]" viewBox="0 0 24 24" fill="currentColor"><path d="M23.994 6.124a9.23 9.23 0 00-.24-2.19c-.317-1.31-1.062-2.31-2.18-3.043a5.022 5.022 0 00-1.877-.726 10.496 10.496 0 00-1.564-.15c-.04-.003-.083-.01-.124-.013H5.986c-.152.01-.303.017-.455.026-.747.043-1.49.123-2.193.4-1.336.53-2.3 1.452-2.865 2.78-.192.448-.292.925-.363 1.408-.056.392-.088.785-.1 1.18 0 .032-.007.062-.01.093v12.223c.01.14.017.283.027.424.05.815.154 1.624.497 2.373.65 1.42 1.738 2.353 3.234 2.801.42.127.856.187 1.293.228.555.053 1.11.06 1.667.06h11.03a12.5 12.5 0 001.57-.1c.822-.106 1.596-.35 2.296-.81a5.046 5.046 0 001.88-2.207c.186-.42.293-.87.37-1.324.113-.675.138-1.358.137-2.04-.002-3.8 0-7.595-.003-11.393zm-6.423 3.99v5.712c0 .417-.058.827-.244 1.206-.29.59-.76.962-1.388 1.14-.35.1-.706.157-1.07.173-.95.045-1.773-.6-1.943-1.536a1.88 1.88 0 011.038-2.022c.357-.17.724-.283 1.1-.38.36-.094.72-.186 1.073-.305.27-.09.387-.282.39-.568.01-.67 0-1.34.002-2.01v-.153l-4.168.98v7.384c0 .378-.047.75-.2 1.1-.26.59-.715.98-1.327 1.178-.367.118-.745.185-1.13.207-.94.058-1.797-.548-1.996-1.45-.21-.95.2-1.843 1.032-2.18.36-.145.736-.247 1.108-.345.28-.073.564-.14.84-.228.304-.097.437-.3.44-.618V7.076c0-.22.042-.4.198-.55.12-.116.27-.174.43-.207l5.223-1.227c.388-.09.78-.166 1.18-.168.183 0 .36.042.49.196.1.12.15.267.15.422-.01 1.622-.006 3.24-.01 4.86z"/></svg>
               </div>
             </div>
           </div>
@@ -362,27 +362,29 @@ export default function Home() {
         </section>
 
         {/* 11. Equipment */}
-        <section className="py-20 sm:py-28">
+        <section className="py-24 sm:py-32">
           <div className="max-w-6xl mx-auto px-6 sm:px-10 text-center">
-            <h2 className="text-3xl sm:text-4xl font-bold text-gray-900 leading-tight">Turn a clear space into a place to practise.</h2>
-            <p className="mt-5 text-base text-gray-500 max-w-lg mx-auto leading-relaxed">
+            <p className="text-xs font-bold uppercase tracking-[0.2em] text-gray-400 mb-4">Equipment</p>
+            <h2 className="text-3xl sm:text-5xl font-extrabold text-gray-900 leading-[1.08] tracking-tight">Turn a clear space into a place to practise.</h2>
+            <p className="mt-6 text-base text-gray-500 max-w-lg mx-auto leading-relaxed">
               You'll need your stick, a suitable training ball, the mat and a supported phone with a camera. Follow the setup instructions for your sport and leave enough space for your movements.
             </p>
           </div>
         </section>
 
         {/* 12. Teams and coaches */}
-        <section id="teams" className="bg-gray-50 py-20 sm:py-28">
+        <section id="teams" className="bg-gray-50/50 py-24 sm:py-32">
           <div className="max-w-6xl mx-auto px-6 sm:px-10">
             <div className="max-w-2xl">
-              <h2 className="text-3xl sm:text-4xl font-bold text-gray-900 leading-tight">Keep players engaged between training sessions.</h2>
-              <p className="mt-5 text-lg text-gray-500 leading-relaxed">
+              <p className="text-xs font-bold uppercase tracking-[0.2em] text-gray-400 mb-4">For teams</p>
+              <h2 className="text-3xl sm:text-5xl font-extrabold text-gray-900 leading-[1.08] tracking-tight">Keep players engaged between training sessions.</h2>
+              <p className="mt-6 text-lg text-gray-500 leading-relaxed">
                 HockeyBeats gives individual practice a shared goal. Players can work on their own, compare scores and bring a little friendly competition back to the team.
               </p>
               <p className="mt-3 text-base text-gray-400">
                 For coaches, it's another way to encourage regular time with the stick. For clubs, it's an interactive activity to introduce at training, team events or player development sessions.
               </p>
-              <div className="mt-8">
+              <div className="mt-10">
                 <a href="mailto:hello@hockeybeats.com" className="btn-primary px-8 py-4">Bring HockeyBeats to your team</a>
               </div>
             </div>
@@ -390,10 +392,11 @@ export default function Home() {
         </section>
 
         {/* 13. FAQ */}
-        <section className="py-20 sm:py-28">
+        <section className="py-24 sm:py-32">
           <div className="max-w-3xl mx-auto px-6 sm:px-10">
-            <h2 className="text-3xl font-bold text-gray-900 mb-12 text-center">Frequently asked questions</h2>
-            <div className="space-y-4">
+            <p className="text-xs font-bold uppercase tracking-[0.2em] text-gray-400 mb-4 text-center">Help menu</p>
+            <h2 className="text-3xl sm:text-4xl font-extrabold text-gray-900 mb-14 text-center tracking-tight">Frequently asked questions</h2>
+            <div className="space-y-3">
               {[
                 { q: 'What is HockeyBeats?', a: 'HockeyBeats is an interactive training app for stick-and-ball practice. Players use real movements to play games on screen, build scores and compete in rankings.' },
                 { q: 'Which sports is it for?', a: 'HockeyBeats is designed for ice hockey, field hockey and floorball. Ice hockey players use it for off-ice practice.' },
@@ -404,12 +407,12 @@ export default function Home() {
                 { q: 'Can I compete with teammates?', a: 'Yes. Scores and rankings let you compare results with friends and teammates, as well as work towards your own personal best.' },
                 { q: 'Does it replace team training?', a: 'No. HockeyBeats adds individual practice between team sessions. Coaches remain essential for technical feedback, team play and development.' },
               ].map((faq) => (
-                <details key={faq.q} className="bg-gray-50 rounded-2xl p-5 group">
-                  <summary className="font-semibold text-gray-900 cursor-pointer list-none flex justify-between items-center">
+                <details key={faq.q} className="faq-item rounded-2xl p-6 group">
+                  <summary className="font-bold text-gray-900 cursor-pointer list-none flex justify-between items-center tracking-tight">
                     {faq.q}
-                    <span className="text-gray-400 group-open:rotate-45 transition-transform text-xl">+</span>
+                    <span className="text-gray-300 group-open:rotate-45 transition-transform duration-300 text-xl font-light">+</span>
                   </summary>
-                  <p className="mt-3 text-sm text-gray-500 leading-relaxed">{faq.a}</p>
+                  <p className="mt-4 text-sm text-gray-500 leading-relaxed">{faq.a}</p>
                 </details>
               ))}
             </div>
@@ -417,13 +420,13 @@ export default function Home() {
         </section>
 
         {/* 14. Final CTA */}
-        <section className="bg-gray-50 py-24 sm:py-32">
+        <section className="bg-gray-50/50 py-28 sm:py-36">
           <div className="max-w-6xl mx-auto px-6 sm:px-10 text-center">
-            <h2 className="text-3xl sm:text-4xl font-bold text-gray-900 tracking-tight">Give your next training session a head start.</h2>
-            <p className="mt-4 text-lg text-gray-500 max-w-md mx-auto">
+            <h2 className="text-3xl sm:text-5xl font-extrabold text-gray-900 tracking-tight leading-[1.08]">Give your next training session a head start.</h2>
+            <p className="mt-5 text-lg text-gray-500 max-w-md mx-auto">
               Pick up your stick, play a game and put in the practice you'll take back to your team.
             </p>
-            <div className="mt-8 flex flex-wrap gap-4 justify-center">
+            <div className="mt-10 flex flex-wrap gap-4 justify-center">
               <Link href="/trening" className="btn-primary text-base px-8 py-4">Start training</Link>
               <a href="#how-it-works" className="btn-secondary text-base px-8 py-4">Watch it in action</a>
             </div>
@@ -432,22 +435,22 @@ export default function Home() {
       </main>
 
       {/* Footer */}
-      <footer className="border-t border-gray-100 px-6 sm:px-10 py-10">
+      <footer className="border-t border-gray-100 px-6 sm:px-10 py-12">
         <div className="max-w-6xl mx-auto">
           <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-6">
             <div>
               <Image src="/images/hb-logo-stacked.png" alt="HockeyBeats" width={80} height={56} className="h-10 w-auto mb-2" />
-              <p className="text-xs text-gray-400">Interactive practice for ice hockey, field hockey and floorball.</p>
+              <p className="text-xs text-gray-400 tracking-wide">Interactive practice for ice hockey, field hockey and floorball.</p>
             </div>
-            <div className="flex flex-wrap gap-5 text-sm text-gray-400">
-              <a href="#how-it-works" className="hover:text-gray-900 transition-colors">How it works</a>
-              <a href="#sports" className="hover:text-gray-900 transition-colors">Sports</a>
-              <a href="#games" className="hover:text-gray-900 transition-colors">Games</a>
-              <a href="#parents" className="hover:text-gray-900 transition-colors">For parents</a>
-              <a href="#teams" className="hover:text-gray-900 transition-colors">For teams</a>
+            <div className="flex flex-wrap gap-6 text-sm text-gray-400 font-medium tracking-tight">
+              <a href="#how-it-works" className="hover:text-gray-900 transition-colors duration-300">How it works</a>
+              <a href="#sports" className="hover:text-gray-900 transition-colors duration-300">Sports</a>
+              <a href="#games" className="hover:text-gray-900 transition-colors duration-300">Games</a>
+              <a href="#parents" className="hover:text-gray-900 transition-colors duration-300">For parents</a>
+              <a href="#teams" className="hover:text-gray-900 transition-colors duration-300">For teams</a>
             </div>
           </div>
-          <div className="mt-8 pt-6 border-t border-gray-100 flex flex-wrap gap-4 text-xs text-gray-400">
+          <div className="mt-8 pt-6 border-t border-gray-100 flex flex-wrap gap-4 text-xs text-gray-400 tracking-wide">
             <span>Privacy Policy</span>
             <span>Terms of Use</span>
           </div>
@@ -456,10 +459,10 @@ export default function Home() {
 
       {/* Login modal */}
       {showAuth && (
-        <div className="fixed inset-0 bg-black/20 backdrop-blur-sm flex items-center justify-center z-50 p-4">
-          <div className="bg-white rounded-3xl p-8 w-full max-w-sm shadow-2xl">
+        <div className="fixed inset-0 bg-black/20 backdrop-blur-md flex items-center justify-center z-50 p-4">
+          <div className="bg-white rounded-3xl p-8 w-full max-w-sm shadow-2xl shadow-gray-900/10 border border-gray-100">
             <div className="flex justify-between items-center mb-6">
-              <h2 className="text-xl font-bold text-gray-900">Log in</h2>
+              <h2 className="text-xl font-extrabold text-gray-900 tracking-tight">Log in</h2>
               <button onClick={() => { setShowAuth(false); setLoginError(''); }} className="text-gray-400 hover:text-gray-600 text-xl">x</button>
             </div>
             <form onSubmit={handleLogin} className="space-y-4">
@@ -496,10 +499,10 @@ function HeroBanner() {
 
         {/* Content - centered */}
         <div className="relative z-10 max-w-6xl mx-auto px-6 sm:px-10 pt-32 pb-20 flex flex-col items-center text-center">
-          <h1 className="text-4xl sm:text-6xl lg:text-7xl font-bold text-white leading-[1.06] tracking-tight max-w-3xl">
+          <h1 className="text-4xl sm:text-6xl lg:text-7xl font-extrabold text-white leading-[1.04] tracking-tighter max-w-3xl">
             A game you want to&nbsp;play. Practice the coach will&nbsp;notice.
           </h1>
-          <p className="mt-6 text-lg sm:text-xl text-white/60 max-w-xl leading-relaxed">
+          <p className="mt-6 text-lg sm:text-xl text-white/50 max-w-xl leading-relaxed font-medium">
             HockeyBeats turns stickhandling practice into an interactive game. Follow the action on screen, move the ball and build your score.
           </p>
 
@@ -507,7 +510,7 @@ function HeroBanner() {
           <div className="mt-10">
             <button
               onClick={() => setShowPlatform(true)}
-              className="group relative bg-white text-gray-900 font-bold text-lg px-12 py-5 rounded-full hover:shadow-2xl hover:shadow-white/20 active:scale-[0.97] transition-all"
+              className="group relative bg-white text-gray-900 font-extrabold text-lg px-12 py-5 rounded-full hover:shadow-2xl hover:shadow-white/25 active:scale-[0.97] transition-all duration-300 tracking-tight"
             >
               <span className="relative z-10 flex items-center gap-2">
                 <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
@@ -517,16 +520,16 @@ function HeroBanner() {
           </div>
 
           {/* Store badges */}
-          <div className="mt-8 flex flex-wrap items-center gap-5">
+          <div className="mt-8 flex flex-wrap items-center gap-5 font-medium">
             <div className="flex items-center gap-1.5">
               <svg className="w-6 h-6 text-white/70" viewBox="0 0 24 24" fill="currentColor"><path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.8-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M13 3.5c.73-.83 1.94-1.46 2.94-1.5.13 1.17-.34 2.35-1.04 3.19-.69.85-1.83 1.51-2.95 1.42-.15-1.15.41-2.35 1.05-3.11z"/></svg>
-              <span className="text-sm font-semibold text-white">4.8</span>
+              <span className="text-sm font-extrabold text-white tracking-tight">4.8</span>
               <span className="text-xs text-white/40">App Store</span>
             </div>
             <div className="w-px h-4 bg-white/20" />
             <div className="flex items-center gap-1.5">
               <svg className="w-5 h-5 text-white/70" viewBox="0 0 24 24" fill="currentColor"><path d="M3.609 1.814L13.792 12 3.61 22.186a.996.996 0 01-.61-.92V2.734a1 1 0 01.609-.92zm10.89 10.893l2.302 2.302-10.937 6.333 8.635-8.635zm3.199-1.842l2.458 1.42c.544.317.544 1.114 0 1.43l-2.458 1.42-2.534-2.535 2.534-2.535zM5.864 3.458L16.8 9.79l-2.302 2.302-8.635-8.635z"/></svg>
-              <span className="text-sm font-semibold text-white">4.8</span>
+              <span className="text-sm font-extrabold text-white tracking-tight">4.8</span>
               <span className="text-xs text-white/40">Google Play</span>
             </div>
             <div className="w-px h-4 bg-white/20" />
@@ -550,39 +553,39 @@ function HeroBanner() {
 
       {/* Platform selector modal */}
       {showPlatform && (
-        <div className="fixed inset-0 bg-black/30 backdrop-blur-sm flex items-center justify-center z-50 p-4">
-          <div className="bg-white rounded-3xl p-8 w-full max-w-md shadow-2xl">
+        <div className="fixed inset-0 bg-black/30 backdrop-blur-md flex items-center justify-center z-50 p-4">
+          <div className="bg-white rounded-3xl p-8 w-full max-w-md shadow-2xl shadow-gray-900/10 border border-gray-100">
             <div className="flex justify-between items-center mb-6">
-              <h2 className="text-xl font-bold text-gray-900">Choose your platform</h2>
+              <h2 className="text-xl font-extrabold text-gray-900 tracking-tight">Choose your platform</h2>
               <button onClick={() => { setShowPlatform(false); setSelectedPlatform(null); }} className="text-gray-400 hover:text-gray-600 text-xl">x</button>
             </div>
 
             {!selectedPlatform ? (
               <div className="space-y-3">
-                <button onClick={() => setSelectedPlatform('mobile')} className="w-full flex items-center gap-4 rounded-2xl p-4 border-2 border-gray-200 hover:border-gray-400 transition-all text-left">
+                <button onClick={() => setSelectedPlatform('mobile')} className="w-full flex items-center gap-4 rounded-2xl p-4 border-2 border-gray-100 hover:border-gray-300 hover:shadow-md transition-all duration-300 text-left">
                   <div className="w-12 h-12 bg-gray-50 rounded-xl flex items-center justify-center">
                     <svg className="w-6 h-6 text-gray-700" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}><rect x="6" y="2" width="12" height="20" rx="2" /><line x1="10" y1="18" x2="14" y2="18" /></svg>
                   </div>
                   <div>
-                    <div className="font-semibold text-gray-900">Mobile</div>
+                    <div className="font-bold text-gray-900 tracking-tight">Mobile</div>
                     <div className="text-xs text-gray-400">iPhone, Android</div>
                   </div>
                 </button>
-                <button onClick={() => setSelectedPlatform('desktop')} className="w-full flex items-center gap-4 rounded-2xl p-4 border-2 border-gray-200 hover:border-gray-400 transition-all text-left">
+                <button onClick={() => setSelectedPlatform('desktop')} className="w-full flex items-center gap-4 rounded-2xl p-4 border-2 border-gray-100 hover:border-gray-300 hover:shadow-md transition-all duration-300 text-left">
                   <div className="w-12 h-12 bg-gray-50 rounded-xl flex items-center justify-center">
                     <svg className="w-6 h-6 text-gray-700" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}><rect x="2" y="3" width="20" height="14" rx="2" /><line x1="8" y1="21" x2="16" y2="21" /><line x1="12" y1="17" x2="12" y2="21" /></svg>
                   </div>
                   <div>
-                    <div className="font-semibold text-gray-900">Desktop</div>
+                    <div className="font-bold text-gray-900 tracking-tight">Desktop</div>
                     <div className="text-xs text-gray-400">Mac, Windows, Linux</div>
                   </div>
                 </button>
-                <button onClick={() => setSelectedPlatform('tv')} className="w-full flex items-center gap-4 rounded-2xl p-4 border-2 border-gray-200 hover:border-gray-400 transition-all text-left">
+                <button onClick={() => setSelectedPlatform('tv')} className="w-full flex items-center gap-4 rounded-2xl p-4 border-2 border-gray-100 hover:border-gray-300 hover:shadow-md transition-all duration-300 text-left">
                   <div className="w-12 h-12 bg-gray-50 rounded-xl flex items-center justify-center">
                     <svg className="w-6 h-6 text-gray-700" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}><rect x="2" y="4" width="20" height="13" rx="2" /><line x1="7" y1="21" x2="17" y2="21" /><line x1="9" y1="17" x2="9" y2="21" /><line x1="15" y1="17" x2="15" y2="21" /></svg>
                   </div>
                   <div>
-                    <div className="font-semibold text-gray-900">TV</div>
+                    <div className="font-bold text-gray-900 tracking-tight">TV</div>
                     <div className="text-xs text-gray-400">Samsung, LG, TCL, Hisense</div>
                   </div>
                 </button>
@@ -595,15 +598,15 @@ function HeroBanner() {
                 <h3 className="text-lg font-bold text-gray-900 mb-4">Mobile</h3>
                 <Link href="/trening" onClick={() => setShowPlatform(false)} className="w-full flex items-center gap-4 rounded-2xl p-4 bg-gray-50 hover:bg-gray-100 transition-colors">
                   <svg className="w-8 h-8 text-gray-700" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}><circle cx="12" cy="12" r="10" /><path d="M8 12h8M12 8v8" /></svg>
-                  <div><div className="font-semibold text-gray-900">Browser</div><div className="text-xs text-gray-400">Play instantly — no download</div></div>
+                  <div><div className="font-bold text-gray-900 tracking-tight">Browser</div><div className="text-xs text-gray-400">Play instantly — no download</div></div>
                 </Link>
                 <a href="#" className="w-full flex items-center gap-4 rounded-2xl p-4 bg-gray-50 hover:bg-gray-100 transition-colors">
                   <svg className="w-8 h-8 text-gray-700" viewBox="0 0 24 24" fill="currentColor"><path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.8-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M13 3.5c.73-.83 1.94-1.46 2.94-1.5.13 1.17-.34 2.35-1.04 3.19-.69.85-1.83 1.51-2.95 1.42-.15-1.15.41-2.35 1.05-3.11z"/></svg>
-                  <div><div className="font-semibold text-gray-900">App Store</div><div className="text-xs text-gray-400">Download for iPhone</div></div>
+                  <div><div className="font-bold text-gray-900 tracking-tight">App Store</div><div className="text-xs text-gray-400">Download for iPhone</div></div>
                 </a>
                 <a href="#" className="w-full flex items-center gap-4 rounded-2xl p-4 bg-gray-50 hover:bg-gray-100 transition-colors">
                   <svg className="w-8 h-8 text-gray-700" viewBox="0 0 24 24" fill="currentColor"><path d="M3.609 1.814L13.792 12 3.61 22.186a.996.996 0 01-.61-.92V2.734a1 1 0 01.609-.92zm10.89 10.893l2.302 2.302-10.937 6.333 8.635-8.635zm3.199-1.842l2.458 1.42c.544.317.544 1.114 0 1.43l-2.458 1.42-2.534-2.535 2.534-2.535zM5.864 3.458L16.8 9.79l-2.302 2.302-8.635-8.635z"/></svg>
-                  <div><div className="font-semibold text-gray-900">Google Play</div><div className="text-xs text-gray-400">Download for Android</div></div>
+                  <div><div className="font-bold text-gray-900 tracking-tight">Google Play</div><div className="text-xs text-gray-400">Download for Android</div></div>
                 </a>
               </div>
             ) : selectedPlatform === 'desktop' ? (
@@ -614,7 +617,7 @@ function HeroBanner() {
                 <h3 className="text-lg font-bold text-gray-900 mb-4">Desktop</h3>
                 <Link href="/trening" onClick={() => setShowPlatform(false)} className="w-full flex items-center gap-4 rounded-2xl p-4 bg-gray-50 hover:bg-gray-100 transition-colors">
                   <svg className="w-8 h-8 text-gray-700" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}><circle cx="12" cy="12" r="10" /><path d="M8 12h8M12 8v8" /></svg>
-                  <div><div className="font-semibold text-gray-900">Browser</div><div className="text-xs text-gray-400">Play instantly on any browser</div></div>
+                  <div><div className="font-bold text-gray-900 tracking-tight">Browser</div><div className="text-xs text-gray-400">Play instantly on any browser</div></div>
                 </Link>
               </div>
             ) : (
@@ -625,19 +628,19 @@ function HeroBanner() {
                 <h3 className="text-lg font-bold text-gray-900 mb-4">TV</h3>
                 <Link href="/trening" onClick={() => setShowPlatform(false)} className="w-full flex items-center gap-4 rounded-2xl p-4 bg-gray-50 hover:bg-gray-100 transition-colors">
                   <svg className="w-8 h-8 text-gray-700" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}><circle cx="12" cy="12" r="10" /><path d="M8 12h8M12 8v8" /></svg>
-                  <div><div className="font-semibold text-gray-900">Browser via HDMI</div><div className="text-xs text-gray-400">Connect laptop to TV</div></div>
+                  <div><div className="font-bold text-gray-900 tracking-tight">Browser via HDMI</div><div className="text-xs text-gray-400">Connect laptop to TV</div></div>
                 </Link>
                 <a href="#" className="w-full flex items-center gap-4 rounded-2xl p-4 bg-gray-50 hover:bg-gray-100 transition-colors">
                   <div className="w-8 h-8 bg-gray-200 rounded-lg flex items-center justify-center text-xs font-bold text-gray-600">S</div>
-                  <div><div className="font-semibold text-gray-900">Samsung Tizen</div><div className="text-xs text-gray-400">Download from Samsung Store</div></div>
+                  <div><div className="font-bold text-gray-900 tracking-tight">Samsung Tizen</div><div className="text-xs text-gray-400">Download from Samsung Store</div></div>
                 </a>
                 <a href="#" className="w-full flex items-center gap-4 rounded-2xl p-4 bg-gray-50 hover:bg-gray-100 transition-colors">
                   <div className="w-8 h-8 bg-gray-200 rounded-lg flex items-center justify-center text-xs font-bold text-gray-600">LG</div>
-                  <div><div className="font-semibold text-gray-900">LG webOS</div><div className="text-xs text-gray-400">Download from LG Content Store</div></div>
+                  <div><div className="font-bold text-gray-900 tracking-tight">LG webOS</div><div className="text-xs text-gray-400">Download from LG Content Store</div></div>
                 </a>
                 <a href="#" className="w-full flex items-center gap-4 rounded-2xl p-4 bg-gray-50 hover:bg-gray-100 transition-colors">
                   <div className="w-8 h-8 bg-gray-200 rounded-lg flex items-center justify-center text-xs font-bold text-gray-600">T</div>
-                  <div><div className="font-semibold text-gray-900">TCL &amp; Hisense</div><div className="text-xs text-gray-400">Download from app store</div></div>
+                  <div><div className="font-bold text-gray-900 tracking-tight">TCL &amp; Hisense</div><div className="text-xs text-gray-400">Download from app store</div></div>
                 </a>
               </div>
             )}
