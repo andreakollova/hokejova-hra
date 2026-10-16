@@ -567,6 +567,7 @@ function HeroBanner() {
               Play now — it&apos;s free
             </Link>
           </div>
+          <p className="mt-4 text-xs text-gray-400">App Store · Google Play · Web · TV</p>
         </div>
 
         {/* Video fills bottom portion, bleeds behind text */}
