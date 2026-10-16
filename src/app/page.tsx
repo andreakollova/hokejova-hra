@@ -93,7 +93,7 @@ export default function Home() {
             <div className="mt-14 max-w-3xl">
               <div className="rounded-3xl overflow-hidden aspect-video bg-gray-900 shadow-2xl shadow-gray-900/10 ring-1 ring-gray-200/50">
                 <iframe
-                  src="https://www.youtube.com/embed/F1_0Lkp16Rc?rel=0&modestbranding=1"
+                  src="https://www.youtube.com/embed/7mGtwXDxupA?rel=0&modestbranding=1"
                   title="HockeyBeats gameplay"
                   className="w-full h-full"
                   allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
@@ -489,7 +489,7 @@ function HeroBanner() {
         {/* Video background */}
         <div className="absolute inset-0">
           <iframe
-            src="https://www.youtube.com/embed/F1_0Lkp16Rc?autoplay=1&mute=1&loop=1&controls=0&showinfo=0&rel=0&playlist=F1_0Lkp16Rc&playsinline=1&modestbranding=1&iv_load_policy=3"
+            src="https://www.youtube.com/embed/7mGtwXDxupA?autoplay=1&mute=1&loop=1&controls=0&showinfo=0&rel=0&playlist=7mGtwXDxupA&playsinline=1&modestbranding=1&iv_load_policy=3"
             className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[180vw] h-[180vh] sm:w-[120vw] sm:h-[120vh] pointer-events-none"
             allow="autoplay; encrypted-media"
             title="Background"
