@@ -555,7 +555,7 @@ function HeroBanner() {
         {/* Text overlay on top */}
         <div className="relative z-20 flex flex-col items-center text-center pt-28 sm:pt-32 px-6">
           <p className="text-[10px] sm:text-xs font-bold uppercase tracking-[0.3em] text-gray-400 mb-5">Stickhandling. In play.</p>
-          <h1 className="text-5xl sm:text-7xl lg:text-8xl font-black text-gray-900 leading-[0.95] tracking-tight">
+          <h1 className="text-3xl sm:text-5xl font-black text-gray-900 leading-[0.95] tracking-tight">
             All play.<br />More game.
           </h1>
           <p className="mt-5 text-sm sm:text-base text-gray-400 max-w-lg">
@@ -568,7 +568,8 @@ function HeroBanner() {
           <div className="absolute inset-0 overflow-hidden">
             <iframe
               src="https://www.youtube.com/embed/7mGtwXDxupA?autoplay=1&mute=1&loop=1&controls=0&showinfo=0&rel=0&playlist=7mGtwXDxupA&playsinline=1&modestbranding=1&iv_load_policy=3&disablekb=1"
-              className="absolute inset-0 w-full h-full pointer-events-none"
+              className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 pointer-events-none border-0"
+              style={{ width: 'max(100vw, 177.78vh)', height: 'max(100%, 56.25vw)' }}
               allow="autoplay; encrypted-media"
               title="Background"
             />
