@@ -210,7 +210,7 @@ export default function Home() {
             </div>
 
             {/* PS5-style game cards */}
-            <div className="grid sm:grid-cols-2 gap-6">
+            <div className="grid grid-cols-2 gap-6">
               {/* HockeyBeats */}
               <Link href="/trening" className="group block">
                 <div className="game-tile rounded-3xl overflow-hidden relative aspect-[3/4] bg-gray-100">
@@ -228,6 +228,32 @@ export default function Home() {
               <Link href="/space" className="group block">
                 <div className="game-tile rounded-3xl overflow-hidden relative aspect-[3/4] bg-[#0f172a]">
                   <Image src="/images/game-spaceinvaders.png" alt="Space Invaders" fill className="object-cover group-hover:scale-105 transition-all duration-700" />
+                  <div className="absolute bottom-0 left-0 right-0 p-6 bg-gradient-to-t from-black/60 to-transparent">
+                    <div className="flex items-center gap-2 text-sm font-bold text-white">
+                      Play
+                      <svg className="w-4 h-4 group-hover:translate-x-1 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" /></svg>
+                    </div>
+                  </div>
+                </div>
+              </Link>
+
+              {/* Jelly Stack */}
+              <Link href="/jelly-stack" className="group block">
+                <div className="game-tile rounded-3xl overflow-hidden relative aspect-[3/4] bg-[#faf5eb]">
+                  <Image src="/images/game-jellystack.png" alt="Jelly Stack" fill className="object-cover group-hover:scale-105 transition-all duration-700" />
+                  <div className="absolute bottom-0 left-0 right-0 p-6 bg-gradient-to-t from-black/60 to-transparent">
+                    <div className="flex items-center gap-2 text-sm font-bold text-white">
+                      Play
+                      <svg className="w-4 h-4 group-hover:translate-x-1 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" /></svg>
+                    </div>
+                  </div>
+                </div>
+              </Link>
+
+              {/* Orbit Hop */}
+              <Link href="/orbit-hop" className="group block">
+                <div className="game-tile rounded-3xl overflow-hidden relative aspect-[3/4] bg-[#ede9fe]">
+                  <Image src="/images/game-orbithop.png" alt="Orbit Hop" fill className="object-cover group-hover:scale-105 transition-all duration-700" />
                   <div className="absolute bottom-0 left-0 right-0 p-6 bg-gradient-to-t from-black/60 to-transparent">
                     <div className="flex items-center gap-2 text-sm font-bold text-white">
                       Play
