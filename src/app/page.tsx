@@ -110,22 +110,22 @@ export default function Home() {
         <section className="bg-gray-50/50 py-24 sm:py-32">
           <div className="max-w-6xl mx-auto px-6 sm:px-10">
             <div className="grid lg:grid-cols-2 gap-12 items-center">
-            <div>
-              <h2 className="text-3xl sm:text-5xl font-extrabold text-gray-900 leading-[1.08] tracking-tight">Better play starts with keeping your head up.</h2>
-              <p className="mt-6 text-lg text-gray-500 leading-relaxed">
-                When you're always watching the ball, you miss what's happening around you.
-              </p>
-              <p className="mt-3 text-base text-gray-400 leading-relaxed">
-                HockeyBeats puts the action on the screen in front of you. As you follow it, you practise handling the ball while looking ahead — an important habit for spotting teammates, finding space and recognising your next opportunity.
-              </p>
-              <p className="mt-3 text-sm text-gray-400 italic">
-                You're concentrating on the game. You might not even realise how much you're practising.
-              </p>
-            </div>
-            </div>
-            <div className="max-w-md mt-8">
-              <div className="rounded-3xl overflow-hidden">
-                <Image src="/images/hero-girl.png" alt="Player practising" width={500} height={400} className="w-full h-auto" />
+              <div>
+                <h2 className="text-3xl sm:text-5xl font-extrabold text-gray-900 leading-[1.08] tracking-tight">Better play starts with keeping your head up.</h2>
+                <p className="mt-6 text-lg text-gray-500 leading-relaxed">
+                  When you&apos;re always watching the ball, you miss what&apos;s happening around you.
+                </p>
+                <p className="mt-3 text-base text-gray-400 leading-relaxed">
+                  HockeyBeats puts the action on the screen in front of you. As you follow it, you practise handling the ball while looking ahead — an important habit for spotting teammates, finding space and recognising your next opportunity.
+                </p>
+                <p className="mt-3 text-sm text-gray-400 italic">
+                  You&apos;re concentrating on the game. You might not even realise how much you&apos;re practising.
+                </p>
+              </div>
+              <div>
+                <div className="rounded-3xl overflow-hidden">
+                  <Image src="/images/hero-girl.png" alt="Player practising" width={500} height={400} className="w-full h-auto" />
+                </div>
               </div>
             </div>
           </div>
@@ -209,9 +209,9 @@ export default function Home() {
                 <div className="game-tile rounded-3xl overflow-hidden relative aspect-[3/4] bg-gray-100">
                   <Image src="/images/game-hockeybeats.png" alt="HockeyBeats" fill className="object-cover group-hover:scale-105 transition-all duration-700" />
                   <div className="absolute bottom-0 left-0 right-0 p-6 bg-gradient-to-t from-black/60 to-transparent">
-                    <div className="flex items-center gap-2 text-sm font-bold text-white">
-                      Play
-                      <svg className="w-4 h-4 group-hover:translate-x-1 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" /></svg>
+                    <div className="inline-flex items-center gap-2 bg-white/20 backdrop-blur-sm text-white text-xs font-bold px-4 py-2 rounded-full group-hover:bg-white/30 transition-all">
+                      <svg className="w-3.5 h-3.5" fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+                      Play now
                     </div>
                   </div>
                 </div>
@@ -222,39 +222,29 @@ export default function Home() {
                 <div className="game-tile rounded-3xl overflow-hidden relative aspect-[3/4] bg-[#0f172a]">
                   <Image src="/images/game-spaceinvaders.png" alt="Space Invaders" fill className="object-cover group-hover:scale-105 transition-all duration-700" />
                   <div className="absolute bottom-0 left-0 right-0 p-6 bg-gradient-to-t from-black/60 to-transparent">
-                    <div className="flex items-center gap-2 text-sm font-bold text-white">
-                      Play
-                      <svg className="w-4 h-4 group-hover:translate-x-1 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" /></svg>
+                    <div className="inline-flex items-center gap-2 bg-white/20 backdrop-blur-sm text-white text-xs font-bold px-4 py-2 rounded-full group-hover:bg-white/30 transition-all">
+                      <svg className="w-3.5 h-3.5" fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+                      Play now
                     </div>
                   </div>
                 </div>
               </Link>
 
-              {/* Jelly Stack */}
-              <Link href="/jelly-stack" className="group block">
-                <div className="game-tile rounded-3xl overflow-hidden relative aspect-[3/4] bg-[#faf5eb]">
-                  <Image src="/images/game-jellystack.png" alt="Jelly Stack" fill className="object-cover group-hover:scale-105 transition-all duration-700" />
-                  <div className="absolute bottom-0 left-0 right-0 p-6 bg-gradient-to-t from-black/60 to-transparent">
-                    <div className="flex items-center gap-2 text-sm font-bold text-white">
-                      Play
-                      <svg className="w-4 h-4 group-hover:translate-x-1 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" /></svg>
-                    </div>
-                  </div>
+              {/* Jelly Stack - coming soon */}
+              <div className="relative">
+                <div className="rounded-3xl overflow-hidden relative aspect-[3/4] bg-[#faf5eb] opacity-50 grayscale">
+                  <Image src="/images/game-jellystack.png" alt="Jelly Stack" fill className="object-cover" />
                 </div>
-              </Link>
+                <div className="absolute bottom-4 left-4 bg-gray-900/80 text-white text-[10px] font-bold uppercase tracking-wider px-3 py-1.5 rounded-full">Coming soon</div>
+              </div>
 
-              {/* Orbit Hop */}
-              <Link href="/orbit-hop" className="group block">
-                <div className="game-tile rounded-3xl overflow-hidden relative aspect-[3/4] bg-[#ede9fe]">
-                  <Image src="/images/game-orbithop.png" alt="Orbit Hop" fill className="object-cover group-hover:scale-105 transition-all duration-700" />
-                  <div className="absolute bottom-0 left-0 right-0 p-6 bg-gradient-to-t from-black/60 to-transparent">
-                    <div className="flex items-center gap-2 text-sm font-bold text-white">
-                      Play
-                      <svg className="w-4 h-4 group-hover:translate-x-1 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" /></svg>
-                    </div>
-                  </div>
+              {/* Orbit Hop - coming soon */}
+              <div className="relative">
+                <div className="rounded-3xl overflow-hidden relative aspect-[3/4] bg-[#ede9fe] opacity-50 grayscale">
+                  <Image src="/images/game-orbithop.png" alt="Orbit Hop" fill className="object-cover" />
                 </div>
-              </Link>
+                <div className="absolute bottom-4 left-4 bg-gray-900/80 text-white text-[10px] font-bold uppercase tracking-wider px-3 py-1.5 rounded-full">Coming soon</div>
+              </div>
             </div>
 
             {/* Other games */}
@@ -362,10 +352,17 @@ export default function Home() {
                 </p>
                 <p className="mt-3 text-base text-gray-400">Music adds to the experience while you focus on the game and your practice.</p>
               </div>
-              <div className="flex items-center justify-center gap-8">
-                <svg className="w-14 h-14 text-[#1DB954]" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.4 0 0 5.4 0 12s5.4 12 12 12 12-5.4 12-12S18.66 0 12 0zm5.521 17.34c-.24.359-.66.48-1.021.24-2.82-1.74-6.36-2.101-10.561-1.141-.418.122-.779-.179-.899-.539-.12-.421.18-.78.54-.9 4.56-1.021 8.52-.6 11.64 1.32.42.18.479.659.301 1.02zm1.44-3.3c-.301.42-.841.6-1.262.3-3.239-1.98-8.159-2.58-11.939-1.38-.479.12-1.02-.12-1.14-.6-.12-.48.12-1.021.6-1.141C9.6 9.9 15 10.561 18.72 12.84c.361.181.54.78.241 1.2zm.12-3.36C15.24 8.4 8.82 8.16 5.16 9.301c-.6.179-1.2-.181-1.38-.721-.18-.601.18-1.2.72-1.381 4.26-1.26 11.28-1.02 15.721 1.621.539.3.719 1.02.419 1.56-.299.421-1.02.599-1.559.3z"/></svg>
-                <span className="text-2xl text-gray-300">+</span>
-                <img src="/images/icon-applemusic.svg" alt="Apple Music" className="w-14 h-14 rounded-xl" />
+              <div className="relative h-48 flex items-center justify-center">
+                {/* Floating Spotify */}
+                <div className="absolute animate-[bounce_3s_ease-in-out_infinite]" style={{ left: '15%', top: '10%' }}>
+                  <svg className="w-16 h-16 text-[#1DB954] drop-shadow-lg" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.4 0 0 5.4 0 12s5.4 12 12 12 12-5.4 12-12S18.66 0 12 0zm5.521 17.34c-.24.359-.66.48-1.021.24-2.82-1.74-6.36-2.101-10.561-1.141-.418.122-.779-.179-.899-.539-.12-.421.18-.78.54-.9 4.56-1.021 8.52-.6 11.64 1.32.42.18.479.659.301 1.02zm1.44-3.3c-.301.42-.841.6-1.262.3-3.239-1.98-8.159-2.58-11.939-1.38-.479.12-1.02-.12-1.14-.6-.12-.48.12-1.021.6-1.141C9.6 9.9 15 10.561 18.72 12.84c.361.181.54.78.241 1.2zm.12-3.36C15.24 8.4 8.82 8.16 5.16 9.301c-.6.179-1.2-.181-1.38-.721-.18-.601.18-1.2.72-1.381 4.26-1.26 11.28-1.02 15.721 1.621.539.3.719 1.02.419 1.56-.299.421-1.02.599-1.559.3z"/></svg>
+                </div>
+                {/* Floating Apple Music */}
+                <div className="absolute animate-[bounce_3.5s_ease-in-out_infinite_0.5s]" style={{ right: '15%', bottom: '10%' }}>
+                  <img src="/images/icon-applemusic.svg" alt="Apple Music" className="w-16 h-16 rounded-2xl drop-shadow-lg" />
+                </div>
+                {/* Plus sign */}
+                <span className="text-4xl font-light text-gray-300">+</span>
               </div>
             </div>
           </div>
