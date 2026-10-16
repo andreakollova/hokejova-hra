@@ -96,9 +96,6 @@ export default function Home() {
         {/* 1. Hero banner - fullscreen with photo */}
         <HeroBanner />
 
-        {/* Start Playing - platform strip */}
-        <StartPlayingSection />
-
         {/* 2. Gameplay */}
         <section className="bg-gray-50/50 py-24 sm:py-32">
           <div className="max-w-6xl mx-auto px-6 sm:px-10">
@@ -123,6 +120,9 @@ export default function Home() {
             </div>
           </div>
         </section>
+
+        {/* Start Playing */}
+        <StartPlayingSection />
 
         {/* 3. Sports */}
         <section id="sports" className="py-24 sm:py-32">
@@ -707,7 +707,7 @@ function StartPlayingSection() {
   const [expanded, setExpanded] = useState<'mobile' | 'desktop' | 'tv' | null>(null);
 
   return (
-    <section className="relative bg-black py-16 sm:py-24 overflow-hidden">
+    <section className="relative bg-[#1a1a1a] py-16 sm:py-24 overflow-hidden">
       <div className="max-w-6xl mx-auto px-6 sm:px-10">
         <div className="text-center mb-12">
           <Image src="/images/hb-logo-white.png" alt="start playing" width={200} height={40} className="h-6 w-auto mx-auto mb-4 opacity-40" />
@@ -720,12 +720,12 @@ function StartPlayingSection() {
           <div className="flex-1">
             <button
               onClick={() => setExpanded(expanded === 'mobile' ? null : 'mobile')}
-              className={`w-full flex items-center gap-4 rounded-2xl px-6 py-5 transition-all duration-300 ${expanded === 'mobile' ? 'bg-white text-gray-900' : 'bg-white/8 hover:bg-white/12 text-white border border-white/10 hover:border-white/20'}`}
+              className={`w-full flex flex-col items-center gap-3 rounded-2xl px-6 py-6 transition-all duration-300 ${expanded === 'mobile' ? 'bg-white text-gray-900 shadow-lg' : 'bg-white/5 hover:bg-white/10 text-white border border-white/8 hover:border-white/15'}`}
             >
-              <svg className={`w-8 h-8 ${expanded === 'mobile' ? 'text-gray-900' : 'text-white/70'}`} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}><rect x="6" y="2" width="12" height="20" rx="2" /><line x1="10" y1="18" x2="14" y2="18" /></svg>
-              <div className="text-left">
-                <div className={`text-base font-bold tracking-tight ${expanded === 'mobile' ? 'text-gray-900' : 'text-white'}`}>mobile</div>
-                <div className={`text-xs ${expanded === 'mobile' ? 'text-gray-500' : 'text-white/40'}`}>iOS & Android</div>
+              <svg className={`w-7 h-7 ${expanded === 'mobile' ? 'text-gray-900' : 'text-white/50'}`} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}><rect x="6" y="2" width="12" height="20" rx="2" /><line x1="10" y1="18" x2="14" y2="18" /></svg>
+              <div className="text-center">
+                <div className={`text-sm font-bold tracking-tight ${expanded === 'mobile' ? 'text-gray-900' : 'text-white'}`}>mobile</div>
+                <div className={`text-[10px] ${expanded === 'mobile' ? 'text-gray-400' : 'text-white/30'}`}>iOS & Android</div>
               </div>
             </button>
             {expanded === 'mobile' && (
@@ -750,12 +750,12 @@ function StartPlayingSection() {
           <div className="flex-1">
             <button
               onClick={() => setExpanded(expanded === 'desktop' ? null : 'desktop')}
-              className={`w-full flex items-center gap-4 rounded-2xl px-6 py-5 transition-all duration-300 ${expanded === 'desktop' ? 'bg-white text-gray-900' : 'bg-white/8 hover:bg-white/12 text-white border border-white/10 hover:border-white/20'}`}
+              className={`w-full flex flex-col items-center gap-3 rounded-2xl px-6 py-6 transition-all duration-300 ${expanded === 'desktop' ? 'bg-white text-gray-900 shadow-lg' : 'bg-white/5 hover:bg-white/10 text-white border border-white/8 hover:border-white/15'}`}
             >
-              <svg className={`w-8 h-8 ${expanded === 'desktop' ? 'text-gray-900' : 'text-white/70'}`} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}><rect x="2" y="3" width="20" height="14" rx="2" /><line x1="8" y1="21" x2="16" y2="21" /><line x1="12" y1="17" x2="12" y2="21" /></svg>
-              <div className="text-left">
-                <div className={`text-base font-bold tracking-tight ${expanded === 'desktop' ? 'text-gray-900' : 'text-white'}`}>desktop</div>
-                <div className={`text-xs ${expanded === 'desktop' ? 'text-gray-500' : 'text-white/40'}`}>Mac & Windows</div>
+              <svg className={`w-7 h-7 ${expanded === 'desktop' ? 'text-gray-900' : 'text-white/50'}`} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}><rect x="2" y="3" width="20" height="14" rx="2" /><line x1="8" y1="21" x2="16" y2="21" /><line x1="12" y1="17" x2="12" y2="21" /></svg>
+              <div className="text-center">
+                <div className={`text-sm font-bold tracking-tight ${expanded === 'desktop' ? 'text-gray-900' : 'text-white'}`}>desktop</div>
+                <div className={`text-[10px] ${expanded === 'desktop' ? 'text-gray-400' : 'text-white/30'}`}>Mac & Windows</div>
               </div>
             </button>
             {expanded === 'desktop' && (
@@ -772,12 +772,12 @@ function StartPlayingSection() {
           <div className="flex-1">
             <button
               onClick={() => setExpanded(expanded === 'tv' ? null : 'tv')}
-              className={`w-full flex items-center gap-4 rounded-2xl px-6 py-5 transition-all duration-300 ${expanded === 'tv' ? 'bg-white text-gray-900' : 'bg-white/8 hover:bg-white/12 text-white border border-white/10 hover:border-white/20'}`}
+              className={`w-full flex flex-col items-center gap-3 rounded-2xl px-6 py-6 transition-all duration-300 ${expanded === 'tv' ? 'bg-white text-gray-900 shadow-lg' : 'bg-white/5 hover:bg-white/10 text-white border border-white/8 hover:border-white/15'}`}
             >
-              <svg className={`w-8 h-8 ${expanded === 'tv' ? 'text-gray-900' : 'text-white/70'}`} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}><rect x="2" y="4" width="20" height="13" rx="2" /><line x1="7" y1="21" x2="17" y2="21" /><line x1="9" y1="17" x2="9" y2="21" /><line x1="15" y1="17" x2="15" y2="21" /></svg>
-              <div className="text-left">
-                <div className={`text-base font-bold tracking-tight ${expanded === 'tv' ? 'text-gray-900' : 'text-white'}`}>tv</div>
-                <div className={`text-xs ${expanded === 'tv' ? 'text-gray-500' : 'text-white/40'}`}>Smart TV</div>
+              <svg className={`w-7 h-7 ${expanded === 'tv' ? 'text-gray-900' : 'text-white/50'}`} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}><rect x="2" y="4" width="20" height="13" rx="2" /><line x1="7" y1="21" x2="17" y2="21" /><line x1="9" y1="17" x2="9" y2="21" /><line x1="15" y1="17" x2="15" y2="21" /></svg>
+              <div className="text-center">
+                <div className={`text-sm font-bold tracking-tight ${expanded === 'tv' ? 'text-gray-900' : 'text-white'}`}>tv</div>
+                <div className={`text-[10px] ${expanded === 'tv' ? 'text-gray-400' : 'text-white/30'}`}>Smart TV</div>
               </div>
             </button>
             {expanded === 'tv' && (
