@@ -17,7 +17,7 @@ export default function Home() {
   const [scrolled, setScrolled] = useState(false);
 
   useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > 60);
+    const onScroll = () => setScrolled(window.scrollY > window.innerHeight * 0.5);
     window.addEventListener('scroll', onScroll, { passive: true });
     return () => window.removeEventListener('scroll', onScroll);
   }, []);
@@ -573,8 +573,8 @@ function HeroBanner() {
             A game you want to play. Practice the coach will notice.
           </p>
           <div className="mt-8">
-            <Link href="/trening" className="bg-gray-900 text-white font-bold text-sm sm:text-base px-8 sm:px-10 py-3.5 sm:py-4 rounded-full hover:bg-gray-800 hover:shadow-xl active:scale-[0.97] transition-all duration-300 inline-flex items-center gap-2">
-              <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+            <Link href="/trening" className="bg-gray-900 text-white font-medium text-sm px-7 py-3 rounded-full hover:bg-gray-800 hover:shadow-lg active:scale-[0.97] transition-all duration-300 inline-flex items-center gap-2">
+              <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
               Play now — it&apos;s free
             </Link>
           </div>
