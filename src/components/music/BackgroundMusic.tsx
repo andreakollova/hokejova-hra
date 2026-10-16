@@ -91,7 +91,7 @@ export default function BackgroundMusic({ spotify, onSelect, selectedTrack }: Ba
 
   return (
     <div>
-      <label className="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-3 block">Hudba</label>
+      <label className="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-3 block">Music</label>
 
       {selectedTrack ? (
         <div className="rounded-2xl p-4 border-2 border-green-500 bg-green-50 flex items-center gap-3">
@@ -103,7 +103,7 @@ export default function BackgroundMusic({ spotify, onSelect, selectedTrack }: Ba
             <div className="text-xs text-gray-500 truncate">{selectedTrack.artists}</div>
           </div>
           <button onClick={() => { onSelect(null); setShowSearch(false); }} className="text-xs text-gray-400 hover:text-gray-600">
-            Zrusit
+            Cancel
           </button>
         </div>
       ) : (
@@ -111,8 +111,8 @@ export default function BackgroundMusic({ spotify, onSelect, selectedTrack }: Ba
           onClick={() => setShowSearch(!showSearch)}
           className="w-full rounded-2xl p-4 border-2 border-gray-200 bg-white hover:border-gray-300 transition-all text-left"
         >
-          <div className="text-sm font-semibold text-gray-900">Pustit pesnicku</div>
-          <div className="text-xs text-gray-500 mt-0.5">Spotify alebo Apple Music</div>
+          <div className="text-sm font-semibold text-gray-900">Play a song</div>
+          <div className="text-xs text-gray-500 mt-0.5">Spotify or Apple Music</div>
         </button>
       )}
 
@@ -148,10 +148,10 @@ export default function BackgroundMusic({ spotify, onSelect, selectedTrack }: Ba
           {!isConnected && (
             <div className="text-center py-4">
               <button onClick={handleConnect} className="btn-primary text-sm">
-                Pripojit {service === 'apple' ? 'Apple Music' : 'Spotify'}
+                Connect {service === 'apple' ? 'Apple Music' : 'Spotify'}
               </button>
               <p className="text-xs text-gray-400 mt-2">
-                {service === 'apple' ? 'Vyzaduje Apple Music predplatne' : 'Vyzaduje Spotify Premium'}
+                {service === 'apple' ? 'Requires Apple Music subscription' : 'Requires Spotify Premium'}
               </p>
             </div>
           )}
@@ -161,7 +161,7 @@ export default function BackgroundMusic({ spotify, onSelect, selectedTrack }: Ba
               {/* Favorites */}
               {favorites.length > 0 && !searchQuery && (
                 <div>
-                  <div className="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-2">Oblubene</div>
+                  <div className="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-2">Favourites</div>
                   <div className="space-y-1.5">
                     {favorites.map((rec) => (
                       <button key={rec.track.id} onClick={() => handleSelect(rec.track)}
@@ -181,7 +181,7 @@ export default function BackgroundMusic({ spotify, onSelect, selectedTrack }: Ba
               {/* Recent */}
               {recent.length > 0 && !searchQuery && (
                 <div>
-                  <div className="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-2">Posledne</div>
+                  <div className="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-2">Recent</div>
                   <div className="space-y-1.5">
                     {recent.map((rec) => (
                       <button key={rec.track.id} onClick={() => handleSelect(rec.track)}
@@ -203,9 +203,9 @@ export default function BackgroundMusic({ spotify, onSelect, selectedTrack }: Ba
                 value={searchQuery}
                 onChange={(e) => handleSearch(e.target.value)}
                 className="input-field"
-                placeholder={`Hladat na ${service === 'apple' ? 'Apple Music' : 'Spotify'}...`}
+                placeholder={`Search on ${service === 'apple' ? 'Apple Music' : 'Spotify'}...`}
               />
-              {activeService.searching && <div className="text-center text-gray-400 text-xs py-2">Hladam...</div>}
+              {activeService.searching && <div className="text-center text-gray-400 text-xs py-2">Searching...</div>}
               {searchQuery && activeService.searchResults.length > 0 && (
                 <div className="space-y-1.5 max-h-48 overflow-y-auto">
                   {activeService.searchResults.map((track) => (

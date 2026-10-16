@@ -326,14 +326,14 @@ export default function FigureEightGame({
             <div className="text-3xl font-bold text-gray-900 tabular-nums">
               {hud.completedEights}
             </div>
-            <div className="text-xs text-gray-400">Osmičky</div>
+            <div className="text-xs text-gray-400">Figure 8s</div>
           </div>
 
           <div className="bg-white/80 backdrop-blur-sm rounded-lg px-4 py-2 text-center shadow-sm">
             <div className="text-3xl font-bold text-gray-900 tabular-nums">
               {Math.ceil(hud.timeLeft)}s
             </div>
-            <div className="text-xs text-gray-400">Čas</div>
+            <div className="text-xs text-gray-400">Time</div>
           </div>
 
           <div className="bg-white/80 backdrop-blur-sm rounded-lg px-4 py-2 text-right shadow-sm">
@@ -357,7 +357,7 @@ export default function FigureEightGame({
       {/* Scale control */}
       <div className="absolute bottom-4 left-4 bg-white/80 backdrop-blur-sm rounded-lg px-3 py-2 pointer-events-auto shadow-sm">
         <label className="text-xs text-gray-500 block mb-1">
-          Veľkosť dráhy: {Math.round(scale * 100)}%
+          Track size: {Math.round(scale * 100)}%
         </label>
         <input
           type="range"
@@ -374,10 +374,10 @@ export default function FigureEightGame({
         <div className="absolute inset-0 flex items-center justify-center bg-white/50 backdrop-blur-sm">
           <div className="text-center bg-white/90 rounded-3xl px-10 py-8 shadow-lg">
             <div className="text-2xl font-bold text-yellow-600 mb-2">
-              Sledovanie stratené
+              Tracking lost
             </div>
             <p className="text-gray-600">
-              Vráť loptičku do viditeľnej oblasti kamery
+              Return the ball to the camera's view
             </p>
           </div>
         </div>

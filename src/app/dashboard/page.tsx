@@ -62,6 +62,12 @@ export default function DashboardPage() {
     } catch {}
   };
 
+  // Redirect to home if not logged in
+  if (!isLoggedIn) {
+    if (typeof window !== 'undefined') window.location.href = '/';
+    return null;
+  }
+
   const streak = loaded ? getStreak() : { currentStreak: 0, frozen: false };
   const level = loaded ? getLevelProgress() : { level: 0, xpInLevel: 0, xpNeeded: 100, progress: 0 };
   const totalXP = loaded ? getXP() : 0;

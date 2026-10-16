@@ -306,7 +306,7 @@ export default function TreningPage() {
         {inputMode === 'demo' && !musicConfig && (
           <div className="absolute bottom-4 left-4 bg-yellow-50/90 border border-yellow-200 rounded-2xl px-3 py-2 backdrop-blur-sm">
             <span className="text-xs text-yellow-700">
-              Demo režim - pohybuj myšou
+              Demo mode - move your mouse
             </span>
           </div>
         )}
@@ -363,14 +363,14 @@ export default function TreningPage() {
           <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
             <path strokeLinecap="round" strokeLinejoin="round" d="M15 19l-7-7 7-7" />
           </svg>
-          Späť
+          Back
         </Link>
 
         <div className="mb-10">
           <h1 className="text-4xl font-extrabold text-gray-900 mb-3 tracking-tight">Slalom</h1>
           <p className="text-gray-500 leading-relaxed">
-            Vyhýbaj sa kužeľom striedavo zľava a sprava. Kužele sa priblížujú k tebe
-            a ty musíš viesť loptičku na správnu stranu.
+            Dodge the cones alternating left and right. The cones approach you
+            and you must guide the ball to the correct side.
           </p>
         </div>
 
@@ -378,7 +378,7 @@ export default function TreningPage() {
           {/* Input mode */}
           <div>
             <label className="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-3 block">
-              Režim vstupu
+              Input mode
             </label>
             <div className="flex gap-3">
               <button
@@ -389,8 +389,8 @@ export default function TreningPage() {
                     : 'border-gray-200 bg-white hover:border-gray-300'
                 }`}
               >
-                <div className="text-sm font-semibold text-gray-900">Kamera</div>
-                <div className="text-xs text-gray-500 mt-1">Sledovanie reálnej loptičky</div>
+                <div className="text-sm font-semibold text-gray-900">Camera</div>
+                <div className="text-xs text-gray-500 mt-1">Track real ball</div>
               </button>
               <button
                 onClick={() => setInputMode('demo')}
@@ -400,8 +400,8 @@ export default function TreningPage() {
                     : 'border-gray-200 bg-white hover:border-gray-300'
                 }`}
               >
-                <div className="text-sm font-semibold text-gray-900">Demo (myš)</div>
-                <div className="text-xs text-gray-500 mt-1">Testovanie bez kamery</div>
+                <div className="text-sm font-semibold text-gray-900">Demo (mouse)</div>
+                <div className="text-xs text-gray-500 mt-1">Testing without camera</div>
               </button>
             </div>
           </div>
@@ -410,18 +410,18 @@ export default function TreningPage() {
           {inputMode === 'camera' && (
             <div className="flex items-center justify-between card p-5">
               <div>
-                <div className="text-sm font-semibold text-gray-900">Kalibrácia kamery</div>
+                <div className="text-sm font-semibold text-gray-900">Camera calibration</div>
                 <div className="text-xs text-gray-500 mt-1.5">
                   {calibration
-                    ? `Uložená (${calibration.resolution.width}x${calibration.resolution.height})`
-                    : 'Nie je nastavená'}
+                    ? `Saved (${calibration.resolution.width}x${calibration.resolution.height})`
+                    : 'Not configured'}
                 </div>
               </div>
               <button
                 onClick={() => setPhase('calibration')}
                 className="text-sm font-medium text-green-600 hover:text-green-700 bg-green-50 hover:bg-green-100 px-4 py-2 rounded-xl transition-all"
               >
-                {calibration ? 'Prekalibrovať' : 'Kalibrovať'}
+                {calibration ? 'Recalibrate' : 'Calibrate'}
               </button>
             </div>
           )}
@@ -429,7 +429,7 @@ export default function TreningPage() {
           {/* Difficulty */}
           <div>
             <label className="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-3 block">
-              Obťažnosť
+              Difficulty
             </label>
             <div className="flex gap-2.5">
               {(['easy', 'medium', 'hard'] as const).map((d) => (
@@ -442,7 +442,7 @@ export default function TreningPage() {
                       : 'border-gray-200 bg-white text-gray-500 hover:border-gray-300 hover:text-gray-700'
                   }`}
                 >
-                  {d === 'easy' ? 'Ľahká' : d === 'medium' ? 'Stredná' : 'Ťažká'}
+                  {d === 'easy' ? 'Easy' : d === 'medium' ? 'Medium' : 'Hard'}
                 </button>
               ))}
             </div>
@@ -451,7 +451,7 @@ export default function TreningPage() {
           {/* Duration */}
           <div>
             <label className="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-3 block">
-              Dĺžka tréningu
+              Duration
             </label>
             <div className="flex gap-2.5">
               {([30, 60, 90] as const).map((d) => (
@@ -464,7 +464,7 @@ export default function TreningPage() {
                       : 'border-gray-200 bg-white text-gray-500 hover:border-gray-300 hover:text-gray-700'
                   }`}
                 >
-                  {d} sekúnd
+                  {d} seconds
                 </button>
               ))}
             </div>
@@ -473,7 +473,7 @@ export default function TreningPage() {
           {/* Beat mode */}
           <div>
             <label className="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-3 block">
-              Hudba
+              Music
             </label>
             <button
               onClick={() => setPhase('music')}
@@ -494,17 +494,17 @@ export default function TreningPage() {
                       {' - '}{musicConfig.bpm} BPM
                     </div>
                   </div>
-                  <span className="text-xs text-green-600">Zmeniť</span>
+                  <span className="text-xs text-green-600">Change</span>
                 </div>
               ) : (
                 <div className="flex items-center justify-between">
                   <div>
                     <div className="text-sm font-semibold text-gray-900">Beat mód</div>
                     <div className="text-xs text-gray-500 mt-0.5">
-                      Kužele syncnuté na rytmus hudby
+                      Cones synced to the rhythm of music
                     </div>
                   </div>
-                  <span className="text-xs text-gray-400">Nastaviť</span>
+                  <span className="text-xs text-gray-400">Set up</span>
                 </div>
               )}
             </button>
@@ -513,19 +513,19 @@ export default function TreningPage() {
                 onClick={() => setMusicConfig(null)}
                 className="text-xs text-gray-400 hover:text-gray-600 mt-2 transition-colors"
               >
-                Vypnúť beat mód
+                Disable beat mode
               </button>
             )}
           </div>
 
           {/* Start button */}
           <button onClick={startGame} className="btn-primary w-full text-lg py-4 mt-2">
-            {musicConfig ? `Hrať na ${musicConfig.bpm} BPM` : 'Spustiť tréning'}
+            {musicConfig ? `Play at ${musicConfig.bpm} BPM` : 'Start training'}
           </button>
 
           {inputMode === 'demo' && (
             <p className="text-center text-xs text-gray-400">
-              Výsledky z demo režimu sa neukladajú do rebríčka.
+              Demo mode results are not saved to the rankings.
             </p>
           )}
         </div>

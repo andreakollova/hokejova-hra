@@ -659,7 +659,7 @@ export default function SlalomGame(props: SlalomGameProps) {
         <div className="flex justify-between items-start max-w-3xl mx-auto">
           <div className="bg-white/80 backdrop-blur-md rounded-2xl px-5 py-3 shadow-sm">
             <div className="text-3xl font-bold text-gray-900 tabular-nums">{hud.score}</div>
-            <div className="text-xs text-gray-400 uppercase tracking-wider">Skóre</div>
+            <div className="text-xs text-gray-400 uppercase tracking-wider">Score</div>
           </div>
           <div className="bg-white/80 backdrop-blur-md rounded-2xl px-5 py-3 text-center shadow-sm">
             <div className="text-3xl font-bold text-gray-900 tabular-nums">{Math.ceil(hud.timeLeft)}s</div>
@@ -667,7 +667,7 @@ export default function SlalomGame(props: SlalomGameProps) {
           </div>
           <div className="bg-white/80 backdrop-blur-md rounded-2xl px-5 py-3 text-right shadow-sm">
             <div className="text-3xl font-bold text-gray-900 tabular-nums">{hud.streak}</div>
-            <div className="text-xs text-gray-400 uppercase tracking-wider">Séria</div>
+            <div className="text-xs text-gray-400 uppercase tracking-wider">Streak</div>
           </div>
           {hud.bpm > 0 && (
             <div className={`bg-white/80 backdrop-blur-md rounded-2xl px-5 py-3 text-center shadow-sm transition-all ${hud.beatPulse ? 'ring-2 ring-green-400/50 scale-105' : ''}`}>
@@ -691,7 +691,7 @@ export default function SlalomGame(props: SlalomGameProps) {
               transform="rotate(-90 18 18)"
             />
           </svg>
-          <span className="text-xs text-yellow-600">Návrat do menu</span>
+          <span className="text-xs text-yellow-600">Back to menu</span>
         </div>
       )}
 
@@ -706,8 +706,8 @@ export default function SlalomGame(props: SlalomGameProps) {
       {isPaused && hud.countdown <= 0 && (
         <div className="absolute inset-0 flex items-center justify-center bg-white/50 backdrop-blur-sm">
           <div className="text-center bg-white/90 backdrop-blur-md rounded-3xl px-10 py-8 shadow-lg">
-            <div className="text-2xl font-bold text-yellow-600 mb-3">Sledovanie stratené</div>
-            <p className="text-gray-600">Vráť loptičku do viditeľnej oblasti kamery</p>
+            <div className="text-2xl font-bold text-yellow-600 mb-3">Tracking lost</div>
+            <p className="text-gray-600">Return the ball to the camera's view</p>
           </div>
         </div>
       )}

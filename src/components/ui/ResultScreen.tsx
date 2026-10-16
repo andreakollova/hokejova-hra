@@ -195,7 +195,7 @@ export default function ResultScreen({
         {/* Actions */}
         <div className="flex gap-3">
           <button onClick={onPlayAgain} className="btn-primary flex-1">Play again</button>
-          <button onClick={onMenu} className="btn-secondary flex-1">Menu</button>
+          <a href="/dashboard" className="btn-secondary flex-1 text-center">Menu</a>
         </div>
 
         <div className="text-center">

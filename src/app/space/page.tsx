@@ -108,7 +108,7 @@ export default function SpacePage() {
           </div>
           <div className="flex gap-3">
             <button onClick={() => { setResult(null); setPhase('playing'); }} className="flex-1 bg-cyan-500 hover:bg-cyan-400 text-white font-medium py-3.5 rounded-full transition-all">Hrat znova</button>
-            <Link href="/" className="flex-1 bg-white/10 hover:bg-white/20 text-white font-medium py-3.5 rounded-full transition-all text-center">Menu</Link>
+            <Link href="/dashboard" className="flex-1 bg-white/10 hover:bg-white/20 text-white font-medium py-3.5 rounded-full transition-all text-center">Menu</Link>
           </div>
         </div>
       </div>

@@ -128,19 +128,19 @@ export default function MusicSelector({ onSelect, onCancel, spotify }: MusicSele
           <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
             <path strokeLinecap="round" strokeLinejoin="round" d="M15 19l-7-7 7-7" />
           </svg>
-          Spat
+          Back
         </button>
 
-        <h1 className="text-3xl font-bold text-gray-900 mb-2 tracking-tight">Vyber pesnicku</h1>
+        <h1 className="text-3xl font-bold text-gray-900 mb-2 tracking-tight">Choose a song</h1>
         <p className="text-gray-400 mb-8 leading-relaxed">
-          Kuzele pojdu do rytmu hudby.
+          Cones will move to the rhythm of the music.
         </p>
 
         {/* Spotify connection */}
         {!spotify.isConnected ? (
           <div className="card p-6 text-center space-y-3">
-            <p className="text-sm text-gray-500">Pripoj Spotify Premium pre prehravanie.</p>
-            <button onClick={spotify.connect} className="btn-primary text-sm">Pripojit Spotify</button>
+            <p className="text-sm text-gray-500">Connect Spotify Premium to play music.</p>
+            <button onClick={spotify.connect} className="btn-primary text-sm">Connect Spotify</button>
           </div>
         ) : (
           <div className="space-y-6">
@@ -150,7 +150,7 @@ export default function MusicSelector({ onSelect, onCancel, spotify }: MusicSele
               value={searchQuery}
               onChange={(e) => handleSearch(e.target.value)}
               className="input-field"
-              placeholder="Hladat pesnicku..."
+              placeholder="Search for a song..."
             />
 
             {/* BPM picker for unmapped track */}
@@ -167,7 +167,7 @@ export default function MusicSelector({ onSelect, onCancel, spotify }: MusicSele
                 </div>
                 <div>
                   <label className="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-2 block">
-                    Vyber tempo
+                    Select tempo
                   </label>
                   <div className="flex gap-2">
                     {BPM_TEMPLATES.map((bpm) => (
@@ -185,18 +185,18 @@ export default function MusicSelector({ onSelect, onCancel, spotify }: MusicSele
                     ))}
                   </div>
                   <p className="text-xs text-gray-400 mt-2">
-                    Kuzele pojdu v zvolenom tempe, nie presne v rytme pesicky.
+                    Cones will move at the selected tempo, not exactly to the song's rhythm.
                   </p>
                 </div>
                 <button onClick={handleConfirmBpm} className="btn-primary w-full">
-                  Hrat na {selectedBpm} BPM
+                  Play at {selectedBpm} BPM
                 </button>
               </div>
             )}
 
             {/* Search results */}
             {spotify.searching && (
-              <div className="text-center text-gray-400 text-sm py-4">Hladam...</div>
+              <div className="text-center text-gray-400 text-sm py-4">Searching...</div>
             )}
 
             {searchQuery && spotify.searchResults.length > 0 && (
@@ -236,12 +236,12 @@ export default function MusicSelector({ onSelect, onCancel, spotify }: MusicSele
             {!searchQuery && (
               <div>
                 <label className="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-3 block">
-                  Odporucane pesnicky
+                  Recommended songs
                 </label>
                 {loading ? (
-                  <div className="text-center text-gray-400 text-sm py-6">Nacitavam...</div>
+                  <div className="text-center text-gray-400 text-sm py-6">Loading...</div>
                 ) : availableSongs.length === 0 ? (
-                  <div className="text-center text-gray-400 text-sm py-6">Zatial ziadne odporucane pesnicky.</div>
+                  <div className="text-center text-gray-400 text-sm py-6">No recommended songs yet.</div>
                 ) : (
                   <div className="space-y-2">
                     {availableSongs.map((song) => (

@@ -530,9 +530,9 @@ export default function CalibrationWizard({
       case 'test':
         return (
           <div className="space-y-4">
-            <h2 className="text-2xl font-semibold text-gray-900">Skuska sledovania</h2>
+            <h2 className="text-2xl font-semibold text-gray-900">Tracking test</h2>
             <p className="text-gray-400">
-              Pohybuj loptičkou a over, či zelený krúžok sleduje jej pohyb.
+              Move the ball and verify that the green circle follows its movement.
             </p>
             <div className="relative max-w-2xl">
               <canvas
@@ -552,18 +552,18 @@ export default function CalibrationWizard({
               />
               <span className="text-sm text-gray-400">
                 {testResult === 'tracking'
-                  ? 'Sledovanie funguje'
+                  ? 'Tracking works'
                   : testResult === 'lost'
-                  ? 'Loptička nie je detekovaná'
-                  : 'Čakám na detekciu...'}
+                  ? 'Ball not detected'
+                  : 'Waiting for detection...'}
               </span>
             </div>
             <div className="flex gap-3">
               <button onClick={() => setStep('tolerance')} className="btn-secondary">
-                Spätná úprava
+                Go back
               </button>
               <button onClick={handleComplete} className="btn-primary">
-                Hotovo - spustiť tréning
+                Done - start training
               </button>
             </div>
           </div>
@@ -609,7 +609,7 @@ export default function CalibrationWizard({
           }}
           className="mt-8 text-sm text-gray-400 hover:text-gray-600 transition-colors"
         >
-          Zrušiť kalibráciu
+          Cancel calibration
         </button>
       </div>
     </div>

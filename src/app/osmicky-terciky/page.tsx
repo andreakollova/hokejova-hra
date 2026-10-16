@@ -110,7 +110,7 @@ export default function OsmickyTercikyPage() {
           </div>
           <div className="flex gap-3">
             <button onClick={() => { setResult(null); setPhase('playing'); }} className="btn-primary flex-1">Hrat znova</button>
-            <Link href="/" className="btn-secondary flex-1 text-center">Menu</Link>
+            <Link href="/dashboard" className="btn-secondary flex-1 text-center">Menu</Link>
           </div>
         </div>
       </div>

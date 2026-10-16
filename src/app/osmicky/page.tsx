@@ -187,7 +187,7 @@ export default function OsmickyPage() {
 
         {inputMode === 'demo' && (
           <div className="absolute bottom-4 left-4 bg-yellow-50/90 border border-yellow-200 rounded-lg px-3 py-2 backdrop-blur-sm">
-            <span className="text-xs text-yellow-700">Demo režim - pohybuj myšou</span>
+            <span className="text-xs text-yellow-700">Demo mode - move your mouse</span>
           </div>
         )}
       </div>
@@ -201,20 +201,20 @@ export default function OsmickyPage() {
           href="/"
           className="text-sm text-gray-400 hover:text-gray-600 transition-colors mb-8 inline-block"
         >
-          &larr; Späť
+          &larr; Back
         </Link>
 
-        <h1 className="text-3xl font-bold text-gray-900 mb-2">Osmičky</h1>
+        <h1 className="text-3xl font-bold text-gray-900 mb-2">Figure 8</h1>
         <p className="text-gray-500 mb-8">
-          Veď loptičku v tvare osmičky okolo dvoch bodov. Počíta sa počet
-          dokončených osmičiek za zvolený čas.
+          Guide the ball in a figure-8 pattern around two points. The number of
+          completed figure 8s within the chosen time is counted.
         </p>
 
         <div className="space-y-6">
           {/* Input mode */}
           <div>
             <label className="text-sm font-medium text-gray-500 mb-3 block">
-              Režim vstupu
+              Input mode
             </label>
             <div className="flex gap-3">
               <button
@@ -225,8 +225,8 @@ export default function OsmickyPage() {
                     : 'border-gray-200 bg-white hover:border-gray-300'
                 }`}
               >
-                <div className="text-sm font-medium text-gray-900">Kamera</div>
-                <div className="text-xs text-gray-500 mt-1">Sledovanie reálnej loptičky</div>
+                <div className="text-sm font-medium text-gray-900">Camera</div>
+                <div className="text-xs text-gray-500 mt-1">Track real ball</div>
               </button>
               <button
                 onClick={() => setInputMode('demo')}
@@ -236,8 +236,8 @@ export default function OsmickyPage() {
                     : 'border-gray-200 bg-white hover:border-gray-300'
                 }`}
               >
-                <div className="text-sm font-medium text-gray-900">Demo (mys)</div>
-                <div className="text-xs text-gray-500 mt-1">Testovanie bez kamery</div>
+                <div className="text-sm font-medium text-gray-900">Demo (mouse)</div>
+                <div className="text-xs text-gray-500 mt-1">Testing without camera</div>
               </button>
             </div>
           </div>
@@ -246,18 +246,18 @@ export default function OsmickyPage() {
           {inputMode === 'camera' && (
             <div className="flex items-center justify-between bg-white rounded-xl p-4 border border-gray-200 shadow-sm">
               <div>
-                <div className="text-sm font-medium text-gray-900">Kalibrácia kamery</div>
+                <div className="text-sm font-medium text-gray-900">Camera calibration</div>
                 <div className="text-xs text-gray-500 mt-1">
                   {calibration
-                    ? `Kalibrácia uložená (${calibration.resolution.width}x${calibration.resolution.height})`
-                    : 'Nie je nastavená'}
+                    ? `Saved (${calibration.resolution.width}x${calibration.resolution.height})`
+                    : 'Not configured'}
                 </div>
               </div>
               <button
                 onClick={() => setPhase('calibration')}
                 className="text-sm text-green-600 hover:text-green-700 transition-colors"
               >
-                {calibration ? 'Prekalibrovať' : 'Kalibrovať'}
+                {calibration ? 'Recalibrate' : 'Calibrate'}
               </button>
             </div>
           )}
@@ -265,7 +265,7 @@ export default function OsmickyPage() {
           {/* Duration */}
           <div>
             <label className="text-sm font-medium text-gray-500 mb-3 block">
-              Dĺžka tréningu
+              Duration
             </label>
             <div className="flex gap-3">
               {([30, 60, 90] as const).map((d) => (
@@ -285,14 +285,14 @@ export default function OsmickyPage() {
           </div>
 
           <div className="bg-gray-50 rounded-xl p-4 border border-gray-100 text-xs text-gray-500">
-            Presnosť hodnotenia osmičiek závisí od kvality farebného sledovania.
-            Pre najlepšie výsledky použi výrazne farebnú loptičku a dobré osvetlenie.
+            Figure 8 scoring accuracy depends on the quality of colour tracking.
+            For best results use a brightly coloured ball and good lighting.
           </div>
 
           <BackgroundMusic spotify={spotify} onSelect={setBgTrack} selectedTrack={bgTrack} />
 
           <button onClick={startGame} className="btn-primary w-full text-lg py-4">
-            Spustiť tréning
+            Start training
           </button>
         </div>
       </div>

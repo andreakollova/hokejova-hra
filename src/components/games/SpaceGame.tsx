@@ -428,19 +428,19 @@ export default function SpaceGame({
         <div className="flex justify-between items-start max-w-3xl mx-auto">
           <div className="bg-white/10 backdrop-blur-md rounded-2xl px-5 py-3">
             <div className="text-3xl font-bold text-white tabular-nums">{hud.score}</div>
-            <div className="text-xs text-white/50 uppercase tracking-wider">Skore</div>
+            <div className="text-xs text-white/50 uppercase tracking-wider">Score</div>
           </div>
           <div className="bg-white/10 backdrop-blur-md rounded-2xl px-5 py-3 text-center">
             <div className="text-3xl font-bold text-white tabular-nums">{Math.ceil(hud.timeLeft)}s</div>
-            <div className="text-xs text-white/50 uppercase tracking-wider">Cas</div>
+            <div className="text-xs text-white/50 uppercase tracking-wider">Time</div>
           </div>
           <div className="bg-white/10 backdrop-blur-md rounded-2xl px-5 py-3 text-center">
             <div className="text-3xl font-bold text-white tabular-nums">{hud.blocksLeft}</div>
-            <div className="text-xs text-white/50 uppercase tracking-wider">Bloky</div>
+            <div className="text-xs text-white/50 uppercase tracking-wider">Blocks</div>
           </div>
           <div className="bg-white/10 backdrop-blur-md rounded-2xl px-5 py-3 text-right">
             <div className="text-3xl font-bold text-red-400 tabular-nums">{'❤'.repeat(Math.max(0, hud.lives))}</div>
-            <div className="text-xs text-white/50 uppercase tracking-wider">Zivoty</div>
+            <div className="text-xs text-white/50 uppercase tracking-wider">Lives</div>
           </div>
         </div>
       </div>
@@ -453,7 +453,7 @@ export default function SpaceGame({
             <circle cx="18" cy="18" r="15" fill="none" stroke="#f59e0b" strokeWidth="3"
               strokeDasharray={`${hud.backProgress * 94.2} 94.2`} strokeLinecap="round" transform="rotate(-90 18 18)" />
           </svg>
-          <span className="text-xs text-yellow-400">Navrat</span>
+          <span className="text-xs text-yellow-400">Back</span>
         </div>
       )}
     </div>

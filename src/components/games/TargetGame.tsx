@@ -450,15 +450,15 @@ export default function TargetGame(props: TargetGameProps) {
         <div className="flex justify-between items-start max-w-3xl mx-auto">
           <div className="bg-white/80 backdrop-blur-md rounded-2xl px-5 py-3 shadow-sm">
             <div className="text-3xl font-bold text-gray-900 tabular-nums">{hud.score}</div>
-            <div className="text-xs text-gray-400 uppercase tracking-wider">Skore</div>
+            <div className="text-xs text-gray-400 uppercase tracking-wider">Score</div>
           </div>
           <div className="bg-white/80 backdrop-blur-md rounded-2xl px-5 py-3 text-center shadow-sm">
             <div className="text-3xl font-bold text-gray-900 tabular-nums">{Math.ceil(hud.timeLeft)}s</div>
-            <div className="text-xs text-gray-400 uppercase tracking-wider">Cas</div>
+            <div className="text-xs text-gray-400 uppercase tracking-wider">Time</div>
           </div>
           <div className="bg-white/80 backdrop-blur-md rounded-2xl px-5 py-3 text-right shadow-sm">
             <div className="text-3xl font-bold text-gray-900 tabular-nums">{hud.hits}</div>
-            <div className="text-xs text-gray-400 uppercase tracking-wider">Zasahy</div>
+            <div className="text-xs text-gray-400 uppercase tracking-wider">Hits</div>
           </div>
         </div>
       </div>
@@ -471,7 +471,7 @@ export default function TargetGame(props: TargetGameProps) {
             <circle cx="18" cy="18" r="15" fill="none" stroke="#f59e0b" strokeWidth="3"
               strokeDasharray={`${hud.backProgress * 94.2} 94.2`} strokeLinecap="round" transform="rotate(-90 18 18)" />
           </svg>
-          <span className="text-xs text-yellow-600">Navrat do menu</span>
+          <span className="text-xs text-yellow-600">Back to menu</span>
         </div>
       )}
 
