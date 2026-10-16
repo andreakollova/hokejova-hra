@@ -584,28 +584,6 @@ function HeroBanner() {
           {/* Fade from bg color into video */}
           <div className="absolute inset-x-0 top-0 h-28 bg-gradient-to-b from-[#eef0f4] to-transparent z-10" />
 
-          {/* Bottom bar - CTA */}
-          <div className="absolute bottom-8 left-1/2 -translate-x-1/2 z-20 w-[90%] max-w-2xl">
-            <div className="bg-white/90 backdrop-blur-xl rounded-2xl px-6 py-4 flex items-center justify-between shadow-lg shadow-black/5">
-              <div className="flex items-center gap-3">
-                <span className="w-3 h-3 bg-emerald-500 rounded-full animate-pulse" />
-                <div>
-                  <div className="text-sm font-bold text-gray-900">Ready when you are.</div>
-                  <div className="text-xs text-gray-400">Your stick. Your ball. Let&apos;s play.</div>
-                </div>
-              </div>
-              <div className="flex flex-col items-end gap-1">
-                <button
-                  onClick={() => setShowPlatform(true)}
-                  className="bg-gray-900 text-white font-bold text-sm px-6 py-2.5 rounded-full hover:bg-gray-800 active:scale-[0.97] transition-all flex items-center gap-2"
-                >
-                  Play for free
-                  <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}><path strokeLinecap="round" strokeLinejoin="round" d="M7 17L17 7M17 7H7M17 7v10" /></svg>
-                </button>
-                <span className="text-[10px] text-gray-400">iOS · Android · Web</span>
-              </div>
-            </div>
-          </div>
 
           {/* Sports bar bottom left */}
           <div className="absolute bottom-4 left-6 z-10 flex items-center gap-3">
