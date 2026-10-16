@@ -32,10 +32,10 @@ export default function Home() {
   return (
     <div className="min-h-screen bg-white flex flex-col">
       {/* Hero top bar - hamburger left, socials right (visible only on hero) */}
-      <div className={`fixed top-0 left-0 right-0 z-50 px-6 sm:px-10 py-5 transition-all duration-500 ${
+      <div className={`fixed top-0 left-0 right-0 z-50 px-4 sm:px-8 py-5 transition-all duration-500 ${
         scrolled ? 'opacity-0 pointer-events-none' : 'opacity-100'
       }`}>
-        <div className="max-w-6xl mx-auto flex justify-between items-center">
+        <div className="flex justify-between items-center">
           {/* Hamburger */}
           <button className="text-gray-500 hover:text-gray-900 transition-colors p-1">
             <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
@@ -97,40 +97,7 @@ export default function Home() {
         <HeroBanner />
 
         {/* Start Playing - platform strip */}
-        <section className="relative bg-gray-900 py-14 sm:py-20 overflow-hidden">
-          <div className="absolute inset-0 opacity-10">
-            <div className="absolute inset-0" style={{ backgroundImage: 'url("data:image/svg+xml,%3Csvg width=\'60\' height=\'60\' viewBox=\'0 0 60 60\' xmlns=\'http://www.w3.org/2000/svg\'%3E%3Cg fill=\'none\' fill-rule=\'evenodd\'%3E%3Cg fill=\'%23ffffff\' fill-opacity=\'0.15\'%3E%3Cpath d=\'M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z\'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E")' }} />
-          </div>
-          <div className="max-w-6xl mx-auto px-6 sm:px-10">
-            <div className="text-center mb-10">
-              <h2 className="text-3xl sm:text-4xl font-black text-white italic tracking-tight uppercase">Start Playing</h2>
-              <p className="mt-2 text-white/70 text-sm">HockeyBeats is available free on these platforms.</p>
-            </div>
-            <div className="flex flex-col sm:flex-row justify-center gap-4">
-              <a href="#" className="flex items-center justify-between gap-5 bg-white/10 hover:bg-white/20 border-2 border-white/30 hover:border-white/50 rounded-full px-7 py-4 transition-all">
-                <div>
-                  <div className="text-[10px] text-white/60 uppercase tracking-wider font-medium">Play on</div>
-                  <div className="text-base font-extrabold text-white tracking-tight uppercase">Mobile</div>
-                </div>
-                <svg className="w-7 h-7 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}><rect x="6" y="2" width="12" height="20" rx="2" /><line x1="10" y1="18" x2="14" y2="18" /></svg>
-              </a>
-              <Link href="/trening" className="flex items-center justify-between gap-5 bg-white/10 hover:bg-white/20 border-2 border-white/30 hover:border-white/50 rounded-full px-7 py-4 transition-all">
-                <div>
-                  <div className="text-[10px] text-white/60 uppercase tracking-wider font-medium">Play on</div>
-                  <div className="text-base font-extrabold text-white tracking-tight uppercase">Desktop</div>
-                </div>
-                <svg className="w-7 h-7 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}><rect x="2" y="3" width="20" height="14" rx="2" /><line x1="8" y1="21" x2="16" y2="21" /><line x1="12" y1="17" x2="12" y2="21" /></svg>
-              </Link>
-              <a href="#" className="flex items-center justify-between gap-5 bg-white/10 hover:bg-white/20 border-2 border-white/30 hover:border-white/50 rounded-full px-7 py-4 transition-all">
-                <div>
-                  <div className="text-[10px] text-white/60 uppercase tracking-wider font-medium">Play on</div>
-                  <div className="text-base font-extrabold text-white tracking-tight uppercase">TV</div>
-                </div>
-                <svg className="w-7 h-7 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}><rect x="2" y="4" width="20" height="13" rx="2" /><line x1="7" y1="21" x2="17" y2="21" /><line x1="9" y1="17" x2="9" y2="21" /><line x1="15" y1="17" x2="15" y2="21" /></svg>
-              </a>
-            </div>
-          </div>
-        </section>
+        <StartPlayingSection />
 
         {/* 2. Gameplay */}
         <section className="bg-gray-50/50 py-24 sm:py-32">
@@ -621,12 +588,6 @@ function HeroBanner() {
           {/* Fade from bg color into video */}
           <div className="absolute inset-x-0 top-0 h-28 bg-gradient-to-b from-[#eef0f4] to-transparent z-10" />
 
-          {/* Floating music icons */}
-          <div className="absolute top-8 right-8 z-10 flex items-center gap-3 opacity-60">
-            <svg className="w-8 h-8 text-[#1DB954]" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.4 0 0 5.4 0 12s5.4 12 12 12 12-5.4 12-12S18.66 0 12 0zm5.521 17.34c-.24.359-.66.48-1.021.24-2.82-1.74-6.36-2.101-10.561-1.141-.418.122-.779-.179-.899-.539-.12-.421.18-.78.54-.9 4.56-1.021 8.52-.6 11.64 1.32.42.18.479.659.301 1.02zm1.44-3.3c-.301.42-.841.6-1.262.3-3.239-1.98-8.159-2.58-11.939-1.38-.479.12-1.02-.12-1.14-.6-.12-.48.12-1.021.6-1.141C9.6 9.9 15 10.561 18.72 12.84c.361.181.54.78.241 1.2zm.12-3.36C15.24 8.4 8.82 8.16 5.16 9.301c-.6.179-1.2-.181-1.38-.721-.18-.601.18-1.2.72-1.381 4.26-1.26 11.28-1.02 15.721 1.621.539.3.719 1.02.419 1.56-.299.421-1.02.599-1.559.3z"/></svg>
-            <img src="/images/icon-applemusic.svg" alt="Apple Music" className="w-8 h-8 rounded-lg" />
-          </div>
-
           {/* Sports bar bottom left */}
           <div className="absolute bottom-4 left-6 z-10 flex items-center gap-3">
             <span className="text-[10px] font-bold uppercase tracking-[0.15em] text-white/60">Ice Hockey</span>
@@ -738,5 +699,102 @@ function HeroBanner() {
         </div>
       )}
     </>
+  );
+}
+
+// Start Playing section with expandable platform options
+function StartPlayingSection() {
+  const [expanded, setExpanded] = useState<'mobile' | 'desktop' | 'tv' | null>(null);
+
+  return (
+    <section className="relative bg-black py-16 sm:py-24 overflow-hidden">
+      <div className="max-w-6xl mx-auto px-6 sm:px-10">
+        <div className="text-center mb-12">
+          <Image src="/images/hb-logo-white.png" alt="start playing" width={200} height={40} className="h-6 w-auto mx-auto mb-4 opacity-40" />
+          <h2 className="text-3xl sm:text-4xl font-black text-white tracking-tight lowercase">start playing</h2>
+          <p className="mt-3 text-white/50 text-sm">Free on all platforms.</p>
+        </div>
+
+        <div className="flex flex-col sm:flex-row justify-center gap-4 max-w-2xl mx-auto">
+          {/* Mobile */}
+          <div className="flex-1">
+            <button
+              onClick={() => setExpanded(expanded === 'mobile' ? null : 'mobile')}
+              className={`w-full flex items-center gap-4 rounded-2xl px-6 py-5 transition-all duration-300 ${expanded === 'mobile' ? 'bg-white text-gray-900' : 'bg-white/8 hover:bg-white/12 text-white border border-white/10 hover:border-white/20'}`}
+            >
+              <svg className={`w-8 h-8 ${expanded === 'mobile' ? 'text-gray-900' : 'text-white/70'}`} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}><rect x="6" y="2" width="12" height="20" rx="2" /><line x1="10" y1="18" x2="14" y2="18" /></svg>
+              <div className="text-left">
+                <div className={`text-base font-bold tracking-tight ${expanded === 'mobile' ? 'text-gray-900' : 'text-white'}`}>mobile</div>
+                <div className={`text-xs ${expanded === 'mobile' ? 'text-gray-500' : 'text-white/40'}`}>iOS & Android</div>
+              </div>
+            </button>
+            {expanded === 'mobile' && (
+              <div className="mt-2 space-y-2 animate-[fadeIn_0.2s_ease-out]">
+                <Link href="/trening" className="flex items-center gap-3 bg-white/8 hover:bg-white/12 border border-white/10 rounded-xl px-5 py-3 transition-all">
+                  <svg className="w-5 h-5 text-white/60" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}><circle cx="12" cy="12" r="10" /><path d="M8 12h8" /></svg>
+                  <div className="text-sm font-medium text-white">Play on web now</div>
+                </Link>
+                <a href="#" className="flex items-center gap-3 bg-white/8 hover:bg-white/12 border border-white/10 rounded-xl px-5 py-3 transition-all">
+                  <svg className="w-5 h-5 text-white/60" viewBox="0 0 24 24" fill="currentColor"><path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.8-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M13 3.5c.73-.83 1.94-1.46 2.94-1.5.13 1.17-.34 2.35-1.04 3.19-.69.85-1.83 1.51-2.95 1.42-.15-1.15.41-2.35 1.05-3.11z"/></svg>
+                  <div className="text-sm font-medium text-white">App Store</div>
+                </a>
+                <a href="#" className="flex items-center gap-3 bg-white/8 hover:bg-white/12 border border-white/10 rounded-xl px-5 py-3 transition-all">
+                  <svg className="w-5 h-5 text-white/60" viewBox="0 0 24 24" fill="currentColor"><path d="M3.609 1.814L13.792 12 3.61 22.186a.996.996 0 01-.61-.92V2.734a1 1 0 01.609-.92zm10.89 10.893l2.302 2.302-10.937 6.333 8.635-8.635zm3.199-1.842l2.458 1.42c.544.317.544 1.114 0 1.43l-2.458 1.42-2.534-2.535 2.534-2.535zM5.864 3.458L16.8 9.79l-2.302 2.302-8.635-8.635z"/></svg>
+                  <div className="text-sm font-medium text-white">Google Play</div>
+                </a>
+              </div>
+            )}
+          </div>
+
+          {/* Desktop */}
+          <div className="flex-1">
+            <button
+              onClick={() => setExpanded(expanded === 'desktop' ? null : 'desktop')}
+              className={`w-full flex items-center gap-4 rounded-2xl px-6 py-5 transition-all duration-300 ${expanded === 'desktop' ? 'bg-white text-gray-900' : 'bg-white/8 hover:bg-white/12 text-white border border-white/10 hover:border-white/20'}`}
+            >
+              <svg className={`w-8 h-8 ${expanded === 'desktop' ? 'text-gray-900' : 'text-white/70'}`} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}><rect x="2" y="3" width="20" height="14" rx="2" /><line x1="8" y1="21" x2="16" y2="21" /><line x1="12" y1="17" x2="12" y2="21" /></svg>
+              <div className="text-left">
+                <div className={`text-base font-bold tracking-tight ${expanded === 'desktop' ? 'text-gray-900' : 'text-white'}`}>desktop</div>
+                <div className={`text-xs ${expanded === 'desktop' ? 'text-gray-500' : 'text-white/40'}`}>Mac & Windows</div>
+              </div>
+            </button>
+            {expanded === 'desktop' && (
+              <div className="mt-2 animate-[fadeIn_0.2s_ease-out]">
+                <Link href="/trening" className="flex items-center gap-3 bg-white/8 hover:bg-white/12 border border-white/10 rounded-xl px-5 py-3 transition-all">
+                  <svg className="w-5 h-5 text-white/60" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}><circle cx="12" cy="12" r="10" /><path d="M8 12h8" /></svg>
+                  <div className="text-sm font-medium text-white">Play on web</div>
+                </Link>
+              </div>
+            )}
+          </div>
+
+          {/* TV */}
+          <div className="flex-1">
+            <button
+              onClick={() => setExpanded(expanded === 'tv' ? null : 'tv')}
+              className={`w-full flex items-center gap-4 rounded-2xl px-6 py-5 transition-all duration-300 ${expanded === 'tv' ? 'bg-white text-gray-900' : 'bg-white/8 hover:bg-white/12 text-white border border-white/10 hover:border-white/20'}`}
+            >
+              <svg className={`w-8 h-8 ${expanded === 'tv' ? 'text-gray-900' : 'text-white/70'}`} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}><rect x="2" y="4" width="20" height="13" rx="2" /><line x1="7" y1="21" x2="17" y2="21" /><line x1="9" y1="17" x2="9" y2="21" /><line x1="15" y1="17" x2="15" y2="21" /></svg>
+              <div className="text-left">
+                <div className={`text-base font-bold tracking-tight ${expanded === 'tv' ? 'text-gray-900' : 'text-white'}`}>tv</div>
+                <div className={`text-xs ${expanded === 'tv' ? 'text-gray-500' : 'text-white/40'}`}>Smart TV</div>
+              </div>
+            </button>
+            {expanded === 'tv' && (
+              <div className="mt-2 space-y-2 animate-[fadeIn_0.2s_ease-out]">
+                <Link href="/trening" className="flex items-center gap-3 bg-white/8 hover:bg-white/12 border border-white/10 rounded-xl px-5 py-3 transition-all">
+                  <svg className="w-5 h-5 text-white/60" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}><circle cx="12" cy="12" r="10" /><path d="M8 12h8" /></svg>
+                  <div className="text-sm font-medium text-white">Web via HDMI</div>
+                </Link>
+                <a href="#" className="flex items-center gap-3 bg-white/8 hover:bg-white/12 border border-white/10 rounded-xl px-5 py-3 transition-all">
+                  <div className="w-5 h-5 bg-white/20 rounded flex items-center justify-center text-[8px] font-bold text-white/70">TV</div>
+                  <div className="text-sm font-medium text-white">Samsung · LG · TCL · Hisense</div>
+                </a>
+              </div>
+            )}
+          </div>
+        </div>
+      </div>
+    </section>
   );
 }
