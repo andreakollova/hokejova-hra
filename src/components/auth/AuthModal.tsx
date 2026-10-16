@@ -26,13 +26,13 @@ export default function AuthModal({ onClose }: AuthModalProps) {
       if (mode === 'login') {
         const err = await signInWithEmail(email, password);
         if (err) {
-          setError('Nesprávny email alebo heslo');
+          setError('Incorrect email or password');
         } else {
           onClose();
         }
       } else {
         if (nickname.length < 2) {
-          setError('Prezývka musí mať aspoň 2 znaky');
+          setError('Nickname must be at least 2 characters');
           setLoading(false);
           return;
         }
@@ -44,7 +44,7 @@ export default function AuthModal({ onClose }: AuthModalProps) {
         }
       }
     } catch {
-      setError('Neočakávaná chyba');
+      setError('Unexpected error');
     } finally {
       setLoading(false);
     }
@@ -55,7 +55,7 @@ export default function AuthModal({ onClose }: AuthModalProps) {
       <div className="bg-white rounded-3xl p-8 w-full max-w-sm shadow-2xl">
         <div className="flex justify-between items-center mb-6">
           <h2 className="text-xl font-bold text-gray-900">
-            {mode === 'login' ? 'Prihlásenie' : 'Registrácia'}
+            {mode === 'login' ? 'Login' : 'Register'}
           </h2>
           <button
             onClick={onClose}
@@ -69,14 +69,14 @@ export default function AuthModal({ onClose }: AuthModalProps) {
           {mode === 'register' && (
             <div>
               <label className="text-sm text-gray-500 block mb-1">
-                Prezývka
+                Nickname
               </label>
               <input
                 type="text"
                 value={nickname}
                 onChange={(e) => setNickname(e.target.value)}
                 className="input-field"
-                placeholder="Tvoja prezývka"
+                placeholder="Your nickname"
                 required
               />
             </div>
@@ -88,18 +88,18 @@ export default function AuthModal({ onClose }: AuthModalProps) {
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               className="input-field"
-              placeholder="email@priklad.sk"
+              placeholder="email@example.com"
               required
             />
           </div>
           <div>
-            <label className="text-sm text-gray-500 block mb-1">Heslo</label>
+            <label className="text-sm text-gray-500 block mb-1">Password</label>
             <input
               type="password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               className="input-field"
-              placeholder="Min. 6 znakov"
+              placeholder="Min. 6 characters"
               minLength={6}
               required
             />
@@ -113,10 +113,10 @@ export default function AuthModal({ onClose }: AuthModalProps) {
             className="btn-primary w-full disabled:opacity-50"
           >
             {loading
-              ? 'Načítavam...'
+              ? 'Loading...'
               : mode === 'login'
-              ? 'Prihlásiť sa'
-              : 'Registrovať sa'}
+              ? 'Log in'
+              : 'Register'}
           </button>
         </form>
 
@@ -126,8 +126,8 @@ export default function AuthModal({ onClose }: AuthModalProps) {
             className="text-sm text-gray-400 hover:text-gray-900 transition-colors"
           >
             {mode === 'login'
-              ? 'Nemáš účet? Registruj sa'
-              : 'Máš účet? Prihlas sa'}
+              ? "Don't have an account? Register"
+              : 'Have an account? Log in'}
           </button>
         </div>
       </div>

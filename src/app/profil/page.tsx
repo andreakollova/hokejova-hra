@@ -50,7 +50,7 @@ export default function ProfilPage() {
   if (loading) {
     return (
       <div className="min-h-screen bg-gray-50/50 flex items-center justify-center">
-        <div className="text-gray-500">Načítavam...</div>
+        <div className="text-gray-500">Loading...</div>
       </div>
     );
   }
@@ -59,22 +59,22 @@ export default function ProfilPage() {
     return (
       <div className="min-h-screen bg-gray-50/50 p-6">
         <div className="max-w-lg mx-auto text-center pt-20">
-          <h1 className="text-2xl font-bold text-gray-900 mb-4">Môj profil</h1>
+          <h1 className="text-2xl font-bold text-gray-900 mb-4">My profile</h1>
           <p className="text-gray-500 mb-6">
-            Prihlas sa, aby si videl svoju históriu a osobné rekordy.
+            Log in to see your history and personal records.
           </p>
           <button
             onClick={() => setShowAuth(true)}
             className="btn-primary"
           >
-            Prihlásiť sa
+            Log in
           </button>
           <div className="mt-4">
             <Link
               href="/"
               className="text-sm text-gray-400 hover:text-gray-600 transition-colors"
             >
-              &larr; Späť
+              &larr; Back
             </Link>
           </div>
           {showAuth && <AuthModal onClose={() => setShowAuth(false)} />}
@@ -90,7 +90,7 @@ export default function ProfilPage() {
           href="/"
           className="text-sm text-gray-400 hover:text-gray-600 transition-colors mb-8 inline-block"
         >
-          &larr; Späť
+          &larr; Back
         </Link>
 
         {/* Profile header */}
@@ -104,16 +104,16 @@ export default function ProfilPage() {
                     value={newNickname}
                     onChange={(e) => setNewNickname(e.target.value)}
                     className="input-field w-48"
-                    placeholder="Nová prezývka"
+                    placeholder="New nickname"
                   />
                   <button onClick={handleSaveNickname} className="btn-primary text-sm px-3 py-2">
-                    Uložiť
+                    Save
                   </button>
                 </div>
               ) : (
                 <div className="flex items-center gap-3">
                   <h1 className="text-2xl font-bold text-gray-900">
-                    {profile?.nickname || 'Hráč'}
+                    {profile?.nickname || 'Player'}
                   </h1>
                   <button
                     onClick={() => {
@@ -122,7 +122,7 @@ export default function ProfilPage() {
                     }}
                     className="text-sm text-gray-400 hover:text-gray-600"
                   >
-                    Upraviť
+                    Edit
                   </button>
                 </div>
               )}
@@ -134,21 +134,21 @@ export default function ProfilPage() {
               onClick={signOut}
               className="text-sm text-gray-400 hover:text-red-500 transition-colors"
             >
-              Odhlásiť
+              Log out
             </button>
           </div>
         </div>
 
         {/* Training history */}
         <h2 className="text-lg font-semibold text-gray-900 mb-4">
-          História tréningov
+          Training history
         </h2>
 
         {history.length === 0 ? (
           <div className="bg-white rounded-xl p-8 text-center border border-gray-200 shadow-sm">
-            <p className="text-gray-500">Zatiaľ žiadne tréningy</p>
+            <p className="text-gray-500">No training sessions yet</p>
             <Link href="/trening" className="btn-primary mt-4 inline-block">
-              Začať trénovať
+              Start training
             </Link>
           </div>
         ) : (

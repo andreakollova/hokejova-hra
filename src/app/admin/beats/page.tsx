@@ -160,7 +160,7 @@ export default function BeatBuilderPage() {
         setMessage(`Error: ${data.error}`);
       }
     } catch {
-      setMessage('Chyba pri ukladaní.');
+      setMessage('Error while saving.');
     }
     setSaving(false);
   };
@@ -182,7 +182,7 @@ export default function BeatBuilderPage() {
 
   const saveAdminKey = () => {
     localStorage.setItem('admin_key', adminKey);
-    setMessage('Admin kľúč uložený.');
+    setMessage('Admin key saved.');
   };
 
   return (
