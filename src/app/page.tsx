@@ -561,6 +561,12 @@ function HeroBanner() {
           <p className="mt-5 text-sm sm:text-base text-gray-400 max-w-lg">
             The game you&apos;ll come back to. The practice that stays with you.
           </p>
+          <div className="mt-8">
+            <Link href="/trening" className="bg-gray-900 text-white font-bold text-base sm:text-lg px-10 sm:px-14 py-4 sm:py-5 rounded-full hover:bg-gray-800 hover:shadow-xl active:scale-[0.97] transition-all duration-300 inline-flex items-center gap-3">
+              <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+              Play now — it&apos;s free
+            </Link>
+          </div>
         </div>
 
         {/* Video fills bottom portion, bleeds behind text */}
