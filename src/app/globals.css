@@ -13,17 +13,17 @@ body {
   color: var(--color-foreground);
 }
 
-/* Bonsai/Dribbble style buttons */
+/* PS5-inspired gaming buttons */
 .btn-primary {
-  @apply bg-gray-900 hover:bg-gray-800 text-white font-medium px-7 py-3.5 rounded-full transition-all duration-200 active:scale-[0.97];
+  @apply bg-gray-900 hover:bg-gray-800 text-white font-bold px-7 py-3.5 rounded-full transition-all duration-300 active:scale-[0.97] tracking-tight hover:shadow-lg hover:shadow-gray-900/20;
 }
 
 .btn-secondary {
-  @apply bg-white hover:bg-gray-50 text-gray-900 font-medium px-7 py-3.5 rounded-full transition-all duration-200 border border-gray-200 hover:border-gray-300;
+  @apply bg-white hover:bg-gray-50 text-gray-900 font-bold px-7 py-3.5 rounded-full transition-all duration-300 border-2 border-gray-200 hover:border-gray-400 tracking-tight hover:shadow-md;
 }
 
 .btn-accent {
-  @apply bg-green-600 hover:bg-green-500 text-white font-medium px-7 py-3.5 rounded-full transition-all duration-200 active:scale-[0.97];
+  @apply bg-green-600 hover:bg-green-500 text-white font-bold px-7 py-3.5 rounded-full transition-all duration-300 active:scale-[0.97] tracking-tight;
 }
 
 .input-field {
@@ -37,6 +37,65 @@ body {
 
 .card-hover {
   @apply bg-white border border-gray-100 rounded-3xl hover:shadow-lg hover:border-gray-200 transition-all duration-300;
+}
+
+/* PS5 game tile hover effect */
+.game-tile {
+  @apply transition-all duration-300 ease-out;
+}
+.game-tile:hover {
+  transform: scale(1.02) translateY(-4px);
+  box-shadow:
+    0 20px 40px -12px rgba(0, 0, 0, 0.1),
+    0 0 0 1px rgba(0, 0, 0, 0.03);
+}
+
+/* Achievement step card */
+.achievement-step {
+  @apply relative bg-white rounded-3xl p-8 border border-gray-100 transition-all duration-300;
+}
+.achievement-step:hover {
+  border-color: #d1d5db;
+  box-shadow:
+    0 8px 30px -8px rgba(0, 0, 0, 0.08),
+    0 0 0 1px rgba(0, 0, 0, 0.02);
+}
+
+/* FAQ gaming menu item */
+.faq-item {
+  @apply bg-white rounded-2xl border border-gray-100 transition-all duration-300;
+}
+.faq-item:hover {
+  border-color: #d1d5db;
+  box-shadow: 0 4px 20px -4px rgba(0, 0, 0, 0.06);
+}
+.faq-item[open] {
+  border-color: #9ca3af;
+  box-shadow: 0 4px 20px -4px rgba(0, 0, 0, 0.08);
+}
+
+/* Sport card with left accent border */
+.sport-card {
+  @apply bg-white rounded-3xl p-8 border border-gray-100 transition-all duration-300 relative overflow-hidden;
+}
+.sport-card::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 16px;
+  bottom: 16px;
+  width: 3px;
+  background: linear-gradient(180deg, #d1d5db, #9ca3af);
+  border-radius: 2px;
+  opacity: 0;
+  transition: opacity 0.3s;
+}
+.sport-card:hover::before {
+  opacity: 1;
+}
+.sport-card:hover {
+  box-shadow: 0 8px 30px -8px rgba(0, 0, 0, 0.08);
+  border-color: #e5e7eb;
 }
 
 /* Smooth scrollbar */

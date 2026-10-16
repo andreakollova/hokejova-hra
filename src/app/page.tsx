@@ -34,7 +34,7 @@ export default function Home() {
       {/* Navigation - transparent on top, glass on scroll */}
       <header className={`fixed top-0 left-0 right-0 z-50 px-6 sm:px-10 transition-all duration-500 ${
         scrolled
-          ? 'py-3 bg-white/70 backdrop-blur-xl shadow-sm border-b border-white/20'
+          ? 'py-3 bg-white/80 backdrop-blur-2xl shadow-[0_1px_20px_-6px_rgba(0,0,0,0.08)] border-b border-gray-100'
           : 'py-5 bg-transparent'
       }`}>
         <div className="max-w-6xl mx-auto flex justify-between items-center">
@@ -48,21 +48,21 @@ export default function Home() {
             />
           </Link>
           <nav className="flex items-center gap-5 sm:gap-7">
-            <a href="#how-it-works" className={`text-sm transition-colors hidden sm:block ${scrolled ? 'text-gray-500 hover:text-gray-900' : 'text-white/70 hover:text-white'}`}>How it works</a>
-            <a href="#sports" className={`text-sm transition-colors hidden sm:block ${scrolled ? 'text-gray-500 hover:text-gray-900' : 'text-white/70 hover:text-white'}`}>Sports</a>
-            <a href="#games" className={`text-sm transition-colors hidden sm:block ${scrolled ? 'text-gray-500 hover:text-gray-900' : 'text-white/70 hover:text-white'}`}>Games</a>
-            <a href="#parents" className={`text-sm transition-colors hidden sm:block ${scrolled ? 'text-gray-500 hover:text-gray-900' : 'text-white/70 hover:text-white'}`}>For parents</a>
-            <a href="#teams" className={`text-sm transition-colors hidden sm:block ${scrolled ? 'text-gray-500 hover:text-gray-900' : 'text-white/70 hover:text-white'}`}>For teams</a>
+            <a href="#how-it-works" className={`text-sm font-medium tracking-tight transition-colors hidden sm:block ${scrolled ? 'text-gray-400 hover:text-gray-900' : 'text-white/60 hover:text-white'}`}>How it works</a>
+            <a href="#sports" className={`text-sm font-medium tracking-tight transition-colors hidden sm:block ${scrolled ? 'text-gray-400 hover:text-gray-900' : 'text-white/60 hover:text-white'}`}>Sports</a>
+            <a href="#games" className={`text-sm font-medium tracking-tight transition-colors hidden sm:block ${scrolled ? 'text-gray-400 hover:text-gray-900' : 'text-white/60 hover:text-white'}`}>Games</a>
+            <a href="#parents" className={`text-sm font-medium tracking-tight transition-colors hidden sm:block ${scrolled ? 'text-gray-400 hover:text-gray-900' : 'text-white/60 hover:text-white'}`}>For parents</a>
+            <a href="#teams" className={`text-sm font-medium tracking-tight transition-colors hidden sm:block ${scrolled ? 'text-gray-400 hover:text-gray-900' : 'text-white/60 hover:text-white'}`}>For teams</a>
             {isLoggedIn ? (
               <>
                 {engLoaded && getStreak().currentStreak > 0 && (
                   <StreakBadge currentStreak={getStreak().currentStreak} frozen={getStreak().frozen} size="sm" />
                 )}
-                <Link href="/nastavenia" className={`text-sm ${scrolled ? 'text-gray-500' : 'text-white/70'}`}>{settings.username}</Link>
+                <Link href="/nastavenia" className={`text-sm font-medium ${scrolled ? 'text-gray-500' : 'text-white/70'}`}>{settings.username}</Link>
               </>
             ) : (
-              <Link href="/trening" className={`text-sm font-medium px-5 py-2.5 rounded-full transition-all ${
-                scrolled ? 'bg-gray-900 text-white hover:bg-gray-800' : 'bg-white/15 text-white backdrop-blur-sm hover:bg-white/25 border border-white/20'
+              <Link href="/trening" className={`text-sm font-bold tracking-tight px-5 py-2.5 rounded-full transition-all duration-300 ${
+                scrolled ? 'bg-gray-900 text-white hover:bg-gray-800 hover:shadow-lg hover:shadow-gray-900/15' : 'bg-white/15 text-white backdrop-blur-sm hover:bg-white/25 border border-white/20'
               }`}>Start training</Link>
             )}
           </nav>
@@ -75,11 +75,11 @@ export default function Home() {
         <HeroBanner />
 
         {/* 2. Gameplay */}
-        <section className="bg-gray-50 py-20 sm:py-28">
+        <section className="bg-gray-50/50 py-24 sm:py-32">
           <div className="max-w-6xl mx-auto px-6 sm:px-10">
             <div className="max-w-2xl">
-              <h2 className="text-3xl sm:text-4xl font-bold text-gray-900 leading-tight">Better play starts with keeping your head up.</h2>
-              <p className="mt-5 text-lg text-gray-500 leading-relaxed">
+              <h2 className="text-3xl sm:text-5xl font-extrabold text-gray-900 leading-[1.08] tracking-tight">Better play starts with keeping your head up.</h2>
+              <p className="mt-6 text-lg text-gray-500 leading-relaxed">
                 When you're always watching the ball, you miss what's happening around you.
               </p>
               <p className="mt-3 text-base text-gray-400 leading-relaxed">
@@ -90,8 +90,8 @@ export default function Home() {
               </p>
             </div>
             {/* Video */}
-            <div className="mt-12 max-w-3xl">
-              <div className="rounded-2xl overflow-hidden aspect-video bg-gray-900">
+            <div className="mt-14 max-w-3xl">
+              <div className="rounded-3xl overflow-hidden aspect-video bg-gray-900 shadow-2xl shadow-gray-900/10 ring-1 ring-gray-200/50">
                 <iframe
                   src="https://www.youtube.com/embed/F1_0Lkp16Rc?rel=0&modestbranding=1"
                   title="HockeyBeats gameplay"
@@ -105,25 +105,26 @@ export default function Home() {
         </section>
 
         {/* 3. Sports */}
-        <section id="sports" className="py-20 sm:py-28">
+        <section id="sports" className="py-24 sm:py-32">
           <div className="max-w-6xl mx-auto px-6 sm:px-10">
             <div className="text-center mb-16">
-              <h2 className="text-3xl sm:text-4xl font-bold text-gray-900 leading-tight">Three sports. A shared reason to keep practising.</h2>
-              <p className="mt-4 text-lg text-gray-500 max-w-xl mx-auto">
+              <p className="text-xs font-bold uppercase tracking-[0.2em] text-gray-400 mb-4">Select your sport</p>
+              <h2 className="text-3xl sm:text-5xl font-extrabold text-gray-900 leading-[1.08] tracking-tight">Three sports. A shared reason to keep practising.</h2>
+              <p className="mt-5 text-lg text-gray-500 max-w-xl mx-auto">
                 Whether you play on ice, on the pitch or in the sports hall, time with your stick matters.
               </p>
             </div>
             <div className="grid sm:grid-cols-3 gap-6">
-              <div className="bg-gray-50 rounded-2xl p-8">
-                <h3 className="text-lg font-bold text-gray-900 mb-3">Ice hockey</h3>
+              <div className="sport-card">
+                <h3 className="text-lg font-extrabold text-gray-900 mb-3 tracking-tight">Ice hockey</h3>
                 <p className="text-sm text-gray-500 leading-relaxed">Keep working on your stickhandling away from the rink, with off-ice practice that gets you moving and looking ahead.</p>
               </div>
-              <div className="bg-gray-50 rounded-2xl p-8">
-                <h3 className="text-lg font-bold text-gray-900 mb-3">Field hockey</h3>
+              <div className="sport-card">
+                <h3 className="text-lg font-extrabold text-gray-900 mb-3 tracking-tight">Field hockey</h3>
                 <p className="text-sm text-gray-500 leading-relaxed">Spend more time on ball control and practise lifting your eyes while your stick stays involved.</p>
               </div>
-              <div className="bg-gray-50 rounded-2xl p-8">
-                <h3 className="text-lg font-bold text-gray-900 mb-3">Floorball</h3>
+              <div className="sport-card">
+                <h3 className="text-lg font-extrabold text-gray-900 mb-3 tracking-tight">Floorball</h3>
                 <p className="text-sm text-gray-500 leading-relaxed">Give your stick skills extra attention outside team training, with games that keep you engaged in every movement.</p>
               </div>
             </div>
@@ -131,25 +132,34 @@ export default function Home() {
         </section>
 
         {/* 4. Why HockeyBeats */}
-        <section className="bg-gray-50 py-20 sm:py-28">
+        <section className="bg-gray-50/50 py-24 sm:py-32">
           <div className="max-w-6xl mx-auto px-6 sm:px-10">
             <div className="max-w-2xl mb-16">
-              <h2 className="text-3xl sm:text-4xl font-bold text-gray-900 leading-tight">Make practice something you look forward to.</h2>
-              <p className="mt-5 text-lg text-gray-500 leading-relaxed">
+              <h2 className="text-3xl sm:text-5xl font-extrabold text-gray-900 leading-[1.08] tracking-tight">Make practice something you look forward to.</h2>
+              <p className="mt-6 text-lg text-gray-500 leading-relaxed">
                 Getting better takes repetition. Finding the motivation to repeat the same movements can be the harder part. HockeyBeats gives those movements a purpose inside a game.
               </p>
             </div>
             <div className="grid sm:grid-cols-3 gap-8">
-              <div>
-                <h3 className="text-base font-bold text-gray-900 mb-2">Build control through repetition</h3>
+              <div className="bg-white rounded-3xl p-7 border border-gray-100 hover:border-gray-200 hover:shadow-md transition-all duration-300">
+                <div className="w-10 h-10 rounded-2xl bg-gray-100 flex items-center justify-center mb-4">
+                  <span className="text-sm font-black text-gray-400">01</span>
+                </div>
+                <h3 className="text-base font-extrabold text-gray-900 mb-2 tracking-tight">Build control through repetition</h3>
                 <p className="text-sm text-gray-500 leading-relaxed">Give yourself more opportunities to get comfortable with your stick and ball.</p>
               </div>
-              <div>
-                <h3 className="text-base font-bold text-gray-900 mb-2">Practise looking ahead</h3>
+              <div className="bg-white rounded-3xl p-7 border border-gray-100 hover:border-gray-200 hover:shadow-md transition-all duration-300">
+                <div className="w-10 h-10 rounded-2xl bg-gray-100 flex items-center justify-center mb-4">
+                  <span className="text-sm font-black text-gray-400">02</span>
+                </div>
+                <h3 className="text-base font-extrabold text-gray-900 mb-2 tracking-tight">Practise looking ahead</h3>
                 <p className="text-sm text-gray-500 leading-relaxed">Follow the screen while keeping the ball moving, rather than watching your stick the whole time.</p>
               </div>
-              <div>
-                <h3 className="text-base font-bold text-gray-900 mb-2">Build a habit that lasts</h3>
+              <div className="bg-white rounded-3xl p-7 border border-gray-100 hover:border-gray-200 hover:shadow-md transition-all duration-300">
+                <div className="w-10 h-10 rounded-2xl bg-gray-100 flex items-center justify-center mb-4">
+                  <span className="text-sm font-black text-gray-400">03</span>
+                </div>
+                <h3 className="text-base font-extrabold text-gray-900 mb-2 tracking-tight">Build a habit that lasts</h3>
                 <p className="text-sm text-gray-500 leading-relaxed">Make individual practice easier to return to with different games, personal bests and friendly competition.</p>
               </div>
             </div>
@@ -157,26 +167,27 @@ export default function Home() {
         </section>
 
         {/* 5. Game previews */}
-        <section id="games" className="py-20 sm:py-28">
+        <section id="games" className="py-24 sm:py-32">
           <div className="max-w-6xl mx-auto px-6 sm:px-10">
             <div className="text-center mb-16">
-              <h2 className="text-3xl sm:text-4xl font-bold text-gray-900 leading-tight">Different games keep practice interesting.</h2>
-              <p className="mt-4 text-base text-gray-500">Start with HockeyBeats, then explore extra games that give you another reason to pick up your stick.</p>
+              <p className="text-xs font-bold uppercase tracking-[0.2em] text-gray-400 mb-4">Game library</p>
+              <h2 className="text-3xl sm:text-5xl font-extrabold text-gray-900 leading-[1.08] tracking-tight">Different games keep practice interesting.</h2>
+              <p className="mt-5 text-base text-gray-500">Start with HockeyBeats, then explore extra games that give you another reason to pick up your stick.</p>
             </div>
 
             {/* Main game */}
             <Link href="/trening" className="group block mb-6">
-              <div className="rounded-3xl overflow-hidden relative h-72 sm:h-96 bg-gray-900">
-                <Image src="/images/hero-dribble.jpg" alt="Slalom" fill className="object-cover opacity-50 group-hover:opacity-60 group-hover:scale-105 transition-all duration-500" />
+              <div className="game-tile rounded-3xl overflow-hidden relative h-72 sm:h-96 bg-gray-900 ring-1 ring-white/10">
+                <Image src="/images/hero-dribble.jpg" alt="Slalom" fill className="object-cover opacity-50 group-hover:opacity-60 group-hover:scale-105 transition-all duration-700" />
                 <div className="absolute inset-0 flex flex-col justify-end p-8 sm:p-10">
-                  <div className="inline-flex items-center gap-2 bg-white/20 backdrop-blur-sm rounded-full px-3 py-1 text-xs text-white font-medium w-fit mb-3">HockeyBeats</div>
-                  <h3 className="text-2xl sm:text-3xl font-bold text-white mb-2">Find your way through the slalom.</h3>
+                  <div className="inline-flex items-center gap-2 bg-white/20 backdrop-blur-sm rounded-full px-3 py-1 text-xs text-white font-bold tracking-wide w-fit mb-3">HockeyBeats</div>
+                  <h3 className="text-2xl sm:text-3xl font-extrabold text-white mb-2 tracking-tight">Find your way through the slalom.</h3>
                   <p className="text-sm text-white/70 max-w-lg">
                     Move through the slalom on screen using your stick-and-ball movements. Follow the course, respond to what's ahead and aim for a better score each time you play.
                   </p>
-                  <div className="mt-4 flex items-center gap-2 text-sm font-medium text-white">
+                  <div className="mt-4 flex items-center gap-2 text-sm font-bold text-white tracking-tight">
                     Preview HockeyBeats
-                    <svg className="w-4 h-4 group-hover:translate-x-1 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" /></svg>
+                    <svg className="w-4 h-4 group-hover:translate-x-1.5 transition-transform duration-300" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" /></svg>
                   </div>
                 </div>
               </div>
@@ -185,28 +196,28 @@ export default function Home() {
             {/* Extra games */}
             <div className="grid sm:grid-cols-2 gap-6">
               <Link href="/space" className="group block">
-                <div className="rounded-2xl bg-[#0f172a] p-8 h-52 flex flex-col justify-between group-hover:bg-[#1e293b] transition-colors">
+                <div className="game-tile rounded-3xl bg-[#0f172a] p-8 h-52 flex flex-col justify-between ring-1 ring-white/5">
                   <div>
-                    <p className="text-xs text-white/40 uppercase tracking-wider mb-2">Extra game</p>
-                    <h3 className="text-lg font-bold text-white mb-2">Space Invaders</h3>
+                    <p className="text-xs text-white/40 uppercase tracking-[0.15em] font-bold mb-2">Extra game</p>
+                    <h3 className="text-lg font-extrabold text-white mb-2 tracking-tight">Space Invaders</h3>
                     <p className="text-sm text-white/50">Use your stick-and-ball movements to play through a space-themed game. Your next score is there to beat.</p>
                   </div>
-                  <div className="flex items-center gap-2 text-sm font-medium text-cyan-400">
+                  <div className="flex items-center gap-2 text-sm font-bold text-cyan-400 tracking-tight">
                     Preview the game
-                    <svg className="w-4 h-4 group-hover:translate-x-1 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" /></svg>
+                    <svg className="w-4 h-4 group-hover:translate-x-1.5 transition-transform duration-300" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" /></svg>
                   </div>
                 </div>
               </Link>
               <Link href="/terciky" className="group block">
-                <div className="rounded-2xl bg-gray-50 p-8 h-52 flex flex-col justify-between group-hover:bg-gray-100 transition-colors">
+                <div className="game-tile rounded-3xl bg-white p-8 h-52 flex flex-col justify-between border border-gray-100">
                   <div>
-                    <p className="text-xs text-gray-400 uppercase tracking-wider mb-2">More games to explore</p>
-                    <h3 className="text-lg font-bold text-gray-900 mb-2">Change the game and keep practising.</h3>
+                    <p className="text-xs text-gray-400 uppercase tracking-[0.15em] font-bold mb-2">More games to explore</p>
+                    <h3 className="text-lg font-extrabold text-gray-900 mb-2 tracking-tight">Change the game and keep practising.</h3>
                     <p className="text-sm text-gray-500">Discover other ways to play when you feel like something different.</p>
                   </div>
-                  <div className="flex items-center gap-2 text-sm font-medium text-gray-900">
+                  <div className="flex items-center gap-2 text-sm font-bold text-gray-900 tracking-tight">
                     Explore the games
-                    <svg className="w-4 h-4 group-hover:translate-x-1 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" /></svg>
+                    <svg className="w-4 h-4 group-hover:translate-x-1.5 transition-transform duration-300" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" /></svg>
                   </div>
                 </div>
               </Link>
@@ -215,49 +226,79 @@ export default function Home() {
         </section>
 
         {/* 6. How it works */}
-        <section id="how-it-works" className="bg-gray-50 py-20 sm:py-28">
+        <section id="how-it-works" className="bg-gray-50/50 py-24 sm:py-32">
           <div className="max-w-6xl mx-auto px-6 sm:px-10">
-            <h2 className="text-3xl sm:text-4xl font-bold text-gray-900 leading-tight text-center mb-16">Set up at home and get straight into practice.</h2>
-            <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-8">
+            <p className="text-xs font-bold uppercase tracking-[0.2em] text-gray-400 mb-4 text-center">Quest steps</p>
+            <h2 className="text-3xl sm:text-5xl font-extrabold text-gray-900 leading-[1.08] tracking-tight text-center mb-16">Set up at home and get straight into practice.</h2>
+            <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
               {[
                 { step: '1', title: 'Prepare your space', desc: 'Get your stick, ball and training mat ready, leaving enough clear space to move comfortably.' },
                 { step: '2', title: 'Open the app', desc: 'Position your phone and follow the camera setup instructions. Make sure you can see the screen clearly.' },
                 { step: '3', title: 'Choose a game', desc: 'Start with the HockeyBeats slalom or try one of the extra games.' },
                 { step: '4', title: 'Play and check your score', desc: 'Follow the action, keep the ball moving and see how you did. Come back to improve your result.' },
               ].map((item) => (
-                <div key={item.step}>
-                  <div className="text-4xl font-black text-gray-200 mb-3">{item.step}</div>
-                  <h3 className="text-lg font-bold text-gray-900 mb-2">{item.title}</h3>
+                <div key={item.step} className="achievement-step">
+                  <div className="w-12 h-12 rounded-2xl bg-gray-900 flex items-center justify-center mb-5">
+                    <span className="text-lg font-black text-white">{item.step}</span>
+                  </div>
+                  <h3 className="text-lg font-extrabold text-gray-900 mb-2 tracking-tight">{item.title}</h3>
                   <p className="text-sm text-gray-500 leading-relaxed">{item.desc}</p>
+                  {/* Achievement progress bar */}
+                  <div className="mt-5 h-1 bg-gray-100 rounded-full overflow-hidden">
+                    <div className="h-full bg-gradient-to-r from-gray-300 to-gray-400 rounded-full" style={{ width: `${Number(item.step) * 25}%` }} />
+                  </div>
                 </div>
               ))}
             </div>
-            <div className="text-center mt-12">
+            <div className="text-center mt-14">
               <Link href="/trening" className="btn-primary px-8 py-4">Start your first session</Link>
             </div>
           </div>
         </section>
 
         {/* 7. Scores and rankings */}
-        <section className="py-20 sm:py-28">
+        <section className="py-24 sm:py-32">
           <div className="max-w-6xl mx-auto px-6 sm:px-10 text-center">
-            <h2 className="text-3xl sm:text-4xl font-bold text-gray-900 leading-tight">See your progress. Give your teammates something to chase.</h2>
-            <p className="mt-5 text-base text-gray-500 max-w-lg mx-auto leading-relaxed">
+            <p className="text-xs font-bold uppercase tracking-[0.2em] text-gray-400 mb-4">Leaderboard</p>
+            <h2 className="text-3xl sm:text-5xl font-extrabold text-gray-900 leading-[1.08] tracking-tight">See your progress. Give your teammates something to chase.</h2>
+            <p className="mt-6 text-base text-gray-500 max-w-lg mx-auto leading-relaxed">
               Your score gives you a clear goal for the next session. Rankings bring your teammates into it, too. Compare results, challenge each other and keep the competition going between training sessions.
             </p>
-            <div className="mt-8">
+            {/* Gaming stat badges */}
+            <div className="mt-10 flex flex-wrap justify-center gap-4">
+              <div className="inline-flex items-center gap-2.5 bg-white border border-gray-100 rounded-2xl px-5 py-3 shadow-sm">
+                <div className="w-8 h-8 rounded-xl bg-gray-900 flex items-center justify-center">
+                  <svg className="w-4 h-4 text-white" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+                </div>
+                <div className="text-left">
+                  <p className="text-xs text-gray-400 font-medium">Rating</p>
+                  <p className="text-sm font-extrabold text-gray-900 tracking-tight">4.8 / 5.0</p>
+                </div>
+              </div>
+              <div className="inline-flex items-center gap-2.5 bg-white border border-gray-100 rounded-2xl px-5 py-3 shadow-sm">
+                <div className="w-8 h-8 rounded-xl bg-gray-900 flex items-center justify-center">
+                  <svg className="w-4 h-4 text-white" fill="currentColor" viewBox="0 0 20 20"><path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd"/></svg>
+                </div>
+                <div className="text-left">
+                  <p className="text-xs text-gray-400 font-medium">Active players</p>
+                  <p className="text-sm font-extrabold text-gray-900 tracking-tight">Growing daily</p>
+                </div>
+              </div>
+            </div>
+            <div className="mt-10">
               <Link href="/rebricek" className="btn-primary px-8 py-4">Set your first score</Link>
             </div>
           </div>
         </section>
 
         {/* 8. Music */}
-        <section className="bg-gray-50 py-20 sm:py-28">
+        <section className="bg-gray-50/50 py-24 sm:py-32">
           <div className="max-w-6xl mx-auto px-6 sm:px-10">
-            <div className="grid lg:grid-cols-2 gap-12 items-center">
+            <div className="grid lg:grid-cols-2 gap-16 items-center">
               <div>
-                <h2 className="text-3xl sm:text-4xl font-bold text-gray-900 leading-tight">Your favourite music can come to training, too.</h2>
-                <p className="mt-5 text-lg text-gray-500 leading-relaxed">
+                <p className="text-xs font-bold uppercase tracking-[0.2em] text-gray-400 mb-4">Audio</p>
+                <h2 className="text-3xl sm:text-5xl font-extrabold text-gray-900 leading-[1.08] tracking-tight">Your favourite music can come to training, too.</h2>
+                <p className="mt-6 text-lg text-gray-500 leading-relaxed">
                   Connect Spotify or Apple Music and listen to any song while you play. Put on your usual playlist, find something that gets you moving or listen to the same favourite again.
                 </p>
                 <p className="mt-3 text-base text-gray-400">Music adds to the experience while you focus on the game and your practice.</p>
@@ -272,10 +313,10 @@ export default function Home() {
         </section>
 
         {/* 9. Mobile app */}
-        <section className="py-20 sm:py-28">
+        <section className="py-24 sm:py-32">
           <div className="max-w-6xl mx-auto px-6 sm:px-10">
-            <h2 className="text-3xl sm:text-4xl font-bold text-gray-900 leading-tight mb-4">Your practice starts on your phone.</h2>
-            <p className="text-lg text-gray-500 leading-relaxed max-w-2xl mb-12">
+            <h2 className="text-3xl sm:text-5xl font-extrabold text-gray-900 leading-[1.08] tracking-tight mb-4">Your practice starts on your phone.</h2>
+            <p className="text-lg text-gray-500 leading-relaxed max-w-2xl mb-14">
               Open HockeyBeats to choose a game, start playing and keep track of your results. During play, your phone becomes the screen you follow.
             </p>
             <div className="grid sm:grid-cols-3 gap-6">
@@ -284,8 +325,8 @@ export default function Home() {
                 { title: 'A record of your results', desc: 'See your scores and personal bests, so you know what you\'re working towards.' },
                 { title: 'A connection to your teammates', desc: 'Check the rankings and see how your latest result compares.' },
               ].map((item) => (
-                <div key={item.title} className="bg-gray-50 rounded-2xl p-6">
-                  <h3 className="text-base font-bold text-gray-900 mb-2">{item.title}</h3>
+                <div key={item.title} className="bg-white rounded-3xl p-7 border border-gray-100 hover:border-gray-200 hover:shadow-md transition-all duration-300">
+                  <h3 className="text-base font-extrabold text-gray-900 mb-2 tracking-tight">{item.title}</h3>
                   <p className="text-sm text-gray-500 leading-relaxed">{item.desc}</p>
                 </div>
               ))}
@@ -294,10 +335,11 @@ export default function Home() {
         </section>
 
         {/* 10. For parents */}
-        <section id="parents" className="bg-gray-50 py-20 sm:py-28">
+        <section id="parents" className="bg-gray-50/50 py-24 sm:py-32">
           <div className="max-w-6xl mx-auto px-6 sm:px-10">
-            <h2 className="text-3xl sm:text-4xl font-bold text-gray-900 leading-tight max-w-2xl mb-4">Help them build a practice habit of their own.</h2>
-            <p className="text-lg text-gray-500 leading-relaxed max-w-2xl mb-12">
+            <p className="text-xs font-bold uppercase tracking-[0.2em] text-gray-400 mb-4">For parents</p>
+            <h2 className="text-3xl sm:text-5xl font-extrabold text-gray-900 leading-[1.08] tracking-tight max-w-2xl mb-4">Help them build a practice habit of their own.</h2>
+            <p className="text-lg text-gray-500 leading-relaxed max-w-2xl mb-14">
               Team training gives children coaching, structure and time with their teammates. Individual practice gives them more opportunities to work with their stick. HockeyBeats makes that extra practice easier to enjoy.
             </p>
             <div className="grid sm:grid-cols-2 gap-6">
@@ -307,13 +349,13 @@ export default function Home() {
                 { title: 'Extra repetitions between team sessions', desc: 'They can spend more time on individual skills at home, alongside the guidance they receive from their coach.' },
                 { title: 'Motivation they can make their own', desc: 'Whether they enjoy beating a personal best, competing with friends or trying another game, there\'s more than one reason to practise.' },
               ].map((item) => (
-                <div key={item.title} className="bg-white rounded-2xl p-6 border border-gray-100">
-                  <h3 className="text-base font-bold text-gray-900 mb-2">{item.title}</h3>
+                <div key={item.title} className="bg-white rounded-3xl p-7 border border-gray-100 hover:border-gray-200 hover:shadow-md transition-all duration-300">
+                  <h3 className="text-base font-extrabold text-gray-900 mb-2 tracking-tight">{item.title}</h3>
                   <p className="text-sm text-gray-500 leading-relaxed">{item.desc}</p>
                 </div>
               ))}
             </div>
-            <div className="mt-10">
+            <div className="mt-12">
               <a href="#how-it-works" className="btn-secondary px-8 py-4">See HockeyBeats in action</a>
             </div>
           </div>
