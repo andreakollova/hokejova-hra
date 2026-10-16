@@ -8,14 +8,15 @@ const inter = Inter({
 });
 
 export const metadata: Metadata = {
-  title: "Hokejový Tréner - Tréning pozemného hokeja",
+  title: "HockeyBeats - Get better at hockey to the music you love",
   description:
-    "Trénuj techniku miešania loptičky v interaktívnom tréningovom prostredí s kamerou v reálnom čase.",
+    "Field hockey training game with music. Play along to Spotify or Apple Music, build your score and rank against teammates.",
+  icons: { icon: '/images/hb-favicon.png' },
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="sk" className={`${inter.variable} h-full antialiased`}>
+    <html lang="en" className={`${inter.variable} h-full antialiased`}>
       <body className="min-h-full flex flex-col bg-white text-gray-900 font-sans">{children}</body>
     </html>
   );
