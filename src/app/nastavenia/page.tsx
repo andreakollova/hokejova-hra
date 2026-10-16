@@ -19,7 +19,7 @@ export default function NastaveniaPage() {
   if (!loaded || !engLoaded) {
     return (
       <div className="min-h-screen bg-white flex items-center justify-center">
-        <p className="text-gray-400">Nacitavam...</p>
+        <p className="text-gray-400">Loading...</p>
       </div>
     );
   }
@@ -56,17 +56,17 @@ export default function NastaveniaPage() {
             <Image src="/images/logo-sportqo.png" alt="sportqo" width={120} height={32} className="h-8 w-auto" />
           </Link>
           <Link href="/" className="text-sm text-gray-500 hover:text-gray-900 transition-colors">
-            Domov
+            Home
           </Link>
         </div>
       </header>
 
       <main className="flex-1 max-w-3xl mx-auto w-full px-6 sm:px-10 py-12">
-        <h1 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-10">Nastavenia</h1>
+        <h1 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-10">Settings</h1>
 
         {/* Profile with Avatar */}
         <section className="mb-10">
-          <h2 className="text-sm font-medium text-gray-400 uppercase tracking-wider mb-3">Profil</h2>
+          <h2 className="text-sm font-medium text-gray-400 uppercase tracking-wider mb-3">Profile</h2>
           <div className="card p-6">
             <div className="flex items-center gap-4">
               <div className="relative group cursor-pointer" onClick={() => fileInputRef.current?.click()}>
@@ -87,7 +87,7 @@ export default function NastaveniaPage() {
               </div>
               <div>
                 <p className="text-lg font-semibold text-gray-900">{settings.username}</p>
-                <p className="text-sm text-gray-400">Prihlaseny uzivatel</p>
+                <p className="text-sm text-gray-400">Logged in user</p>
                 {avatar && (
                   <button
                     onClick={() => setAvatar(null)}
@@ -158,9 +158,9 @@ export default function NastaveniaPage() {
 
         {/* Platform toggle */}
         <section className="mb-10">
-          <h2 className="text-sm font-medium text-gray-400 uppercase tracking-wider mb-3">Platforma</h2>
+          <h2 className="text-sm font-medium text-gray-400 uppercase tracking-wider mb-3">Platform</h2>
           <div className="card p-6">
-            <p className="text-sm text-gray-500 mb-4">Vyber zariadenie, na ktorom trenujes.</p>
+            <p className="text-sm text-gray-500 mb-4">Select the device you train on.</p>
             <div className="flex gap-3">
               <button
                 onClick={() => updateSettings({ platform: 'desktop' })}
@@ -180,7 +180,7 @@ export default function NastaveniaPage() {
                     : 'bg-gray-50 text-gray-500 hover:bg-gray-100 border border-gray-200'
                 }`}
               >
-                Mobil
+                Mobile
               </button>
             </div>
           </div>
@@ -188,9 +188,9 @@ export default function NastaveniaPage() {
 
         {/* Music service */}
         <section className="mb-10">
-          <h2 className="text-sm font-medium text-gray-400 uppercase tracking-wider mb-3">Hudobna sluzba</h2>
+          <h2 className="text-sm font-medium text-gray-400 uppercase tracking-wider mb-3">Music service</h2>
           <div className="card p-6">
-            <p className="text-sm text-gray-500 mb-4">Predvolena sluzba pre Beat mod.</p>
+            <p className="text-sm text-gray-500 mb-4">Default service for Beat mode.</p>
             <div className="flex gap-3">
               <button
                 onClick={() => updateSettings({ musicService: 'spotify' })}
@@ -218,7 +218,7 @@ export default function NastaveniaPage() {
 
         {/* Calibration status */}
         <section className="mb-10">
-          <h2 className="text-sm font-medium text-gray-400 uppercase tracking-wider mb-3">Kalibracia kamery</h2>
+          <h2 className="text-sm font-medium text-gray-400 uppercase tracking-wider mb-3">Camera calibration</h2>
           <div className="card p-6">
             <div className="flex items-center gap-3">
               <div
@@ -228,8 +228,8 @@ export default function NastaveniaPage() {
               />
               <p className="text-sm text-gray-700">
                 {settings.calibrationData
-                  ? 'Kamera je kalibrovaná'
-                  : 'Kamera zatial nie je kalibrovaná'}
+                  ? 'Camera is calibrated'
+                  : 'Camera is not yet calibrated'}
               </p>
             </div>
             {settings.calibrationData && (
@@ -237,7 +237,7 @@ export default function NastaveniaPage() {
                 onClick={() => updateSettings({ calibrationData: null })}
                 className="mt-4 text-sm text-gray-400 hover:text-gray-600 transition-colors"
               >
-                Resetovat kalibraciu
+                Reset calibration
               </button>
             )}
           </div>
@@ -252,7 +252,7 @@ export default function NastaveniaPage() {
             }}
             className="btn-secondary w-full text-center"
           >
-            Odhlasit sa
+            Log out
           </button>
         </section>
       </main>

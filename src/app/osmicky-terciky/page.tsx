@@ -100,16 +100,16 @@ export default function OsmickyTercikyPage() {
       <div className="min-h-screen bg-gray-50/50 flex items-center justify-center p-6">
         <div className="max-w-md w-full space-y-8">
           <div className="text-center">
-            <h1 className="text-3xl font-extrabold text-gray-900">Osmicky dokoncene</h1>
+            <h1 className="text-3xl font-extrabold text-gray-900">Figure 8 complete</h1>
           </div>
           <div className="grid grid-cols-2 gap-3">
-            <div className="card p-4"><div className="text-2xl font-bold text-green-600 tabular-nums">{result.score}</div><div className="text-xs text-gray-400 mt-1">Skore</div></div>
-            <div className="card p-4"><div className="text-2xl font-bold text-gray-900 tabular-nums">{result.completedEights}</div><div className="text-xs text-gray-400 mt-1">Osmicky</div></div>
-            <div className="card p-4"><div className="text-2xl font-bold text-gray-900 tabular-nums">{result.hits}</div><div className="text-xs text-gray-400 mt-1">Zasahy</div></div>
-            <div className="card p-4"><div className="text-2xl font-bold text-gray-900 tabular-nums">{result.duration}s</div><div className="text-xs text-gray-400 mt-1">Cas</div></div>
+            <div className="card p-4"><div className="text-2xl font-bold text-green-600 tabular-nums">{result.score}</div><div className="text-xs text-gray-400 mt-1">Score</div></div>
+            <div className="card p-4"><div className="text-2xl font-bold text-gray-900 tabular-nums">{result.completedEights}</div><div className="text-xs text-gray-400 mt-1">Figure 8s</div></div>
+            <div className="card p-4"><div className="text-2xl font-bold text-gray-900 tabular-nums">{result.hits}</div><div className="text-xs text-gray-400 mt-1">Hits</div></div>
+            <div className="card p-4"><div className="text-2xl font-bold text-gray-900 tabular-nums">{result.duration}s</div><div className="text-xs text-gray-400 mt-1">Time</div></div>
           </div>
           <div className="flex gap-3">
-            <button onClick={() => { setResult(null); setPhase('playing'); }} className="btn-primary flex-1">Hrat znova</button>
+            <button onClick={() => { setResult(null); setPhase('playing'); }} className="btn-primary flex-1">Play again</button>
             <Link href="/dashboard" className="btn-secondary flex-1 text-center">Menu</Link>
           </div>
         </div>
@@ -129,7 +129,7 @@ export default function OsmickyTercikyPage() {
         />
         {inputMode === 'demo' && (
           <div className="absolute bottom-4 left-4 bg-yellow-50/90 border border-yellow-200 rounded-2xl px-3 py-2">
-            <span className="text-xs text-yellow-700">Demo - pohybuj mysou</span>
+            <span className="text-xs text-yellow-700">Demo - move your mouse</span>
           </div>
         )}
       </div>
@@ -141,50 +141,50 @@ export default function OsmickyTercikyPage() {
       <div className="max-w-lg mx-auto">
         <Link href="/" className="inline-flex items-center gap-1.5 text-sm text-gray-400 hover:text-gray-600 transition-colors mb-10">
           <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M15 19l-7-7 7-7" /></svg>
-          Spat
+          Back
         </Link>
         <div className="mb-10">
-          <h1 className="text-4xl font-extrabold text-gray-900 mb-3 tracking-tight">Osmicky s tercikmi</h1>
-          <p className="text-gray-400 leading-relaxed">Terciky sa ukazuju v tvare osmicky. Ved lopticku od jedneho k druhemu v spravnom poradi.</p>
+          <h1 className="text-4xl font-extrabold text-gray-900 mb-3 tracking-tight">Figure 8 with targets</h1>
+          <p className="text-gray-400 leading-relaxed">Targets appear in a figure-8 pattern. Guide the ball from one to the next in the correct order.</p>
         </div>
         <div className="space-y-7">
           <div>
-            <label className="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-3 block">Rezim</label>
+            <label className="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-3 block">Mode</label>
             <div className="flex gap-3">
               <button onClick={() => setInputMode('camera')} className={`flex-1 rounded-2xl p-4 border-2 transition-all ${inputMode === 'camera' ? 'border-green-500 bg-green-50' : 'border-gray-200 bg-white hover:border-gray-300'}`}>
-                <div className="text-sm font-semibold text-gray-900">Kamera</div>
+                <div className="text-sm font-semibold text-gray-900">Camera</div>
               </button>
               <button onClick={() => setInputMode('demo')} className={`flex-1 rounded-2xl p-4 border-2 transition-all ${inputMode === 'demo' ? 'border-yellow-500 bg-yellow-50' : 'border-gray-200 bg-white hover:border-gray-300'}`}>
-                <div className="text-sm font-semibold text-gray-900">Demo (mys)</div>
+                <div className="text-sm font-semibold text-gray-900">Demo (mouse)</div>
               </button>
             </div>
           </div>
           {inputMode === 'camera' && (
             <div className="flex items-center justify-between card p-5">
               <div>
-                <div className="text-sm font-semibold text-gray-900">Kalibracia</div>
-                <div className="text-xs text-gray-500 mt-1">{calibration ? `Ulozena` : 'Nie je nastavena'}</div>
+                <div className="text-sm font-semibold text-gray-900">Calibration</div>
+                <div className="text-xs text-gray-500 mt-1">{calibration ? `Saved` : 'Not configured'}</div>
               </div>
               <button onClick={() => setPhase('calibration')} className="text-sm font-medium text-green-600 bg-green-50 hover:bg-green-100 px-4 py-2 rounded-xl transition-all">
-                {calibration ? 'Prekalibrovat' : 'Kalibrovat'}
+                {calibration ? 'Recalibrate' : 'Calibrate'}
               </button>
             </div>
           )}
           <div>
-            <label className="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-3 block">Obtaznost</label>
+            <label className="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-3 block">Difficulty</label>
             <div className="flex gap-2.5">
               {(['easy', 'medium', 'hard'] as const).map((d) => (
                 <button key={d} onClick={() => setDifficulty(d)} className={`flex-1 rounded-2xl py-3.5 border-2 transition-all text-sm font-semibold ${difficulty === d ? 'border-green-500 bg-green-50 text-green-600' : 'border-gray-200 bg-white text-gray-500 hover:border-gray-300'}`}>
-                  {d === 'easy' ? 'Lahka' : d === 'medium' ? 'Stredna' : 'Tazka'}
+                  {d === 'easy' ? 'Easy' : d === 'medium' ? 'Medium' : 'Hard'}
                 </button>
               ))}
             </div>
             <p className="text-xs text-gray-400 mt-2">
-              {difficulty === 'easy' ? '8 bodov, velke terciky' : difficulty === 'medium' ? '12 bodov, stredne' : '16 bodov, male terciky'}
+              {difficulty === 'easy' ? '8 points, large targets' : difficulty === 'medium' ? '12 points, medium' : '16 points, small targets'}
             </p>
           </div>
           <div>
-            <label className="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-3 block">Dlzka</label>
+            <label className="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-3 block">Duration</label>
             <div className="flex gap-2.5">
               {([30, 60, 90] as const).map((d) => (
                 <button key={d} onClick={() => setDuration(d)} className={`flex-1 rounded-2xl py-3.5 border-2 transition-all text-sm font-semibold ${duration === d ? 'border-green-500 bg-green-50 text-green-600' : 'border-gray-200 bg-white text-gray-500 hover:border-gray-300'}`}>
@@ -195,7 +195,7 @@ export default function OsmickyTercikyPage() {
           </div>
           <BackgroundMusic spotify={spotify} onSelect={setBgTrack} selectedTrack={bgTrack} />
 
-          <button onClick={startGame} className="btn-primary w-full text-lg py-4 mt-2">Spustit</button>
+          <button onClick={startGame} className="btn-primary w-full text-lg py-4 mt-2">Start</button>
         </div>
       </div>
     </div>

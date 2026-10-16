@@ -175,52 +175,58 @@ export default function Home() {
               <p className="mt-5 text-base text-gray-500">Start with HockeyBeats, then explore extra games that give you another reason to pick up your stick.</p>
             </div>
 
-            {/* Main game */}
-            <Link href="/trening" className="group block mb-6">
-              <div className="game-tile rounded-3xl overflow-hidden relative h-72 sm:h-96 bg-gray-900 ring-1 ring-white/10">
-                <Image src="/images/hero-dribble.jpg" alt="Slalom" fill className="object-cover opacity-50 group-hover:opacity-60 group-hover:scale-105 transition-all duration-700" />
-                <div className="absolute inset-0 flex flex-col justify-end p-8 sm:p-10">
-                  <div className="inline-flex items-center gap-2 bg-white/20 backdrop-blur-sm rounded-full px-3 py-1 text-xs text-white font-bold tracking-wide w-fit mb-3">HockeyBeats</div>
-                  <h3 className="text-2xl sm:text-3xl font-extrabold text-white mb-2 tracking-tight">Find your way through the slalom.</h3>
-                  <p className="text-sm text-white/70 max-w-lg">
-                    Move through the slalom on screen using your stick-and-ball movements. Follow the course, respond to what's ahead and aim for a better score each time you play.
-                  </p>
-                  <div className="mt-4 flex items-center gap-2 text-sm font-bold text-white tracking-tight">
-                    Preview HockeyBeats
-                    <svg className="w-4 h-4 group-hover:translate-x-1.5 transition-transform duration-300" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" /></svg>
-                  </div>
-                </div>
-              </div>
-            </Link>
-
-            {/* Extra games */}
+            {/* PS5-style game cards */}
             <div className="grid sm:grid-cols-2 gap-6">
+              {/* HockeyBeats */}
+              <Link href="/trening" className="group block">
+                <div className="game-tile rounded-3xl overflow-hidden relative aspect-[3/4] bg-gray-100">
+                  <Image src="/images/game-hockeybeats.png" alt="HockeyBeats" fill className="object-cover group-hover:scale-105 transition-all duration-700" />
+                  <div className="absolute bottom-0 left-0 right-0 p-6 bg-gradient-to-t from-black/60 to-transparent">
+                    <div className="flex items-center gap-2 text-sm font-bold text-white">
+                      Play
+                      <svg className="w-4 h-4 group-hover:translate-x-1 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" /></svg>
+                    </div>
+                  </div>
+                </div>
+              </Link>
+
+              {/* Space Invaders */}
               <Link href="/space" className="group block">
-                <div className="game-tile rounded-3xl bg-[#0f172a] p-8 h-52 flex flex-col justify-between ring-1 ring-white/5">
-                  <div>
-                    <p className="text-xs text-white/40 uppercase tracking-[0.15em] font-bold mb-2">Extra game</p>
-                    <h3 className="text-lg font-extrabold text-white mb-2 tracking-tight">Space Invaders</h3>
-                    <p className="text-sm text-white/50">Use your stick-and-ball movements to play through a space-themed game. Your next score is there to beat.</p>
-                  </div>
-                  <div className="flex items-center gap-2 text-sm font-bold text-cyan-400 tracking-tight">
-                    Preview the game
-                    <svg className="w-4 h-4 group-hover:translate-x-1.5 transition-transform duration-300" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" /></svg>
+                <div className="game-tile rounded-3xl overflow-hidden relative aspect-[3/4] bg-[#0f172a]">
+                  <Image src="/images/game-spaceinvaders.png" alt="Space Invaders" fill className="object-cover group-hover:scale-105 transition-all duration-700" />
+                  <div className="absolute bottom-0 left-0 right-0 p-6 bg-gradient-to-t from-black/60 to-transparent">
+                    <div className="flex items-center gap-2 text-sm font-bold text-white">
+                      Play
+                      <svg className="w-4 h-4 group-hover:translate-x-1 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" /></svg>
+                    </div>
                   </div>
                 </div>
               </Link>
-              <Link href="/terciky" className="group block">
-                <div className="game-tile rounded-3xl bg-white p-8 h-52 flex flex-col justify-between border border-gray-100">
-                  <div>
-                    <p className="text-xs text-gray-400 uppercase tracking-[0.15em] font-bold mb-2">More games to explore</p>
-                    <h3 className="text-lg font-extrabold text-gray-900 mb-2 tracking-tight">Change the game and keep practising.</h3>
-                    <p className="text-sm text-gray-500">Discover other ways to play when you feel like something different.</p>
+            </div>
+
+            {/* Other games */}
+            <div className="mt-6">
+              <p className="text-xs font-bold uppercase tracking-[0.2em] text-gray-400 mb-4">More games</p>
+              <div className="grid grid-cols-3 gap-4">
+                <Link href="/terciky" className="group block">
+                  <div className="game-tile bg-gray-50 rounded-2xl p-5 h-28 flex flex-col justify-between border border-gray-100">
+                    <span className="text-xl">🎯</span>
+                    <div className="text-sm font-bold text-gray-900 tracking-tight">Targets</div>
                   </div>
-                  <div className="flex items-center gap-2 text-sm font-bold text-gray-900 tracking-tight">
-                    Explore the games
-                    <svg className="w-4 h-4 group-hover:translate-x-1.5 transition-transform duration-300" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" /></svg>
+                </Link>
+                <Link href="/osmicky-terciky" className="group block">
+                  <div className="game-tile bg-gray-50 rounded-2xl p-5 h-28 flex flex-col justify-between border border-gray-100">
+                    <span className="text-xl">♾️</span>
+                    <div className="text-sm font-bold text-gray-900 tracking-tight">Figure 8</div>
                   </div>
-                </div>
-              </Link>
+                </Link>
+                <Link href="/osmicky" className="group block">
+                  <div className="game-tile bg-gray-50 rounded-2xl p-5 h-28 flex flex-col justify-between border border-gray-100">
+                    <span className="text-xl">🔄</span>
+                    <div className="text-sm font-bold text-gray-900 tracking-tight">Classic 8s</div>
+                  </div>
+                </Link>
+              </div>
             </div>
           </div>
         </section>

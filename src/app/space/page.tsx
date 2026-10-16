@@ -98,16 +98,16 @@ export default function SpacePage() {
       <div className="min-h-screen bg-[#0f172a] flex items-center justify-center p-6">
         <div className="max-w-md w-full space-y-8">
           <div className="text-center">
-            <h1 className="text-3xl font-extrabold text-white">{result.lives > 0 ? 'Misia dokoncena' : 'Game Over'}</h1>
+            <h1 className="text-3xl font-extrabold text-white">{result.lives > 0 ? 'Mission complete' : 'Game Over'}</h1>
           </div>
           <div className="grid grid-cols-2 gap-3">
-            <div className="bg-white/10 rounded-2xl p-4"><div className="text-2xl font-bold text-cyan-400 tabular-nums">{result.score}</div><div className="text-xs text-white/50 mt-1">Skore</div></div>
-            <div className="bg-white/10 rounded-2xl p-4"><div className="text-2xl font-bold text-white tabular-nums">{result.blocksDestroyed}</div><div className="text-xs text-white/50 mt-1">Bloky</div></div>
-            <div className="bg-white/10 rounded-2xl p-4"><div className="text-2xl font-bold text-white tabular-nums">{result.asteroidsHit}</div><div className="text-xs text-white/50 mt-1">Zasahy</div></div>
-            <div className="bg-white/10 rounded-2xl p-4"><div className="text-2xl font-bold text-red-400 tabular-nums">{'❤'.repeat(result.lives)}{result.lives === 0 && '💀'}</div><div className="text-xs text-white/50 mt-1">Zivoty</div></div>
+            <div className="bg-white/10 rounded-2xl p-4"><div className="text-2xl font-bold text-cyan-400 tabular-nums">{result.score}</div><div className="text-xs text-white/50 mt-1">Score</div></div>
+            <div className="bg-white/10 rounded-2xl p-4"><div className="text-2xl font-bold text-white tabular-nums">{result.blocksDestroyed}</div><div className="text-xs text-white/50 mt-1">Blocks</div></div>
+            <div className="bg-white/10 rounded-2xl p-4"><div className="text-2xl font-bold text-white tabular-nums">{result.asteroidsHit}</div><div className="text-xs text-white/50 mt-1">Hits</div></div>
+            <div className="bg-white/10 rounded-2xl p-4"><div className="text-2xl font-bold text-red-400 tabular-nums">{'❤'.repeat(result.lives)}{result.lives === 0 && '💀'}</div><div className="text-xs text-white/50 mt-1">Lives</div></div>
           </div>
           <div className="flex gap-3">
-            <button onClick={() => { setResult(null); setPhase('playing'); }} className="flex-1 bg-cyan-500 hover:bg-cyan-400 text-white font-medium py-3.5 rounded-full transition-all">Hrat znova</button>
+            <button onClick={() => { setResult(null); setPhase('playing'); }} className="flex-1 bg-cyan-500 hover:bg-cyan-400 text-white font-medium py-3.5 rounded-full transition-all">Play again</button>
             <Link href="/dashboard" className="flex-1 bg-white/10 hover:bg-white/20 text-white font-medium py-3.5 rounded-full transition-all text-center">Menu</Link>
           </div>
         </div>
@@ -127,7 +127,7 @@ export default function SpacePage() {
         />
         {inputMode === 'demo' && (
           <div className="absolute bottom-4 left-4 bg-cyan-500/20 border border-cyan-500/30 rounded-2xl px-3 py-2">
-            <span className="text-xs text-cyan-300">Demo - pohybuj mysou</span>
+            <span className="text-xs text-cyan-300">Demo - move your mouse</span>
           </div>
         )}
       </div>
@@ -139,47 +139,47 @@ export default function SpacePage() {
       <div className="max-w-lg mx-auto">
         <Link href="/" className="inline-flex items-center gap-1.5 text-sm text-white/40 hover:text-white/70 transition-colors mb-10">
           <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M15 19l-7-7 7-7" /></svg>
-          Spat
+          Back
         </Link>
         <div className="mb-10">
           <h1 className="text-4xl font-extrabold text-white mb-3 tracking-tight">Space Invaders</h1>
-          <p className="text-white/40 leading-relaxed">Ovladaj vesmirnu lod loptickou. Znic bloky a vyhybaj sa asteroidom.</p>
+          <p className="text-white/40 leading-relaxed">Control the spaceship with the ball. Destroy blocks and dodge asteroids.</p>
         </div>
         <div className="space-y-7">
           <div>
-            <label className="text-xs font-semibold text-white/30 uppercase tracking-wider mb-3 block">Rezim</label>
+            <label className="text-xs font-semibold text-white/30 uppercase tracking-wider mb-3 block">Mode</label>
             <div className="flex gap-3">
               <button onClick={() => setInputMode('camera')} className={`flex-1 rounded-2xl p-4 border-2 transition-all ${inputMode === 'camera' ? 'border-cyan-500 bg-cyan-500/10' : 'border-white/10 bg-white/5 hover:border-white/20'}`}>
-                <div className="text-sm font-semibold text-white">Kamera</div>
+                <div className="text-sm font-semibold text-white">Camera</div>
               </button>
               <button onClick={() => setInputMode('demo')} className={`flex-1 rounded-2xl p-4 border-2 transition-all ${inputMode === 'demo' ? 'border-yellow-500 bg-yellow-500/10' : 'border-white/10 bg-white/5 hover:border-white/20'}`}>
-                <div className="text-sm font-semibold text-white">Demo (mys)</div>
+                <div className="text-sm font-semibold text-white">Demo (mouse)</div>
               </button>
             </div>
           </div>
           {inputMode === 'camera' && (
             <div className="flex items-center justify-between bg-white/5 border border-white/10 rounded-2xl p-5">
               <div>
-                <div className="text-sm font-semibold text-white">Kalibracia</div>
-                <div className="text-xs text-white/40 mt-1">{calibration ? 'Ulozena' : 'Nie je nastavena'}</div>
+                <div className="text-sm font-semibold text-white">Calibration</div>
+                <div className="text-xs text-white/40 mt-1">{calibration ? 'Saved' : 'Not configured'}</div>
               </div>
               <button onClick={() => setPhase('calibration')} className="text-sm font-medium text-cyan-400 bg-cyan-500/10 hover:bg-cyan-500/20 px-4 py-2 rounded-xl transition-all">
-                {calibration ? 'Prekalibrovat' : 'Kalibrovat'}
+                {calibration ? 'Recalibrate' : 'Calibrate'}
               </button>
             </div>
           )}
           <div>
-            <label className="text-xs font-semibold text-white/30 uppercase tracking-wider mb-3 block">Obtaznost</label>
+            <label className="text-xs font-semibold text-white/30 uppercase tracking-wider mb-3 block">Difficulty</label>
             <div className="flex gap-2.5">
               {(['easy', 'medium', 'hard'] as const).map((d) => (
                 <button key={d} onClick={() => setDifficulty(d)} className={`flex-1 rounded-2xl py-3.5 border-2 transition-all text-sm font-semibold ${difficulty === d ? 'border-cyan-500 bg-cyan-500/10 text-cyan-400' : 'border-white/10 bg-white/5 text-white/50 hover:border-white/20'}`}>
-                  {d === 'easy' ? 'Lahka' : d === 'medium' ? 'Stredna' : 'Tazka'}
+                  {d === 'easy' ? 'Easy' : d === 'medium' ? 'Medium' : 'Hard'}
                 </button>
               ))}
             </div>
           </div>
           <div>
-            <label className="text-xs font-semibold text-white/30 uppercase tracking-wider mb-3 block">Dlzka</label>
+            <label className="text-xs font-semibold text-white/30 uppercase tracking-wider mb-3 block">Duration</label>
             <div className="flex gap-2.5">
               {([30, 60, 90] as const).map((d) => (
                 <button key={d} onClick={() => setDuration(d)} className={`flex-1 rounded-2xl py-3.5 border-2 transition-all text-sm font-semibold ${duration === d ? 'border-cyan-500 bg-cyan-500/10 text-cyan-400' : 'border-white/10 bg-white/5 text-white/50 hover:border-white/20'}`}>
@@ -191,7 +191,7 @@ export default function SpacePage() {
           <BackgroundMusic spotify={spotify} onSelect={setBgTrack} selectedTrack={bgTrack} />
 
           <button onClick={startGame} className="w-full bg-cyan-500 hover:bg-cyan-400 text-white font-semibold text-lg py-4 rounded-full transition-all">
-            Spustit misiu
+            Start mission
           </button>
         </div>
       </div>

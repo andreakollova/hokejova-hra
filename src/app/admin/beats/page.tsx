@@ -76,7 +76,7 @@ export default function BeatBuilderPage() {
     setBeats([]);
     setRecordStartTime(performance.now());
     setIsRecording(true);
-    setMessage('Klepaj MEDZERNÍK na každý beat pesničky...');
+    setMessage('Tap SPACEBAR on every beat of the song...');
 
     // Poll position
     positionInterval.current = setInterval(async () => {
@@ -93,9 +93,9 @@ export default function BeatBuilderPage() {
     if (beats.length >= 4) {
       const avgInterval = (beats[beats.length - 1] - beats[0]) / (beats.length - 1);
       setCurrentBpm(Math.round(60 / avgInterval));
-      setMessage(`Nahraných ${beats.length} beatov. Ulož alebo nahraj znova.`);
+      setMessage(`Recorded ${beats.length} beats. Save or record again.`);
     } else {
-      setMessage('Príliš málo beatov. Skús znova.');
+      setMessage('Too few beats. Try again.');
     }
   };
 
@@ -129,7 +129,7 @@ export default function BeatBuilderPage() {
 
   const saveBeatMap = async () => {
     if (!selectedTrack || beats.length < 4 || !adminKey) {
-      setMessage('Chýba admin kľúč alebo nedostatok beatov.');
+      setMessage('Missing admin key or not enough beats.');
       return;
     }
 
@@ -153,11 +153,11 @@ export default function BeatBuilderPage() {
       });
 
       if (res.ok) {
-        setMessage('Beat mapa uložená!');
+        setMessage('Beat map saved!');
         loadSavedMaps();
       } else {
         const data = await res.json();
-        setMessage(`Chyba: ${data.error}`);
+        setMessage(`Error: ${data.error}`);
       }
     } catch {
       setMessage('Chyba pri ukladaní.');
@@ -190,13 +190,13 @@ export default function BeatBuilderPage() {
       <div className="max-w-2xl mx-auto">
         <h1 className="text-3xl font-bold text-gray-900 mb-2">Beat Builder</h1>
         <p className="text-gray-400 mb-8">
-          Vyber pesničku, pusti ju a klepaj MEDZERNÍK na každý beat. Uloží sa beat mapa pre hráčov.
+          Select a song, play it and tap SPACEBAR on every beat. The beat map will be saved for players.
         </p>
 
         {/* Admin key */}
         <div className="card p-5 mb-8">
           <label className="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-2 block">
-            Admin kľúč
+            Admin key
           </label>
           <div className="flex gap-2">
             <input
@@ -207,7 +207,7 @@ export default function BeatBuilderPage() {
               placeholder="Service role key..."
             />
             <button onClick={saveAdminKey} className="btn-secondary text-sm px-4">
-              Uložiť
+              Save
             </button>
           </div>
         </div>
@@ -216,9 +216,9 @@ export default function BeatBuilderPage() {
         {!spotify.isConnected ? (
           <div className="text-center py-8">
             <button onClick={spotify.connect} className="btn-primary">
-              Pripojiť Spotify
+              Connect Spotify
             </button>
-            <p className="text-xs text-gray-400 mt-2">Potrebné pre prehrávanie</p>
+            <p className="text-xs text-gray-400 mt-2">Required for playback</p>
           </div>
         ) : (
           <div className="space-y-6">
@@ -228,13 +228,13 @@ export default function BeatBuilderPage() {
               value={searchQuery}
               onChange={(e) => handleSearch(e.target.value)}
               className="input-field"
-              placeholder="Hľadať pesničku na Spotify..."
+              placeholder="Search for a song on Spotify..."
             />
 
             {/* SDK status */}
             <div className="flex items-center gap-2 text-xs text-gray-400">
               <span className={`w-2 h-2 rounded-full ${spotify.isReady ? 'bg-green-500' : 'bg-yellow-500 animate-pulse'}`} />
-              {spotify.isReady ? 'Prehrávač pripravený' : 'Pripájam...'}
+              {spotify.isReady ? 'Player ready' : 'Connecting...'}
             </div>
 
             {/* Search results */}
@@ -276,7 +276,7 @@ export default function BeatBuilderPage() {
                     onClick={() => { setSelectedTrack(null); setBeats([]); setIsRecording(false); }}
                     className="text-xs text-gray-400 hover:text-gray-600"
                   >
-                    Zmeniť
+                    Change
                   </button>
                 </div>
 
@@ -288,11 +288,11 @@ export default function BeatBuilderPage() {
                       disabled={!spotify.isReady}
                       className="btn-primary disabled:opacity-50"
                     >
-                      Spustiť nahrávanie
+                      Start recording
                     </button>
                   ) : (
                     <button onClick={stopRecording} className="bg-red-500 hover:bg-red-600 text-white font-medium px-7 py-3.5 rounded-full transition-all">
-                      Zastaviť
+                      Stop
                     </button>
                   )}
                   {beats.length > 0 && !isRecording && (
@@ -301,7 +301,7 @@ export default function BeatBuilderPage() {
                       disabled={saving || beats.length < 4}
                       className="btn-accent disabled:opacity-50"
                     >
-                      {saving ? 'Ukladám...' : 'Uložiť beat mapu'}
+                      {saving ? 'Saving...' : 'Save beat map'}
                     </button>
                   )}
                 </div>
@@ -310,7 +310,7 @@ export default function BeatBuilderPage() {
                 <div className="grid grid-cols-3 gap-4 text-center">
                   <div className="bg-gray-50 rounded-2xl p-3">
                     <div className="text-2xl font-bold text-gray-900 tabular-nums">{beats.length}</div>
-                    <div className="text-xs text-gray-400">Beaty</div>
+                    <div className="text-xs text-gray-400">Beats</div>
                   </div>
                   <div className="bg-gray-50 rounded-2xl p-3">
                     <div className="text-2xl font-bold text-gray-900 tabular-nums">{currentBpm || '---'}</div>
@@ -320,7 +320,7 @@ export default function BeatBuilderPage() {
                     <div className="text-2xl font-bold text-gray-900 tabular-nums">
                       {Math.floor(playbackPosition / 1000)}s
                     </div>
-                    <div className="text-xs text-gray-400">Pozícia</div>
+                    <div className="text-xs text-gray-400">Position</div>
                   </div>
                 </div>
 
@@ -351,9 +351,9 @@ export default function BeatBuilderPage() {
 
         {/* Saved beat maps */}
         <div className="mt-12">
-          <h2 className="text-xl font-bold text-gray-900 mb-4">Uložené beat mapy ({savedMaps.length})</h2>
+          <h2 className="text-xl font-bold text-gray-900 mb-4">Saved beat maps ({savedMaps.length})</h2>
           {savedMaps.length === 0 ? (
-            <p className="text-gray-400 text-sm">Zatiaľ žiadne beat mapy.</p>
+            <p className="text-gray-400 text-sm">No beat maps yet.</p>
           ) : (
             <div className="space-y-3">
               {savedMaps.map((bm) => (
@@ -366,12 +366,12 @@ export default function BeatBuilderPage() {
                     <div className="text-xs text-gray-500 truncate">{bm.track_artist}</div>
                   </div>
                   <div className="text-sm text-gray-400 tabular-nums">{bm.bpm} BPM</div>
-                  <div className="text-xs text-gray-400">{bm.beats.length} beatov</div>
+                  <div className="text-xs text-gray-400">{bm.beats.length} beats</div>
                   <button
                     onClick={() => deleteBeatMap(bm.id)}
                     className="text-xs text-red-400 hover:text-red-600 transition-colors"
                   >
-                    Zmazať
+                    Delete
                   </button>
                 </div>
               ))}

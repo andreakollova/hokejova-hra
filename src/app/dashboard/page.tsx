@@ -141,62 +141,44 @@ export default function DashboardPage() {
         {/* Games grid */}
         <div className="mb-12">
           <h2 className="text-xs font-bold uppercase tracking-[0.2em] text-gray-400 mb-5">Games</h2>
-          <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
-            {/* Main game */}
-            <Link href="/trening" className="group block sm:col-span-2 lg:col-span-2">
-              <div className="game-tile rounded-3xl overflow-hidden relative h-48 bg-gray-900">
-                <Image src="/images/hero-dribble.jpg" alt="Slalom" fill className="object-cover opacity-40 group-hover:opacity-50 transition-all duration-500" />
-                <div className="absolute inset-0 flex flex-col justify-end p-6">
-                  <div className="inline-flex items-center gap-1.5 bg-emerald-500/90 rounded-full px-2.5 py-0.5 text-[10px] text-white font-bold tracking-wide w-fit mb-2">
-                    MAIN GAME
-                  </div>
-                  <h3 className="text-xl font-extrabold text-white tracking-tight">HockeyBeats Slalom</h3>
-                  <p className="text-xs text-white/60 mt-1">Beat sync · Rankings · Music</p>
+          {/* Main games - PS5 style cards */}
+          <div className="grid sm:grid-cols-2 gap-5 mb-5">
+            <Link href="/trening" className="group block">
+              <div className="game-tile rounded-3xl overflow-hidden relative aspect-[4/5] bg-gray-100">
+                <Image src="/images/game-hockeybeats.png" alt="HockeyBeats" fill className="object-cover group-hover:scale-105 transition-all duration-500" />
+                <div className="absolute bottom-0 left-0 right-0 p-5 bg-gradient-to-t from-black/50 to-transparent">
+                  <div className="text-sm font-bold text-white">Play</div>
                 </div>
               </div>
             </Link>
-
-            {/* Space */}
             <Link href="/space" className="group block">
-              <div className="game-tile rounded-3xl bg-[#0f172a] p-6 h-48 flex flex-col justify-between">
-                <span className="text-2xl">🚀</span>
-                <div>
-                  <h3 className="text-base font-extrabold text-white tracking-tight">Space Invaders</h3>
-                  <p className="text-xs text-white/40 mt-1">Arcade · Blocks · Asteroids</p>
+              <div className="game-tile rounded-3xl overflow-hidden relative aspect-[4/5] bg-[#0f172a]">
+                <Image src="/images/game-spaceinvaders.png" alt="Space Invaders" fill className="object-cover group-hover:scale-105 transition-all duration-500" />
+                <div className="absolute bottom-0 left-0 right-0 p-5 bg-gradient-to-t from-black/50 to-transparent">
+                  <div className="text-sm font-bold text-white">Play</div>
                 </div>
               </div>
             </Link>
+          </div>
 
-            {/* Targets */}
+          {/* Other games */}
+          <div className="grid grid-cols-3 gap-3">
             <Link href="/terciky" className="group block">
-              <div className="game-tile rounded-3xl bg-gray-50 p-6 h-40 flex flex-col justify-between border border-gray-100">
-                <span className="text-2xl">🎯</span>
-                <div>
-                  <h3 className="text-base font-extrabold text-gray-900 tracking-tight">Targets</h3>
-                  <p className="text-xs text-gray-400 mt-1">Speed · Accuracy</p>
-                </div>
+              <div className="game-tile bg-gray-50 rounded-2xl p-4 h-24 flex flex-col justify-between border border-gray-100">
+                <span className="text-lg">🎯</span>
+                <div className="text-xs font-bold text-gray-900">Targets</div>
               </div>
             </Link>
-
-            {/* Figure 8 */}
             <Link href="/osmicky-terciky" className="group block">
-              <div className="game-tile rounded-3xl bg-gray-50 p-6 h-40 flex flex-col justify-between border border-gray-100">
-                <span className="text-2xl">♾️</span>
-                <div>
-                  <h3 className="text-base font-extrabold text-gray-900 tracking-tight">Figure 8</h3>
-                  <p className="text-xs text-gray-400 mt-1">Control · Flow</p>
-                </div>
+              <div className="game-tile bg-gray-50 rounded-2xl p-4 h-24 flex flex-col justify-between border border-gray-100">
+                <span className="text-lg">♾️</span>
+                <div className="text-xs font-bold text-gray-900">Figure 8</div>
               </div>
             </Link>
-
-            {/* Classic 8s */}
             <Link href="/osmicky" className="group block">
-              <div className="game-tile rounded-3xl bg-gray-50 p-6 h-40 flex flex-col justify-between border border-gray-100">
-                <span className="text-2xl">🔄</span>
-                <div>
-                  <h3 className="text-base font-extrabold text-gray-900 tracking-tight">Classic 8s</h3>
-                  <p className="text-xs text-gray-400 mt-1">Top-down · Precision</p>
-                </div>
+              <div className="game-tile bg-gray-50 rounded-2xl p-4 h-24 flex flex-col justify-between border border-gray-100">
+                <span className="text-lg">🔄</span>
+                <div className="text-xs font-bold text-gray-900">Classic 8s</div>
               </div>
             </Link>
           </div>

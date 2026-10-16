@@ -51,36 +51,36 @@ export default function RebricekPage() {
           <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
             <path strokeLinecap="round" strokeLinejoin="round" d="M15 19l-7-7 7-7" />
           </svg>
-          Spat
+          Back
         </Link>
 
-        <h1 className="text-3xl font-bold text-gray-900 mb-2">Rebricek</h1>
-        <p className="text-gray-400 mb-8">Porovnaj sa s ostatnymi hracmi.</p>
+        <h1 className="text-3xl font-bold text-gray-900 mb-2">Rankings</h1>
+        <p className="text-gray-400 mb-8">Compare yourself with other players.</p>
 
         <div className="flex gap-2 mb-6">
           <button onClick={() => setTab('overall')}
             className={`rounded-full px-5 py-2 text-sm font-medium transition-all ${tab === 'overall' ? 'bg-gray-900 text-white' : 'bg-gray-100 text-gray-500'}`}>
-            Celkovy
+            Overall
           </button>
           {isLoggedIn && (
             <button onClick={() => setTab('personal')}
               className={`rounded-full px-5 py-2 text-sm font-medium transition-all ${tab === 'personal' ? 'bg-gray-900 text-white' : 'bg-gray-100 text-gray-500'}`}>
-              Moje skore
+              My scores
             </button>
           )}
         </div>
 
         {tab === 'overall' && myRank > 0 && (
           <div className="card p-4 mb-6 flex items-center justify-between">
-            <span className="text-sm text-gray-500">Tvoje umiestnenie</span>
+            <span className="text-sm text-gray-500">Your rank</span>
             <span className="text-2xl font-bold text-gray-900">#{myRank}</span>
           </div>
         )}
 
         {loading ? (
-          <div className="text-center text-gray-400 py-12">Nacitavam...</div>
+          <div className="text-center text-gray-400 py-12">Loading...</div>
         ) : scores.length === 0 ? (
-          <div className="text-center text-gray-400 py-12">Zatial ziadne skore.</div>
+          <div className="text-center text-gray-400 py-12">No scores yet.</div>
         ) : (
           <div className="space-y-2">
             {scores.map((entry, idx) => {
@@ -104,7 +104,7 @@ export default function RebricekPage() {
                       <span className="text-sm font-semibold text-gray-900">
                         {entry.username}
                       </span>
-                      {isMe && <span className="text-green-600 text-xs">(ty)</span>}
+                      {isMe && <span className="text-green-600 text-xs">(you)</span>}
                       {isMe && myLevel.level > 0 && (
                         <span className="inline-flex items-center justify-center w-5 h-5 rounded-full bg-gray-900 text-[10px] font-bold text-white">
                           {myLevel.level}
@@ -112,7 +112,7 @@ export default function RebricekPage() {
                       )}
                     </div>
                     <div className="text-xs text-gray-400">
-                      {entry.song_name || 'Slalom'} · {entry.difficulty === 'easy' ? 'Lahka' : entry.difficulty === 'medium' ? 'Stredna' : 'Tazka'} · {entry.accuracy}% · Seria {entry.longest_streak}
+                      {entry.song_name || 'Slalom'} · {entry.difficulty === 'easy' ? 'Easy' : entry.difficulty === 'medium' ? 'Medium' : 'Hard'} · {entry.accuracy}% · Streak {entry.longest_streak}
                     </div>
                   </div>
                   <div className="text-right">
