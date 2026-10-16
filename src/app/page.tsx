@@ -87,6 +87,18 @@ export default function Home() {
                 You're concentrating on the game. You might not even realise how much you're practising.
               </p>
             </div>
+            {/* Video */}
+            <div className="mt-12 max-w-3xl">
+              <div className="rounded-2xl overflow-hidden aspect-video bg-gray-900">
+                <iframe
+                  src="https://www.youtube.com/embed/F1_0Lkp16Rc?rel=0&modestbranding=1"
+                  title="HockeyBeats gameplay"
+                  className="w-full h-full"
+                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                  allowFullScreen
+                />
+              </div>
+            </div>
           </div>
         </section>
 
