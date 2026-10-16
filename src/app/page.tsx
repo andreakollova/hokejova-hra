@@ -40,30 +40,26 @@ export default function Home() {
         <div className="max-w-6xl mx-auto flex justify-between items-center">
           <Link href="/">
             <Image
-              src={scrolled ? '/images/hb-logo.png' : '/images/hb-logo-white.png'}
+              src="/images/hb-logo.png"
               alt="HockeyBeats"
-              width={140}
+              width={160}
               height={32}
               className={`transition-all duration-300 ${scrolled ? 'h-7 w-auto' : 'h-8 w-auto'}`}
             />
           </Link>
           <nav className="flex items-center gap-5 sm:gap-7">
-            <a href="#how-it-works" className={`text-sm font-medium tracking-tight transition-colors hidden sm:block ${scrolled ? 'text-gray-400 hover:text-gray-900' : 'text-white/60 hover:text-white'}`}>How it works</a>
-            <a href="#sports" className={`text-sm font-medium tracking-tight transition-colors hidden sm:block ${scrolled ? 'text-gray-400 hover:text-gray-900' : 'text-white/60 hover:text-white'}`}>Sports</a>
-            <a href="#games" className={`text-sm font-medium tracking-tight transition-colors hidden sm:block ${scrolled ? 'text-gray-400 hover:text-gray-900' : 'text-white/60 hover:text-white'}`}>Games</a>
-            <a href="#parents" className={`text-sm font-medium tracking-tight transition-colors hidden sm:block ${scrolled ? 'text-gray-400 hover:text-gray-900' : 'text-white/60 hover:text-white'}`}>For parents</a>
-            <a href="#teams" className={`text-sm font-medium tracking-tight transition-colors hidden sm:block ${scrolled ? 'text-gray-400 hover:text-gray-900' : 'text-white/60 hover:text-white'}`}>For teams</a>
+            <a href="#how-it-works" className="text-sm font-medium tracking-tight text-gray-400 hover:text-gray-900 transition-colors hidden sm:block">How it works</a>
+            <a href="#sports" className="text-sm font-medium tracking-tight text-gray-400 hover:text-gray-900 transition-colors hidden sm:block">Sports</a>
+            <a href="#parents" className="text-sm font-medium tracking-tight text-gray-400 hover:text-gray-900 transition-colors hidden sm:block">For parents</a>
             {isLoggedIn ? (
               <>
                 {engLoaded && getStreak().currentStreak > 0 && (
                   <StreakBadge currentStreak={getStreak().currentStreak} frozen={getStreak().frozen} size="sm" />
                 )}
-                <Link href="/nastavenia" className={`text-sm font-medium ${scrolled ? 'text-gray-500' : 'text-white/70'}`}>{settings.username}</Link>
+                <Link href="/nastavenia" className="text-sm font-medium text-gray-500">{settings.username}</Link>
               </>
             ) : (
-              <Link href="/trening" className={`text-sm font-bold tracking-tight px-5 py-2.5 rounded-full transition-all duration-300 ${
-                scrolled ? 'bg-gray-900 text-white hover:bg-gray-800 hover:shadow-lg hover:shadow-gray-900/15' : 'bg-white/15 text-white backdrop-blur-sm hover:bg-white/25 border border-white/20'
-              }`}>Start training</Link>
+              <Link href="/trening" className="text-sm font-bold tracking-tight px-5 py-2.5 rounded-full border border-gray-300 text-gray-900 hover:bg-gray-900 hover:text-white hover:border-gray-900 transition-all duration-300">Start training</Link>
             )}
           </nav>
         </div>
@@ -529,69 +525,50 @@ function HeroBanner() {
 
   return (
     <>
-      <section className="relative h-screen flex flex-col justify-center overflow-hidden">
-        {/* Video background - dark overlay */}
-        <div className="absolute inset-0 bg-black">
-          <iframe
-            src="https://www.youtube.com/embed/7mGtwXDxupA?autoplay=1&mute=1&loop=1&controls=0&showinfo=0&rel=0&playlist=7mGtwXDxupA&playsinline=1&modestbranding=1&iv_load_policy=3&disablekb=1"
-            className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 pointer-events-none"
-            style={{ width: '300vw', height: '300vh', minWidth: '100vw', minHeight: '100vh' }}
-            allow="autoplay; encrypted-media"
-            title="Background"
-          />
-          <div className="absolute inset-0 bg-black/50" />
-          <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-black/40" />
-        </div>
-
-        {/* Content - centered, white text, logo prominent */}
-        <div className="relative z-10 max-w-6xl mx-auto px-6 sm:px-10 pt-32 pb-20 flex flex-col items-center text-center">
-          {/* Logo */}
-          <Image src="/images/hb-logo-white.png" alt="HockeyBeats" width={280} height={60} className="h-12 sm:h-16 w-auto mb-8" />
-
-          <h1 className="text-3xl sm:text-5xl lg:text-6xl font-extrabold text-white leading-[1.08] tracking-tight max-w-3xl">
-            A game you want to&nbsp;play. Practice the coach will&nbsp;notice.
+      <section className="relative min-h-screen flex flex-col overflow-hidden bg-[#f0f2f5]">
+        {/* Top section - light bg with text */}
+        <div className="relative z-10 flex flex-col items-center text-center pt-28 sm:pt-36 pb-10 px-6">
+          <h1 className="text-4xl sm:text-6xl lg:text-7xl font-extrabold text-gray-900 leading-[1.05] tracking-tight">
+            Your game. Your rhythm.
           </h1>
-          <p className="mt-6 text-base sm:text-lg text-white/60 max-w-lg leading-relaxed">
-            Turn stickhandling practice into an interactive game. Follow the action on screen, move the ball and build your score.
+          <p className="mt-4 text-base sm:text-lg text-gray-400">
+            A game you want to play. Practice your coach will notice.
           </p>
 
-          {/* Main CTA - prominent */}
-          <div className="mt-10">
+          {/* CTA */}
+          <div className="mt-8">
             <button
               onClick={() => setShowPlatform(true)}
-              className="group relative bg-white text-gray-900 font-extrabold text-lg px-12 py-5 rounded-full hover:shadow-2xl hover:shadow-white/25 active:scale-[0.97] transition-all duration-300 tracking-tight"
+              className="group bg-gray-900 text-white font-bold text-base px-10 py-4 rounded-full hover:bg-gray-800 hover:shadow-xl active:scale-[0.97] transition-all duration-300 flex items-center gap-3"
             >
-              <span className="relative z-10 flex items-center gap-2">
-                <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
-                Play now — it&apos;s free
-              </span>
+              <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+              Play now — it&apos;s free
             </button>
           </div>
 
-          {/* Store badges */}
-          <div className="mt-8 flex flex-wrap items-center justify-center gap-3">
-            <a href="#" className="hover:opacity-80 transition-opacity">
-              <img src="https://developer.apple.com/assets/elements/badges/download-on-the-app-store.svg" alt="Download on the App Store" className="h-10" />
-            </a>
-            <a href="#" className="hover:opacity-80 transition-opacity">
-              <img src="https://upload.wikimedia.org/wikipedia/commons/7/78/Google_Play_Store_badge_EN.svg" alt="Get it on Google Play" className="h-10" />
-            </a>
-            <Link href="/trening" className="inline-flex items-center gap-2 bg-white/15 text-white text-xs font-bold px-4 h-10 rounded-lg hover:bg-white/25 border border-white/20 transition-colors backdrop-blur-sm">
-              <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><circle cx="12" cy="12" r="10" /><path d="M2 12h20" /></svg>
-              Play on Web
-            </Link>
-          </div>
-
-          <p className="mt-5 text-xs text-white/30">For ice hockey, field hockey and floorball.</p>
+          <p className="mt-4 text-xs text-gray-400">iOS · Android · Web</p>
         </div>
 
-        {/* Scroll arrow */}
-        <a href="#more" className="absolute bottom-8 left-1/2 -translate-x-1/2 z-10 flex flex-col items-center gap-1 text-white/40 hover:text-white/70 transition-colors">
-          <span className="text-xs">More info</span>
-          <svg className="w-5 h-5 animate-bounce" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-            <path strokeLinecap="round" strokeLinejoin="round" d="M19 9l-7 7-7-7" />
-          </svg>
-        </a>
+        {/* Bottom section - gameplay video/image */}
+        <div className="relative flex-1 min-h-[50vh]">
+          {/* Video background */}
+          <div className="absolute inset-0 overflow-hidden">
+            <iframe
+              src="https://www.youtube.com/embed/7mGtwXDxupA?autoplay=1&mute=1&loop=1&controls=0&showinfo=0&rel=0&playlist=7mGtwXDxupA&playsinline=1&modestbranding=1&iv_load_policy=3&disablekb=1"
+              className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 pointer-events-none"
+              style={{ width: '300vw', height: '300vh', minWidth: '100vw', minHeight: '100vh' }}
+              allow="autoplay; encrypted-media"
+              title="Background"
+            />
+          </div>
+          {/* Gradient fade from light bg to video */}
+          <div className="absolute inset-x-0 top-0 h-24 bg-gradient-to-b from-[#f0f2f5] to-transparent z-10" />
+          {/* "Real gameplay" badge */}
+          <div className="absolute bottom-6 left-6 z-10 flex items-center gap-2">
+            <span className="w-2 h-2 bg-emerald-500 rounded-full animate-pulse" />
+            <span className="text-[10px] font-bold uppercase tracking-[0.15em] text-white/70">Real gameplay</span>
+          </div>
+        </div>
       </section>
 
       {/* Anchor for scroll */}
