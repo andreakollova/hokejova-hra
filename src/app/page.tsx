@@ -86,6 +86,105 @@ export default function Home() {
           </div>
         </section>
 
+        {/* Sports */}
+        <section className="py-16 sm:py-20 border-b border-gray-100">
+          <div className="max-w-6xl mx-auto px-6 sm:px-10">
+            <p className="text-center text-sm text-gray-400 uppercase tracking-widest mb-10">Works with your sport</p>
+            <div className="flex flex-wrap justify-center gap-8 sm:gap-16">
+              {[
+                { name: 'Field Hockey', icon: '🏑' },
+                { name: 'Ice Hockey', icon: '🏒' },
+                { name: 'Floorball', icon: '🥍' },
+              ].map((sport) => (
+                <div key={sport.name} className="flex flex-col items-center gap-2">
+                  <span className="text-4xl">{sport.icon}</span>
+                  <span className="text-sm font-medium text-gray-900">{sport.name}</span>
+                </div>
+              ))}
+            </div>
+          </div>
+        </section>
+
+        {/* Games overview */}
+        <section className="py-20 sm:py-28">
+          <div className="max-w-6xl mx-auto px-6 sm:px-10">
+            <div className="text-center mb-16">
+              <p className="text-sm text-gray-400 uppercase tracking-widest mb-3">Games</p>
+              <h2 className="text-3xl sm:text-4xl font-bold text-gray-900 leading-tight">
+                More than one way to practise.
+              </h2>
+            </div>
+
+            {/* Main game */}
+            <div className="mb-10">
+              <Link href="/trening" className="group block">
+                <div className="rounded-3xl overflow-hidden relative h-64 sm:h-80 bg-gray-900">
+                  <Image src="/images/hero-dribble.jpg" alt="Slalom" fill className="object-cover opacity-50 group-hover:opacity-60 group-hover:scale-105 transition-all duration-500" />
+                  <div className="absolute inset-0 flex flex-col justify-end p-8 sm:p-10">
+                    <div className="inline-flex items-center gap-2 bg-white/20 backdrop-blur-sm rounded-full px-3 py-1 text-xs text-white font-medium w-fit mb-3">
+                      <Image src="/images/hb-icon.png" alt="" width={16} height={16} className="h-3.5 w-auto invert" />
+                      HockeyBeats
+                    </div>
+                    <h3 className="text-2xl sm:text-3xl font-bold text-white mb-2">Slalom</h3>
+                    <p className="text-sm text-white/70 max-w-md">
+                      The main game. Dodge cones left and right to the beat of your music. Build streaks, climb the rankings.
+                    </p>
+                    <div className="mt-4 flex items-center gap-2 text-sm font-medium text-white">
+                      Play now
+                      <svg className="w-4 h-4 group-hover:translate-x-1 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                        <path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" />
+                      </svg>
+                    </div>
+                  </div>
+                </div>
+              </Link>
+            </div>
+
+            {/* Extra games */}
+            <div>
+              <p className="text-xs text-gray-400 uppercase tracking-widest mb-5">Extra games</p>
+              <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-4">
+                <Link href="/terciky" className="group block">
+                  <div className="bg-gray-50 rounded-2xl p-6 h-44 flex flex-col justify-between group-hover:bg-gray-100 transition-colors">
+                    <div className="text-2xl">🎯</div>
+                    <div>
+                      <h3 className="text-base font-bold text-gray-900 mb-1">Targets</h3>
+                      <p className="text-xs text-gray-500">Hit targets as fast as you can.</p>
+                    </div>
+                  </div>
+                </Link>
+                <Link href="/osmicky-terciky" className="group block">
+                  <div className="bg-gray-50 rounded-2xl p-6 h-44 flex flex-col justify-between group-hover:bg-gray-100 transition-colors">
+                    <div className="text-2xl">♾️</div>
+                    <div>
+                      <h3 className="text-base font-bold text-gray-900 mb-1">Figure 8</h3>
+                      <p className="text-xs text-gray-500">Guide the ball through checkpoints in a figure-8 pattern.</p>
+                    </div>
+                  </div>
+                </Link>
+                <Link href="/space" className="group block">
+                  <div className="bg-[#0f172a] rounded-2xl p-6 h-44 flex flex-col justify-between group-hover:bg-[#1e293b] transition-colors">
+                    <div className="text-2xl">🚀</div>
+                    <div>
+                      <h3 className="text-base font-bold text-white mb-1">Space Invaders</h3>
+                      <p className="text-xs text-white/50">Control a spaceship with your stick. Destroy blocks, dodge asteroids.</p>
+                    </div>
+                  </div>
+                </Link>
+                <Link href="/osmicky" className="group block">
+                  <div className="bg-gray-50 rounded-2xl p-6 h-44 flex flex-col justify-between group-hover:bg-gray-100 transition-colors">
+                    <div className="text-2xl">🔄</div>
+                    <div>
+                      <h3 className="text-base font-bold text-gray-900 mb-1">Classic 8s</h3>
+                      <p className="text-xs text-gray-500">Practise your figure-8 with a top-down view.</p>
+                    </div>
+                  </div>
+                </Link>
+              </div>
+            </div>
+          </div>
+        </section>
+
         {/* 2. Gameplay */}
         <section className="bg-gray-50 py-20 sm:py-28">
           <div className="max-w-6xl mx-auto px-6 sm:px-10">
