@@ -2,11 +2,14 @@
 
 import { useState, useEffect } from 'react';
 import { useSettings } from '@/hooks/useSettings';
+import { useEngagement } from '@/hooks/useEngagement';
+import StreakBadge from '@/components/ui/StreakBadge';
 import Link from 'next/link';
 import Image from 'next/image';
 
 export default function Home() {
   const { settings, isLoggedIn, login, logout } = useSettings();
+  const { getStreak, getLevelProgress, loaded: engLoaded } = useEngagement();
   const [showAuth, setShowAuth] = useState(false);
   const [loginUsername, setLoginUsername] = useState('');
   const [loginPassword, setLoginPassword] = useState('');
@@ -35,9 +38,9 @@ export default function Home() {
             <Image
               src={scrolled ? '/images/hb-icon.png' : '/images/hb-logo.png'}
               alt="HockeyBeats"
-              width={scrolled ? 36 : 160}
-              height={scrolled ? 20 : 36}
-              className={`transition-all duration-300 ${scrolled ? 'h-5 w-auto' : 'h-8 w-auto'}`}
+              width={scrolled ? 44 : 200}
+              height={scrolled ? 28 : 44}
+              className={`transition-all duration-300 ${scrolled ? 'h-7 w-auto' : 'h-10 w-auto'}`}
             />
           </Link>
           <nav className="flex items-center gap-5 sm:gap-7">
@@ -47,6 +50,14 @@ export default function Home() {
             <a href="#teams" className="text-sm text-gray-500 hover:text-gray-900 transition-colors hidden sm:block">For teams</a>
             {isLoggedIn ? (
               <>
+                {engLoaded && getStreak().currentStreak > 0 && (
+                  <StreakBadge currentStreak={getStreak().currentStreak} frozen={getStreak().frozen} size="sm" />
+                )}
+                {engLoaded && getLevelProgress().level > 0 && (
+                  <span className="inline-flex items-center justify-center w-6 h-6 rounded-full bg-gray-900 text-xs font-bold text-white">
+                    {getLevelProgress().level}
+                  </span>
+                )}
                 <Link href="/nastavenia" className="text-sm text-gray-500 hover:text-gray-900">{settings.username}</Link>
                 <button onClick={logout} className="text-sm text-gray-400 hover:text-gray-600">Log out</button>
               </>
@@ -90,18 +101,39 @@ export default function Home() {
         <section className="py-16 sm:py-20 border-b border-gray-100">
           <div className="max-w-6xl mx-auto px-6 sm:px-10">
             <p className="text-center text-sm text-gray-400 uppercase tracking-widest mb-10">Works with your sport</p>
-            <div className="flex flex-wrap justify-center gap-8 sm:gap-16">
+            <div className="flex flex-wrap justify-center items-end gap-10 sm:gap-16">
               {[
-                { name: 'Field Hockey', icon: '🏑' },
-                { name: 'Ice Hockey', icon: '🏒' },
-                { name: 'Floorball', icon: '🥍' },
+                { name: 'Field Hockey', icon: (
+                  <svg className="w-10 h-10 text-gray-900" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.5} strokeLinecap="round" strokeLinejoin="round">
+                    <path d="M6 3c0 0-1 4-1 8s2 7 4 9l2 2" />
+                    <path d="M18 3c0 0 1 4 1 8s-2 7-4 9l-2 2" />
+                    <circle cx="12" cy="18" r="2" fill="currentColor" />
+                  </svg>
+                )},
+                { name: 'Ice Hockey', icon: (
+                  <svg className="w-10 h-10 text-gray-900" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.5} strokeLinecap="round" strokeLinejoin="round">
+                    <path d="M4 20l8-16h4l4 4" />
+                    <path d="M16 8l-4 4" />
+                    <circle cx="8" cy="17" r="2.5" fill="currentColor" />
+                  </svg>
+                )},
+                { name: 'Floorball', icon: (
+                  <svg className="w-10 h-10 text-gray-900" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.5} strokeLinecap="round" strokeLinejoin="round">
+                    <path d="M5 3v14c0 2 2 4 4 4h2" />
+                    <rect x="3" y="17" width="8" height="4" rx="2" />
+                    <circle cx="17" cy="12" r="3" strokeDasharray="2 2" />
+                  </svg>
+                )},
               ].map((sport) => (
-                <div key={sport.name} className="flex flex-col items-center gap-2">
-                  <span className="text-4xl">{sport.icon}</span>
+                <div key={sport.name} className="flex flex-col items-center gap-3">
+                  <div className="w-16 h-16 bg-gray-50 rounded-2xl flex items-center justify-center">
+                    {sport.icon}
+                  </div>
                   <span className="text-sm font-medium text-gray-900">{sport.name}</span>
                 </div>
               ))}
             </div>
+            <p className="text-center text-xs text-gray-400 mt-8">Or any other hockey sport with a stick and ball.</p>
           </div>
         </section>
 

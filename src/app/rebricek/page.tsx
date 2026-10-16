@@ -2,6 +2,8 @@
 
 import { useState, useEffect } from 'react';
 import { useSettings } from '@/hooks/useSettings';
+import { useEngagement } from '@/hooks/useEngagement';
+import Avatar from '@/components/ui/Avatar';
 import Link from 'next/link';
 
 interface ScoreEntry {
@@ -19,6 +21,7 @@ interface ScoreEntry {
 
 export default function RebricekPage() {
   const { settings, isLoggedIn } = useSettings();
+  const { getLevelProgress, getAvatar } = useEngagement();
   const [tab, setTab] = useState<'overall' | 'personal'>('overall');
   const [scores, setScores] = useState<ScoreEntry[]>([]);
   const [loading, setLoading] = useState(false);
@@ -38,6 +41,8 @@ export default function RebricekPage() {
   };
 
   const myRank = tab === 'overall' ? scores.findIndex(s => s.username === settings.username) + 1 : 0;
+  const myLevel = getLevelProgress();
+  const myAvatar = getAvatar();
 
   return (
     <div className="min-h-screen bg-white px-6 py-8">
@@ -89,9 +94,22 @@ export default function RebricekPage() {
                       rank === 1 ? 'bg-yellow-100 text-yellow-700' : rank === 2 ? 'bg-gray-100 text-gray-600' : rank === 3 ? 'bg-orange-100 text-orange-600' : 'bg-gray-50 text-gray-400'
                     }`}>{rank}</div>
                   )}
+                  <Avatar
+                    username={entry.username}
+                    photoUrl={isMe ? myAvatar : null}
+                    size="sm"
+                  />
                   <div className="flex-1 min-w-0">
-                    <div className="text-sm font-semibold text-gray-900">
-                      {entry.username} {isMe && <span className="text-green-600 text-xs">(ty)</span>}
+                    <div className="flex items-center gap-2">
+                      <span className="text-sm font-semibold text-gray-900">
+                        {entry.username}
+                      </span>
+                      {isMe && <span className="text-green-600 text-xs">(ty)</span>}
+                      {isMe && myLevel.level > 0 && (
+                        <span className="inline-flex items-center justify-center w-5 h-5 rounded-full bg-gray-900 text-[10px] font-bold text-white">
+                          {myLevel.level}
+                        </span>
+                      )}
                     </div>
                     <div className="text-xs text-gray-400">
                       {entry.song_name || 'Slalom'} · {entry.difficulty === 'easy' ? 'Lahka' : entry.difficulty === 'medium' ? 'Stredna' : 'Tazka'} · {entry.accuracy}% · Seria {entry.longest_streak}
