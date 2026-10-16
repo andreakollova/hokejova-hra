@@ -160,13 +160,13 @@ export default function ProfilPage() {
               >
                 <div>
                   <div className="text-sm font-medium text-gray-900">
-                    {rec.game_type === 'slalom' ? 'Slalom' : 'Osmičky'}{' '}
+                    {rec.game_type === 'slalom' ? 'Slalom' : 'Figure 8'}{' '}
                     <span className="text-gray-400">
                       {rec.difficulty === 'easy'
-                        ? 'Ľahká'
+                        ? 'Easy'
                         : rec.difficulty === 'medium'
-                        ? 'Stredná'
-                        : 'Ťažká'}{' '}
+                        ? 'Medium'
+                        : 'Hard'}{' '}
                       / {rec.duration_seconds}s
                     </span>
                   </div>
@@ -184,7 +184,7 @@ export default function ProfilPage() {
                     {rec.score}
                   </div>
                   <div className="text-xs text-gray-400">
-                    {rec.accuracy}% | Séria {rec.longest_streak}
+                    {rec.accuracy}% | Streak {rec.longest_streak}
                   </div>
                 </div>
               </div>

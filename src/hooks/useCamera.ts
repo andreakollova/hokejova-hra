@@ -33,32 +33,32 @@ export function useCamera() {
         .filter((d) => d.kind === 'videoinput')
         .map((d) => ({
           deviceId: d.deviceId,
-          label: d.label || `Kamera ${d.deviceId.slice(0, 8)}`,
+          label: d.label || `Camera ${d.deviceId.slice(0, 8)}`,
         }));
 
       // On mobile, add friendly names if labels are empty
       if (isMobile() && videoDevices.length >= 2) {
         // Usually: first = front, second = back
-        if (!videoDevices[0].label || videoDevices[0].label.startsWith('Kamera')) {
-          videoDevices[0].label = 'Predná kamera';
+        if (!videoDevices[0].label || videoDevices[0].label.startsWith('Camera')) {
+          videoDevices[0].label = 'Front camera';
         }
-        if (videoDevices.length > 1 && (!videoDevices[1].label || videoDevices[1].label.startsWith('Kamera'))) {
-          videoDevices[1].label = 'Zadná kamera';
+        if (videoDevices.length > 1 && (!videoDevices[1].label || videoDevices[1].label.startsWith('Camera'))) {
+          videoDevices[1].label = 'Back camera';
         }
       }
 
       // On mobile, add virtual entries for facingMode if no devices found
       if (isMobile() && videoDevices.length === 0) {
         videoDevices.push(
-          { deviceId: '__front__', label: 'Predná kamera' },
-          { deviceId: '__back__', label: 'Zadná kamera' }
+          { deviceId: '__front__', label: 'Front camera' },
+          { deviceId: '__back__', label: 'Back camera' }
         );
       }
 
       setDevices(videoDevices);
       return videoDevices;
     } catch {
-      setError('Nepodarilo sa načítať kamery');
+      setError('Failed to load cameras');
       return [];
     }
   }, []);
@@ -76,7 +76,7 @@ export function useCamera() {
       return true;
     } catch {
       setPermission('denied');
-      setError('Prístup ku kamere bol zamietnutý');
+      setError('Camera access was denied');
       return false;
     }
   }, [enumerateDevices]);
@@ -147,7 +147,7 @@ export function useCamera() {
           label:
             devices.find((d) => d.deviceId === deviceId)?.label ||
             track.label ||
-            'Kamera',
+            'Camera',
         };
 
         setActiveCamera(info);
@@ -155,7 +155,7 @@ export function useCamera() {
         setError(null);
         return info;
       } catch (e) {
-        const msg = e instanceof Error ? e.message : 'Neznáma chyba kamery';
+        const msg = e instanceof Error ? e.message : 'Unknown camera error';
         setError(msg);
         return null;
       }

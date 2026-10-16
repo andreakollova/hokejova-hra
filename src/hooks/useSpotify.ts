@@ -90,7 +90,7 @@ export function useSpotify() {
 
   const initPlayer = useCallback((token: string) => {
     const player = new window.Spotify.Player({
-      name: 'Hokejový Tréner',
+      name: 'Hockey Trainer',
       getOAuthToken: (cb) => {
         // Try to refresh if needed
         const currentToken = getCookie('spotify_token_client');

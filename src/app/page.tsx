@@ -530,7 +530,7 @@ function HeroBanner() {
   return (
     <>
       <section className="relative h-screen flex flex-col justify-center overflow-hidden">
-        {/* Video background - full cover, no letterbox */}
+        {/* Video background - dark overlay */}
         <div className="absolute inset-0 bg-black">
           <iframe
             src="https://www.youtube.com/embed/7mGtwXDxupA?autoplay=1&mute=1&loop=1&controls=0&showinfo=0&rel=0&playlist=7mGtwXDxupA&playsinline=1&modestbranding=1&iv_load_policy=3&disablekb=1"
@@ -539,19 +539,20 @@ function HeroBanner() {
             allow="autoplay; encrypted-media"
             title="Background"
           />
-          {/* White gradient from bottom */}
-          <div className="absolute inset-0 bg-gradient-to-t from-white via-white/40 to-transparent" />
-          {/* Subtle top darken for header readability */}
-          <div className="absolute inset-x-0 top-0 h-32 bg-gradient-to-b from-black/30 to-transparent" />
+          <div className="absolute inset-0 bg-black/50" />
+          <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-black/40" />
         </div>
 
-        {/* Content - centered, dark text on white gradient */}
+        {/* Content - centered, white text, logo prominent */}
         <div className="relative z-10 max-w-6xl mx-auto px-6 sm:px-10 pt-32 pb-20 flex flex-col items-center text-center">
-          <h1 className="text-4xl sm:text-6xl lg:text-7xl font-extrabold text-gray-900 leading-[1.04] tracking-tighter max-w-3xl drop-shadow-[0_2px_20px_rgba(255,255,255,0.8)]">
+          {/* Logo */}
+          <Image src="/images/hb-logo-white.png" alt="HockeyBeats" width={280} height={60} className="h-12 sm:h-16 w-auto mb-8" />
+
+          <h1 className="text-3xl sm:text-5xl lg:text-6xl font-extrabold text-white leading-[1.08] tracking-tight max-w-3xl">
             A game you want to&nbsp;play. Practice the coach will&nbsp;notice.
           </h1>
-          <p className="mt-6 text-lg sm:text-xl text-gray-600 max-w-xl leading-relaxed font-medium">
-            HockeyBeats turns stickhandling practice into an interactive game. Follow the action on screen, move the ball and build your score.
+          <p className="mt-6 text-base sm:text-lg text-white/60 max-w-lg leading-relaxed">
+            Turn stickhandling practice into an interactive game. Follow the action on screen, move the ball and build your score.
           </p>
 
           {/* Main CTA - prominent */}
@@ -575,17 +576,17 @@ function HeroBanner() {
             <a href="#" className="hover:opacity-80 transition-opacity">
               <img src="https://upload.wikimedia.org/wikipedia/commons/7/78/Google_Play_Store_badge_EN.svg" alt="Get it on Google Play" className="h-10" />
             </a>
-            <Link href="/trening" className="inline-flex items-center gap-2 bg-gray-900 text-white text-xs font-bold px-4 h-10 rounded-lg hover:bg-gray-800 transition-colors">
-              <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><circle cx="12" cy="12" r="10" /><path d="M8 12h8" /></svg>
+            <Link href="/trening" className="inline-flex items-center gap-2 bg-white/15 text-white text-xs font-bold px-4 h-10 rounded-lg hover:bg-white/25 border border-white/20 transition-colors backdrop-blur-sm">
+              <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><circle cx="12" cy="12" r="10" /><path d="M2 12h20" /></svg>
               Play on Web
             </Link>
           </div>
 
-          <p className="mt-5 text-xs text-gray-400">For ice hockey, field hockey and floorball.</p>
+          <p className="mt-5 text-xs text-white/30">For ice hockey, field hockey and floorball.</p>
         </div>
 
         {/* Scroll arrow */}
-        <a href="#more" className="absolute bottom-8 left-1/2 -translate-x-1/2 z-10 flex flex-col items-center gap-1 text-gray-400 hover:text-gray-600 transition-colors">
+        <a href="#more" className="absolute bottom-8 left-1/2 -translate-x-1/2 z-10 flex flex-col items-center gap-1 text-white/40 hover:text-white/70 transition-colors">
           <span className="text-xs">More info</span>
           <svg className="w-5 h-5 animate-bounce" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
             <path strokeLinecap="round" strokeLinejoin="round" d="M19 9l-7 7-7-7" />

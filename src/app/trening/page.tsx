@@ -490,7 +490,7 @@ export default function TreningPage() {
                       {musicConfig.track?.name || `${musicConfig.bpm} BPM`}
                     </div>
                     <div className="text-xs text-gray-500 mt-0.5">
-                      {musicConfig.track?.artists || (musicConfig.mode === 'tap' ? 'Tap tempo' : 'Metronóm')}
+                      {musicConfig.track?.artists || (musicConfig.mode === 'tap' ? 'Tap tempo' : 'Metronome')}
                       {' - '}{musicConfig.bpm} BPM
                     </div>
                   </div>
@@ -499,7 +499,7 @@ export default function TreningPage() {
               ) : (
                 <div className="flex items-center justify-between">
                   <div>
-                    <div className="text-sm font-semibold text-gray-900">Beat mód</div>
+                    <div className="text-sm font-semibold text-gray-900">Beat mode</div>
                     <div className="text-xs text-gray-500 mt-0.5">
                       Cones synced to the rhythm of music
                     </div>
