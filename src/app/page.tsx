@@ -34,8 +34,8 @@ export default function Home() {
       {/* Navigation - transparent on top, glass on scroll */}
       <header className={`fixed top-0 left-0 right-0 z-50 px-6 sm:px-10 transition-all duration-500 ${
         scrolled
-          ? 'py-3 bg-white/80 backdrop-blur-2xl shadow-[0_1px_20px_-6px_rgba(0,0,0,0.08)] border-b border-gray-100'
-          : 'py-5 bg-transparent'
+          ? 'py-3 bg-white/80 backdrop-blur-2xl shadow-[0_1px_20px_-6px_rgba(0,0,0,0.08)] border-b border-gray-100 translate-y-0 opacity-100'
+          : '-translate-y-full opacity-0 py-5'
       }`}>
         <div className="max-w-6xl mx-auto flex justify-between items-center">
           <Link href="/">
@@ -568,12 +568,12 @@ function HeroBanner() {
               <span className="text-xs text-gray-400">on Google Play</span>
             </div>
           </div>
-          <Image src="/images/hb-logo-stacked.png" alt="HockeyBeats" width={200} height={120} className="h-20 sm:h-28 w-auto" />
+          <Image src="/images/hb-logo-stacked.png" alt="HockeyBeats" width={250} height={150} className="h-24 sm:h-36 w-auto" />
           <p className="mt-4 text-sm sm:text-base text-gray-600 max-w-lg">
             A game you want to play. Practice the coach will notice.
           </p>
           <div className="mt-8">
-            <Link href="/trening" className="bg-gray-900 text-white font-bold text-base sm:text-lg px-10 sm:px-14 py-4 sm:py-5 rounded-full hover:bg-gray-800 hover:shadow-xl active:scale-[0.97] transition-all duration-300 inline-flex items-center gap-3">
+            <Link href="/trening" className="bg-gray-900 text-white font-bold text-sm sm:text-base px-8 sm:px-10 py-3.5 sm:py-4 rounded-full hover:bg-gray-800 hover:shadow-xl active:scale-[0.97] transition-all duration-300 inline-flex items-center gap-2">
               <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
               Play now — it&apos;s free
             </Link>
