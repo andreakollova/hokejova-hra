@@ -71,39 +71,37 @@ export default function Home() {
         <HeroBanner />
 
         {/* Start Playing - platform strip */}
-        <section className="relative bg-gradient-to-r from-emerald-600 to-emerald-500 py-12 sm:py-16 overflow-hidden">
+        <section className="relative bg-gray-900 py-14 sm:py-20 overflow-hidden">
           <div className="absolute inset-0 opacity-10">
             <div className="absolute inset-0" style={{ backgroundImage: 'url("data:image/svg+xml,%3Csvg width=\'60\' height=\'60\' viewBox=\'0 0 60 60\' xmlns=\'http://www.w3.org/2000/svg\'%3E%3Cg fill=\'none\' fill-rule=\'evenodd\'%3E%3Cg fill=\'%23ffffff\' fill-opacity=\'0.15\'%3E%3Cpath d=\'M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z\'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E")' }} />
           </div>
           <div className="max-w-6xl mx-auto px-6 sm:px-10">
-            <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-8">
-              <div>
-                <h2 className="text-3xl sm:text-4xl font-black text-white italic tracking-tight uppercase">Start Playing</h2>
-                <p className="mt-2 text-white/70 text-sm">HockeyBeats is available free on these platforms.</p>
-              </div>
-              <div className="flex flex-col sm:flex-row gap-3">
-                <a href="#" className="flex items-center justify-between gap-4 bg-white/10 hover:bg-white/20 border-2 border-white/30 hover:border-white/50 rounded-full px-6 py-3 transition-all group">
-                  <div>
-                    <div className="text-[10px] text-white/60 uppercase tracking-wider font-medium">Free on</div>
-                    <div className="text-sm font-extrabold text-white tracking-tight uppercase">App Store</div>
-                  </div>
-                  <svg className="w-7 h-7 text-white" viewBox="0 0 24 24" fill="currentColor"><path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.8-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M13 3.5c.73-.83 1.94-1.46 2.94-1.5.13 1.17-.34 2.35-1.04 3.19-.69.85-1.83 1.51-2.95 1.42-.15-1.15.41-2.35 1.05-3.11z"/></svg>
-                </a>
-                <a href="#" className="flex items-center justify-between gap-4 bg-white/10 hover:bg-white/20 border-2 border-white/30 hover:border-white/50 rounded-full px-6 py-3 transition-all group">
-                  <div>
-                    <div className="text-[10px] text-white/60 uppercase tracking-wider font-medium">Free on</div>
-                    <div className="text-sm font-extrabold text-white tracking-tight uppercase">Google Play</div>
-                  </div>
-                  <svg className="w-6 h-6 text-white" viewBox="0 0 24 24" fill="currentColor"><path d="M3.609 1.814L13.792 12 3.61 22.186a.996.996 0 01-.61-.92V2.734a1 1 0 01.609-.92zm10.89 10.893l2.302 2.302-10.937 6.333 8.635-8.635zm3.199-1.842l2.458 1.42c.544.317.544 1.114 0 1.43l-2.458 1.42-2.534-2.535 2.534-2.535zM5.864 3.458L16.8 9.79l-2.302 2.302-8.635-8.635z"/></svg>
-                </a>
-                <Link href="/trening" className="flex items-center justify-between gap-4 bg-white/10 hover:bg-white/20 border-2 border-white/30 hover:border-white/50 rounded-full px-6 py-3 transition-all group">
-                  <div>
-                    <div className="text-[10px] text-white/60 uppercase tracking-wider font-medium">Play on</div>
-                    <div className="text-sm font-extrabold text-white tracking-tight uppercase">Web Browser</div>
-                  </div>
-                  <svg className="w-6 h-6 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}><circle cx="12" cy="12" r="10" /><path d="M2 12h20M12 2a15.3 15.3 0 014 10 15.3 15.3 0 01-4 10 15.3 15.3 0 01-4-10 15.3 15.3 0 014-10z" /></svg>
-                </Link>
-              </div>
+            <div className="text-center mb-10">
+              <h2 className="text-3xl sm:text-4xl font-black text-white italic tracking-tight uppercase">Start Playing</h2>
+              <p className="mt-2 text-white/70 text-sm">HockeyBeats is available free on these platforms.</p>
+            </div>
+            <div className="flex flex-col sm:flex-row justify-center gap-4">
+              <a href="#" className="flex items-center justify-between gap-5 bg-white/10 hover:bg-white/20 border-2 border-white/30 hover:border-white/50 rounded-full px-7 py-4 transition-all">
+                <div>
+                  <div className="text-[10px] text-white/60 uppercase tracking-wider font-medium">Play on</div>
+                  <div className="text-base font-extrabold text-white tracking-tight uppercase">Mobile</div>
+                </div>
+                <svg className="w-7 h-7 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}><rect x="6" y="2" width="12" height="20" rx="2" /><line x1="10" y1="18" x2="14" y2="18" /></svg>
+              </a>
+              <Link href="/trening" className="flex items-center justify-between gap-5 bg-white/10 hover:bg-white/20 border-2 border-white/30 hover:border-white/50 rounded-full px-7 py-4 transition-all">
+                <div>
+                  <div className="text-[10px] text-white/60 uppercase tracking-wider font-medium">Play on</div>
+                  <div className="text-base font-extrabold text-white tracking-tight uppercase">Desktop</div>
+                </div>
+                <svg className="w-7 h-7 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}><rect x="2" y="3" width="20" height="14" rx="2" /><line x1="8" y1="21" x2="16" y2="21" /><line x1="12" y1="17" x2="12" y2="21" /></svg>
+              </Link>
+              <a href="#" className="flex items-center justify-between gap-5 bg-white/10 hover:bg-white/20 border-2 border-white/30 hover:border-white/50 rounded-full px-7 py-4 transition-all">
+                <div>
+                  <div className="text-[10px] text-white/60 uppercase tracking-wider font-medium">Play on</div>
+                  <div className="text-base font-extrabold text-white tracking-tight uppercase">TV</div>
+                </div>
+                <svg className="w-7 h-7 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}><rect x="2" y="4" width="20" height="13" rx="2" /><line x1="7" y1="21" x2="17" y2="21" /><line x1="9" y1="17" x2="9" y2="21" /><line x1="15" y1="17" x2="15" y2="21" /></svg>
+              </a>
             </div>
           </div>
         </section>
@@ -111,7 +109,8 @@ export default function Home() {
         {/* 2. Gameplay */}
         <section className="bg-gray-50/50 py-24 sm:py-32">
           <div className="max-w-6xl mx-auto px-6 sm:px-10">
-            <div className="max-w-2xl">
+            <div className="grid lg:grid-cols-2 gap-12 items-center">
+            <div>
               <h2 className="text-3xl sm:text-5xl font-extrabold text-gray-900 leading-[1.08] tracking-tight">Better play starts with keeping your head up.</h2>
               <p className="mt-6 text-lg text-gray-500 leading-relaxed">
                 When you're always watching the ball, you miss what's happening around you.
@@ -123,16 +122,10 @@ export default function Home() {
                 You're concentrating on the game. You might not even realise how much you're practising.
               </p>
             </div>
-            {/* Video */}
-            <div className="mt-14 max-w-3xl">
-              <div className="rounded-3xl overflow-hidden aspect-video bg-gray-900 shadow-2xl shadow-gray-900/10 ring-1 ring-gray-200/50">
-                <iframe
-                  src="https://www.youtube.com/embed/7mGtwXDxupA?rel=0&modestbranding=1"
-                  title="HockeyBeats gameplay"
-                  className="w-full h-full"
-                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                  allowFullScreen
-                />
+            </div>
+            <div className="max-w-md mt-8">
+              <div className="rounded-3xl overflow-hidden">
+                <Image src="/images/hero-girl.png" alt="Player practising" width={500} height={400} className="w-full h-auto" />
               </div>
             </div>
           </div>
@@ -209,8 +202,8 @@ export default function Home() {
               <p className="mt-5 text-base text-gray-500">Start with HockeyBeats, then explore extra games that give you another reason to pick up your stick.</p>
             </div>
 
-            {/* PS5-style game cards */}
-            <div className="grid grid-cols-2 gap-6">
+            {/* PS5-style game cards - 4 in a row */}
+            <div className="grid grid-cols-2 lg:grid-cols-4 gap-5">
               {/* HockeyBeats */}
               <Link href="/trening" className="group block">
                 <div className="game-tile rounded-3xl overflow-hidden relative aspect-[3/4] bg-gray-100">
@@ -554,30 +547,28 @@ function HeroBanner() {
       <section className="relative h-screen flex flex-col overflow-hidden bg-[#eef0f4]">
         {/* Text overlay on top */}
         <div className="relative z-20 flex flex-col items-center text-center pt-28 sm:pt-32 px-6">
-          <div className="flex items-center gap-6 sm:gap-8 mb-6">
-            <div className="flex items-center gap-2">
-              <span className="text-xl sm:text-2xl font-black text-gray-900">4.8</span>
+          <div className="flex items-center gap-5 mb-5">
+            <div className="flex items-center gap-1.5">
+              <span className="text-sm font-bold text-gray-900">4.8</span>
               <div className="flex gap-0.5">
                 {[...Array(5)].map((_, i) => (
-                  <svg key={i} className="w-4 h-4 text-amber-400" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+                  <svg key={i} className="w-3 h-3 text-amber-400" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
                 ))}
               </div>
               <span className="text-xs text-gray-400">on App Store</span>
             </div>
-            <div className="w-px h-6 bg-gray-200" />
-            <div className="flex items-center gap-2">
-              <span className="text-xl sm:text-2xl font-black text-gray-900">4.8</span>
+            <div className="w-px h-4 bg-gray-200" />
+            <div className="flex items-center gap-1.5">
+              <span className="text-sm font-bold text-gray-900">4.8</span>
               <div className="flex gap-0.5">
                 {[...Array(5)].map((_, i) => (
-                  <svg key={i} className="w-4 h-4 text-amber-400" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+                  <svg key={i} className="w-3 h-3 text-amber-400" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
                 ))}
               </div>
               <span className="text-xs text-gray-400">on Google Play</span>
             </div>
           </div>
-          <h1 className="text-3xl sm:text-5xl font-black text-gray-900 leading-[0.95] tracking-tight">
-            All play.<br />More game.
-          </h1>
+          <Image src="/images/hb-logo-stacked.png" alt="HockeyBeats" width={200} height={120} className="h-20 sm:h-28 w-auto" />
           <p className="mt-5 text-sm sm:text-base text-gray-400 max-w-lg">
             The game you&apos;ll come back to. The practice that stays with you.
           </p>
@@ -587,15 +578,9 @@ function HeroBanner() {
               Play now — it&apos;s free
             </Link>
           </div>
-          <div className="mt-5 flex items-center gap-4">
-            {/* App Store */}
-            <svg className="h-5 w-auto text-gray-400" viewBox="0 0 24 24" fill="currentColor"><path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.8-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M13 3.5c.73-.83 1.94-1.46 2.94-1.5.13 1.17-.34 2.35-1.04 3.19-.69.85-1.83 1.51-2.95 1.42-.15-1.15.41-2.35 1.05-3.11z"/></svg>
-            {/* Google Play */}
-            <svg className="h-5 w-auto text-gray-400" viewBox="0 0 24 24" fill="currentColor"><path d="M3.609 1.814L13.792 12 3.61 22.186a.996.996 0 01-.61-.92V2.734a1 1 0 01.609-.92zm10.89 10.893l2.302 2.302-10.937 6.333 8.635-8.635zm3.199-1.842l2.458 1.42c.544.317.544 1.114 0 1.43l-2.458 1.42-2.534-2.535 2.534-2.535zM5.864 3.458L16.8 9.79l-2.302 2.302-8.635-8.635z"/></svg>
-            {/* Web */}
-            <svg className="h-5 w-auto text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}><circle cx="12" cy="12" r="10" /><path d="M2 12h20M12 2a15.3 15.3 0 014 10 15.3 15.3 0 01-4 10 15.3 15.3 0 01-4-10 15.3 15.3 0 014-10z" /></svg>
-            {/* TV */}
-            <svg className="h-5 w-auto text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}><rect x="2" y="4" width="20" height="13" rx="2" /><line x1="7" y1="21" x2="17" y2="21" /><line x1="9" y1="17" x2="9" y2="21" /><line x1="15" y1="17" x2="15" y2="21" /></svg>
+          <div className="mt-5 flex items-center gap-3">
+            <a href="#"><img src="/images/badge-appstore.svg" alt="Download on the App Store" className="h-9 hover:opacity-80 transition-opacity" /></a>
+            <a href="#"><img src="/images/badge-googleplay.svg" alt="Get it on Google Play" className="h-9 hover:opacity-80 transition-opacity" /></a>
           </div>
         </div>
 
@@ -613,6 +598,11 @@ function HeroBanner() {
           {/* Fade from bg color into video */}
           <div className="absolute inset-x-0 top-0 h-28 bg-gradient-to-b from-[#eef0f4] to-transparent z-10" />
 
+          {/* Floating music icons */}
+          <div className="absolute top-8 right-8 z-10 flex items-center gap-3 opacity-60">
+            <svg className="w-8 h-8 text-[#1DB954]" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.4 0 0 5.4 0 12s5.4 12 12 12 12-5.4 12-12S18.66 0 12 0zm5.521 17.34c-.24.359-.66.48-1.021.24-2.82-1.74-6.36-2.101-10.561-1.141-.418.122-.779-.179-.899-.539-.12-.421.18-.78.54-.9 4.56-1.021 8.52-.6 11.64 1.32.42.18.479.659.301 1.02zm1.44-3.3c-.301.42-.841.6-1.262.3-3.239-1.98-8.159-2.58-11.939-1.38-.479.12-1.02-.12-1.14-.6-.12-.48.12-1.021.6-1.141C9.6 9.9 15 10.561 18.72 12.84c.361.181.54.78.241 1.2zm.12-3.36C15.24 8.4 8.82 8.16 5.16 9.301c-.6.179-1.2-.181-1.38-.721-.18-.601.18-1.2.72-1.381 4.26-1.26 11.28-1.02 15.721 1.621.539.3.719 1.02.419 1.56-.299.421-1.02.599-1.559.3z"/></svg>
+            <svg className="w-8 h-8 text-[#FA243C]" viewBox="0 0 24 24" fill="currentColor"><path d="M23.994 6.124a9.23 9.23 0 00-.24-2.19c-.317-1.31-1.062-2.31-2.18-3.043a5.022 5.022 0 00-1.877-.726 10.496 10.496 0 00-1.564-.15c-.04-.003-.083-.01-.124-.013H5.986c-.152.01-.303.017-.455.026-.747.043-1.49.123-2.193.4-1.336.53-2.3 1.452-2.865 2.78-.192.448-.292.925-.363 1.408-.056.392-.088.785-.1 1.18 0 .032-.007.062-.01.093v12.223c.01.14.017.283.027.424.05.815.154 1.624.497 2.373.65 1.42 1.738 2.353 3.234 2.801.42.127.856.187 1.293.228.555.053 1.11.06 1.667.06h11.03a12.5 12.5 0 001.57-.1c.822-.106 1.596-.35 2.296-.81a5.046 5.046 0 001.88-2.207c.186-.42.293-.87.37-1.324.113-.675.138-1.358.137-2.04-.002-3.8 0-7.595-.003-11.393zm-6.423 3.99v5.712c0 .417-.058.827-.244 1.206-.29.59-.76.962-1.388 1.14-.35.1-.706.157-1.07.173-.95.045-1.773-.6-1.943-1.536a1.88 1.88 0 011.038-2.022c.357-.17.724-.283 1.1-.38.36-.094.72-.186 1.073-.305.27-.09.387-.282.39-.568.01-.67 0-1.34.002-2.01v-.153l-4.168.98v7.384c0 .378-.047.75-.2 1.1-.26.59-.715.98-1.327 1.178-.367.118-.745.185-1.13.207-.94.058-1.797-.548-1.996-1.45-.21-.95.2-1.843 1.032-2.18.36-.145.736-.247 1.108-.345.28-.073.564-.14.84-.228.304-.097.437-.3.44-.618V7.076c0-.22.042-.4.198-.55.12-.116.27-.174.43-.207l5.223-1.227c.388-.09.78-.166 1.18-.168.183 0 .36.042.49.196.1.12.15.267.15.422-.01 1.622-.006 3.24-.01 4.86z"/></svg>
+          </div>
 
           {/* Sports bar bottom left */}
           <div className="absolute bottom-4 left-6 z-10 flex items-center gap-3">
