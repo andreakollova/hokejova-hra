@@ -13,13 +13,13 @@ interface CalibrationWizardProps {
 type Step = 'camera' | 'preview' | 'corners' | 'color' | 'tolerance' | 'range' | 'test';
 
 const STEP_LABELS: Record<Step, string> = {
-  camera: '1. Kamera',
-  preview: '2. Nastavenie kamery',
-  corners: '3. Oblasť tréningu',
-  color: '4. Farba loptičky',
-  tolerance: '5. Tolerancia farby',
-  range: '6. Rozsah pohybu',
-  test: '7. Skuska sledovania',
+  camera: '1. Camera',
+  preview: '2. Camera setup',
+  corners: '3. Training area',
+  color: '4. Ball colour',
+  tolerance: '5. Colour tolerance',
+  range: '6. Movement range',
+  test: '7. Tracking test',
 };
 
 export default function CalibrationWizard({
@@ -249,10 +249,10 @@ export default function CalibrationWizard({
       case 'camera':
         return (
           <div className="space-y-6">
-            <h2 className="text-2xl font-semibold text-gray-900">Nastavenie kamery</h2>
+            <h2 className="text-2xl font-semibold text-gray-900">Camera setup</h2>
             <p className="text-gray-500">
-              Povoľ prístup ku kamere a vyber zariadenie. Kameru polož nižšie a nasmeruj
-              na tréningovú plochu.
+              Allow camera access and select a device. Place the camera lower and point it
+              at the training area.
             </p>
 
             {permission !== 'granted' ? (
@@ -260,17 +260,17 @@ export default function CalibrationWizard({
                 onClick={handleRequestPermission}
                 className="btn-primary"
               >
-                Povoliť kameru
+                Allow camera
               </button>
             ) : (
               <div className="space-y-4">
-                <label className="block text-sm text-gray-500">Vyber kameru</label>
+                <label className="block text-sm text-gray-500">Select camera</label>
                 <select
                   className="input-field"
                   value={selectedDevice}
                   onChange={(e) => setSelectedDevice(e.target.value)}
                 >
-                  <option value="">-- Vyber kameru --</option>
+                  <option value="">-- Select camera --</option>
                   {devices.map((d) => (
                     <option key={d.deviceId} value={d.deviceId}>
                       {d.label}
@@ -282,7 +282,7 @@ export default function CalibrationWizard({
                   disabled={!selectedDevice}
                   className="btn-primary disabled:opacity-50"
                 >
-                  Spustiť kameru
+                  Start camera
                 </button>
               </div>
             )}
@@ -293,7 +293,7 @@ export default function CalibrationWizard({
 
             {permission === 'denied' && (
               <p className="text-red-500 text-sm">
-                Prístup ku kamere je zakázaný. Skontroluj nastavenia prehliadača.
+                Camera access is denied. Check your browser settings.
               </p>
             )}
           </div>
@@ -302,9 +302,9 @@ export default function CalibrationWizard({
       case 'preview':
         return (
           <div className="space-y-4">
-            <h2 className="text-2xl font-semibold text-gray-900">Náhľadovanie kamery</h2>
+            <h2 className="text-2xl font-semibold text-gray-900">Camera preview</h2>
             <p className="text-gray-400">
-              Skontroluj, či kamera sníma tréningovú plochu. Loptička by mala byť dobre viditeľná.
+              Check that the camera captures the training area. The ball should be clearly visible.
             </p>
             {activeCamera && (
               <div className="text-sm text-gray-500">
@@ -320,7 +320,7 @@ export default function CalibrationWizard({
               />
             </div>
             <button onClick={() => setStep('corners')} className="btn-primary">
-              Pokračovať
+              Continue
             </button>
           </div>
         );
@@ -328,10 +328,10 @@ export default function CalibrationWizard({
       case 'corners':
         return (
           <div className="space-y-4">
-            <h2 className="text-2xl font-semibold text-gray-900">Oblasť tréningu</h2>
+            <h2 className="text-2xl font-semibold text-gray-900">Training area</h2>
             <p className="text-gray-400">
-              Klikni na 4 rohy tréningovej plochy v poradí: ľavý horný, pravý horný,
-              pravý dolný, ľavý dolný. ({corners.length}/4)
+              Click on the 4 corners of the training area in order: top-left, top-right,
+              bottom-right, bottom-left. ({corners.length}/4)
             </p>
             <div className="relative max-w-2xl">
               <canvas
@@ -345,14 +345,14 @@ export default function CalibrationWizard({
                 onClick={() => setCorners([])}
                 className="btn-secondary"
               >
-                Resetovať
+                Reset
               </button>
               <button
                 onClick={() => setStep('color')}
                 disabled={corners.length < 4}
                 className="btn-primary disabled:opacity-50"
               >
-                Pokračovať
+                Continue
               </button>
             </div>
           </div>
@@ -361,9 +361,9 @@ export default function CalibrationWizard({
       case 'color':
         return (
           <div className="space-y-4">
-            <h2 className="text-2xl font-semibold text-gray-900">Farba loptičky</h2>
+            <h2 className="text-2xl font-semibold text-gray-900">Ball colour</h2>
             <p className="text-gray-400">
-              Klikni na loptičku v obraze. Zvýraznia sa oblasti s podobnou farbou.
+              Click on the ball in the image. Areas with a similar colour will be highlighted.
             </p>
             <div className="relative max-w-2xl">
               <canvas
@@ -386,7 +386,7 @@ export default function CalibrationWizard({
               disabled={hsvCenter[0] === 0 && hsvCenter[1] === 0 && hsvCenter[2] === 0}
               className="btn-primary disabled:opacity-50"
             >
-              Pokračovať
+              Continue
             </button>
           </div>
         );
@@ -394,9 +394,9 @@ export default function CalibrationWizard({
       case 'tolerance':
         return (
           <div className="space-y-4">
-            <h2 className="text-2xl font-semibold text-gray-900">Tolerancia farby</h2>
+            <h2 className="text-2xl font-semibold text-gray-900">Colour tolerance</h2>
             <p className="text-gray-400">
-              Nastav toleranciu, kým zelená oblasť pokrýva iba loptičku.
+              Adjust the tolerance until the green area covers only the ball.
             </p>
             <div className="relative max-w-2xl">
               <canvas
@@ -410,7 +410,7 @@ export default function CalibrationWizard({
             </div>
             <div className="grid grid-cols-3 gap-4 max-w-md">
               <div>
-                <label className="text-sm text-gray-400">Odtien (H): {hsvTolerance[0]}</label>
+                <label className="text-sm text-gray-400">Hue (H): {hsvTolerance[0]}</label>
                 <input
                   type="range"
                   min="5"
@@ -427,7 +427,7 @@ export default function CalibrationWizard({
                 />
               </div>
               <div>
-                <label className="text-sm text-gray-400">Sytost (S): {hsvTolerance[1]}</label>
+                <label className="text-sm text-gray-400">Saturation (S): {hsvTolerance[1]}</label>
                 <input
                   type="range"
                   min="10"
@@ -444,7 +444,7 @@ export default function CalibrationWizard({
                 />
               </div>
               <div>
-                <label className="text-sm text-gray-400">Jas (V): {hsvTolerance[2]}</label>
+                <label className="text-sm text-gray-400">Brightness (V): {hsvTolerance[2]}</label>
                 <input
                   type="range"
                   min="10"
@@ -462,7 +462,7 @@ export default function CalibrationWizard({
               </div>
             </div>
             <button onClick={() => setStep('range')} className="btn-primary">
-              Pokračovať
+              Continue
             </button>
           </div>
         );
@@ -470,14 +470,14 @@ export default function CalibrationWizard({
       case 'range':
         return (
           <div className="space-y-4">
-            <h2 className="text-2xl font-semibold text-gray-900">Rozsah pohybu</h2>
+            <h2 className="text-2xl font-semibold text-gray-900">Movement range</h2>
             <p className="text-gray-400">
-              Nastav pohodlný ľavý a pravý rozsah pohybu loptičky.
+              Set a comfortable left and right movement range for the ball.
             </p>
             <div className="grid grid-cols-2 gap-4 max-w-md">
               <div>
                 <label className="text-sm text-gray-400">
-                  Lava strana: {Math.round(movementRange.left * 100)}%
+                  Left side: {Math.round(movementRange.left * 100)}%
                 </label>
                 <input
                   type="range"
@@ -495,7 +495,7 @@ export default function CalibrationWizard({
               </div>
               <div>
                 <label className="text-sm text-gray-400">
-                  Prava strana: {Math.round(movementRange.right * 100)}%
+                  Right side: {Math.round(movementRange.right * 100)}%
                 </label>
                 <input
                   type="range"
@@ -519,10 +519,10 @@ export default function CalibrationWizard({
                 onChange={(e) => setMirrorX(e.target.checked)}
                 className="w-4 h-4"
               />
-              Obrátiť ľavú a pravú stranu
+              Flip left and right
             </label>
             <button onClick={() => setStep('test')} className="btn-primary">
-              Pokračovať na skúšku
+              Continue to test
             </button>
           </div>
         );

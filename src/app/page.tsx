@@ -486,23 +486,27 @@ function HeroBanner() {
   return (
     <>
       <section className="relative h-screen flex flex-col justify-center overflow-hidden">
-        {/* Video background */}
-        <div className="absolute inset-0">
+        {/* Video background - full cover, no letterbox */}
+        <div className="absolute inset-0 bg-black">
           <iframe
-            src="https://www.youtube.com/embed/7mGtwXDxupA?autoplay=1&mute=1&loop=1&controls=0&showinfo=0&rel=0&playlist=7mGtwXDxupA&playsinline=1&modestbranding=1&iv_load_policy=3"
-            className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[180vw] h-[180vh] sm:w-[120vw] sm:h-[120vh] pointer-events-none"
+            src="https://www.youtube.com/embed/7mGtwXDxupA?autoplay=1&mute=1&loop=1&controls=0&showinfo=0&rel=0&playlist=7mGtwXDxupA&playsinline=1&modestbranding=1&iv_load_policy=3&disablekb=1"
+            className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 pointer-events-none"
+            style={{ width: '300vw', height: '300vh', minWidth: '100vw', minHeight: '100vh' }}
             allow="autoplay; encrypted-media"
             title="Background"
           />
-          <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/50 to-black/30" />
+          {/* White gradient from bottom */}
+          <div className="absolute inset-0 bg-gradient-to-t from-white via-white/40 to-transparent" />
+          {/* Subtle top darken for header readability */}
+          <div className="absolute inset-x-0 top-0 h-32 bg-gradient-to-b from-black/30 to-transparent" />
         </div>
 
-        {/* Content - centered */}
+        {/* Content - centered, dark text on white gradient */}
         <div className="relative z-10 max-w-6xl mx-auto px-6 sm:px-10 pt-32 pb-20 flex flex-col items-center text-center">
-          <h1 className="text-4xl sm:text-6xl lg:text-7xl font-extrabold text-white leading-[1.04] tracking-tighter max-w-3xl">
+          <h1 className="text-4xl sm:text-6xl lg:text-7xl font-extrabold text-gray-900 leading-[1.04] tracking-tighter max-w-3xl drop-shadow-[0_2px_20px_rgba(255,255,255,0.8)]">
             A game you want to&nbsp;play. Practice the coach will&nbsp;notice.
           </h1>
-          <p className="mt-6 text-lg sm:text-xl text-white/50 max-w-xl leading-relaxed font-medium">
+          <p className="mt-6 text-lg sm:text-xl text-gray-600 max-w-xl leading-relaxed font-medium">
             HockeyBeats turns stickhandling practice into an interactive game. Follow the action on screen, move the ball and build your score.
           </p>
 
@@ -520,27 +524,24 @@ function HeroBanner() {
           </div>
 
           {/* Store badges */}
-          <div className="mt-8 flex flex-wrap items-center gap-5 font-medium">
-            <div className="flex items-center gap-1.5">
-              <svg className="w-6 h-6 text-white/70" viewBox="0 0 24 24" fill="currentColor"><path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.8-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M13 3.5c.73-.83 1.94-1.46 2.94-1.5.13 1.17-.34 2.35-1.04 3.19-.69.85-1.83 1.51-2.95 1.42-.15-1.15.41-2.35 1.05-3.11z"/></svg>
-              <span className="text-sm font-extrabold text-white tracking-tight">4.8</span>
-              <span className="text-xs text-white/40">App Store</span>
-            </div>
-            <div className="w-px h-4 bg-white/20" />
-            <div className="flex items-center gap-1.5">
-              <svg className="w-5 h-5 text-white/70" viewBox="0 0 24 24" fill="currentColor"><path d="M3.609 1.814L13.792 12 3.61 22.186a.996.996 0 01-.61-.92V2.734a1 1 0 01.609-.92zm10.89 10.893l2.302 2.302-10.937 6.333 8.635-8.635zm3.199-1.842l2.458 1.42c.544.317.544 1.114 0 1.43l-2.458 1.42-2.534-2.535 2.534-2.535zM5.864 3.458L16.8 9.79l-2.302 2.302-8.635-8.635z"/></svg>
-              <span className="text-sm font-extrabold text-white tracking-tight">4.8</span>
-              <span className="text-xs text-white/40">Google Play</span>
-            </div>
-            <div className="w-px h-4 bg-white/20" />
-            <span className="text-xs text-white/40">Web · TV</span>
+          <div className="mt-8 flex flex-wrap items-center justify-center gap-3">
+            <a href="#" className="hover:opacity-80 transition-opacity">
+              <img src="https://developer.apple.com/assets/elements/badges/download-on-the-app-store.svg" alt="Download on the App Store" className="h-10" />
+            </a>
+            <a href="#" className="hover:opacity-80 transition-opacity">
+              <img src="https://upload.wikimedia.org/wikipedia/commons/7/78/Google_Play_Store_badge_EN.svg" alt="Get it on Google Play" className="h-10" />
+            </a>
+            <Link href="/trening" className="inline-flex items-center gap-2 bg-gray-900 text-white text-xs font-bold px-4 h-10 rounded-lg hover:bg-gray-800 transition-colors">
+              <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><circle cx="12" cy="12" r="10" /><path d="M8 12h8" /></svg>
+              Play on Web
+            </Link>
           </div>
 
-          <p className="mt-5 text-xs text-white/30">For ice hockey, field hockey and floorball.</p>
+          <p className="mt-5 text-xs text-gray-400">For ice hockey, field hockey and floorball.</p>
         </div>
 
         {/* Scroll arrow */}
-        <a href="#more" className="absolute bottom-8 left-1/2 -translate-x-1/2 z-10 flex flex-col items-center gap-1 text-white/50 hover:text-white/80 transition-colors">
+        <a href="#more" className="absolute bottom-8 left-1/2 -translate-x-1/2 z-10 flex flex-col items-center gap-1 text-gray-400 hover:text-gray-600 transition-colors">
           <span className="text-xs">More info</span>
           <svg className="w-5 h-5 animate-bounce" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
             <path strokeLinecap="round" strokeLinejoin="round" d="M19 9l-7 7-7-7" />

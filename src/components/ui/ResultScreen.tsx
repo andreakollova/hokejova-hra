@@ -100,18 +100,18 @@ export default function ResultScreen({
         <div className="text-center">
           {rank && rank <= 3 && (
             <div className="inline-flex items-center gap-2 bg-yellow-50 border border-yellow-200 rounded-full px-4 py-1.5 text-xs text-yellow-600 font-semibold mb-3">
-              #{rank} v rebriku!
+              #{rank} in rankings!
             </div>
           )}
           <h1 className="text-3xl font-extrabold text-gray-900 mb-1">
-            {isSlalom ? 'Slalom dokonceny' : 'Osmicky dokoncene'}
+            {isSlalom ? 'Slalom complete' : 'Figure 8 complete'}
           </h1>
           {songName && (
             <p className="text-sm text-gray-500">{songName} - {songArtist}</p>
           )}
           {result.inputMode === 'demo' && (
             <span className="inline-block bg-gray-100 text-gray-500 text-xs px-3 py-1 rounded-full mt-2">
-              Demo rezim
+              Demo mode
             </span>
           )}
         </div>
@@ -122,11 +122,11 @@ export default function ResultScreen({
             {isSlalom ? slalomResult.score : f8Result.completedEights}
           </div>
           <div className="text-sm text-gray-400 mt-1">
-            {isSlalom ? 'bodov' : 'osmiciek'}
+            {isSlalom ? 'points' : 'figure 8s'}
           </div>
           {rank && (
             <div className="mt-3 text-sm text-green-600 font-medium">
-              #{rank} celkovo
+              #{rank} overall
             </div>
           )}
         </div>
@@ -142,15 +142,15 @@ export default function ResultScreen({
         <div className="grid grid-cols-3 gap-3">
           {isSlalom ? (
             <>
-              <StatCard label="Presnost" value={`${slalomResult.accuracy}%`} />
-              <StatCard label="Seria" value={slalomResult.longestStreak.toString()} />
-              <StatCard label="Spravne" value={`${slalomResult.correctPasses}/${slalomResult.totalCones}`} />
+              <StatCard label="Accuracy" value={`${slalomResult.accuracy}%`} />
+              <StatCard label="Streak" value={slalomResult.longestStreak.toString()} />
+              <StatCard label="Correct" value={`${slalomResult.correctPasses}/${slalomResult.totalCones}`} />
             </>
           ) : (
             <>
-              <StatCard label="Osmicky" value={f8Result.completedEights.toString()} />
+              <StatCard label="Figure 8s" value={f8Result.completedEights.toString()} />
               <StatCard label="Tempo" value={`${f8Result.tempo}/min`} />
-              <StatCard label="Cas" value={`${f8Result.duration}s`} />
+              <StatCard label="Time" value={`${f8Result.duration}s`} />
             </>
           )}
         </div>
@@ -188,19 +188,19 @@ export default function ResultScreen({
 
         {!isLoggedIn && result.inputMode !== 'demo' && (
           <p className="text-center text-xs text-gray-400">
-            Prihlas sa pre ukladanie skore do rebricka
+            Log in to save your score to the rankings
           </p>
         )}
 
         {/* Actions */}
         <div className="flex gap-3">
-          <button onClick={onPlayAgain} className="btn-primary flex-1">Hrat znova</button>
+          <button onClick={onPlayAgain} className="btn-primary flex-1">Play again</button>
           <button onClick={onMenu} className="btn-secondary flex-1">Menu</button>
         </div>
 
         <div className="text-center">
           <a href="/rebricek" className="text-sm text-gray-400 hover:text-gray-900 transition-colors">
-            Pozriet rebricek
+            View rankings
           </a>
         </div>
       </div>
