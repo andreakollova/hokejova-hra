@@ -160,15 +160,18 @@ export default function Home() {
               </p>
             </div>
             <div className="grid sm:grid-cols-3 gap-6">
-              <div className="sport-card">
+              <div className="sport-card flex flex-col items-center text-center">
+                <Image src="/images/sport-icehockey.png" alt="Ice hockey puck" width={120} height={120} className="w-24 h-24 mb-5" />
                 <h3 className="text-lg font-extrabold text-gray-900 mb-3 tracking-tight">Ice hockey</h3>
                 <p className="text-sm text-gray-500 leading-relaxed">Keep working on your stickhandling away from the rink, with off-ice practice that gets you moving and looking ahead.</p>
               </div>
-              <div className="sport-card">
+              <div className="sport-card flex flex-col items-center text-center">
+                <Image src="/images/sport-fieldhockey.png" alt="Field hockey ball" width={120} height={120} className="w-24 h-24 mb-5" />
                 <h3 className="text-lg font-extrabold text-gray-900 mb-3 tracking-tight">Field hockey</h3>
                 <p className="text-sm text-gray-500 leading-relaxed">Spend more time on ball control and practise lifting your eyes while your stick stays involved.</p>
               </div>
-              <div className="sport-card">
+              <div className="sport-card flex flex-col items-center text-center">
+                <Image src="/images/sport-floorball.png" alt="Floorball" width={120} height={120} className="w-24 h-24 mb-5" />
                 <h3 className="text-lg font-extrabold text-gray-900 mb-3 tracking-tight">Floorball</h3>
                 <p className="text-sm text-gray-500 leading-relaxed">Give your stick skills extra attention outside team training, with games that keep you engaged in every movement.</p>
               </div>
@@ -386,11 +389,18 @@ export default function Home() {
         {/* 10. For parents */}
         <section id="parents" className="bg-gray-50/50 py-24 sm:py-32">
           <div className="max-w-6xl mx-auto px-6 sm:px-10">
-            <p className="text-xs font-bold uppercase tracking-[0.2em] text-gray-400 mb-4">For parents</p>
-            <h2 className="text-3xl sm:text-5xl font-extrabold text-gray-900 leading-[1.08] tracking-tight max-w-2xl mb-4">Help them build a practice habit of their own.</h2>
-            <p className="text-lg text-gray-500 leading-relaxed max-w-2xl mb-14">
-              Team training gives children coaching, structure and time with their teammates. Individual practice gives them more opportunities to work with their stick. HockeyBeats makes that extra practice easier to enjoy.
-            </p>
+            <div className="grid lg:grid-cols-2 gap-12 items-center mb-14">
+              <div>
+                <p className="text-xs font-bold uppercase tracking-[0.2em] text-gray-400 mb-4">For parents</p>
+                <h2 className="text-3xl sm:text-5xl font-extrabold text-gray-900 leading-[1.08] tracking-tight mb-4">Help them build a practice habit of their own.</h2>
+                <p className="text-lg text-gray-500 leading-relaxed">
+                  Team training gives children coaching, structure and time with their teammates. Individual practice gives them more opportunities to work with their stick. HockeyBeats makes that extra practice easier to enjoy.
+                </p>
+              </div>
+              <div className="rounded-3xl overflow-hidden">
+                <Image src="/images/parents.png" alt="Child practising at home with parent watching" width={600} height={400} className="w-full h-auto" />
+              </div>
+            </div>
             <div className="grid sm:grid-cols-2 gap-6">
               {[
                 { title: 'Active time with a purpose', desc: 'Children play by moving and working with a real stick and ball.' },
