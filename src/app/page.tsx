@@ -96,6 +96,9 @@ export default function Home() {
         {/* 1. Hero banner - fullscreen with photo */}
         <HeroBanner />
 
+        {/* Start Playing */}
+        <StartPlayingSection />
+
         {/* 2. Gameplay */}
         <section className="bg-gray-50/50 py-24 sm:py-32">
           <div className="max-w-6xl mx-auto px-6 sm:px-10">
@@ -120,9 +123,6 @@ export default function Home() {
             </div>
           </div>
         </section>
-
-        {/* Start Playing */}
-        <StartPlayingSection />
 
         {/* 3. Sports */}
         <section id="sports" className="py-24 sm:py-32">
@@ -579,8 +579,8 @@ function HeroBanner() {
           <div className="absolute inset-0 overflow-hidden">
             <iframe
               src="https://www.youtube.com/embed/7mGtwXDxupA?autoplay=1&mute=1&loop=1&controls=0&showinfo=0&rel=0&playlist=7mGtwXDxupA&playsinline=1&modestbranding=1&iv_load_policy=3&disablekb=1"
-              className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 pointer-events-none border-0"
-              style={{ width: 'max(100vw, 177.78vh)', height: 'max(100%, 56.25vw)' }}
+              className="absolute left-1/2 -translate-x-1/2 pointer-events-none border-0"
+              style={{ top: '35%', transform: 'translate(-50%, -50%)', width: 'max(100vw, 177.78vh)', height: 'max(100%, 56.25vw)' }}
               allow="autoplay; encrypted-media"
               title="Background"
             />
@@ -704,15 +704,14 @@ function HeroBanner() {
 
 // Start Playing section with expandable platform options
 function StartPlayingSection() {
-  const [expanded, setExpanded] = useState<'mobile' | 'desktop' | 'tv' | null>(null);
+  const [expanded, setExpanded] = useState<'mobile' | 'desktop' | 'tv' | null>('mobile');
 
   return (
-    <section className="relative bg-[#1a1a1a] py-16 sm:py-24 overflow-hidden">
+    <section className="relative bg-[#1a1a1a] py-14 sm:py-20 overflow-hidden">
       <div className="max-w-6xl mx-auto px-6 sm:px-10">
-        <div className="text-center mb-12">
-          <Image src="/images/hb-logo-white.png" alt="start playing" width={200} height={40} className="h-6 w-auto mx-auto mb-4 opacity-40" />
-          <h2 className="text-3xl sm:text-4xl font-black text-white tracking-tight lowercase">start playing</h2>
-          <p className="mt-3 text-white/50 text-sm">Free on all platforms.</p>
+        <div className="text-center mb-10">
+          <h2 className="text-2xl sm:text-3xl font-black text-white tracking-tight lowercase">start playing</h2>
+          <p className="mt-2 text-white text-sm">Free on all platforms.</p>
         </div>
 
         <div className="flex flex-col sm:flex-row justify-center gap-4 max-w-2xl mx-auto">
