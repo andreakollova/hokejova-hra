@@ -125,7 +125,7 @@ export default function Home() {
         </section>
 
         {/* Music - right after gameplay */}
-        <section className="py-24 sm:py-32">
+        <section className="py-12 sm:py-16">
           <div className="max-w-6xl mx-auto px-6 sm:px-10">
             <div className="grid lg:grid-cols-2 gap-16 items-center">
               <div className="relative h-48 flex items-center justify-center order-2 lg:order-1">
@@ -265,26 +265,23 @@ export default function Home() {
               </div>
             </div>
 
-            {/* Other games */}
+            {/* Other games with artwork */}
             <div className="mt-6">
               <p className="text-xs font-bold uppercase tracking-[0.2em] text-gray-400 mb-4">More games</p>
               <div className="grid grid-cols-3 gap-4">
                 <Link href="/terciky" className="group block">
-                  <div className="game-tile bg-gray-50 rounded-2xl p-5 h-28 flex flex-col justify-between border border-gray-100">
-                    <span className="text-xl">🎯</span>
-                    <div className="text-sm font-bold text-gray-900 tracking-tight">Targets</div>
+                  <div className="game-tile rounded-2xl overflow-hidden relative aspect-[3/4] bg-gray-100">
+                    <Image src="/images/game-targets.png" alt="Targets" fill className="object-cover group-hover:scale-105 transition-all duration-500" />
                   </div>
                 </Link>
                 <Link href="/osmicky-terciky" className="group block">
-                  <div className="game-tile bg-gray-50 rounded-2xl p-5 h-28 flex flex-col justify-between border border-gray-100">
-                    <span className="text-xl">♾️</span>
-                    <div className="text-sm font-bold text-gray-900 tracking-tight">Figure 8</div>
+                  <div className="game-tile rounded-2xl overflow-hidden relative aspect-[3/4] bg-gray-100">
+                    <Image src="/images/game-figure8.png" alt="Figure 8" fill className="object-cover group-hover:scale-105 transition-all duration-500" />
                   </div>
                 </Link>
                 <Link href="/osmicky" className="group block">
-                  <div className="game-tile bg-gray-50 rounded-2xl p-5 h-28 flex flex-col justify-between border border-gray-100">
-                    <span className="text-xl">🔄</span>
-                    <div className="text-sm font-bold text-gray-900 tracking-tight">Classic 8s</div>
+                  <div className="game-tile rounded-2xl overflow-hidden relative aspect-[3/4] bg-gray-100">
+                    <Image src="/images/game-classic8s.png" alt="Classic 8s" fill className="object-cover group-hover:scale-105 transition-all duration-500" />
                   </div>
                 </Link>
               </div>
@@ -707,8 +704,8 @@ function StartPlayingSection() {
     <section className="relative bg-[#111111] py-14 sm:py-20 overflow-hidden">
       <div className="max-w-6xl mx-auto px-6 sm:px-10">
         <div className="text-center mb-10">
-          <h2 className="text-2xl sm:text-3xl font-black text-white tracking-tight lowercase">start playing</h2>
-          <p className="mt-2 text-white text-sm">Free on all platforms.</p>
+          <Image src="/images/logo-startnow.png" alt="Start Now" width={300} height={100} className="h-16 sm:h-20 w-auto mx-auto" />
+          <p className="mt-3 text-white text-sm">Free on all platforms.</p>
         </div>
 
         <div className="flex flex-col sm:flex-row justify-center gap-4 max-w-2xl mx-auto">
