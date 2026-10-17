@@ -268,7 +268,7 @@ export default function Home() {
             {/* Other games with artwork */}
             <div className="mt-6">
               <p className="text-xs font-bold uppercase tracking-[0.2em] text-gray-400 mb-4">More games</p>
-              <div className="grid grid-cols-3 gap-4">
+              <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
                 <Link href="/terciky" className="group block">
                   <div className="game-tile rounded-2xl overflow-hidden relative aspect-[3/4] bg-gray-100">
                     <Image src="/images/game-targets.png" alt="Targets" fill className="object-cover group-hover:scale-105 transition-all duration-500" />
@@ -284,6 +284,12 @@ export default function Home() {
                     <Image src="/images/game-classic8s.png" alt="Classic 8s" fill className="object-cover group-hover:scale-105 transition-all duration-500" />
                   </div>
                 </Link>
+                <div className="relative">
+                  <div className="rounded-2xl overflow-hidden relative aspect-[3/4] bg-gray-100 opacity-50 grayscale">
+                    <Image src="/images/game-vdrag.png" alt="V-drag" fill className="object-cover" />
+                  </div>
+                  <div className="absolute bottom-3 left-3 bg-gray-900/80 text-white text-[10px] font-bold uppercase tracking-wider px-3 py-1.5 rounded-full">Coming soon</div>
+                </div>
               </div>
             </div>
           </div>
