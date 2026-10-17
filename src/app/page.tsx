@@ -37,20 +37,20 @@ export default function Home() {
       }`}>
         <div className="flex justify-between items-center">
           {/* Hamburger */}
-          <button className="text-gray-500 hover:text-gray-900 transition-colors p-1">
+          <button className="text-gray-700 hover:text-gray-900 transition-colors p-1">
             <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
               <path strokeLinecap="round" strokeLinejoin="round" d="M4 6h16M4 12h16M4 18h16" />
             </svg>
           </button>
           {/* Socials */}
           <div className="flex items-center gap-4">
-            <a href="#" className="text-gray-400 hover:text-gray-700 transition-colors">
+            <a href="#" className="text-gray-600 hover:text-gray-900 transition-colors">
               <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z"/></svg>
             </a>
-            <a href="#" className="text-gray-400 hover:text-gray-700 transition-colors">
+            <a href="#" className="text-gray-600 hover:text-gray-900 transition-colors">
               <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M19.59 6.69a4.83 4.83 0 01-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 01-2.88 2.5 2.89 2.89 0 01-2.89-2.89 2.89 2.89 0 012.89-2.89c.28 0 .54.04.79.1V9.01a6.27 6.27 0 00-.79-.05 6.34 6.34 0 00-6.34 6.34 6.34 6.34 0 006.34 6.34 6.34 6.34 0 006.34-6.34V8.75a8.18 8.18 0 004.76 1.52V6.84a4.84 4.84 0 01-1-.15z"/></svg>
             </a>
-            <a href="#" className="text-gray-400 hover:text-gray-700 transition-colors">
+            <a href="#" className="text-gray-600 hover:text-gray-900 transition-colors">
               <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M23.498 6.186a3.016 3.016 0 00-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 00.502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 002.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 002.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg>
             </a>
           </div>
@@ -117,8 +117,33 @@ export default function Home() {
               </div>
               <div>
                 <div className="rounded-3xl overflow-hidden">
-                  <Image src="/images/hero-girl.png" alt="Player practising" width={500} height={400} className="w-full h-auto" />
+                  <Image src="/images/hero-indoor.png" alt="Player practising at home" width={600} height={450} className="w-full h-auto" />
                 </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* Music - right after gameplay */}
+        <section className="py-24 sm:py-32">
+          <div className="max-w-6xl mx-auto px-6 sm:px-10">
+            <div className="grid lg:grid-cols-2 gap-16 items-center">
+              <div className="relative h-48 flex items-center justify-center order-2 lg:order-1">
+                <div className="absolute animate-[bounce_3s_ease-in-out_infinite]" style={{ left: '15%', top: '10%' }}>
+                  <svg className="w-16 h-16 text-[#1DB954] drop-shadow-lg" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.4 0 0 5.4 0 12s5.4 12 12 12 12-5.4 12-12S18.66 0 12 0zm5.521 17.34c-.24.359-.66.48-1.021.24-2.82-1.74-6.36-2.101-10.561-1.141-.418.122-.779-.179-.899-.539-.12-.421.18-.78.54-.9 4.56-1.021 8.52-.6 11.64 1.32.42.18.479.659.301 1.02zm1.44-3.3c-.301.42-.841.6-1.262.3-3.239-1.98-8.159-2.58-11.939-1.38-.479.12-1.02-.12-1.14-.6-.12-.48.12-1.021.6-1.141C9.6 9.9 15 10.561 18.72 12.84c.361.181.54.78.241 1.2zm.12-3.36C15.24 8.4 8.82 8.16 5.16 9.301c-.6.179-1.2-.181-1.38-.721-.18-.601.18-1.2.72-1.381 4.26-1.26 11.28-1.02 15.721 1.621.539.3.719 1.02.419 1.56-.299.421-1.02.599-1.559.3z"/></svg>
+                </div>
+                <div className="absolute animate-[bounce_3.5s_ease-in-out_infinite_0.5s]" style={{ right: '15%', bottom: '10%' }}>
+                  <img src="/images/icon-applemusic.svg" alt="Apple Music" className="w-16 h-16 rounded-2xl drop-shadow-lg" />
+                </div>
+                <span className="text-4xl font-light text-gray-300">+</span>
+              </div>
+              <div className="order-1 lg:order-2">
+                <p className="text-xs font-bold uppercase tracking-[0.2em] text-gray-400 mb-4">Audio</p>
+                <h2 className="text-3xl sm:text-5xl font-extrabold text-gray-900 leading-[1.08] tracking-tight">Your favourite music can come to training, too.</h2>
+                <p className="mt-6 text-lg text-gray-500 leading-relaxed">
+                  Connect Spotify or Apple Music and listen to any song while you play. Put on your usual playlist, find something that gets you moving or listen to the same favourite again.
+                </p>
+                <p className="mt-3 text-base text-gray-400">Music adds to the experience while you focus on the game and your practice.</p>
               </div>
             </div>
           </div>
@@ -329,34 +354,6 @@ export default function Home() {
             </div>
             <div className="mt-10">
               <Link href="/rebricek" className="btn-primary px-8 py-4">Set your first score</Link>
-            </div>
-          </div>
-        </section>
-
-        {/* 8. Music */}
-        <section className="bg-gray-50/50 py-24 sm:py-32">
-          <div className="max-w-6xl mx-auto px-6 sm:px-10">
-            <div className="grid lg:grid-cols-2 gap-16 items-center">
-              <div>
-                <p className="text-xs font-bold uppercase tracking-[0.2em] text-gray-400 mb-4">Audio</p>
-                <h2 className="text-3xl sm:text-5xl font-extrabold text-gray-900 leading-[1.08] tracking-tight">Your favourite music can come to training, too.</h2>
-                <p className="mt-6 text-lg text-gray-500 leading-relaxed">
-                  Connect Spotify or Apple Music and listen to any song while you play. Put on your usual playlist, find something that gets you moving or listen to the same favourite again.
-                </p>
-                <p className="mt-3 text-base text-gray-400">Music adds to the experience while you focus on the game and your practice.</p>
-              </div>
-              <div className="relative h-48 flex items-center justify-center">
-                {/* Floating Spotify */}
-                <div className="absolute animate-[bounce_3s_ease-in-out_infinite]" style={{ left: '15%', top: '10%' }}>
-                  <svg className="w-16 h-16 text-[#1DB954] drop-shadow-lg" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.4 0 0 5.4 0 12s5.4 12 12 12 12-5.4 12-12S18.66 0 12 0zm5.521 17.34c-.24.359-.66.48-1.021.24-2.82-1.74-6.36-2.101-10.561-1.141-.418.122-.779-.179-.899-.539-.12-.421.18-.78.54-.9 4.56-1.021 8.52-.6 11.64 1.32.42.18.479.659.301 1.02zm1.44-3.3c-.301.42-.841.6-1.262.3-3.239-1.98-8.159-2.58-11.939-1.38-.479.12-1.02-.12-1.14-.6-.12-.48.12-1.021.6-1.141C9.6 9.9 15 10.561 18.72 12.84c.361.181.54.78.241 1.2zm.12-3.36C15.24 8.4 8.82 8.16 5.16 9.301c-.6.179-1.2-.181-1.38-.721-.18-.601.18-1.2.72-1.381 4.26-1.26 11.28-1.02 15.721 1.621.539.3.719 1.02.419 1.56-.299.421-1.02.599-1.559.3z"/></svg>
-                </div>
-                {/* Floating Apple Music */}
-                <div className="absolute animate-[bounce_3.5s_ease-in-out_infinite_0.5s]" style={{ right: '15%', bottom: '10%' }}>
-                  <img src="/images/icon-applemusic.svg" alt="Apple Music" className="w-16 h-16 rounded-2xl drop-shadow-lg" />
-                </div>
-                {/* Plus sign */}
-                <span className="text-4xl font-light text-gray-300">+</span>
-              </div>
             </div>
           </div>
         </section>
@@ -707,7 +704,7 @@ function StartPlayingSection() {
   const [expanded, setExpanded] = useState<'mobile' | 'desktop' | 'tv' | null>('mobile');
 
   return (
-    <section className="relative bg-[#1a1a1a] py-14 sm:py-20 overflow-hidden">
+    <section className="relative bg-[#111111] py-14 sm:py-20 overflow-hidden">
       <div className="max-w-6xl mx-auto px-6 sm:px-10">
         <div className="text-center mb-10">
           <h2 className="text-2xl sm:text-3xl font-black text-white tracking-tight lowercase">start playing</h2>
