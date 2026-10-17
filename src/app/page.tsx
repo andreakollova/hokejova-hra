@@ -579,8 +579,8 @@ function HeroBanner() {
           <div className="absolute inset-0 overflow-hidden">
             <iframe
               src="https://www.youtube.com/embed/7mGtwXDxupA?autoplay=1&mute=1&loop=1&controls=0&showinfo=0&rel=0&playlist=7mGtwXDxupA&playsinline=1&modestbranding=1&iv_load_policy=3&disablekb=1"
-              className="absolute left-1/2 -translate-x-1/2 pointer-events-none border-0"
-              style={{ top: '35%', transform: 'translate(-50%, -50%)', width: 'max(100vw, 177.78vh)', height: 'max(100%, 56.25vw)' }}
+              className="absolute pointer-events-none border-0"
+              style={{ top: '30%', left: '50%', transform: 'translate(-50%, -50%)', width: 'max(100vw, 177.78vh)', height: 'max(100%, 56.25vw)' }}
               allow="autoplay; encrypted-media"
               title="Background"
             />
