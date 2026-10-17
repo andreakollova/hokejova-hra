@@ -149,71 +149,6 @@ export default function Home() {
           </div>
         </section>
 
-        {/* 3. Sports */}
-        <section id="sports" className="py-24 sm:py-32">
-          <div className="max-w-6xl mx-auto px-6 sm:px-10">
-            <div className="text-center mb-16">
-              <p className="text-xs font-bold uppercase tracking-[0.2em] text-gray-400 mb-4">Select your sport</p>
-              <h2 className="text-3xl sm:text-5xl font-extrabold text-gray-900 leading-[1.08] tracking-tight">Three sports. A shared reason to keep practising.</h2>
-              <p className="mt-5 text-lg text-gray-500 max-w-xl mx-auto">
-                Whether you play on ice, on the pitch or in the sports hall, time with your stick matters.
-              </p>
-            </div>
-            <div className="grid sm:grid-cols-3 gap-6">
-              <div className="sport-card flex flex-col items-center text-center">
-                <Image src="/images/sport-icehockey.png" alt="Ice hockey puck" width={120} height={120} className="w-24 h-24 mb-5" />
-                <h3 className="text-lg font-extrabold text-gray-900 mb-3 tracking-tight">Ice hockey</h3>
-                <p className="text-sm text-gray-500 leading-relaxed">Keep working on your stickhandling away from the rink, with off-ice practice that gets you moving and looking ahead.</p>
-              </div>
-              <div className="sport-card flex flex-col items-center text-center">
-                <Image src="/images/sport-fieldhockey.png" alt="Field hockey ball" width={120} height={120} className="w-24 h-24 mb-5" />
-                <h3 className="text-lg font-extrabold text-gray-900 mb-3 tracking-tight">Field hockey</h3>
-                <p className="text-sm text-gray-500 leading-relaxed">Spend more time on ball control and practise lifting your eyes while your stick stays involved.</p>
-              </div>
-              <div className="sport-card flex flex-col items-center text-center">
-                <Image src="/images/sport-floorball.png" alt="Floorball" width={120} height={120} className="w-24 h-24 mb-5" />
-                <h3 className="text-lg font-extrabold text-gray-900 mb-3 tracking-tight">Floorball</h3>
-                <p className="text-sm text-gray-500 leading-relaxed">Give your stick skills extra attention outside team training, with games that keep you engaged in every movement.</p>
-              </div>
-            </div>
-          </div>
-        </section>
-
-        {/* 4. Why HockeyBeats */}
-        <section className="bg-gray-50/50 py-24 sm:py-32">
-          <div className="max-w-6xl mx-auto px-6 sm:px-10">
-            <div className="max-w-2xl mb-16">
-              <h2 className="text-3xl sm:text-5xl font-extrabold text-gray-900 leading-[1.08] tracking-tight">Make practice something you look forward to.</h2>
-              <p className="mt-6 text-lg text-gray-500 leading-relaxed">
-                Getting better takes repetition. Finding the motivation to repeat the same movements can be the harder part. HockeyBeats gives those movements a purpose inside a game.
-              </p>
-            </div>
-            <div className="grid sm:grid-cols-3 gap-8">
-              <div className="bg-white rounded-3xl p-7 border border-gray-100 hover:border-gray-200 hover:shadow-md transition-all duration-300">
-                <div className="w-10 h-10 rounded-2xl bg-gray-100 flex items-center justify-center mb-4">
-                  <span className="text-sm font-black text-gray-400">01</span>
-                </div>
-                <h3 className="text-base font-extrabold text-gray-900 mb-2 tracking-tight">Build control through repetition</h3>
-                <p className="text-sm text-gray-500 leading-relaxed">Give yourself more opportunities to get comfortable with your stick and ball.</p>
-              </div>
-              <div className="bg-white rounded-3xl p-7 border border-gray-100 hover:border-gray-200 hover:shadow-md transition-all duration-300">
-                <div className="w-10 h-10 rounded-2xl bg-gray-100 flex items-center justify-center mb-4">
-                  <span className="text-sm font-black text-gray-400">02</span>
-                </div>
-                <h3 className="text-base font-extrabold text-gray-900 mb-2 tracking-tight">Practise looking ahead</h3>
-                <p className="text-sm text-gray-500 leading-relaxed">Follow the screen while keeping the ball moving, rather than watching your stick the whole time.</p>
-              </div>
-              <div className="bg-white rounded-3xl p-7 border border-gray-100 hover:border-gray-200 hover:shadow-md transition-all duration-300">
-                <div className="w-10 h-10 rounded-2xl bg-gray-100 flex items-center justify-center mb-4">
-                  <span className="text-sm font-black text-gray-400">03</span>
-                </div>
-                <h3 className="text-base font-extrabold text-gray-900 mb-2 tracking-tight">Build a habit that lasts</h3>
-                <p className="text-sm text-gray-500 leading-relaxed">Make individual practice easier to return to with different games, personal bests and friendly competition.</p>
-              </div>
-            </div>
-          </div>
-        </section>
-
         {/* 5. Game previews */}
         <section id="games" className="py-24 sm:py-32">
           <div className="max-w-6xl mx-auto px-6 sm:px-10">
@@ -297,7 +232,70 @@ export default function Home() {
             </div>
           </div>
         </section>
+        {/* 3. Sports */}
+        <section id="sports" className="py-24 sm:py-32">
+          <div className="max-w-6xl mx-auto px-6 sm:px-10">
+            <div className="text-center mb-16">
+              <p className="text-xs font-bold uppercase tracking-[0.2em] text-gray-400 mb-4">Select your sport</p>
+              <h2 className="text-3xl sm:text-5xl font-extrabold text-gray-900 leading-[1.08] tracking-tight">Three sports. A shared reason to keep practising.</h2>
+              <p className="mt-5 text-lg text-gray-500 max-w-xl mx-auto">
+                Whether you play on ice, on the pitch or in the sports hall, time with your stick matters.
+              </p>
+            </div>
+            <div className="grid sm:grid-cols-3 gap-6">
+              <div className="sport-card flex flex-col items-center text-center">
+                <Image src="/images/sport-icehockey.png" alt="Ice hockey puck" width={120} height={120} className="w-24 h-24 mb-5" />
+                <h3 className="text-lg font-extrabold text-gray-900 mb-3 tracking-tight">Ice hockey</h3>
+                <p className="text-sm text-gray-500 leading-relaxed">Keep working on your stickhandling away from the rink, with off-ice practice that gets you moving and looking ahead.</p>
+              </div>
+              <div className="sport-card flex flex-col items-center text-center">
+                <Image src="/images/sport-fieldhockey.png" alt="Field hockey ball" width={120} height={120} className="w-24 h-24 mb-5" />
+                <h3 className="text-lg font-extrabold text-gray-900 mb-3 tracking-tight">Field hockey</h3>
+                <p className="text-sm text-gray-500 leading-relaxed">Spend more time on ball control and practise lifting your eyes while your stick stays involved.</p>
+              </div>
+              <div className="sport-card flex flex-col items-center text-center">
+                <Image src="/images/sport-floorball.png" alt="Floorball" width={120} height={120} className="w-24 h-24 mb-5" />
+                <h3 className="text-lg font-extrabold text-gray-900 mb-3 tracking-tight">Floorball</h3>
+                <p className="text-sm text-gray-500 leading-relaxed">Give your stick skills extra attention outside team training, with games that keep you engaged in every movement.</p>
+              </div>
+            </div>
+          </div>
+        </section>
 
+        {/* 4. Why HockeyBeats */}
+        <section className="bg-gray-50/50 py-24 sm:py-32">
+          <div className="max-w-6xl mx-auto px-6 sm:px-10">
+            <div className="max-w-2xl mb-16">
+              <h2 className="text-3xl sm:text-5xl font-extrabold text-gray-900 leading-[1.08] tracking-tight">Make practice something you look forward to.</h2>
+              <p className="mt-6 text-lg text-gray-500 leading-relaxed">
+                Getting better takes repetition. Finding the motivation to repeat the same movements can be the harder part. HockeyBeats gives those movements a purpose inside a game.
+              </p>
+            </div>
+            <div className="grid sm:grid-cols-3 gap-8">
+              <div className="bg-white rounded-3xl p-7 border border-gray-100 hover:border-gray-200 hover:shadow-md transition-all duration-300">
+                <div className="w-10 h-10 rounded-2xl bg-gray-100 flex items-center justify-center mb-4">
+                  <span className="text-sm font-black text-gray-400">01</span>
+                </div>
+                <h3 className="text-base font-extrabold text-gray-900 mb-2 tracking-tight">Build control through repetition</h3>
+                <p className="text-sm text-gray-500 leading-relaxed">Give yourself more opportunities to get comfortable with your stick and ball.</p>
+              </div>
+              <div className="bg-white rounded-3xl p-7 border border-gray-100 hover:border-gray-200 hover:shadow-md transition-all duration-300">
+                <div className="w-10 h-10 rounded-2xl bg-gray-100 flex items-center justify-center mb-4">
+                  <span className="text-sm font-black text-gray-400">02</span>
+                </div>
+                <h3 className="text-base font-extrabold text-gray-900 mb-2 tracking-tight">Practise looking ahead</h3>
+                <p className="text-sm text-gray-500 leading-relaxed">Follow the screen while keeping the ball moving, rather than watching your stick the whole time.</p>
+              </div>
+              <div className="bg-white rounded-3xl p-7 border border-gray-100 hover:border-gray-200 hover:shadow-md transition-all duration-300">
+                <div className="w-10 h-10 rounded-2xl bg-gray-100 flex items-center justify-center mb-4">
+                  <span className="text-sm font-black text-gray-400">03</span>
+                </div>
+                <h3 className="text-base font-extrabold text-gray-900 mb-2 tracking-tight">Build a habit that lasts</h3>
+                <p className="text-sm text-gray-500 leading-relaxed">Make individual practice easier to return to with different games, personal bests and friendly competition.</p>
+              </div>
+            </div>
+          </div>
+        </section>
         {/* 6. How it works */}
         <section id="how-it-works" className="bg-gray-50/50 py-24 sm:py-32">
           <div className="max-w-6xl mx-auto px-6 sm:px-10">
