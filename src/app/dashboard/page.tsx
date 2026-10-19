@@ -36,8 +36,8 @@ interface ScoreEntry {
 }
 
 export default function DashboardPage() {
-  const { settings, isLoggedIn } = useSettings();
-  const { getStreak, getLevelProgress, getXP, getAvatar, loaded } = useEngagement();
+  const { settings, isLoggedIn, loaded } = useSettings();
+  const { getStreak, getLevelProgress, getXP, getAvatar, loaded: engLoaded } = useEngagement();
   const [musicHistory, setMusicHistory] = useState<TrackRecord[]>([]);
   const [topScores, setTopScores] = useState<ScoreEntry[]>([]);
   const [myScores, setMyScores] = useState<ScoreEntry[]>([]);
@@ -62,16 +62,19 @@ export default function DashboardPage() {
     } catch {}
   };
 
+  // Wait for settings to load before checking auth
+  if (!loaded) return null;
+
   // Redirect to home if not logged in
   if (!isLoggedIn) {
     if (typeof window !== 'undefined') window.location.href = '/';
     return null;
   }
 
-  const streak = loaded ? getStreak() : { currentStreak: 0, frozen: false };
-  const level = loaded ? getLevelProgress() : { level: 0, xpInLevel: 0, xpNeeded: 100, progress: 0 };
-  const totalXP = loaded ? getXP() : 0;
-  const avatar = loaded ? getAvatar() : null;
+  const streak = engLoaded ? getStreak() : { currentStreak: 0, frozen: false };
+  const level = engLoaded ? getLevelProgress() : { level: 0, xpInLevel: 0, xpNeeded: 100, progress: 0 };
+  const totalXP = engLoaded ? getXP() : 0;
+  const avatar = engLoaded ? getAvatar() : null;
 
   const favorites = [...musicHistory].sort((a, b) => b.playCount - a.playCount).slice(0, 5);
   const recent = [...musicHistory].sort((a, b) => b.lastPlayed - a.lastPlayed).slice(0, 3);
@@ -107,7 +110,7 @@ export default function DashboardPage() {
             </h1>
             <p className="text-sm text-gray-400 mt-1">Choose a game and start practising.</p>
           </div>
-          {loaded && (
+          {engLoaded && (
             <div className="flex items-center gap-5">
               <div className="text-center">
                 <div className="text-2xl font-black text-gray-900 tabular-nums">{totalXP}</div>
@@ -132,7 +135,7 @@ export default function DashboardPage() {
         </div>
 
         {/* XP bar */}
-        {loaded && level.level >= 0 && (
+        {engLoaded && level.level >= 0 && (
           <div className="mb-10">
             <XPBar level={level.level} xpInLevel={level.xpInLevel} xpNeeded={level.xpNeeded} progress={level.progress} totalXP={totalXP} compact />
           </div>
