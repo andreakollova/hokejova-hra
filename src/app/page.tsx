@@ -94,7 +94,7 @@ export default function Home() {
       <main className="flex-1">
 
         {/* 1. Hero banner - fullscreen with photo */}
-        <HeroBanner />
+        <HeroBanner isLoggedIn={isLoggedIn} onLoginClick={() => setShowAuth(true)} />
 
         {/* Start Playing */}
         <StartPlayingSection />
@@ -536,7 +536,7 @@ export default function Home() {
 }
 
 // Hero Banner - fullscreen with background image, CTA and platform selector
-function HeroBanner() {
+function HeroBanner({ isLoggedIn, onLoginClick }: { isLoggedIn: boolean; onLoginClick: () => void }) {
   const [showPlatform, setShowPlatform] = useState(false);
   const [selectedPlatform, setSelectedPlatform] = useState<'mobile' | 'desktop' | 'tv' | null>(null);
 
@@ -574,7 +574,7 @@ function HeroBanner() {
             <button
               onClick={() => {
                 if (isLoggedIn) { window.location.href = '/dashboard'; }
-                else { setShowAuth(true); }
+                else { onLoginClick(); }
               }}
               className="bg-gray-900 text-white font-medium text-sm px-7 py-3 rounded-full hover:bg-gray-800 hover:shadow-lg active:scale-[0.97] transition-all duration-300 inline-flex items-center gap-2"
             >
