@@ -26,7 +26,7 @@ export default function Home() {
     e.preventDefault();
     setLoginError('');
     const err = login(loginUsername, loginPassword);
-    if (err) { setLoginError(err); } else { setShowAuth(false); setLoginUsername(''); setLoginPassword(''); }
+    if (err) { setLoginError(err); } else { window.location.href = '/dashboard'; }
   };
 
   return (
@@ -571,10 +571,16 @@ function HeroBanner() {
             A game you want to play. Practice the coach will notice.
           </p>
           <div className="mt-8">
-            <Link href="/trening" className="bg-gray-900 text-white font-medium text-sm px-7 py-3 rounded-full hover:bg-gray-800 hover:shadow-lg active:scale-[0.97] transition-all duration-300 inline-flex items-center gap-2">
+            <button
+              onClick={() => {
+                if (isLoggedIn) { window.location.href = '/dashboard'; }
+                else { setShowAuth(true); }
+              }}
+              className="bg-gray-900 text-white font-medium text-sm px-7 py-3 rounded-full hover:bg-gray-800 hover:shadow-lg active:scale-[0.97] transition-all duration-300 inline-flex items-center gap-2"
+            >
               <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
               Play now — it&apos;s free
-            </Link>
+            </button>
           </div>
           <div className="mt-5 flex items-center gap-3">
             <a href="#"><img src="/images/badge-appstore.svg" alt="Download on the App Store" className="h-9 hover:opacity-80 transition-opacity" /></a>
