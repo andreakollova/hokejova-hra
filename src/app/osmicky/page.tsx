@@ -34,6 +34,7 @@ export default function OsmickyPage() {
   const [isPaused, setIsPaused] = useState(false);
   const [calibration, setCalibration] = useState<CalibrationData | null>(null);
   const [bgTrack, setBgTrack] = useState<SpotifyTrack | null>(null);
+  const [spotifyReturned, setSpotifyReturned] = useState(false);
 
   const tracker = useTracker(inputMode);
   const spotify = useSpotify();
@@ -48,6 +49,11 @@ export default function OsmickyPage() {
       try {
         setCalibration(JSON.parse(saved));
       } catch {}
+    }
+    const params = new URLSearchParams(window.location.search);
+    if (params.get('spotify') === 'connected') {
+      setSpotifyReturned(true);
+      window.history.replaceState({}, '', window.location.pathname);
     }
   }, []);
 
@@ -289,7 +295,7 @@ export default function OsmickyPage() {
             For best results use a brightly coloured ball and good lighting.
           </div>
 
-          <BackgroundMusic spotify={spotify} onSelect={setBgTrack} selectedTrack={bgTrack} />
+          <BackgroundMusic spotify={spotify} onSelect={setBgTrack} selectedTrack={bgTrack} autoOpen={spotifyReturned} />
 
           <button onClick={startGame} className="btn-primary w-full text-lg py-4">
             Start training

@@ -235,10 +235,26 @@ export default function DashboardPage() {
             )}
 
             {musicHistory.length === 0 && (
-              <div className="rounded-2xl bg-white/5 border border-white/5 p-8 text-center">
-                <div className="text-2xl mb-3">🎵</div>
-                <p className="text-sm text-white/30">No music played yet.</p>
-                <p className="text-xs text-white/20 mt-1">Connect Spotify or Apple Music in any game.</p>
+              <div className="space-y-2">
+                {[
+                  { name: 'Blinding Lights', artist: 'The Weeknd', plays: 24 },
+                  { name: 'Levitating', artist: 'Dua Lipa', plays: 18 },
+                  { name: 'Flowers', artist: 'Miley Cyrus', plays: 12 },
+                  { name: 'Anti-Hero', artist: 'Taylor Swift', plays: 9 },
+                  { name: 'Unholy', artist: 'Sam Smith, Kim Petras', plays: 7 },
+                ].map((t) => (
+                  <div key={t.name} className="flex items-center gap-3 rounded-2xl p-3 bg-white/5 border border-white/5 opacity-40">
+                    <div className="w-10 h-10 rounded-lg bg-white/10 flex items-center justify-center">
+                      <svg className="w-4 h-4 text-white/30" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}><path strokeLinecap="round" strokeLinejoin="round" d="M9 19V6l12-3v13M9 19c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zm12-3c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zM9 10l12-3" /></svg>
+                    </div>
+                    <div className="flex-1 min-w-0">
+                      <div className="text-sm font-semibold truncate">{t.name}</div>
+                      <div className="text-xs text-white/30 truncate">{t.artist}</div>
+                    </div>
+                    <span className="text-xs text-white/30 tabular-nums">{t.plays}x</span>
+                  </div>
+                ))}
+                <p className="text-xs text-white/20 text-center mt-3">Sample data - connect Spotify in any game to see your music.</p>
               </div>
             )}
           </div>
@@ -271,10 +287,34 @@ export default function DashboardPage() {
                 })}
               </div>
             ) : (
-              <div className="rounded-2xl bg-white/5 border border-white/5 p-8 text-center">
-                <div className="text-2xl mb-3">🏆</div>
-                <p className="text-sm text-white/30">No scores yet.</p>
-                <p className="text-xs text-white/20 mt-1">Play a game to set your first score.</p>
+              <div>
+                <div className="space-y-2">
+                  {[
+                    { rank: 1, name: 'matej_k', score: 2840, song: 'Blinding Lights', acc: 96 },
+                    { rank: 2, name: 'zuzka99', score: 2510, song: 'Levitating', acc: 91 },
+                    { rank: 3, name: 'hockeyboy', score: 2280, song: 'Flowers', acc: 88 },
+                    { rank: 4, name: settings.username, score: 1950, song: 'Anti-Hero', acc: 85 },
+                    { rank: 5, name: 'petra_h', score: 1720, song: 'Unholy', acc: 82 },
+                  ].map((entry) => {
+                    const isMe = entry.name === settings.username;
+                    const idx = entry.rank - 1;
+                    return (
+                      <div key={entry.rank} className={`flex items-center gap-3 rounded-2xl p-3 opacity-40 ${isMe ? 'bg-emerald-500/10 border border-emerald-500/20' : 'bg-white/5 border border-white/5'}`}>
+                        <div className={`w-8 h-8 rounded-full flex items-center justify-center text-xs font-black ${
+                          idx === 0 ? 'bg-amber-400/20 text-amber-400' : idx === 1 ? 'bg-white/10 text-white/60' : idx === 2 ? 'bg-orange-400/20 text-orange-400' : 'bg-white/5 text-white/30'
+                        }`}>{entry.rank}</div>
+                        <div className="flex-1 min-w-0">
+                          <div className="text-sm font-semibold truncate">
+                            {entry.name} {isMe && <span className="text-emerald-400 text-xs">(you)</span>}
+                          </div>
+                          <div className="text-xs text-white/30">{entry.song} · {entry.acc}%</div>
+                        </div>
+                        <div className="text-lg font-black tabular-nums">{entry.score}</div>
+                      </div>
+                    );
+                  })}
+                </div>
+                <p className="text-xs text-white/20 text-center mt-3">Sample data - play a game to see real rankings.</p>
               </div>
             )}
 

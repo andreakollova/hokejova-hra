@@ -42,15 +42,16 @@ interface BackgroundMusicProps {
   spotify: ReturnType<typeof import('@/hooks/useSpotify').useSpotify>;
   onSelect: (track: SpotifyTrack | null) => void;
   selectedTrack: SpotifyTrack | null;
+  autoOpen?: boolean;
 }
 
-export default function BackgroundMusic({ spotify, onSelect, selectedTrack }: BackgroundMusicProps) {
+export default function BackgroundMusic({ spotify, onSelect, selectedTrack, autoOpen }: BackgroundMusicProps) {
   const apple = useAppleMusic();
   const [service, setService] = useState<MusicService>(() => {
     try { return (localStorage.getItem(SERVICE_KEY) as MusicService) || 'spotify'; } catch { return 'spotify'; }
   });
   const [searchQuery, setSearchQuery] = useState('');
-  const [showSearch, setShowSearch] = useState(false);
+  const [showSearch, setShowSearch] = useState(autoOpen || false);
   const [history, setHistory] = useState<TrackRecord[]>([]);
   const searchTimeout = useRef<ReturnType<typeof setTimeout>>(undefined);
 

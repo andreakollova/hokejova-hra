@@ -55,6 +55,16 @@ export default function TreningPage() {
     }
   }, []);
 
+  // Auto-open music selector after Spotify OAuth redirect
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    if (params.get('spotify') === 'connected') {
+      setPhase('music');
+      // Clean up URL
+      window.history.replaceState({}, '', window.location.pathname);
+    }
+  }, []);
+
   const handleCalibrationComplete = useCallback(
     (cal: CalibrationData) => {
       setCalibration(cal);
