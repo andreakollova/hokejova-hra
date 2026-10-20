@@ -35,6 +35,16 @@ interface ScoreEntry {
   created_at: string;
 }
 
+const GAMES = [
+  { name: 'HockeyBeats', href: '/trening', image: '/images/game-hockeybeats.png', bg: '#1a1a2e', desc: 'Beat-synced slalom' },
+  { name: 'Space Invaders', href: '/space', image: '/images/game-spaceinvaders.png', bg: '#0f172a', desc: 'Shoot the blocks' },
+  { name: 'Jelly Stack', href: '/jelly-stack', image: '/images/game-jellystack.png', bg: '#2d1b3d', desc: 'Stack and balance' },
+  { name: 'Orbit Hop', href: '/orbit-hop', image: '/images/game-orbithop.png', bg: '#1a2332', desc: 'Jump between planets' },
+  { name: 'Targets', href: '/terciky', image: '/images/game-targets.png', bg: '#1f2937', desc: 'Hit the targets' },
+  { name: 'Figure 8', href: '/osmicky-terciky', image: '/images/game-figure8.png', bg: '#1a2e1a', desc: 'Figure eight drills' },
+  { name: 'Classic 8s', href: '/osmicky', image: '/images/game-classic8s.png', bg: '#2e2a1a', desc: 'Classic eight pattern' },
+];
+
 export default function DashboardPage() {
   const { settings, isLoggedIn, loaded } = useSettings();
   const { getStreak, getLevelProgress, getXP, getAvatar, loaded: engLoaded } = useEngagement();
@@ -62,10 +72,8 @@ export default function DashboardPage() {
     } catch {}
   };
 
-  // Wait for settings to load before checking auth
   if (!loaded) return null;
 
-  // Redirect to home if not logged in
   if (!isLoggedIn) {
     if (typeof window !== 'undefined') window.location.href = '/';
     return null;
@@ -79,59 +87,64 @@ export default function DashboardPage() {
   const favorites = [...musicHistory].sort((a, b) => b.playCount - a.playCount).slice(0, 5);
   const recent = [...musicHistory].sort((a, b) => b.lastPlayed - a.lastPlayed).slice(0, 3);
 
-  // Find my rank
   const myRank = topScores.findIndex(s => s.username === settings.username) + 1;
 
+  const gamesPlayed = myScores.length;
+
   return (
-    <div className="min-h-screen bg-white">
+    <div className="min-h-screen bg-[#0a0a0f] text-white">
       {/* Header */}
-      <header className="border-b border-gray-100 px-6 sm:px-10 py-4">
-        <div className="max-w-6xl mx-auto flex justify-between items-center">
+      <header className="border-b border-white/5 px-6 sm:px-10 py-4">
+        <div className="max-w-7xl mx-auto flex justify-between items-center">
           <Link href="/">
-            <Image src="/images/hb-logo.png" alt="HockeyBeats" width={130} height={30} className="h-6 w-auto" />
+            <Image src="/images/hb-logo-white.png" alt="HockeyBeats" width={130} height={30} className="h-6 w-auto" />
           </Link>
           <div className="flex items-center gap-4">
             {streak.currentStreak > 0 && <StreakBadge currentStreak={streak.currentStreak} frozen={streak.frozen} size="sm" />}
-            <Link href="/nastavenia" className="flex items-center gap-2">
+            <Link href="/nastavenia" className="flex items-center gap-2.5 bg-white/5 hover:bg-white/10 rounded-full pl-1 pr-4 py-1 transition-colors">
               <Avatar username={settings.username} photoUrl={avatar} size="sm" />
-              <span className="text-sm font-medium text-gray-700 hidden sm:block">{settings.username}</span>
+              <span className="text-sm font-medium text-white/80 hidden sm:block">{settings.username}</span>
             </Link>
           </div>
         </div>
       </header>
 
-      <div className="max-w-6xl mx-auto px-6 sm:px-10 py-8">
+      <div className="max-w-7xl mx-auto px-6 sm:px-10 py-8">
 
-        {/* Welcome + stats row */}
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-10">
+        {/* Welcome + Stats bar */}
+        <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-6 mb-8">
           <div>
-            <h1 className="text-2xl font-extrabold text-gray-900 tracking-tight">
-              Welcome back{isLoggedIn ? `, ${settings.username}` : ''}
+            <h1 className="text-2xl sm:text-3xl font-extrabold tracking-tight">
+              Welcome back, <span className="text-emerald-400">{settings.username}</span>
             </h1>
-            <p className="text-sm text-gray-400 mt-1">Choose a game and start practising.</p>
+            <p className="text-sm text-white/30 mt-1">Pick a game and start training.</p>
           </div>
-          {engLoaded && (
-            <div className="flex items-center gap-5">
-              <div className="text-center">
-                <div className="text-2xl font-black text-gray-900 tabular-nums">{totalXP}</div>
-                <div className="text-[10px] text-gray-400 uppercase tracking-wider">XP</div>
-              </div>
-              <div className="w-px h-8 bg-gray-100" />
-              <div className="text-center">
-                <div className="text-2xl font-black text-gray-900 tabular-nums">{level.level}</div>
-                <div className="text-[10px] text-gray-400 uppercase tracking-wider">Level</div>
-              </div>
-              {myRank > 0 && (
-                <>
-                  <div className="w-px h-8 bg-gray-100" />
-                  <div className="text-center">
-                    <div className="text-2xl font-black text-gray-900 tabular-nums">#{myRank}</div>
-                    <div className="text-[10px] text-gray-400 uppercase tracking-wider">Rank</div>
-                  </div>
-                </>
-              )}
+
+          {/* Stat pills */}
+          <div className="flex items-center gap-3 flex-wrap">
+            <div className="bg-white/5 border border-white/8 rounded-2xl px-5 py-3 text-center min-w-[80px]">
+              <div className="text-xl font-black tabular-nums text-emerald-400">{totalXP}</div>
+              <div className="text-[10px] text-white/30 uppercase tracking-wider mt-0.5">XP</div>
             </div>
-          )}
+            <div className="bg-white/5 border border-white/8 rounded-2xl px-5 py-3 text-center min-w-[80px]">
+              <div className="text-xl font-black tabular-nums">{level.level}</div>
+              <div className="text-[10px] text-white/30 uppercase tracking-wider mt-0.5">Level</div>
+            </div>
+            <div className="bg-white/5 border border-white/8 rounded-2xl px-5 py-3 text-center min-w-[80px]">
+              <div className="text-xl font-black tabular-nums">{gamesPlayed}</div>
+              <div className="text-[10px] text-white/30 uppercase tracking-wider mt-0.5">Games</div>
+            </div>
+            <div className="bg-white/5 border border-white/8 rounded-2xl px-5 py-3 text-center min-w-[80px]">
+              <div className="text-xl font-black tabular-nums">{streak.currentStreak}<span className="text-sm ml-0.5">d</span></div>
+              <div className="text-[10px] text-white/30 uppercase tracking-wider mt-0.5">Streak</div>
+            </div>
+            {myRank > 0 && (
+              <div className="bg-white/5 border border-white/8 rounded-2xl px-5 py-3 text-center min-w-[80px]">
+                <div className="text-xl font-black tabular-nums text-amber-400">#{myRank}</div>
+                <div className="text-[10px] text-white/30 uppercase tracking-wider mt-0.5">Rank</div>
+              </div>
+            )}
+          </div>
         </div>
 
         {/* XP bar */}
@@ -141,65 +154,41 @@ export default function DashboardPage() {
           </div>
         )}
 
-        {/* Games grid */}
-        <div className="mb-12">
-          <h2 className="text-xs font-bold uppercase tracking-[0.2em] text-gray-400 mb-5">Games</h2>
-          {/* Main games - PS5 style cards */}
-          <div className="grid grid-cols-2 sm:grid-cols-2 gap-5 mb-5">
-            <Link href="/trening" className="group block">
-              <div className="game-tile rounded-3xl overflow-hidden relative aspect-[4/5] bg-gray-100">
-                <Image src="/images/game-hockeybeats.png" alt="HockeyBeats" fill className="object-cover group-hover:scale-105 transition-all duration-500" />
-                <div className="absolute bottom-0 left-0 right-0 p-5 bg-gradient-to-t from-black/50 to-transparent">
-                  <div className="text-sm font-bold text-white">Play</div>
+        {/* Featured game - big hero card */}
+        <div className="mb-6">
+          <Link href={GAMES[0].href} className="group block">
+            <div className="relative rounded-3xl overflow-hidden aspect-[21/9] sm:aspect-[3/1]" style={{ background: GAMES[0].bg }}>
+              <Image src={GAMES[0].image} alt={GAMES[0].name} fill className="object-cover opacity-80 group-hover:opacity-100 group-hover:scale-[1.03] transition-all duration-700" />
+              <div className="absolute inset-0 bg-gradient-to-r from-black/70 via-black/30 to-transparent" />
+              <div className="absolute bottom-0 left-0 p-6 sm:p-10">
+                <div className="text-[10px] font-bold uppercase tracking-[0.2em] text-emerald-400 mb-2">Featured</div>
+                <h2 className="text-2xl sm:text-4xl font-black tracking-tight">{GAMES[0].name}</h2>
+                <p className="text-sm text-white/50 mt-1">{GAMES[0].desc}</p>
+                <div className="mt-4 inline-flex items-center gap-2 bg-white text-black text-sm font-bold px-5 py-2.5 rounded-full group-hover:bg-emerald-400 group-hover:text-black transition-colors">
+                  <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+                  Play now
                 </div>
               </div>
-            </Link>
-            <Link href="/space" className="group block">
-              <div className="game-tile rounded-3xl overflow-hidden relative aspect-[4/5] bg-[#0f172a]">
-                <Image src="/images/game-spaceinvaders.png" alt="Space Invaders" fill className="object-cover group-hover:scale-105 transition-all duration-500" />
-                <div className="absolute bottom-0 left-0 right-0 p-5 bg-gradient-to-t from-black/50 to-transparent">
-                  <div className="text-sm font-bold text-white">Play</div>
-                </div>
-              </div>
-            </Link>
-            <Link href="/jelly-stack" className="group block">
-              <div className="game-tile rounded-3xl overflow-hidden relative aspect-[4/5] bg-[#faf5eb]">
-                <Image src="/images/game-jellystack.png" alt="Jelly Stack" fill className="object-cover group-hover:scale-105 transition-all duration-500" />
-                <div className="absolute bottom-0 left-0 right-0 p-5 bg-gradient-to-t from-black/50 to-transparent">
-                  <div className="text-sm font-bold text-white">Play</div>
-                </div>
-              </div>
-            </Link>
-            <Link href="/orbit-hop" className="group block">
-              <div className="game-tile rounded-3xl overflow-hidden relative aspect-[4/5] bg-[#ede9fe]">
-                <Image src="/images/game-orbithop.png" alt="Orbit Hop" fill className="object-cover group-hover:scale-105 transition-all duration-500" />
-                <div className="absolute bottom-0 left-0 right-0 p-5 bg-gradient-to-t from-black/50 to-transparent">
-                  <div className="text-sm font-bold text-white">Play</div>
-                </div>
-              </div>
-            </Link>
-          </div>
+            </div>
+          </Link>
+        </div>
 
-          {/* Other games */}
-          <div className="grid grid-cols-3 gap-3">
-            <Link href="/terciky" className="group block">
-              <div className="game-tile bg-gray-50 rounded-2xl p-4 h-24 flex flex-col justify-between border border-gray-100">
-                <span className="text-lg">🎯</span>
-                <div className="text-xs font-bold text-gray-900">Targets</div>
-              </div>
-            </Link>
-            <Link href="/osmicky-terciky" className="group block">
-              <div className="game-tile bg-gray-50 rounded-2xl p-4 h-24 flex flex-col justify-between border border-gray-100">
-                <span className="text-lg">♾️</span>
-                <div className="text-xs font-bold text-gray-900">Figure 8</div>
-              </div>
-            </Link>
-            <Link href="/osmicky" className="group block">
-              <div className="game-tile bg-gray-50 rounded-2xl p-4 h-24 flex flex-col justify-between border border-gray-100">
-                <span className="text-lg">🔄</span>
-                <div className="text-xs font-bold text-gray-900">Classic 8s</div>
-              </div>
-            </Link>
+        {/* All games grid */}
+        <div className="mb-12">
+          <h2 className="text-xs font-bold uppercase tracking-[0.2em] text-white/30 mb-5">All games</h2>
+          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-4">
+            {GAMES.slice(1).map((game) => (
+              <Link key={game.href} href={game.href} className="group block">
+                <div className="rounded-2xl overflow-hidden relative aspect-[3/4]" style={{ background: game.bg }}>
+                  <Image src={game.image} alt={game.name} fill className="object-cover opacity-70 group-hover:opacity-100 group-hover:scale-105 transition-all duration-500" />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent" />
+                  <div className="absolute bottom-0 left-0 right-0 p-4">
+                    <div className="text-sm font-bold">{game.name}</div>
+                    <div className="text-[10px] text-white/40 mt-0.5">{game.desc}</div>
+                  </div>
+                </div>
+              </Link>
+            ))}
           </div>
         </div>
 
@@ -208,20 +197,20 @@ export default function DashboardPage() {
 
           {/* Music */}
           <div>
-            <h2 className="text-xs font-bold uppercase tracking-[0.2em] text-gray-400 mb-5">Music</h2>
+            <h2 className="text-xs font-bold uppercase tracking-[0.2em] text-white/30 mb-5">Music</h2>
 
             {favorites.length > 0 && (
               <div className="mb-6">
-                <h3 className="text-sm font-bold text-gray-700 mb-3">Favourites</h3>
+                <h3 className="text-sm font-bold text-white/60 mb-3">Favourites</h3>
                 <div className="space-y-2">
                   {favorites.map((rec) => (
-                    <div key={rec.track.id} className="flex items-center gap-3 rounded-2xl p-3 bg-gray-50 border border-gray-100">
+                    <div key={rec.track.id} className="flex items-center gap-3 rounded-2xl p-3 bg-white/5 border border-white/5">
                       {rec.track.albumArt && <img src={rec.track.albumArt} alt="" className="w-10 h-10 rounded-lg object-cover" />}
                       <div className="flex-1 min-w-0">
-                        <div className="text-sm font-semibold text-gray-900 truncate">{rec.track.name}</div>
-                        <div className="text-xs text-gray-400 truncate">{rec.track.artists}</div>
+                        <div className="text-sm font-semibold truncate">{rec.track.name}</div>
+                        <div className="text-xs text-white/30 truncate">{rec.track.artists}</div>
                       </div>
-                      <span className="text-xs text-gray-400 tabular-nums">{rec.playCount}x</span>
+                      <span className="text-xs text-white/30 tabular-nums">{rec.playCount}x</span>
                     </div>
                   ))}
                 </div>
@@ -230,14 +219,14 @@ export default function DashboardPage() {
 
             {recent.length > 0 && (
               <div>
-                <h3 className="text-sm font-bold text-gray-700 mb-3">Recent</h3>
+                <h3 className="text-sm font-bold text-white/60 mb-3">Recent</h3>
                 <div className="space-y-2">
                   {recent.filter(r => !favorites.find(f => f.track.id === r.track.id)).map((rec) => (
-                    <div key={rec.track.id} className="flex items-center gap-3 rounded-2xl p-3 bg-gray-50 border border-gray-100">
+                    <div key={rec.track.id} className="flex items-center gap-3 rounded-2xl p-3 bg-white/5 border border-white/5">
                       {rec.track.albumArt && <img src={rec.track.albumArt} alt="" className="w-10 h-10 rounded-lg object-cover" />}
                       <div className="flex-1 min-w-0">
-                        <div className="text-sm font-semibold text-gray-900 truncate">{rec.track.name}</div>
-                        <div className="text-xs text-gray-400 truncate">{rec.track.artists}</div>
+                        <div className="text-sm font-semibold truncate">{rec.track.name}</div>
+                        <div className="text-xs text-white/30 truncate">{rec.track.artists}</div>
                       </div>
                     </div>
                   ))}
@@ -246,8 +235,10 @@ export default function DashboardPage() {
             )}
 
             {musicHistory.length === 0 && (
-              <div className="rounded-2xl bg-gray-50 border border-gray-100 p-8 text-center">
-                <p className="text-sm text-gray-400">No music played yet. Connect Spotify or Apple Music in any game.</p>
+              <div className="rounded-2xl bg-white/5 border border-white/5 p-8 text-center">
+                <div className="text-2xl mb-3">🎵</div>
+                <p className="text-sm text-white/30">No music played yet.</p>
+                <p className="text-xs text-white/20 mt-1">Connect Spotify or Apple Music in any game.</p>
               </div>
             )}
           </div>
@@ -255,8 +246,8 @@ export default function DashboardPage() {
           {/* Rankings */}
           <div>
             <div className="flex items-center justify-between mb-5">
-              <h2 className="text-xs font-bold uppercase tracking-[0.2em] text-gray-400">Rankings</h2>
-              <Link href="/rebricek" className="text-xs text-emerald-600 font-medium hover:text-emerald-700">View all</Link>
+              <h2 className="text-xs font-bold uppercase tracking-[0.2em] text-white/30">Leaderboard</h2>
+              <Link href="/rebricek" className="text-xs text-emerald-400 font-medium hover:text-emerald-300 transition-colors">View all</Link>
             </div>
 
             {topScores.length > 0 ? (
@@ -264,39 +255,40 @@ export default function DashboardPage() {
                 {topScores.map((entry, idx) => {
                   const isMe = entry.username === settings.username;
                   return (
-                    <div key={entry.id} className={`flex items-center gap-3 rounded-2xl p-3 ${isMe ? 'bg-emerald-50 border border-emerald-200' : 'bg-gray-50 border border-gray-100'}`}>
-                      <div className={`w-7 h-7 rounded-full flex items-center justify-center text-xs font-black ${
-                        idx === 0 ? 'bg-yellow-100 text-yellow-700' : idx === 1 ? 'bg-gray-200 text-gray-600' : idx === 2 ? 'bg-orange-100 text-orange-600' : 'bg-gray-100 text-gray-400'
+                    <div key={entry.id} className={`flex items-center gap-3 rounded-2xl p-3 ${isMe ? 'bg-emerald-500/10 border border-emerald-500/20' : 'bg-white/5 border border-white/5'}`}>
+                      <div className={`w-8 h-8 rounded-full flex items-center justify-center text-xs font-black ${
+                        idx === 0 ? 'bg-amber-400/20 text-amber-400' : idx === 1 ? 'bg-white/10 text-white/60' : idx === 2 ? 'bg-orange-400/20 text-orange-400' : 'bg-white/5 text-white/30'
                       }`}>{idx + 1}</div>
                       <div className="flex-1 min-w-0">
-                        <div className="text-sm font-semibold text-gray-900 truncate">
-                          {entry.username} {isMe && <span className="text-emerald-600 text-xs">(you)</span>}
+                        <div className="text-sm font-semibold truncate">
+                          {entry.username} {isMe && <span className="text-emerald-400 text-xs">(you)</span>}
                         </div>
-                        <div className="text-xs text-gray-400">{entry.song_name || 'Slalom'} · {entry.accuracy}%</div>
+                        <div className="text-xs text-white/30">{entry.song_name || 'Slalom'} · {entry.accuracy}%</div>
                       </div>
-                      <div className="text-lg font-black text-gray-900 tabular-nums">{entry.score}</div>
+                      <div className="text-lg font-black tabular-nums">{entry.score}</div>
                     </div>
                   );
                 })}
               </div>
             ) : (
-              <div className="rounded-2xl bg-gray-50 border border-gray-100 p-8 text-center">
-                <p className="text-sm text-gray-400">No scores yet. Play a game to set your first score.</p>
+              <div className="rounded-2xl bg-white/5 border border-white/5 p-8 text-center">
+                <div className="text-2xl mb-3">🏆</div>
+                <p className="text-sm text-white/30">No scores yet.</p>
+                <p className="text-xs text-white/20 mt-1">Play a game to set your first score.</p>
               </div>
             )}
 
-            {/* My recent scores */}
             {myScores.length > 0 && (
               <div className="mt-6">
-                <h3 className="text-sm font-bold text-gray-700 mb-3">Your recent</h3>
+                <h3 className="text-sm font-bold text-white/60 mb-3">Your recent</h3>
                 <div className="space-y-2">
                   {myScores.slice(0, 3).map((entry) => (
-                    <div key={entry.id} className="flex items-center justify-between rounded-2xl p-3 bg-gray-50 border border-gray-100">
+                    <div key={entry.id} className="flex items-center justify-between rounded-2xl p-3 bg-white/5 border border-white/5">
                       <div>
-                        <div className="text-sm font-semibold text-gray-900">{entry.score} pts</div>
-                        <div className="text-xs text-gray-400">{entry.song_name || 'Slalom'} · {new Date(entry.created_at).toLocaleDateString('en-GB', { day: 'numeric', month: 'short' })}</div>
+                        <div className="text-sm font-semibold">{entry.score} pts</div>
+                        <div className="text-xs text-white/30">{entry.song_name || 'Slalom'} · {new Date(entry.created_at).toLocaleDateString('en-GB', { day: 'numeric', month: 'short' })}</div>
                       </div>
-                      <div className="text-xs text-gray-400">{entry.accuracy}%</div>
+                      <div className="text-xs text-white/30">{entry.accuracy}%</div>
                     </div>
                   ))}
                 </div>
