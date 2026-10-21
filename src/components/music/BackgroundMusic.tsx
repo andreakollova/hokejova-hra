@@ -55,7 +55,29 @@ export default function BackgroundMusic({ spotify, onSelect, selectedTrack, auto
   const [history, setHistory] = useState<TrackRecord[]>([]);
   const searchTimeout = useRef<ReturnType<typeof setTimeout>>(undefined);
 
-  useEffect(() => { setHistory(loadHistory()); }, []);
+  useEffect(() => {
+    setHistory(loadHistory());
+    // Check for prefilled track from dashboard
+    try {
+      const prefill = localStorage.getItem('hb_prefill_track');
+      if (prefill) {
+        localStorage.removeItem('hb_prefill_track');
+        const song = JSON.parse(prefill);
+        if (song.id) {
+          const track: SpotifyTrack = {
+            id: song.id,
+            name: song.name,
+            artists: song.artist,
+            album: '',
+            albumArt: song.albumArt || '',
+            durationMs: 0,
+            uri: `spotify:track:${song.id}`,
+          };
+          onSelect(track);
+        }
+      }
+    } catch {}
+  }, []);
 
   const switchService = (s: MusicService) => {
     setService(s);

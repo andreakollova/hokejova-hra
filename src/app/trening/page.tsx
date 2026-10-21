@@ -123,13 +123,34 @@ export default function TreningPage() {
     }
   }, []);
 
-  // Auto-open music after Spotify OAuth redirect
+  // Auto-open music after Spotify OAuth redirect or prefilled track from dashboard
   useEffect(() => {
     const params = new URLSearchParams(window.location.search);
     if (params.get('spotify') === 'connected') {
       setShowMusic(true);
       window.history.replaceState({}, '', window.location.pathname);
     }
+    // Check for prefilled track from dashboard
+    try {
+      const prefill = localStorage.getItem('hb_prefill_track');
+      if (prefill) {
+        localStorage.removeItem('hb_prefill_track');
+        const song = JSON.parse(prefill);
+        if (song.id) {
+          // Open music panel with this track pre-selected for BPM picking
+          setShowMusic(true);
+          setBpmPickerTrack({
+            id: song.id,
+            name: song.name,
+            artists: song.artist,
+            album: '',
+            albumArt: song.albumArt || '',
+            durationMs: 0,
+            uri: `spotify:track:${song.id}`,
+          });
+        }
+      }
+    } catch {}
   }, []);
 
   // Load admin beat maps

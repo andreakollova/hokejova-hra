@@ -91,6 +91,29 @@ export default function DashboardPage() {
 
   const gamesPlayed = engLoaded ? (engData.totalGamesPlayed || 0) : 0;
 
+  // Track selection modal state
+  const [selectedSong, setSelectedSong] = useState<{ name: string; artist: string; id?: string; albumArt?: string } | null>(null);
+  const [showGamePicker, setShowGamePicker] = useState(false);
+
+  const handleSongClick = (song: { name: string; artist: string; id?: string; albumArt?: string }) => {
+    setSelectedSong(song);
+    setShowGamePicker(false);
+  };
+
+  const handlePlayGame = () => {
+    setShowGamePicker(true);
+  };
+
+  const handlePickGame = (gameHref: string) => {
+    if (selectedSong?.id) {
+      // Store selected song in localStorage so the game page can prefill it
+      try {
+        localStorage.setItem('hb_prefill_track', JSON.stringify(selectedSong));
+      } catch {}
+    }
+    window.location.href = gameHref;
+  };
+
   return (
     <div className="min-h-screen bg-[#0a0a0f] text-white">
       {/* Header */}
@@ -204,14 +227,15 @@ export default function DashboardPage() {
                 <h3 className="text-sm font-bold text-white/60 mb-3">Favourites</h3>
                 <div className="space-y-2">
                   {favorites.map((rec) => (
-                    <div key={rec.track.id} className="flex items-center gap-3 rounded-2xl p-3 bg-white/5 border border-white/5">
+                    <button key={rec.track.id} onClick={() => handleSongClick({ name: rec.track.name, artist: rec.track.artists, id: rec.track.id, albumArt: rec.track.albumArt })}
+                      className="w-full flex items-center gap-3 rounded-2xl p-3 bg-white/5 border border-white/5 hover:bg-white/10 hover:border-white/10 transition-all text-left">
                       {rec.track.albumArt && <img src={rec.track.albumArt} alt="" className="w-10 h-10 rounded-lg object-cover" />}
                       <div className="flex-1 min-w-0">
                         <div className="text-sm font-semibold truncate">{rec.track.name}</div>
                         <div className="text-xs text-white/30 truncate">{rec.track.artists}</div>
                       </div>
                       <span className="text-xs text-white/30 tabular-nums">{rec.playCount}x</span>
-                    </div>
+                    </button>
                   ))}
                 </div>
               </div>
@@ -222,13 +246,14 @@ export default function DashboardPage() {
                 <h3 className="text-sm font-bold text-white/60 mb-3">Recent</h3>
                 <div className="space-y-2">
                   {recent.filter(r => !favorites.find(f => f.track.id === r.track.id)).map((rec) => (
-                    <div key={rec.track.id} className="flex items-center gap-3 rounded-2xl p-3 bg-white/5 border border-white/5">
+                    <button key={rec.track.id} onClick={() => handleSongClick({ name: rec.track.name, artist: rec.track.artists, id: rec.track.id, albumArt: rec.track.albumArt })}
+                      className="w-full flex items-center gap-3 rounded-2xl p-3 bg-white/5 border border-white/5 hover:bg-white/10 hover:border-white/10 transition-all text-left">
                       {rec.track.albumArt && <img src={rec.track.albumArt} alt="" className="w-10 h-10 rounded-lg object-cover" />}
                       <div className="flex-1 min-w-0">
                         <div className="text-sm font-semibold truncate">{rec.track.name}</div>
                         <div className="text-xs text-white/30 truncate">{rec.track.artists}</div>
                       </div>
-                    </div>
+                    </button>
                   ))}
                 </div>
               </div>
@@ -243,7 +268,8 @@ export default function DashboardPage() {
                   { name: 'Anti-Hero', artist: 'Taylor Swift', plays: 9 },
                   { name: 'Unholy', artist: 'Sam Smith, Kim Petras', plays: 7 },
                 ].map((t) => (
-                  <div key={t.name} className="flex items-center gap-3 rounded-2xl p-3 bg-white/5 border border-white/5">
+                  <button key={t.name} onClick={() => handleSongClick({ name: t.name, artist: t.artist })}
+                    className="w-full flex items-center gap-3 rounded-2xl p-3 bg-white/5 border border-white/5 hover:bg-white/10 hover:border-white/10 transition-all text-left">
                     <div className="w-10 h-10 rounded-lg bg-white/10 flex items-center justify-center">
                       <svg className="w-4 h-4 text-white/30" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}><path strokeLinecap="round" strokeLinejoin="round" d="M9 19V6l12-3v13M9 19c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zm12-3c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zM9 10l12-3" /></svg>
                     </div>
@@ -252,7 +278,7 @@ export default function DashboardPage() {
                       <div className="text-xs text-white/30 truncate">{t.artist}</div>
                     </div>
                     <span className="text-xs text-white/30 tabular-nums">{t.plays}x</span>
-                  </div>
+                  </button>
                 ))}
               </div>
             )}
@@ -335,6 +361,61 @@ export default function DashboardPage() {
           </div>
         </div>
       </div>
+
+      {/* Song action modal */}
+      {selectedSong && (
+        <div className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-end sm:items-center justify-center z-50 p-4" onClick={() => { setSelectedSong(null); setShowGamePicker(false); }}>
+          <div className="bg-[#1a1a24] rounded-3xl w-full max-w-sm overflow-hidden" onClick={(e) => e.stopPropagation()}>
+            {/* Song header */}
+            <div className="p-6 pb-4 flex items-center gap-4">
+              {selectedSong.albumArt ? (
+                <img src={selectedSong.albumArt} alt="" className="w-14 h-14 rounded-xl object-cover" />
+              ) : (
+                <div className="w-14 h-14 rounded-xl bg-white/10 flex items-center justify-center">
+                  <svg className="w-6 h-6 text-white/30" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}><path strokeLinecap="round" strokeLinejoin="round" d="M9 19V6l12-3v13M9 19c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zm12-3c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zM9 10l12-3" /></svg>
+                </div>
+              )}
+              <div className="flex-1 min-w-0">
+                <div className="text-base font-bold truncate">{selectedSong.name}</div>
+                <div className="text-sm text-white/40 truncate">{selectedSong.artist}</div>
+              </div>
+            </div>
+
+            {!showGamePicker ? (
+              /* Action buttons */
+              <div className="px-6 pb-6 space-y-2">
+                <button onClick={handlePlayGame}
+                  className="w-full flex items-center gap-3 bg-emerald-500 hover:bg-emerald-400 text-black font-bold rounded-2xl px-5 py-4 transition-colors">
+                  <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+                  Play a game with this song
+                </button>
+                <button onClick={() => { setSelectedSong(null); }}
+                  className="w-full flex items-center gap-3 bg-white/5 hover:bg-white/10 rounded-2xl px-5 py-4 transition-colors text-white/60">
+                  <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}><path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" /></svg>
+                  Cancel
+                </button>
+              </div>
+            ) : (
+              /* Game picker */
+              <div className="px-6 pb-6">
+                <p className="text-xs font-bold uppercase tracking-[0.2em] text-white/30 mb-3">Choose a game</p>
+                <div className="grid grid-cols-2 gap-2">
+                  {GAMES.map((game) => (
+                    <button key={game.href} onClick={() => handlePickGame(game.href)}
+                      className="group rounded-2xl overflow-hidden relative aspect-[4/3] text-left" style={{ background: game.bg }}>
+                      <Image src={game.image} alt={game.name} fill className="object-cover opacity-60 group-hover:opacity-100 transition-opacity duration-300" />
+                      <div className="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent" />
+                      <div className="absolute bottom-0 left-0 right-0 p-3">
+                        <div className="text-xs font-bold">{game.name}</div>
+                      </div>
+                    </button>
+                  ))}
+                </div>
+              </div>
+            )}
+          </div>
+        </div>
+      )}
     </div>
   );
 }

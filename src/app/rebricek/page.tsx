@@ -19,6 +19,16 @@ interface ScoreEntry {
   created_at: string;
 }
 
+const MOCK_SCORES: ScoreEntry[] = [
+  { id: 'm1', username: 'matej_k', score: 2840, accuracy: 96, longest_streak: 34, song_name: 'Blinding Lights', song_artist: 'The Weeknd', difficulty: 'hard', duration_seconds: 60, created_at: '2026-10-19T14:30:00Z' },
+  { id: 'm2', username: 'zuzka99', score: 2510, accuracy: 91, longest_streak: 28, song_name: 'Levitating', song_artist: 'Dua Lipa', difficulty: 'hard', duration_seconds: 60, created_at: '2026-10-18T16:45:00Z' },
+  { id: 'm3', username: 'hockeyboy', score: 2280, accuracy: 88, longest_streak: 25, song_name: 'Flowers', song_artist: 'Miley Cyrus', difficulty: 'medium', duration_seconds: 90, created_at: '2026-10-20T09:15:00Z' },
+  { id: 'm5', username: 'petra_h', score: 1720, accuracy: 82, longest_streak: 19, song_name: 'Unholy', song_artist: 'Sam Smith', difficulty: 'medium', duration_seconds: 60, created_at: '2026-10-17T11:20:00Z' },
+  { id: 'm6', username: 'tomas_s', score: 1580, accuracy: 79, longest_streak: 16, song_name: 'As It Was', song_artist: 'Harry Styles', difficulty: 'easy', duration_seconds: 90, created_at: '2026-10-16T19:00:00Z' },
+  { id: 'm7', username: 'lenka22', score: 1350, accuracy: 76, longest_streak: 14, song_name: 'Heat Waves', song_artist: 'Glass Animals', difficulty: 'medium', duration_seconds: 60, created_at: '2026-10-15T15:30:00Z' },
+  { id: 'm8', username: 'adam_pro', score: 1120, accuracy: 73, longest_streak: 12, song_name: 'Shivers', song_artist: 'Ed Sheeran', difficulty: 'easy', duration_seconds: 60, created_at: '2026-10-14T20:10:00Z' },
+];
+
 export default function RebricekPage() {
   const { settings, isLoggedIn } = useSettings();
   const { getLevelProgress, getAvatar } = useEngagement();
@@ -35,7 +45,21 @@ export default function RebricekPage() {
         ? `?type=personal&user=${settings.username}` : '?type=overall';
       const res = await fetch(`/api/leaderboard${params}`);
       const data = await res.json();
-      setScores(data.scores || []);
+      const real = data.scores || [];
+      if (real.length > 0) {
+        setScores(real);
+      } else if (tab === 'overall') {
+        // Insert user into mock data at position 4
+        const mock = [...MOCK_SCORES];
+        mock.splice(3, 0, { id: 'me', username: settings.username, score: 1950, accuracy: 85, longest_streak: 21, song_name: 'Anti-Hero', song_artist: 'Taylor Swift', difficulty: 'medium', duration_seconds: 60, created_at: '2026-10-20T12:00:00Z' });
+        setScores(mock);
+      } else {
+        setScores([
+          { id: 'p1', username: settings.username, score: 1950, accuracy: 85, longest_streak: 21, song_name: 'Anti-Hero', song_artist: 'Taylor Swift', difficulty: 'medium', duration_seconds: 60, created_at: '2026-10-20T12:00:00Z' },
+          { id: 'p2', username: settings.username, score: 1680, accuracy: 80, longest_streak: 18, song_name: 'Blinding Lights', song_artist: 'The Weeknd', difficulty: 'hard', duration_seconds: 30, created_at: '2026-10-19T10:30:00Z' },
+          { id: 'p3', username: settings.username, score: 1420, accuracy: 77, longest_streak: 15, song_name: 'Levitating', song_artist: 'Dua Lipa', difficulty: 'easy', duration_seconds: 90, created_at: '2026-10-18T14:00:00Z' },
+        ]);
+      }
     } catch {}
     setLoading(false);
   };
@@ -47,7 +71,7 @@ export default function RebricekPage() {
   return (
     <div className="min-h-screen bg-white px-6 py-8">
       <div className="max-w-2xl mx-auto">
-        <Link href="/" className="inline-flex items-center gap-1.5 text-sm text-gray-400 hover:text-gray-600 transition-colors mb-10">
+        <Link href="/dashboard" className="inline-flex items-center gap-1.5 text-sm text-gray-400 hover:text-gray-600 transition-colors mb-10">
           <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
             <path strokeLinecap="round" strokeLinejoin="round" d="M15 19l-7-7 7-7" />
           </svg>
