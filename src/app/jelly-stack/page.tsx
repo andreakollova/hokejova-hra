@@ -135,7 +135,7 @@ export default function JellyStackPage() {
         />
         {inputMode === 'demo' && (
           <div className="absolute bottom-4 left-4 bg-purple-500/20 border border-purple-500/30 rounded-2xl px-3 py-2">
-            <span className="text-xs text-purple-600">Demo - move mouse to {dropSide === 'left' ? 'left' : dropSide === 'right' ? 'right' : 'center'} to drop</span>
+            <span className="text-xs text-purple-600">Demo - move mouse left or right to drop</span>
           </div>
         )}
       </div>
@@ -196,18 +196,6 @@ export default function JellyStackPage() {
               ))}
             </div>
           </div>
-          {/* Drop side */}
-          <div>
-            <label className="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-3 block">Drop zone</label>
-            <div className="flex gap-2.5">
-              {(['left', 'center', 'right'] as const).map((side) => (
-                <button key={side} onClick={() => setDropSide(side)} className={`flex-1 rounded-2xl py-3.5 border-2 transition-all text-sm font-semibold ${dropSide === side ? 'border-purple-500 bg-purple-500/10 text-purple-600' : 'border-gray-200 bg-white text-gray-400 hover:border-gray-300'}`}>
-                  {side === 'left' ? 'Left' : side === 'center' ? 'Center' : 'Right'}
-                </button>
-              ))}
-            </div>
-          </div>
-
           <BackgroundMusic spotify={spotify} onSelect={setBgTrack} selectedTrack={bgTrack} autoOpen={spotifyReturned} />
 
           <button onClick={startGame} className="w-full bg-purple-500 hover:bg-purple-400 text-white font-semibold text-lg py-4 rounded-full transition-all">

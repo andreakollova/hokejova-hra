@@ -86,6 +86,7 @@ export default function OrbitHopGame({
     cameraOffsetX: 0,
     cameraOffsetY: 0,
     wasRight: false,
+    currentHopSide: 'right' as 'left' | 'right',
     missAnim: null as { x: number; y: number; vx: number; vy: number; t: number } | null,
     particles: [] as { x: number; y: number; vx: number; vy: number; life: number; color: string }[],
   });
@@ -309,12 +310,15 @@ export default function OrbitHopGame({
         s.missAnim.vy += 300 * delta; // gravity
       }
 
-      // Hop: ball moves to right side (x > 0.7)
-      const isRight = input.active && input.x > 0.7;
-      if (isRight && !s.wasRight && !s.hopAnim && !s.missAnim) {
+      // Hop: ball moves to current hop side (alternates left/right)
+      const inHopZone = input.active && (
+        s.currentHopSide === 'right' ? input.x > 0.7 : input.x < 0.3
+      );
+      if (inHopZone && !s.wasRight && !s.hopAnim && !s.missAnim) {
         hop(s);
+        s.currentHopSide = s.currentHopSide === 'right' ? 'left' : 'right';
       }
-      s.wasRight = isRight;
+      s.wasRight = inHopZone;
 
       // Update particles
       s.particles = s.particles.filter(p => {
@@ -464,14 +468,20 @@ export default function OrbitHopGame({
 
     ctx.restore();
 
-    // Hop zone indicator on right
+    // Hop zone indicator (alternates left/right)
     if (s.started && !s.finished) {
+      const isRightHop = s.currentHopSide === 'right';
+      const hzX = isRightHop ? w * 0.7 : 0;
+      const hzLabelX = isRightHop ? w * 0.85 : w * 0.15;
       ctx.fillStyle = 'rgba(139, 92, 246, 0.06)';
-      ctx.fillRect(w * 0.7, 0, w * 0.3, h);
-      ctx.fillStyle = 'rgba(139, 92, 246, 0.25)';
-      ctx.font = 'bold 14px sans-serif';
+      ctx.fillRect(hzX, 0, w * 0.3, h);
+      ctx.fillStyle = 'rgba(139, 92, 246, 0.2)';
+      ctx.font = 'bold 32px sans-serif';
       ctx.textAlign = 'center';
-      ctx.fillText('HOP ZONE', w * 0.85, h - 30);
+      ctx.fillText(isRightHop ? '\u2192' : '\u2190', hzLabelX, h / 2);
+      ctx.fillStyle = 'rgba(139, 92, 246, 0.25)';
+      ctx.font = 'bold 12px sans-serif';
+      ctx.fillText('HOP', hzLabelX, h / 2 + 25);
     }
 
     // Flash feedback text

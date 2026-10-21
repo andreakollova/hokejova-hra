@@ -81,6 +81,7 @@ export default function JellyStackGame({
     cameraOffsetY: 0,
     lastDropX: -1,
     wasLeft: false,
+    currentDropSide: 'left' as 'left' | 'right',
   });
 
   const [hud, setHud] = useState({
@@ -259,16 +260,15 @@ export default function JellyStackGame({
         s.currentBlock.x = s.currentBlock.w / 2;
       }
 
-      // Drop: ball moves into drop zone
+      // Drop: ball moves into current drop side (alternates left/right)
       const inDropZone = input.active && (
-        ds === 'left' ? input.x < 0.3 :
-        ds === 'right' ? input.x > 0.7 :
-        input.x > 0.35 && input.x < 0.65
+        s.currentDropSide === 'left' ? input.x < 0.3 : input.x > 0.7
       );
       if (inDropZone && !s.wasLeft) {
-        // Only drop if not already dropping
         if (!s.dropAnim) {
           dropBlock(s);
+          // Alternate side for next drop
+          s.currentDropSide = s.currentDropSide === 'left' ? 'right' : 'left';
         }
       }
       s.wasLeft = inDropZone;
@@ -423,17 +423,22 @@ export default function JellyStackGame({
       ctx.globalAlpha = 1;
     }
 
-    // Drop zone indicator
+    // Drop zone indicator (alternates left/right)
     if (s.started && !s.finished) {
-      const dzX = ds === 'left' ? 0 : ds === 'right' ? w * 0.7 : w * 0.35;
+      const isLeftDrop = s.currentDropSide === 'left';
+      const dzX = isLeftDrop ? 0 : w * 0.7;
       const dzW = w * 0.3;
-      const dzLabelX = ds === 'left' ? dzW / 2 : ds === 'right' ? w * 0.85 : w * 0.5;
+      const dzLabelX = isLeftDrop ? dzW / 2 : w * 0.85;
       ctx.fillStyle = 'rgba(167, 139, 250, 0.06)';
       ctx.fillRect(dzX, 0, dzW, h);
-      ctx.fillStyle = 'rgba(167, 139, 250, 0.25)';
-      ctx.font = 'bold 14px sans-serif';
+      // Arrow indicator
+      ctx.fillStyle = 'rgba(167, 139, 250, 0.2)';
+      ctx.font = 'bold 32px sans-serif';
       ctx.textAlign = 'center';
-      ctx.fillText('DROP ZONE', dzLabelX, h - 30);
+      ctx.fillText(isLeftDrop ? '\u2190' : '\u2192', dzLabelX, h / 2);
+      ctx.fillStyle = 'rgba(167, 139, 250, 0.25)';
+      ctx.font = 'bold 12px sans-serif';
+      ctx.fillText('DROP', dzLabelX, h / 2 + 25);
     }
 
     // Countdown overlay
