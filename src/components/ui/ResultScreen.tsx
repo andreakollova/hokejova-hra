@@ -47,7 +47,6 @@ export default function ResultScreen({
   // Record engagement once loaded
   useEffect(() => {
     if (!engLoaded || recordedRef.current) return;
-    if (result.inputMode === 'demo') return;
     recordedRef.current = true;
 
     const breakdown = recordGame({
@@ -62,7 +61,6 @@ export default function ResultScreen({
 
   const saveScore = async () => {
     if (!isLoggedIn) return;
-    if (result.inputMode === 'demo') return;
 
     try {
       const res = await fetch('/api/leaderboard', {

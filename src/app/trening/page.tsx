@@ -533,11 +533,6 @@ export default function TreningPage() {
             {musicConfig ? `Play at ${musicConfig.bpm} BPM` : 'Start training'}
           </button>
 
-          {inputMode === 'demo' && (
-            <p className="text-center text-xs text-gray-400">
-              Demo mode results are not saved to the rankings.
-            </p>
-          )}
         </div>
       </div>
     </div>
