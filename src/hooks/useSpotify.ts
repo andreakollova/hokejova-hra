@@ -48,12 +48,25 @@ export function useSpotify() {
   const playerRef = useRef<SpotifyPlayer | null>(null);
   const positionIntervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
 
-  // Check if connected on mount
+  // Check if connected on mount - try refresh if access token expired
   useEffect(() => {
     const token = getCookie('spotify_token_client');
     if (token) {
       setIsConnected(true);
       loadPlaybackSDK(token);
+    } else {
+      // Access token expired but refresh token may still be valid (30 days)
+      fetch('/api/spotify/token', { method: 'POST' })
+        .then((res) => {
+          if (res.ok) {
+            const newToken = getCookie('spotify_token_client');
+            if (newToken) {
+              setIsConnected(true);
+              loadPlaybackSDK(newToken);
+            }
+          }
+        })
+        .catch(() => {});
     }
   }, []);
 
