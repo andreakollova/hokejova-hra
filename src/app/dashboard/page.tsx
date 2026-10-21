@@ -47,7 +47,7 @@ const GAMES = [
 
 export default function DashboardPage() {
   const { settings, isLoggedIn, loaded } = useSettings();
-  const { getStreak, getLevelProgress, getXP, getAvatar, loaded: engLoaded } = useEngagement();
+  const { data: engData, getStreak, getLevelProgress, getXP, getAvatar, loaded: engLoaded } = useEngagement();
   const [musicHistory, setMusicHistory] = useState<TrackRecord[]>([]);
   const [topScores, setTopScores] = useState<ScoreEntry[]>([]);
   const [myScores, setMyScores] = useState<ScoreEntry[]>([]);
@@ -89,7 +89,7 @@ export default function DashboardPage() {
 
   const myRank = topScores.findIndex(s => s.username === settings.username) + 1;
 
-  const gamesPlayed = myScores.length;
+  const gamesPlayed = engLoaded ? (engData.totalGamesPlayed || 0) : 0;
 
   return (
     <div className="min-h-screen bg-[#0a0a0f] text-white">
