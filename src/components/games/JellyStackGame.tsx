@@ -53,6 +53,7 @@ export default function JellyStackGame({
   getGameInput,
   onFinish,
   onBackToMenu,
+  dropSide,
 }: JellyStackGameProps) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const config = DIFFICULTY[difficulty];
