@@ -26,9 +26,54 @@ const BPM_TEMPLATES = [80, 100, 120, 140, 160];
 function generateBeatsForBpm(bpm: number, durationS: number): number[] {
   const interval = 60 / bpm;
   const beats: number[] = [];
-  for (let t = interval; t < durationS; t += interval) {
-    beats.push(Math.round(t * 100) / 100);
+
+  // Build a rhythmic pattern with variation:
+  // - phrases of 4-8 beats at normal tempo
+  // - occasional double-time bursts (2-3 beats at half interval)
+  // - pauses (skip 1-2 beats)
+  // Seeded from bpm so the same BPM always gives the same pattern
+  let seed = bpm * 7919;
+  const rng = () => { seed = (seed * 16807 + 0) % 2147483647; return (seed - 1) / 2147483646; };
+
+  let t = interval; // start at first beat
+  while (t < durationS - 0.5) {
+    // Decide phrase type
+    const roll = rng();
+
+    if (roll < 0.55) {
+      // Normal phrase: 3-6 beats at base tempo with slight swing
+      const len = 3 + Math.floor(rng() * 4);
+      for (let i = 0; i < len && t < durationS - 0.5; i++) {
+        beats.push(Math.round(t * 100) / 100);
+        // Swing: odd beats slightly early/late (+/- 12%)
+        const swing = i % 2 === 1 ? interval * (0.88 + rng() * 0.24) : interval;
+        t += swing;
+      }
+    } else if (roll < 0.75) {
+      // Double-time burst: 2-4 beats at half interval
+      const len = 2 + Math.floor(rng() * 3);
+      for (let i = 0; i < len && t < durationS - 0.5; i++) {
+        beats.push(Math.round(t * 100) / 100);
+        t += interval * 0.5;
+      }
+    } else if (roll < 0.9) {
+      // Pause: skip 1-2 beats worth of time, then one beat
+      t += interval * (1 + Math.floor(rng() * 2));
+      if (t < durationS - 0.5) {
+        beats.push(Math.round(t * 100) / 100);
+        t += interval;
+      }
+    } else {
+      // Syncopation: beat, short gap, beat, long gap
+      beats.push(Math.round(t * 100) / 100);
+      t += interval * 0.6;
+      if (t < durationS - 0.5) {
+        beats.push(Math.round(t * 100) / 100);
+        t += interval * 1.4;
+      }
+    }
   }
+
   return beats;
 }
 

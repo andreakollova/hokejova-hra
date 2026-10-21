@@ -221,11 +221,39 @@ export function useSpotify() {
   }, []);
 
   const generateBeatsFromBpm = useCallback((tempo: number, durationS: number) => {
-    const beatInterval = 60 / tempo;
+    const interval = 60 / tempo;
     const beats: number[] = [];
-    for (let t = 0; t < durationS; t += beatInterval) {
-      beats.push(t);
+
+    // Rhythmic variation: phrases, double-time, pauses, syncopation
+    let seed = tempo * 7919;
+    const rng = () => { seed = (seed * 16807 + 0) % 2147483647; return (seed - 1) / 2147483646; };
+
+    let t = interval;
+    while (t < durationS - 0.5) {
+      const roll = rng();
+      if (roll < 0.55) {
+        const len = 3 + Math.floor(rng() * 4);
+        for (let i = 0; i < len && t < durationS - 0.5; i++) {
+          beats.push(Math.round(t * 100) / 100);
+          const swing = i % 2 === 1 ? interval * (0.88 + rng() * 0.24) : interval;
+          t += swing;
+        }
+      } else if (roll < 0.75) {
+        const len = 2 + Math.floor(rng() * 3);
+        for (let i = 0; i < len && t < durationS - 0.5; i++) {
+          beats.push(Math.round(t * 100) / 100);
+          t += interval * 0.5;
+        }
+      } else if (roll < 0.9) {
+        t += interval * (1 + Math.floor(rng() * 2));
+        if (t < durationS - 0.5) { beats.push(Math.round(t * 100) / 100); t += interval; }
+      } else {
+        beats.push(Math.round(t * 100) / 100);
+        t += interval * 0.6;
+        if (t < durationS - 0.5) { beats.push(Math.round(t * 100) / 100); t += interval * 1.4; }
+      }
     }
+
     setBeatMap({ tempo, beats, bars: [], sections: [], durationS });
   }, []);
 
