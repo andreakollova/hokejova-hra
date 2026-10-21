@@ -51,6 +51,8 @@ export default function DashboardPage() {
   const [musicHistory, setMusicHistory] = useState<TrackRecord[]>([]);
   const [topScores, setTopScores] = useState<ScoreEntry[]>([]);
   const [myScores, setMyScores] = useState<ScoreEntry[]>([]);
+  const [selectedSong, setSelectedSong] = useState<{ name: string; artist: string; id?: string; albumArt?: string } | null>(null);
+  const [showGamePicker, setShowGamePicker] = useState(false);
 
   useEffect(() => {
     setMusicHistory(loadMusicHistory());
@@ -90,10 +92,6 @@ export default function DashboardPage() {
   const myRank = topScores.findIndex(s => s.username === settings.username) + 1;
 
   const gamesPlayed = engLoaded ? (engData.totalGamesPlayed || 0) : 0;
-
-  // Track selection modal state
-  const [selectedSong, setSelectedSong] = useState<{ name: string; artist: string; id?: string; albumArt?: string } | null>(null);
-  const [showGamePicker, setShowGamePicker] = useState(false);
 
   const handleSongClick = (song: { name: string; artist: string; id?: string; albumArt?: string }) => {
     setSelectedSong(song);
