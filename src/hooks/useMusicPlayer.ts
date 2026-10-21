@@ -1,6 +1,6 @@
 'use client';
 
-import { useCallback, useRef } from 'react';
+import { useCallback, useRef, useEffect } from 'react';
 import { SpotifyTrack } from '@/lib/spotify';
 import { useSpotify } from './useSpotify';
 import { useAppleMusic } from './useAppleMusic';
@@ -10,6 +10,14 @@ export function useMusicPlayer() {
   const spotify = useSpotify();
   const apple = useAppleMusic();
   const lastServiceRef = useRef<'spotify' | 'apple'>('spotify');
+
+  // Pause music when component unmounts (e.g. browser back button)
+  useEffect(() => {
+    return () => {
+      spotify.pause();
+      apple.pause();
+    };
+  }, []);
 
   const play = useCallback(async (track: SpotifyTrack) => {
     // Determine which service based on track ID prefix

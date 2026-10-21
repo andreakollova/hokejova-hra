@@ -111,7 +111,7 @@ export default function OrbitHopGame({
       planets.push({ x, y, radius, orbitRadius, color: colors, active: true });
       // Next planet position - random direction
       const angle = -Math.PI / 4 + Math.random() * Math.PI / 2; // mostly rightward
-      const dist = orbitRadius + 30 + Math.random() * 60 + (config.planetSizeMin + Math.random() * sizeRange) * 2;
+      const dist = orbitRadius + 15 + Math.random() * 30 + (config.planetSizeMin + Math.random() * sizeRange) * 1.5;
       x += Math.cos(angle) * dist;
       y += Math.sin(angle) * dist - 30; // slight upward bias
     }
@@ -172,8 +172,8 @@ export default function OrbitHopGame({
       const dy = fromY - nextPlanet.y;
       const dist = Math.sqrt(dx * dx + dy * dy);
 
-      // Tolerance: if ball is within orbit radius + some margin
-      const tolerance = nextPlanet.orbitRadius + nextPlanet.radius * 0.8;
+      // Tolerance: generous — if ball is anywhere near the next planet
+      const tolerance = nextPlanet.orbitRadius + nextPlanet.radius * 2.5;
 
       if (dist <= tolerance) {
         // Successful hop
@@ -217,8 +217,7 @@ export default function OrbitHopGame({
         s.orbitAngle = toAngle;
         s.orbitSpeed += config.speedInc;
       } else {
-        // Miss
-        s.lives--;
+        // Miss - no penalty, keep playing
         s.flashTimer = 0.5;
         s.flashType = 'miss';
         playSound(150, 0.3, 'square');
@@ -264,8 +263,8 @@ export default function OrbitHopGame({
 
       s.elapsedTime = (performance.now() - s.gameStartWallTime) / 1000;
 
-      // Time or lives up
-      if (s.elapsedTime >= duration || s.lives <= 0) {
+      // Time up (no lives limit — play the full duration)
+      if (s.elapsedTime >= duration) {
         s.finished = true;
         onFinish({
           score: s.score,
@@ -533,9 +532,9 @@ export default function OrbitHopGame({
             <div className="text-3xl font-bold text-gray-900 tabular-nums">{hud.hops}</div>
             <div className="text-xs text-gray-400 uppercase tracking-wider">Hops</div>
           </div>
-          <div className="bg-white/80 backdrop-blur-md rounded-2xl px-5 py-3 text-right shadow-sm">
-            <div className="text-3xl font-bold text-red-400 tabular-nums">{'❤'.repeat(Math.max(0, hud.lives))}</div>
-            <div className="text-xs text-gray-400 uppercase tracking-wider">Lives</div>
+          <div className="bg-white/80 backdrop-blur-md rounded-2xl px-5 py-3 text-center shadow-sm">
+            <div className="text-3xl font-bold text-indigo-400 tabular-nums">{hud.hops > 0 ? Math.round((hud.score / (hud.hops * 100)) * 100) : 0}%</div>
+            <div className="text-xs text-gray-400 uppercase tracking-wider">Accuracy</div>
           </div>
         </div>
       </div>

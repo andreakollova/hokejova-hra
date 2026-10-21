@@ -113,6 +113,11 @@ export default function TreningPage() {
   // Wall time ref: set when Spotify actually starts playing (after await)
   const gameStartWallTimeRef = useRef(0);
 
+  // Pause music on unmount (browser back button)
+  useEffect(() => {
+    return () => { spotify.pause(); };
+  }, []);
+
   // Load saved calibration
   useEffect(() => {
     const saved = localStorage.getItem('ballTracker_calibration') || sessionStorage.getItem('ballTracker_calibration');
