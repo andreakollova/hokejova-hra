@@ -10,6 +10,7 @@ interface JellyStackGameProps {
   getGameInput: () => GameInput;
   onFinish: (result: JellyStackResult) => void;
   onBackToMenu?: () => void;
+  dropSide?: 'center' | 'left' | 'right';
 }
 
 export interface JellyStackResult {
@@ -27,7 +28,7 @@ export interface JellyStackResult {
 const CANVAS_W = 600;
 const CANVAS_H = 800;
 const BLOCK_H = 30;
-const START_BLOCK_W = 200;
+const START_BLOCK_W = 320;
 const STACK_BASE_Y = 700;
 
 const JELLY_COLORS = ['#f472b6', '#a78bfa', '#fbbf24', '#34d399', '#60a5fa'];
@@ -55,6 +56,7 @@ export default function JellyStackGame({
 }: JellyStackGameProps) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const config = DIFFICULTY[difficulty];
+  const ds = dropSide || 'center';
   const sessionIdRef = useRef(crypto.randomUUID());
 
   const stateRef = useRef({
@@ -134,8 +136,7 @@ export default function JellyStackGame({
       const overlapW = overlapRight - overlapLeft;
 
       if (overlapW <= 0) {
-        // Miss
-        s.lives--;
+        // Miss - no penalty, just skip this block
         s.flashTimer = 0.5;
         s.flashType = 'miss';
         playSound(150, 0.3, 'square');
@@ -229,8 +230,8 @@ export default function JellyStackGame({
 
       s.elapsedTime = (performance.now() - s.gameStartWallTime) / 1000;
 
-      // Time or lives up
-      if (s.elapsedTime >= duration || s.lives <= 0) {
+      // Time up (no lives limit — play the full duration)
+      if (s.elapsedTime >= duration) {
         s.finished = true;
         onFinish({
           score: s.score,
@@ -257,15 +258,19 @@ export default function JellyStackGame({
         s.currentBlock.x = s.currentBlock.w / 2;
       }
 
-      // Drop: ball moves to left side (x < 0.3)
-      const isLeft = input.active && input.x < 0.3;
-      if (isLeft && !s.wasLeft) {
+      // Drop: ball moves into drop zone
+      const inDropZone = input.active && (
+        ds === 'left' ? input.x < 0.3 :
+        ds === 'right' ? input.x > 0.7 :
+        input.x > 0.35 && input.x < 0.65
+      );
+      if (inDropZone && !s.wasLeft) {
         // Only drop if not already dropping
         if (!s.dropAnim) {
           dropBlock(s);
         }
       }
-      s.wasLeft = isLeft;
+      s.wasLeft = inDropZone;
 
       // Drop animation
       if (s.dropAnim) {
@@ -417,14 +422,17 @@ export default function JellyStackGame({
       ctx.globalAlpha = 1;
     }
 
-    // Drop zone indicator on left
+    // Drop zone indicator
     if (s.started && !s.finished) {
-      ctx.fillStyle = 'rgba(167, 139, 250, 0.08)';
-      ctx.fillRect(0, 0, w * 0.3, h);
-      ctx.fillStyle = 'rgba(167, 139, 250, 0.3)';
+      const dzX = ds === 'left' ? 0 : ds === 'right' ? w * 0.7 : w * 0.35;
+      const dzW = w * 0.3;
+      const dzLabelX = ds === 'left' ? dzW / 2 : ds === 'right' ? w * 0.85 : w * 0.5;
+      ctx.fillStyle = 'rgba(167, 139, 250, 0.06)';
+      ctx.fillRect(dzX, 0, dzW, h);
+      ctx.fillStyle = 'rgba(167, 139, 250, 0.25)';
       ctx.font = 'bold 14px sans-serif';
       ctx.textAlign = 'center';
-      ctx.fillText('DROP ZONE', w * 0.15, h - 30);
+      ctx.fillText('DROP ZONE', dzLabelX, h - 30);
     }
 
     // Countdown overlay
@@ -462,9 +470,9 @@ export default function JellyStackGame({
             <div className="text-3xl font-bold text-gray-900 tabular-nums">{hud.stacks}</div>
             <div className="text-xs text-gray-400 uppercase tracking-wider">Stacks</div>
           </div>
-          <div className="bg-white/80 backdrop-blur-md rounded-2xl px-5 py-3 text-right shadow-sm">
-            <div className="text-3xl font-bold text-red-400 tabular-nums">{'❤'.repeat(Math.max(0, hud.lives))}</div>
-            <div className="text-xs text-gray-400 uppercase tracking-wider">Lives</div>
+          <div className="bg-white/80 backdrop-blur-md rounded-2xl px-5 py-3 text-center shadow-sm">
+            <div className="text-3xl font-bold text-purple-400 tabular-nums">{hud.stacks > 0 ? Math.round((hud.score / (hud.stacks * 100)) * 100) : 0}%</div>
+            <div className="text-xs text-gray-400 uppercase tracking-wider">Accuracy</div>
           </div>
         </div>
       </div>
