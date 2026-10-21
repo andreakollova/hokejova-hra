@@ -243,7 +243,7 @@ export default function DashboardPage() {
                   { name: 'Anti-Hero', artist: 'Taylor Swift', plays: 9 },
                   { name: 'Unholy', artist: 'Sam Smith, Kim Petras', plays: 7 },
                 ].map((t) => (
-                  <div key={t.name} className="flex items-center gap-3 rounded-2xl p-3 bg-white/5 border border-white/5 opacity-40">
+                  <div key={t.name} className="flex items-center gap-3 rounded-2xl p-3 bg-white/5 border border-white/5">
                     <div className="w-10 h-10 rounded-lg bg-white/10 flex items-center justify-center">
                       <svg className="w-4 h-4 text-white/30" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}><path strokeLinecap="round" strokeLinejoin="round" d="M9 19V6l12-3v13M9 19c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zm12-3c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zM9 10l12-3" /></svg>
                     </div>
@@ -254,7 +254,6 @@ export default function DashboardPage() {
                     <span className="text-xs text-white/30 tabular-nums">{t.plays}x</span>
                   </div>
                 ))}
-                <p className="text-xs text-white/20 text-center mt-3">Sample data - connect Spotify in any game to see your music.</p>
               </div>
             )}
           </div>
@@ -299,7 +298,7 @@ export default function DashboardPage() {
                     const isMe = entry.name === settings.username;
                     const idx = entry.rank - 1;
                     return (
-                      <div key={entry.rank} className={`flex items-center gap-3 rounded-2xl p-3 opacity-40 ${isMe ? 'bg-emerald-500/10 border border-emerald-500/20' : 'bg-white/5 border border-white/5'}`}>
+                      <div key={entry.rank} className={`flex items-center gap-3 rounded-2xl p-3 ${isMe ? 'bg-emerald-500/10 border border-emerald-500/20' : 'bg-white/5 border border-white/5'}`}>
                         <div className={`w-8 h-8 rounded-full flex items-center justify-center text-xs font-black ${
                           idx === 0 ? 'bg-amber-400/20 text-amber-400' : idx === 1 ? 'bg-white/10 text-white/60' : idx === 2 ? 'bg-orange-400/20 text-orange-400' : 'bg-white/5 text-white/30'
                         }`}>{entry.rank}</div>
@@ -314,7 +313,6 @@ export default function DashboardPage() {
                     );
                   })}
                 </div>
-                <p className="text-xs text-white/20 text-center mt-3">Sample data - play a game to see real rankings.</p>
               </div>
             )}
 

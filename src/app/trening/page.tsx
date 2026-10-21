@@ -1,14 +1,76 @@
 'use client';
 
-import { useState, useRef, useCallback, useEffect } from 'react';
+import { useState, useRef, useCallback, useEffect, useMemo } from 'react';
 import dynamic from 'next/dynamic';
 import { CalibrationData, InputMode, GameInput } from '@/lib/tracking';
 import { SlalomResult } from '@/components/games/SlalomGame';
 import { MusicConfig } from '@/components/music/MusicSelector';
+import { SpotifyTrack } from '@/lib/spotify';
 import { useTracker } from '@/hooks/useTracker';
 import { useCamera } from '@/hooks/useCamera';
 import { useSpotify } from '@/hooks/useSpotify';
 import Link from 'next/link';
+
+const HISTORY_KEY = 'sportqo_music_history';
+const BPM_TEMPLATES = [80, 100, 120, 140, 160];
+
+interface TrackRecord {
+  track: SpotifyTrack;
+  playCount: number;
+  lastPlayed: number;
+}
+
+function loadMusicHistory(): TrackRecord[] {
+  try {
+    const raw = localStorage.getItem(HISTORY_KEY);
+    if (raw) return JSON.parse(raw);
+  } catch {}
+  return [];
+}
+
+function generateBeatsForBpm(bpm: number, durationS: number): number[] {
+  const interval = 60 / bpm;
+  const beats: number[] = [];
+  let seed = bpm * 7919;
+  const rng = () => { seed = (seed * 16807 + 0) % 2147483647; return (seed - 1) / 2147483646; };
+  let t = interval;
+  while (t < durationS - 0.5) {
+    const roll = rng();
+    if (roll < 0.55) {
+      const len = 3 + Math.floor(rng() * 4);
+      for (let i = 0; i < len && t < durationS - 0.5; i++) {
+        beats.push(Math.round(t * 100) / 100);
+        const swing = i % 2 === 1 ? interval * (0.88 + rng() * 0.24) : interval;
+        t += swing;
+      }
+    } else if (roll < 0.75) {
+      const len = 2 + Math.floor(rng() * 3);
+      for (let i = 0; i < len && t < durationS - 0.5; i++) {
+        beats.push(Math.round(t * 100) / 100);
+        t += interval * 0.5;
+      }
+    } else if (roll < 0.9) {
+      t += interval * (1 + Math.floor(rng() * 2));
+      if (t < durationS - 0.5) { beats.push(Math.round(t * 100) / 100); t += interval; }
+    } else {
+      beats.push(Math.round(t * 100) / 100);
+      t += interval * 0.6;
+      if (t < durationS - 0.5) { beats.push(Math.round(t * 100) / 100); t += interval * 1.4; }
+    }
+  }
+  return beats;
+}
+
+interface SavedBeatMap {
+  id: string;
+  spotify_track_id: string;
+  track_name: string;
+  track_artist: string;
+  track_album_art: string;
+  track_duration_ms: number;
+  bpm: number;
+  beats: number[];
+}
 
 const CalibrationWizard = dynamic(
   () => import('@/components/tracking/CalibrationWizard'),
@@ -35,6 +97,12 @@ export default function TreningPage() {
   const [isPaused, setIsPaused] = useState(false);
   const [calibration, setCalibration] = useState<CalibrationData | null>(null);
   const [musicConfig, setMusicConfig] = useState<MusicConfig | null>(null);
+  const [showMusic, setShowMusic] = useState(false);
+  const [searchQuery, setSearchQuery] = useState('');
+  const [beatMaps, setBeatMaps] = useState<SavedBeatMap[]>([]);
+  const [selectedBpm, setSelectedBpm] = useState(120);
+  const [bpmPickerTrack, setBpmPickerTrack] = useState<SpotifyTrack | null>(null);
+  const searchTimeout = useRef<ReturnType<typeof setTimeout>>(undefined);
 
   const tracker = useTracker(inputMode);
   const spotify = useSpotify();
@@ -55,15 +123,68 @@ export default function TreningPage() {
     }
   }, []);
 
-  // Auto-open music selector after Spotify OAuth redirect
+  // Auto-open music after Spotify OAuth redirect
   useEffect(() => {
     const params = new URLSearchParams(window.location.search);
     if (params.get('spotify') === 'connected') {
-      setPhase('music');
-      // Clean up URL
+      setShowMusic(true);
       window.history.replaceState({}, '', window.location.pathname);
     }
   }, []);
+
+  // Load admin beat maps
+  useEffect(() => {
+    fetch('/api/beats').then(r => r.json()).then(d => {
+      if (d.beatMaps) setBeatMaps(d.beatMaps);
+    }).catch(() => {});
+  }, []);
+
+  const musicHistory = useMemo(() => loadMusicHistory(), []);
+  const favorites = useMemo(() => [...musicHistory].sort((a, b) => b.playCount - a.playCount).slice(0, 5), [musicHistory]);
+  const recent = useMemo(() => {
+    const favIds = new Set(favorites.map(f => f.track.id));
+    return musicHistory.filter(h => !favIds.has(h.track.id)).sort((a, b) => b.lastPlayed - a.lastPlayed).slice(0, 3);
+  }, [musicHistory, favorites]);
+  const mappedIds = useMemo(() => new Set(beatMaps.map(b => b.spotify_track_id)), [beatMaps]);
+
+  const handleSearch = (q: string) => {
+    setSearchQuery(q);
+    setBpmPickerTrack(null);
+    if (searchTimeout.current) clearTimeout(searchTimeout.current);
+    searchTimeout.current = setTimeout(() => spotify.search(q), 400);
+  };
+
+  const handleSelectTrack = (track: SpotifyTrack) => {
+    const mapped = beatMaps.find(b => b.spotify_track_id === track.id);
+    if (mapped) {
+      setMusicConfig({
+        mode: 'spotify',
+        bpm: mapped.bpm,
+        beatMap: { tempo: mapped.bpm, beats: mapped.beats, bars: [], sections: [], durationS: mapped.track_duration_ms / 1000 },
+        track: { id: mapped.spotify_track_id, name: mapped.track_name, artists: mapped.track_artist, album: '', albumArt: mapped.track_album_art, durationMs: mapped.track_duration_ms, uri: `spotify:track:${mapped.spotify_track_id}` },
+      });
+      setShowMusic(false);
+      setSearchQuery('');
+      setBpmPickerTrack(null);
+      return;
+    }
+    setBpmPickerTrack(track);
+  };
+
+  const handleConfirmBpm = () => {
+    if (!bpmPickerTrack) return;
+    const durationS = bpmPickerTrack.durationMs / 1000;
+    const beats = generateBeatsForBpm(selectedBpm, durationS);
+    setMusicConfig({
+      mode: 'spotify',
+      bpm: selectedBpm,
+      beatMap: { tempo: selectedBpm, beats, bars: [], sections: [], durationS },
+      track: bpmPickerTrack,
+    });
+    setShowMusic(false);
+    setSearchQuery('');
+    setBpmPickerTrack(null);
+  };
 
   const handleCalibrationComplete = useCallback(
     (cal: CalibrationData) => {
@@ -480,51 +601,169 @@ export default function TreningPage() {
             </div>
           </div>
 
-          {/* Beat mode */}
+          {/* Music */}
           <div>
             <label className="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-3 block">
               Music
             </label>
-            <button
-              onClick={() => setPhase('music')}
-              className={`w-full rounded-2xl p-4 border-2 transition-all text-left ${
-                musicConfig
-                  ? 'border-green-500 bg-green-50'
-                  : 'border-gray-200 bg-white hover:border-gray-300'
-              }`}
-            >
-              {musicConfig ? (
-                <div className="flex items-center justify-between">
-                  <div>
-                    <div className="text-sm font-semibold text-gray-900">
-                      {musicConfig.track?.name || `${musicConfig.bpm} BPM`}
-                    </div>
-                    <div className="text-xs text-gray-500 mt-0.5">
-                      {musicConfig.track?.artists || (musicConfig.mode === 'tap' ? 'Tap tempo' : 'Metronome')}
-                      {' - '}{musicConfig.bpm} BPM
-                    </div>
-                  </div>
-                  <span className="text-xs text-green-600">Change</span>
+
+            {/* Selected song */}
+            {musicConfig ? (
+              <div className="rounded-2xl p-4 border-2 border-green-500 bg-green-50 flex items-center gap-3">
+                {musicConfig.track?.albumArt && (
+                  <img src={musicConfig.track.albumArt} alt="" className="w-10 h-10 rounded-lg object-cover" />
+                )}
+                <div className="flex-1 min-w-0">
+                  <div className="text-sm font-semibold text-gray-900 truncate">{musicConfig.track?.name || `${musicConfig.bpm} BPM`}</div>
+                  <div className="text-xs text-gray-500 truncate">{musicConfig.track?.artists} - {musicConfig.bpm} BPM</div>
                 </div>
-              ) : (
-                <div className="flex items-center justify-between">
-                  <div>
-                    <div className="text-sm font-semibold text-gray-900">Beat mode</div>
-                    <div className="text-xs text-gray-500 mt-0.5">
-                      Cones synced to the rhythm of music
-                    </div>
-                  </div>
-                  <span className="text-xs text-gray-400">Set up</span>
-                </div>
-              )}
-            </button>
-            {musicConfig && (
+                <button onClick={() => { setMusicConfig(null); setShowMusic(true); }} className="text-xs text-green-600 font-medium">Change</button>
+              </div>
+            ) : (
               <button
-                onClick={() => setMusicConfig(null)}
-                className="text-xs text-gray-400 hover:text-gray-600 mt-2 transition-colors"
+                onClick={() => setShowMusic(!showMusic)}
+                className={`w-full rounded-2xl p-4 border-2 transition-all text-left ${showMusic ? 'border-green-500 bg-green-50' : 'border-gray-200 bg-white hover:border-gray-300'}`}
               >
-                Disable beat mode
+                <div className="flex items-center justify-between">
+                  <div>
+                    <div className="text-sm font-semibold text-gray-900">Choose a song</div>
+                    <div className="text-xs text-gray-500 mt-0.5">Cones sync to the rhythm</div>
+                  </div>
+                  <svg className={`w-4 h-4 text-gray-400 transition-transform ${showMusic ? 'rotate-180' : ''}`} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M19 9l-7 7-7-7" /></svg>
+                </div>
               </button>
+            )}
+
+            {/* Inline music panel */}
+            {showMusic && !musicConfig && (
+              <div className="mt-3 space-y-4">
+                {!spotify.isConnected ? (
+                  <div className="text-center py-4 bg-white rounded-2xl border border-gray-100">
+                    <p className="text-sm text-gray-500 mb-3">Connect Spotify Premium to play music.</p>
+                    <button onClick={spotify.connect} className="btn-primary text-sm">Connect Spotify</button>
+                  </div>
+                ) : (
+                  <>
+                    {/* Favorites */}
+                    {favorites.length > 0 && !searchQuery && (
+                      <div>
+                        <div className="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-2">Favourites</div>
+                        <div className="space-y-1.5">
+                          {favorites.map((rec) => (
+                            <button key={rec.track.id} onClick={() => handleSelectTrack(rec.track)}
+                              className="w-full flex items-center gap-2.5 rounded-xl p-2.5 text-left bg-white border border-gray-100 hover:border-gray-300 hover:shadow-sm transition-all">
+                              {rec.track.albumArt && <img src={rec.track.albumArt} alt="" className="w-9 h-9 rounded-lg object-cover" />}
+                              <div className="flex-1 min-w-0">
+                                <div className="text-sm font-medium text-gray-900 truncate">
+                                  {mappedIds.has(rec.track.id) && <span className="text-yellow-500 mr-1">&#9733;</span>}
+                                  {rec.track.name}
+                                </div>
+                                <div className="text-xs text-gray-500 truncate">{rec.track.artists}</div>
+                              </div>
+                              <div className="text-xs text-gray-400">{rec.playCount}x</div>
+                            </button>
+                          ))}
+                        </div>
+                      </div>
+                    )}
+
+                    {/* Recent */}
+                    {recent.length > 0 && !searchQuery && (
+                      <div>
+                        <div className="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-2">Recent</div>
+                        <div className="space-y-1.5">
+                          {recent.map((rec) => (
+                            <button key={rec.track.id} onClick={() => handleSelectTrack(rec.track)}
+                              className="w-full flex items-center gap-2.5 rounded-xl p-2.5 text-left bg-white border border-gray-100 hover:border-gray-300 hover:shadow-sm transition-all">
+                              {rec.track.albumArt && <img src={rec.track.albumArt} alt="" className="w-9 h-9 rounded-lg object-cover" />}
+                              <div className="flex-1 min-w-0">
+                                <div className="text-sm font-medium text-gray-900 truncate">{rec.track.name}</div>
+                                <div className="text-xs text-gray-500 truncate">{rec.track.artists}</div>
+                              </div>
+                            </button>
+                          ))}
+                        </div>
+                      </div>
+                    )}
+
+                    {/* Recommended (admin beat maps) */}
+                    {beatMaps.length > 0 && !searchQuery && favorites.length === 0 && (
+                      <div>
+                        <div className="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-2">Recommended</div>
+                        <div className="space-y-1.5">
+                          {beatMaps.map((song) => (
+                            <button key={song.id} onClick={() => handleSelectTrack({ id: song.spotify_track_id, name: song.track_name, artists: song.track_artist, album: '', albumArt: song.track_album_art, durationMs: song.track_duration_ms, uri: `spotify:track:${song.spotify_track_id}` })}
+                              className="w-full flex items-center gap-2.5 rounded-xl p-2.5 text-left bg-white border border-gray-100 hover:border-gray-300 hover:shadow-sm transition-all">
+                              {song.track_album_art && <img src={song.track_album_art} alt="" className="w-9 h-9 rounded-lg object-cover" />}
+                              <div className="flex-1 min-w-0">
+                                <div className="text-sm font-medium text-gray-900 truncate"><span className="text-yellow-500 mr-1">&#9733;</span>{song.track_name}</div>
+                                <div className="text-xs text-gray-500 truncate">{song.track_artist}</div>
+                              </div>
+                              <div className="text-xs text-gray-400">{song.bpm} BPM</div>
+                            </button>
+                          ))}
+                        </div>
+                      </div>
+                    )}
+
+                    {/* Search */}
+                    <input
+                      type="text"
+                      value={searchQuery}
+                      onChange={(e) => handleSearch(e.target.value)}
+                      className="input-field"
+                      placeholder="Search for a song..."
+                    />
+
+                    {/* BPM picker */}
+                    {bpmPickerTrack && (
+                      <div className="bg-white rounded-2xl border border-gray-200 p-4 space-y-3">
+                        <div className="flex items-center gap-3">
+                          {bpmPickerTrack.albumArt && <img src={bpmPickerTrack.albumArt} alt="" className="w-10 h-10 rounded-xl object-cover" />}
+                          <div className="flex-1 min-w-0">
+                            <div className="text-sm font-semibold text-gray-900 truncate">{bpmPickerTrack.name}</div>
+                            <div className="text-xs text-gray-500 truncate">{bpmPickerTrack.artists}</div>
+                          </div>
+                        </div>
+                        <div className="flex gap-2">
+                          {BPM_TEMPLATES.map((bpm) => (
+                            <button key={bpm} onClick={() => setSelectedBpm(bpm)}
+                              className={`flex-1 rounded-full py-2 text-sm font-medium transition-all ${selectedBpm === bpm ? 'bg-gray-900 text-white' : 'bg-gray-100 text-gray-500 hover:bg-gray-200'}`}>
+                              {bpm}
+                            </button>
+                          ))}
+                        </div>
+                        <button onClick={handleConfirmBpm} className="btn-primary w-full">Play at {selectedBpm} BPM</button>
+                      </div>
+                    )}
+
+                    {spotify.searching && <div className="text-center text-gray-400 text-xs py-2">Searching...</div>}
+
+                    {searchQuery && spotify.searchResults.length > 0 && (
+                      <div className="space-y-1.5 max-h-48 overflow-y-auto">
+                        {spotify.searchResults.map((track) => (
+                          <button key={track.id} onClick={() => handleSelectTrack(track)}
+                            className={`w-full flex items-center gap-2.5 rounded-xl p-2.5 text-left transition-all ${
+                              bpmPickerTrack?.id === track.id ? 'bg-gray-100 border-2 border-gray-300' : 'bg-white border border-gray-100 hover:border-gray-300 hover:shadow-sm'
+                            }`}>
+                            {track.albumArt && <img src={track.albumArt} alt="" className="w-9 h-9 rounded-lg object-cover" />}
+                            <div className="flex-1 min-w-0">
+                              <div className="text-sm font-medium text-gray-900 truncate">
+                                {mappedIds.has(track.id) && <span className="text-yellow-500 mr-1">&#9733;</span>}
+                                {track.name}
+                              </div>
+                              <div className="text-xs text-gray-500 truncate">{track.artists}</div>
+                            </div>
+                            <div className="text-xs text-gray-400">
+                              {Math.floor(track.durationMs / 60000)}:{String(Math.floor((track.durationMs % 60000) / 1000)).padStart(2, '0')}
+                            </div>
+                          </button>
+                        ))}
+                      </div>
+                    )}
+                  </>
+                )}
+              </div>
             )}
           </div>
 
