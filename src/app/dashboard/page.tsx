@@ -37,7 +37,7 @@ interface ScoreEntry {
 
 const GAMES = [
   { name: 'HockeyBeats', href: '/trening', image: '/images/game-hockeybeats.png', bg: '#1a1a2e', desc: 'Beat-synced slalom', clean: false },
-  { name: 'Target Smash', href: '/target-smash', image: '/images/game-targets.png', bg: '#d4d4d8', desc: 'Smash the bullseyes', clean: false },
+  { name: 'Target Smash', href: '/target-smash', image: '/images/game-targets.png', bg: '#1a1a2e', desc: 'Smash the bullseyes', clean: false },
   { name: 'Space Invaders', href: '/space', image: '/images/game-spaceinvaders.png', bg: '#0f172a', desc: 'Shoot the blocks' },
   { name: 'Jelly Stack', href: '/jelly-stack', image: '/images/game-jellystack.png', bg: '#2d1b3d', desc: 'Stack and balance' },
   { name: 'Orbit Hop', href: '/orbit-hop', image: '/images/game-orbithop.png', bg: '#1a2332', desc: 'Jump between planets' },
