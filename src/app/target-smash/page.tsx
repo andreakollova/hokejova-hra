@@ -27,6 +27,7 @@ export default function TargetSmashPage() {
   const [calibration, setCalibration] = useState<CalibrationData | null>(null);
   const [bgTrack, setBgTrack] = useState<SpotifyTrack | null>(null);
   const [spotifyReturned, setSpotifyReturned] = useState(false);
+  const [gameKey, setGameKey] = useState(0);
 
   const { recordGame } = useEngagement();
   const tracker = useTracker(inputMode);
@@ -46,10 +47,11 @@ export default function TargetSmashPage() {
   }, []);
 
   const startGame = useCallback(() => {
-    if (inputMode === 'demo') { tracker.startDemo(); if (bgTrack) playMusic(bgTrack); setPhase('playing'); return; }
+    if (inputMode === 'demo') { tracker.startDemo(); if (bgTrack) playMusic(bgTrack); setGameKey(k => k + 1); setPhase('playing'); return; }
     if (!calibration) { setPhase('calibration'); return; }
     tracker.setCalibration(calibration);
     if (bgTrack) playMusic(bgTrack);
+    setGameKey(k => k + 1);
     setPhase('playing');
   }, [inputMode, calibration, tracker, bgTrack, spotify]);
 
@@ -63,10 +65,12 @@ export default function TargetSmashPage() {
     if (phase !== 'playing' || inputMode !== 'camera' || !calibration) return;
     let cancelled = false;
     const start = async () => {
-      await new Promise(r => setTimeout(r, 200));
+      await new Promise(r => setTimeout(r, 300));
       if (cancelled) return;
       const video = videoRef.current;
       if (!video) return;
+      tracker.stopTracking();
+      stopCamera();
       tracker.setCalibration(calibration);
       let info = await startCamera(calibration.cameraDeviceId, video);
       if (!info) {
@@ -76,11 +80,14 @@ export default function TargetSmashPage() {
           info = { width: video.videoWidth, height: video.videoHeight, fps: 30, deviceId: 'fb', label: 'Fallback' };
         } catch { return; }
       }
-      if (!cancelled && info) tracker.startTracking(video);
+      if (!cancelled && info) {
+        await new Promise(r => setTimeout(r, 200));
+        if (!cancelled) tracker.startTracking(video);
+      }
     };
     start();
-    return () => { cancelled = true; };
-  }, [phase, inputMode, calibration, startCamera]);
+    return () => { cancelled = true; tracker.stopTracking(); };
+  }, [phase, inputMode, calibration, gameKey]); // eslint-disable-line react-hooks/exhaustive-deps
 
   useEffect(() => {
     if (phase !== 'playing' || inputMode !== 'demo') return;

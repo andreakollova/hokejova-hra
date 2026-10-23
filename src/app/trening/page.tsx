@@ -251,6 +251,7 @@ export default function TreningPage() {
 
     // Switch to playing phase FIRST so <video> element renders
     tracker.setCalibration(calibration);
+    setGameKey(k => k + 1);
     setPhase('playing');
   }, [inputMode, calibration, tracker, startCamera]);
 
@@ -268,7 +269,7 @@ export default function TreningPage() {
     let cancelled = false;
     const startCameraTracking = async () => {
       // Wait for video element to render
-      await new Promise(r => setTimeout(r, 200));
+      await new Promise(r => setTimeout(r, 300));
       if (cancelled) return;
 
       const video = videoRef.current;
@@ -277,16 +278,20 @@ export default function TreningPage() {
         return;
       }
 
+      // Always stop existing tracking before restarting
+      tracker.stopTracking();
+      stopCamera();
+
       // Re-apply calibration to tracker
       tracker.setCalibration(calibration);
 
       // Try saved device, fallback to any camera
       let info = await startCamera(calibration.cameraDeviceId, video);
       if (!info) {
-        // Device ID might have changed - try any camera
+        // Device ID might have changed - try any camera (mobile-friendly)
         try {
           const stream = await navigator.mediaDevices.getUserMedia({
-            video: { width: { ideal: 1280 }, height: { ideal: 720 }, frameRate: { ideal: 60 } },
+            video: { facingMode: 'environment', width: { ideal: 1280 }, height: { ideal: 720 } },
           });
           video.srcObject = stream;
           await video.play();
@@ -304,13 +309,17 @@ export default function TreningPage() {
       }
 
       if (!cancelled && info) {
-        tracker.startTracking(video);
+        // Small delay to let camera warm up
+        await new Promise(r => setTimeout(r, 200));
+        if (!cancelled) {
+          tracker.startTracking(video);
+        }
       }
     };
 
     startCameraTracking();
-    return () => { cancelled = true; };
-  }, [phase, inputMode, calibration, startCamera]);
+    return () => { cancelled = true; tracker.stopTracking(); };
+  }, [phase, inputMode, calibration, gameKey]); // eslint-disable-line react-hooks/exhaustive-deps
 
   const handleFinish = useCallback((res: SlalomResult) => {
     setResult(res);
