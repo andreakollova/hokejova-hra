@@ -158,134 +158,36 @@ export default function Home() {
               <p className="mt-5 text-base text-gray-500">Start with HockeyBeats, then explore extra games that give you another reason to pick up your stick.</p>
             </div>
 
-            {/* PS5-style game cards - 4 in a row */}
-            <div className="grid grid-cols-2 lg:grid-cols-4 gap-5">
-              {/* HockeyBeats */}
-              <Link href="/trening" className="group block">
-                <div className="game-tile rounded-3xl overflow-hidden relative aspect-[3/4] bg-gray-100">
-                  <Image src="/images/game-hockeybeats.png" alt="HockeyBeats" fill className="object-cover group-hover:scale-105 transition-all duration-700" />
-                  <div className="absolute bottom-0 left-0 right-0 p-6 bg-gradient-to-t from-black/60 to-transparent">
-                    <div className="inline-flex items-center gap-2 bg-white/20 backdrop-blur-sm text-white text-xs font-bold px-4 py-2 rounded-full group-hover:bg-white/30 transition-all">
-                      <svg className="w-3.5 h-3.5" fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
-                      Play now
+            {/* Horizontal scrolling carousel */}
+            <div className="relative -mx-6 sm:-mx-10">
+              <div className="flex gap-5 overflow-x-auto px-6 sm:px-10 pb-4 snap-x snap-mandatory scrollbar-hide" style={{ scrollbarWidth: 'none', msOverflowStyle: 'none', WebkitOverflowScrolling: 'touch' }}>
+                {[
+                  { href: '/trening', img: '/images/game-hockeybeats.png', name: 'HockeyBeats', bg: '#e8e0d4' },
+                  { href: '/space', img: '/images/game-spaceinvaders.png', name: 'Space Invaders', bg: '#0f172a' },
+                  { href: '/jelly-stack', img: '/images/game-jellystack.png', name: 'Jelly Stack', bg: '#faf5eb' },
+                  { href: '/orbit-hop', img: '/images/game-orbithop.png', name: 'Orbit Hop', bg: '#ede9fe' },
+                  { href: '/neon-drift', img: '/images/game-neondrift.png', name: 'Neon Drift', bg: '#0a1628' },
+                  { href: '/brick-rush', img: '/images/game-brickrush.png', name: 'Brick Rush', bg: '#111111' },
+                  { href: '/magnet-flip', img: '/images/game-magnetflip.png', name: 'Magnet Flip', bg: '#1a1025' },
+                  { href: '/laser-maze', img: '/images/game-lasermaze.png', name: 'Laser Maze', bg: '#0f1f0f' },
+                  { href: '/terciky', img: '/images/game-targets.png', name: 'Targets', bg: '#f3f4f6' },
+                  { href: '/osmicky-terciky', img: '/images/game-figure8.png', name: 'Figure 8', bg: '#f3f4f6' },
+                  { href: '/osmicky', img: '/images/game-classic8s.png', name: 'Classic 8s', bg: '#f3f4f6' },
+                ].map((game) => (
+                  <Link key={game.href} href={game.href} className="group block flex-shrink-0 snap-start" style={{ width: 'clamp(200px, 40vw, 260px)' }}>
+                    <div className="game-tile rounded-3xl overflow-hidden relative aspect-[3/4]" style={{ background: game.bg }}>
+                      <Image src={game.img} alt={game.name} fill className="object-cover group-hover:scale-105 transition-all duration-700" />
+                      <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent" />
+                      <div className="absolute bottom-0 left-0 right-0 p-5">
+                        <div className="text-sm font-bold text-white mb-2">{game.name}</div>
+                        <div className="inline-flex items-center gap-1.5 bg-white/20 backdrop-blur-sm text-white text-[11px] font-bold px-3 py-1.5 rounded-full group-hover:bg-white/30 transition-all">
+                          <svg className="w-3 h-3" fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+                          Play
+                        </div>
+                      </div>
                     </div>
-                  </div>
-                </div>
-              </Link>
-
-              {/* Space Invaders */}
-              <Link href="/space" className="group block">
-                <div className="game-tile rounded-3xl overflow-hidden relative aspect-[3/4] bg-[#0f172a]">
-                  <Image src="/images/game-spaceinvaders.png" alt="Space Invaders" fill className="object-cover group-hover:scale-105 transition-all duration-700" />
-                  <div className="absolute bottom-0 left-0 right-0 p-6 bg-gradient-to-t from-black/60 to-transparent">
-                    <div className="inline-flex items-center gap-2 bg-white/20 backdrop-blur-sm text-white text-xs font-bold px-4 py-2 rounded-full group-hover:bg-white/30 transition-all">
-                      <svg className="w-3.5 h-3.5" fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
-                      Play now
-                    </div>
-                  </div>
-                </div>
-              </Link>
-
-              {/* Jelly Stack */}
-              <Link href="/jelly-stack" className="group block">
-                <div className="game-tile rounded-3xl overflow-hidden relative aspect-[3/4] bg-[#faf5eb]">
-                  <Image src="/images/game-jellystack.png" alt="Jelly Stack" fill className="object-cover group-hover:scale-105 transition-all duration-700" />
-                  <div className="absolute bottom-0 left-0 right-0 p-6 bg-gradient-to-t from-black/60 to-transparent">
-                    <div className="inline-flex items-center gap-2 bg-white/20 backdrop-blur-sm text-white text-xs font-bold px-4 py-2 rounded-full group-hover:bg-white/30 transition-all">
-                      <svg className="w-3.5 h-3.5" fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
-                      Play now
-                    </div>
-                  </div>
-                </div>
-              </Link>
-
-              {/* Orbit Hop */}
-              <Link href="/orbit-hop" className="group block">
-                <div className="game-tile rounded-3xl overflow-hidden relative aspect-[3/4] bg-[#ede9fe]">
-                  <Image src="/images/game-orbithop.png" alt="Orbit Hop" fill className="object-cover group-hover:scale-105 transition-all duration-700" />
-                  <div className="absolute bottom-0 left-0 right-0 p-6 bg-gradient-to-t from-black/60 to-transparent">
-                    <div className="inline-flex items-center gap-2 bg-white/20 backdrop-blur-sm text-white text-xs font-bold px-4 py-2 rounded-full group-hover:bg-white/30 transition-all">
-                      <svg className="w-3.5 h-3.5" fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
-                      Play now
-                    </div>
-                  </div>
-                </div>
-              </Link>
-            </div>
-
-            {/* New games row */}
-            <div className="grid grid-cols-2 lg:grid-cols-4 gap-5 mt-5">
-              <Link href="/neon-drift" className="group block">
-                <div className="game-tile rounded-3xl overflow-hidden relative aspect-[3/4] bg-[#0a1628]">
-                  <Image src="/images/game-neondrift.png" alt="Neon Drift" fill className="object-cover group-hover:scale-105 transition-all duration-700" />
-                  <div className="absolute bottom-0 left-0 right-0 p-6 bg-gradient-to-t from-black/60 to-transparent">
-                    <div className="inline-flex items-center gap-2 bg-white/20 backdrop-blur-sm text-white text-xs font-bold px-4 py-2 rounded-full group-hover:bg-white/30 transition-all">
-                      <svg className="w-3.5 h-3.5" fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
-                      Play now
-                    </div>
-                  </div>
-                </div>
-              </Link>
-              <Link href="/brick-rush" className="group block">
-                <div className="game-tile rounded-3xl overflow-hidden relative aspect-[3/4] bg-[#111111]">
-                  <Image src="/images/game-brickrush.png" alt="Brick Rush" fill className="object-cover group-hover:scale-105 transition-all duration-700" />
-                  <div className="absolute bottom-0 left-0 right-0 p-6 bg-gradient-to-t from-black/60 to-transparent">
-                    <div className="inline-flex items-center gap-2 bg-white/20 backdrop-blur-sm text-white text-xs font-bold px-4 py-2 rounded-full group-hover:bg-white/30 transition-all">
-                      <svg className="w-3.5 h-3.5" fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
-                      Play now
-                    </div>
-                  </div>
-                </div>
-              </Link>
-              <Link href="/magnet-flip" className="group block">
-                <div className="game-tile rounded-3xl overflow-hidden relative aspect-[3/4] bg-[#1a1025]">
-                  <Image src="/images/game-magnetflip.png" alt="Magnet Flip" fill className="object-cover group-hover:scale-105 transition-all duration-700" />
-                  <div className="absolute bottom-0 left-0 right-0 p-6 bg-gradient-to-t from-black/60 to-transparent">
-                    <div className="inline-flex items-center gap-2 bg-white/20 backdrop-blur-sm text-white text-xs font-bold px-4 py-2 rounded-full group-hover:bg-white/30 transition-all">
-                      <svg className="w-3.5 h-3.5" fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
-                      Play now
-                    </div>
-                  </div>
-                </div>
-              </Link>
-              <Link href="/laser-maze" className="group block">
-                <div className="game-tile rounded-3xl overflow-hidden relative aspect-[3/4] bg-[#0f1f0f]">
-                  <Image src="/images/game-lasermaze.png" alt="Laser Maze" fill className="object-cover group-hover:scale-105 transition-all duration-700" />
-                  <div className="absolute bottom-0 left-0 right-0 p-6 bg-gradient-to-t from-black/60 to-transparent">
-                    <div className="inline-flex items-center gap-2 bg-white/20 backdrop-blur-sm text-white text-xs font-bold px-4 py-2 rounded-full group-hover:bg-white/30 transition-all">
-                      <svg className="w-3.5 h-3.5" fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
-                      Play now
-                    </div>
-                  </div>
-                </div>
-              </Link>
-            </div>
-
-            {/* Other games with artwork */}
-            <div className="mt-6">
-              <p className="text-xs font-bold uppercase tracking-[0.2em] text-gray-400 mb-4">More games</p>
-              <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
-                <Link href="/terciky" className="group block">
-                  <div className="game-tile rounded-2xl overflow-hidden relative aspect-[3/4] bg-gray-100">
-                    <Image src="/images/game-targets.png" alt="Targets" fill className="object-cover group-hover:scale-105 transition-all duration-500" />
-                  </div>
-                </Link>
-                <Link href="/osmicky-terciky" className="group block">
-                  <div className="game-tile rounded-2xl overflow-hidden relative aspect-[3/4] bg-gray-100">
-                    <Image src="/images/game-figure8.png" alt="Figure 8" fill className="object-cover group-hover:scale-105 transition-all duration-500" />
-                  </div>
-                </Link>
-                <Link href="/osmicky" className="group block">
-                  <div className="game-tile rounded-2xl overflow-hidden relative aspect-[3/4] bg-gray-100">
-                    <Image src="/images/game-classic8s.png" alt="Classic 8s" fill className="object-cover group-hover:scale-105 transition-all duration-500" />
-                  </div>
-                </Link>
-                <div className="relative">
-                  <div className="rounded-2xl overflow-hidden relative aspect-[3/4] bg-gray-100 opacity-50 grayscale">
-                    <Image src="/images/game-vdrag.png" alt="V-drag" fill className="object-cover" />
-                  </div>
-                  <div className="absolute bottom-3 left-3 bg-gray-900/80 text-white text-[10px] font-bold uppercase tracking-wider px-3 py-1.5 rounded-full">Coming soon</div>
-                </div>
+                  </Link>
+                ))}
               </div>
             </div>
           </div>
