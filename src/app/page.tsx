@@ -31,34 +31,31 @@ export default function Home() {
 
   return (
     <div className="min-h-screen bg-white flex flex-col">
-      {/* Liquid glass header */}
-      <header className="fixed top-4 left-4 right-4 sm:left-8 sm:right-8 z-50 transition-all duration-500">
-        <div className="max-w-7xl mx-auto bg-white/10 backdrop-blur-xl border border-white/20 rounded-2xl px-5 sm:px-8 py-3 shadow-[0_8px_32px_rgba(0,0,0,0.12),inset_0_1px_0_rgba(255,255,255,0.2)]"
-          style={{ WebkitBackdropFilter: 'blur(20px) saturate(180%)' }}>
-          <div className="flex justify-between items-center">
-            <Link href="/" className="flex items-center gap-2">
-              <Image src="/images/hb-icon.png" alt="" width={32} height={32} className="h-6 w-auto" />
-              <span className="text-base font-black tracking-tight text-white drop-shadow-[0_1px_2px_rgba(0,0,0,0.3)]" style={{ fontFamily: "'GC Bustle Sans', sans-serif" }}>hockey beats</span>
-            </Link>
-            <nav className="flex items-center gap-5 sm:gap-7">
-              <a href="#how-it-works" className="text-sm font-medium text-white/80 hover:text-white transition-colors hidden sm:block drop-shadow-[0_1px_2px_rgba(0,0,0,0.2)]">How it works</a>
-              <a href="#games" className="text-sm font-medium text-white/80 hover:text-white transition-colors hidden sm:block drop-shadow-[0_1px_2px_rgba(0,0,0,0.2)]">Games</a>
-              <a href="#platforms" className="text-sm font-medium text-white/80 hover:text-white transition-colors hidden sm:block drop-shadow-[0_1px_2px_rgba(0,0,0,0.2)]">Play anywhere</a>
-              {isLoggedIn ? (
-                <>
-                  {engLoaded && getStreak().currentStreak > 0 && (
-                    <StreakBadge currentStreak={getStreak().currentStreak} frozen={getStreak().frozen} size="sm" />
-                  )}
-                  <Link href="/dashboard" className="text-sm font-medium text-white drop-shadow-[0_1px_2px_rgba(0,0,0,0.2)]">{settings.username}</Link>
-                </>
-              ) : (
-                <div className="flex items-center gap-3">
-                  <button onClick={() => setShowAuth(true)} className="text-sm font-medium text-white/80 hover:text-white transition-colors hidden sm:block drop-shadow-[0_1px_2px_rgba(0,0,0,0.2)]">Log in</button>
-                  <button onClick={() => setShowAuth(true)} className="text-sm font-bold px-5 py-2 rounded-full bg-white/20 hover:bg-white/30 border border-white/30 text-white backdrop-blur-sm transition-all duration-300">Sign up</button>
-                </div>
-              )}
-            </nav>
-          </div>
+      {/* Header with top gradient fade */}
+      <header className="fixed top-0 left-0 right-0 z-50" style={{ background: 'linear-gradient(to bottom, rgba(0,0,0,0.5) 0%, rgba(0,0,0,0.2) 60%, transparent 100%)' }}>
+        <div className="max-w-7xl mx-auto px-6 sm:px-10 py-5 flex justify-between items-center">
+          <Link href="/" className="flex items-center gap-2">
+            <Image src="/images/hb-icon.png" alt="" width={32} height={32} className="h-6 w-auto" />
+            <span className="text-base font-black tracking-tight text-white" style={{ fontFamily: "'GC Bustle Sans', sans-serif" }}>hockey beats</span>
+          </Link>
+          <nav className="flex items-center gap-5 sm:gap-7">
+            <a href="#how-it-works" className="text-sm font-medium text-white/80 hover:text-white transition-colors hidden sm:block">How it works</a>
+            <a href="#games" className="text-sm font-medium text-white/80 hover:text-white transition-colors hidden sm:block">Games</a>
+            <a href="#platforms" className="text-sm font-medium text-white/80 hover:text-white transition-colors hidden sm:block">Play anywhere</a>
+            {isLoggedIn ? (
+              <>
+                {engLoaded && getStreak().currentStreak > 0 && (
+                  <StreakBadge currentStreak={getStreak().currentStreak} frozen={getStreak().frozen} size="sm" />
+                )}
+                <Link href="/dashboard" className="text-sm font-medium text-white">{settings.username}</Link>
+              </>
+            ) : (
+              <div className="flex items-center gap-3">
+                <button onClick={() => setShowAuth(true)} className="text-sm font-medium text-white/80 hover:text-white transition-colors hidden sm:block">Log in</button>
+                <button onClick={() => setShowAuth(true)} className="text-sm font-bold px-5 py-2.5 rounded-full bg-white text-gray-900 hover:bg-gray-100 transition-all duration-300">Sign up</button>
+              </div>
+            )}
+          </nav>
         </div>
       </header>
 
@@ -537,7 +534,7 @@ function HeroBanner({ isLoggedIn, onLoginClick }: { isLoggedIn: boolean; onLogin
 
   return (
     <>
-      <section className="relative h-[82vh] sm:h-[85vh] overflow-hidden">
+      <section className="relative h-[88vh] sm:h-[90vh] overflow-hidden">
         {/* Background slides */}
         {slides.map((s, i) => (
           <div key={s.src} className={`absolute inset-0 transition-opacity duration-1000 ${i === slide ? 'opacity-100' : 'opacity-0'}`}>
