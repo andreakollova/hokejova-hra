@@ -93,6 +93,7 @@ export default function BrickRushGame({
     countdown: 3,
     gameStartWallTime: 0,
     backTimer: 0,
+    respawnTimer: 0,
   });
 
   const [hud, setHud] = useState({
@@ -102,6 +103,7 @@ export default function BrickRushGame({
     waves: 0,
     countdown: 3,
     backProgress: 0,
+    respawnTimer: 0,
   });
 
   const spawnWave = (s: typeof stateRef.current) => {
@@ -237,12 +239,21 @@ export default function BrickRushGame({
       }
       s.paddleX = Math.max(cfg.paddleW / 2, Math.min(CANVAS_W - cfg.paddleW / 2, s.paddleX));
 
+      // Respawn countdown
+      if (s.respawnTimer > 0) {
+        s.respawnTimer -= delta;
+        if (s.respawnTimer <= 0) {
+          s.respawnTimer = 0;
+          resetBallOnPaddle(s);
+          launchBall(s);
+        }
+      }
+
       // Ball on paddle follows paddle
       if (s.ballOnPaddle) {
         s.ballX = s.paddleX;
         s.ballY = CANVAS_H - 40 - PADDLE_H / 2 - BALL_RADIUS;
-        // Auto-launch after a short delay
-        if (s.started) {
+        if (s.started && s.respawnTimer <= 0) {
           launchBall(s);
         }
       } else {
@@ -292,9 +303,12 @@ export default function BrickRushGame({
           playSound(600, 0.05);
         }
 
-        // Ball falls below paddle - reset
-        if (s.ballY - BALL_RADIUS > CANVAS_H) {
-          resetBallOnPaddle(s);
+        // Ball falls below paddle - start respawn countdown
+        if (s.ballY - BALL_RADIUS > CANVAS_H && s.respawnTimer <= 0) {
+          s.respawnTimer = 5;
+          s.ballVX = 0;
+          s.ballVY = 0;
+          s.ballOnPaddle = true;
           playSound(150, 0.2, 'square');
         }
 
@@ -362,6 +376,7 @@ export default function BrickRushGame({
         waves: s.waves,
         countdown: 0,
         backProgress: s.backTimer / 3,
+        respawnTimer: s.respawnTimer,
       });
 
       drawGame(ctx, s, 0);
@@ -486,6 +501,19 @@ export default function BrickRushGame({
       ctx.font = 'bold 120px sans-serif';
       ctx.textAlign = 'center';
       ctx.fillText(String(countdown), w / 2, h / 2 + 40);
+    }
+
+    // Respawn countdown
+    if (s.respawnTimer > 0) {
+      ctx.fillStyle = 'rgba(17, 17, 17, 0.5)';
+      ctx.fillRect(0, 0, w, h);
+      ctx.textAlign = 'center';
+      ctx.fillStyle = '#ef4444';
+      ctx.font = 'bold 28px sans-serif';
+      ctx.fillText('New ball in', w / 2, h / 2 - 20);
+      ctx.fillStyle = '#ffffff';
+      ctx.font = 'bold 80px sans-serif';
+      ctx.fillText(String(Math.ceil(s.respawnTimer)), w / 2, h / 2 + 60);
     }
   };
 
