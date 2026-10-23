@@ -537,7 +537,7 @@ function HeroBanner({ isLoggedIn, onLoginClick }: { isLoggedIn: boolean; onLogin
 
   return (
     <>
-      <section className="relative h-[75vh] sm:h-[80vh] overflow-hidden">
+      <section className="relative h-[82vh] sm:h-[85vh] overflow-hidden">
         {/* Background slides */}
         {slides.map((s, i) => (
           <div key={s.src} className={`absolute inset-0 transition-opacity duration-1000 ${i === slide ? 'opacity-100' : 'opacity-0'}`}>
