@@ -37,6 +37,7 @@ interface ScoreEntry {
 
 const GAMES = [
   { name: 'HockeyBeats', href: '/trening', image: '/images/game-hockeybeats.png', bg: '#1a1a2e', desc: 'Beat-synced slalom' },
+  { name: 'Target Smash', href: '/target-smash', image: '/images/game-targets.png', bg: '#d4d4d8', desc: 'Smash the bullseyes' },
   { name: 'Space Invaders', href: '/space', image: '/images/game-spaceinvaders.png', bg: '#0f172a', desc: 'Shoot the blocks' },
   { name: 'Jelly Stack', href: '/jelly-stack', image: '/images/game-jellystack.png', bg: '#2d1b3d', desc: 'Stack and balance' },
   { name: 'Orbit Hop', href: '/orbit-hop', image: '/images/game-orbithop.png', bg: '#1a2332', desc: 'Jump between planets' },
@@ -45,7 +46,6 @@ const GAMES = [
   { name: 'Magnet Flip', href: '/magnet-flip', image: '/images/game-magnetflip.png', bg: '#1a1025', desc: 'Bounce between platforms' },
   { name: 'Laser Maze', href: '/laser-maze', image: '/images/game-lasermaze.png', bg: '#0f1f0f', desc: 'Navigate the laser maze' },
   { name: 'Color Catch', href: '/color-catch', image: '/images/game-colorcatch.png', bg: '#111111', desc: 'Match colors, catch balls' },
-  { name: 'Target Smash', href: '/target-smash', image: '/images/game-targets.png', bg: '#d4d4d8', desc: 'Smash the bullseyes' },
   { name: 'Targets', href: '/terciky', image: '/images/game-targets.png', bg: '#1f2937', desc: 'Hit the targets' },
   { name: 'Figure 8', href: '/osmicky-terciky', image: '/images/game-figure8.png', bg: '#1a2e1a', desc: 'Figure eight drills' },
   { name: 'Classic 8s', href: '/osmicky', image: '/images/game-classic8s.png', bg: '#2e2a1a', desc: 'Classic eight pattern' },
@@ -341,7 +341,7 @@ export default function DashboardPage() {
 
         {/* All games grid */}
         <div className="mb-12">
-          <h2 className="text-xs font-bold uppercase tracking-[0.2em] text-white mb-5">All games</h2>
+          <h2 className="text-xl font-black text-white mb-5">All games</h2>
           <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-4">
             {GAMES.slice(1).map((game) => (
               <Link key={game.href} href={game.href} className="group block">
@@ -360,7 +360,7 @@ export default function DashboardPage() {
 
         {/* Music: Favourites + Recently played side by side */}
         <div className="mb-12">
-          <h2 className="text-xs font-bold uppercase tracking-[0.2em] text-white mb-5">Music</h2>
+          <h2 className="text-xl font-black text-white mb-5">Music</h2>
           <div className="grid lg:grid-cols-2 gap-6">
             {/* Favourites */}
             <div>
@@ -422,7 +422,7 @@ export default function DashboardPage() {
         {/* Leaderboard: Score left + Time Played right */}
         <div className="mb-8">
           <div className="flex items-center justify-between mb-5">
-            <h2 className="text-xs font-bold uppercase tracking-[0.2em] text-white">Leaderboard</h2>
+            <h2 className="text-xl font-black text-white">Leaderboard</h2>
             <Link href="/rebricek" className="text-xs text-emerald-400 font-medium hover:text-emerald-300 transition-colors">View all</Link>
           </div>
           <div className="grid lg:grid-cols-2 gap-6">
