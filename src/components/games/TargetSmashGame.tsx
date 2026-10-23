@@ -31,9 +31,9 @@ const TARGET_RADIUS = 25;
 const PERFECT_RADIUS = 10;
 
 const DIFFICULTY = {
-  easy:   { interval: 1.5, speed: 2, label: 'Easy' },
-  medium: { interval: 1.0, speed: 3, label: 'Medium' },
-  hard:   { interval: 0.7, speed: 4, label: 'Hard' },
+  easy:   { interval: 2.5, speed: 1.2, label: 'Easy' },
+  medium: { interval: 1.8, speed: 1.8, label: 'Medium' },
+  hard:   { interval: 1.2, speed: 2.5, label: 'Hard' },
 };
 
 interface Target {
@@ -279,26 +279,23 @@ export default function TargetSmashGame({
     const w = CANVAS_W;
     const h = CANVAS_H;
 
-    // Grey floor background
-    ctx.fillStyle = '#d4d4d8';
+    // Green field background
+    ctx.fillStyle = '#e8f5e9';
     ctx.fillRect(0, 0, w, h);
 
-    // Subtle grid lines
-    ctx.strokeStyle = '#c4c4c8';
-    ctx.lineWidth = 0.5;
-    const gridSize = 40;
-    for (let x = 0; x <= w; x += gridSize) {
-      ctx.beginPath();
-      ctx.moveTo(x, 0);
-      ctx.lineTo(x, h);
-      ctx.stroke();
+    // Field lines
+    ctx.strokeStyle = 'rgba(76, 175, 80, 0.15)';
+    ctx.lineWidth = 1;
+    // Vertical center
+    ctx.beginPath(); ctx.moveTo(w / 2, 0); ctx.lineTo(w / 2, h); ctx.stroke();
+    // Horizontal lines
+    for (let y = 0; y <= h; y += 100) {
+      ctx.beginPath(); ctx.moveTo(0, y); ctx.lineTo(w, y); ctx.stroke();
     }
-    for (let y = 0; y <= h; y += gridSize) {
-      ctx.beginPath();
-      ctx.moveTo(0, y);
-      ctx.lineTo(w, y);
-      ctx.stroke();
-    }
+    // Border
+    ctx.strokeStyle = 'rgba(76, 175, 80, 0.25)';
+    ctx.lineWidth = 2;
+    ctx.strokeRect(20, 20, w - 40, h - 40);
 
     // Draw targets
     for (const t of s.targets) {
@@ -377,7 +374,7 @@ export default function TargetSmashGame({
   };
 
   return (
-    <div className="relative w-full h-full flex items-center justify-center bg-[#d4d4d8]">
+    <div className="relative w-full h-full flex items-center justify-center bg-[#e8f5e9]">
       <canvas
         ref={canvasRef}
         width={CANVAS_W}
