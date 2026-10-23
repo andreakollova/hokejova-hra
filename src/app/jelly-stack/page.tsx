@@ -133,9 +133,16 @@ export default function JellyStackPage() {
           onBackToMenu={() => { tracker.stopTracking(); stopCamera(); pauseMusic(); setPhase('setup'); }}
           dropSide={dropSide}
         />
+        {/* Back to menu */}
+        <button
+          onClick={() => { tracker.stopTracking(); stopCamera(); pauseMusic(); setPhase('setup'); }}
+          className="absolute top-4 left-4 bg-white/80 backdrop-blur-sm rounded-lg p-2 text-gray-500 hover:text-gray-900 transition-colors shadow-sm z-10"
+        >
+          <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M15 19l-7-7 7-7" /></svg>
+        </button>
         {inputMode === 'demo' && (
           <div className="absolute bottom-4 left-4 bg-purple-500/20 border border-purple-500/30 rounded-2xl px-3 py-2">
-            <span className="text-xs text-purple-600">Demo - move mouse left or right to drop</span>
+            <span className="text-xs text-purple-600">Demo - move mouse far left or far right to drop</span>
           </div>
         )}
       </div>

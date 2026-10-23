@@ -260,15 +260,23 @@ export default function JellyStackGame({
         s.currentBlock.x = s.currentBlock.w / 2;
       }
 
-      // Drop: ball moves into current drop side (alternates left/right)
+      // Drop: ball moves into current drop side (far left or far right)
       const inDropZone = input.active && (
-        s.currentDropSide === 'left' ? input.x < 0.3 : input.x > 0.7
+        s.currentDropSide === 'left' ? input.x < 0.15 : input.x > 0.85
       );
       if (inDropZone && !s.wasLeft) {
         if (!s.dropAnim) {
           dropBlock(s);
-          // Alternate side for next drop
           s.currentDropSide = s.currentDropSide === 'left' ? 'right' : 'left';
+
+          // Every 5 stacks, reset: new full-width base block on top
+          if (s.totalStacks > 0 && s.totalStacks % 5 === 0) {
+            const topBlock = s.stack[s.stack.length - 1];
+            const resetY = topBlock.y - BLOCK_H;
+            s.stack.push({ x: CANVAS_W / 2, y: resetY, w: START_BLOCK_W, color: '#94a3b8' });
+            s.currentBlock.w = START_BLOCK_W;
+            s.cameraOffsetY = Math.max(0, STACK_BASE_Y - resetY - 200);
+          }
         }
       }
       s.wasLeft = inDropZone;
@@ -423,12 +431,12 @@ export default function JellyStackGame({
       ctx.globalAlpha = 1;
     }
 
-    // Drop zone indicator (alternates left/right)
+    // Drop zone indicator (far left / far right)
     if (s.started && !s.finished) {
       const isLeftDrop = s.currentDropSide === 'left';
-      const dzX = isLeftDrop ? 0 : w * 0.7;
-      const dzW = w * 0.3;
-      const dzLabelX = isLeftDrop ? dzW / 2 : w * 0.85;
+      const dzX = isLeftDrop ? 0 : w * 0.85;
+      const dzW = w * 0.15;
+      const dzLabelX = isLeftDrop ? dzW / 2 : w * 0.925;
       ctx.fillStyle = 'rgba(167, 139, 250, 0.06)';
       ctx.fillRect(dzX, 0, dzW, h);
       // Arrow indicator
