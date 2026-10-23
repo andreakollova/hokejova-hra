@@ -186,21 +186,79 @@ export default function Home() {
                 </div>
               </Link>
 
-              {/* Jelly Stack - coming soon */}
-              <div className="relative">
-                <div className="rounded-3xl overflow-hidden relative aspect-[3/4] bg-[#faf5eb] opacity-50 grayscale">
-                  <Image src="/images/game-jellystack.png" alt="Jelly Stack" fill className="object-cover" />
+              {/* Jelly Stack */}
+              <Link href="/jelly-stack" className="group block">
+                <div className="game-tile rounded-3xl overflow-hidden relative aspect-[3/4] bg-[#faf5eb]">
+                  <Image src="/images/game-jellystack.png" alt="Jelly Stack" fill className="object-cover group-hover:scale-105 transition-all duration-700" />
+                  <div className="absolute bottom-0 left-0 right-0 p-6 bg-gradient-to-t from-black/60 to-transparent">
+                    <div className="inline-flex items-center gap-2 bg-white/20 backdrop-blur-sm text-white text-xs font-bold px-4 py-2 rounded-full group-hover:bg-white/30 transition-all">
+                      <svg className="w-3.5 h-3.5" fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+                      Play now
+                    </div>
+                  </div>
                 </div>
-                <div className="absolute bottom-4 left-4 bg-gray-900/80 text-white text-[10px] font-bold uppercase tracking-wider px-3 py-1.5 rounded-full">Coming soon</div>
-              </div>
+              </Link>
 
-              {/* Orbit Hop - coming soon */}
-              <div className="relative">
-                <div className="rounded-3xl overflow-hidden relative aspect-[3/4] bg-[#ede9fe] opacity-50 grayscale">
-                  <Image src="/images/game-orbithop.png" alt="Orbit Hop" fill className="object-cover" />
+              {/* Orbit Hop */}
+              <Link href="/orbit-hop" className="group block">
+                <div className="game-tile rounded-3xl overflow-hidden relative aspect-[3/4] bg-[#ede9fe]">
+                  <Image src="/images/game-orbithop.png" alt="Orbit Hop" fill className="object-cover group-hover:scale-105 transition-all duration-700" />
+                  <div className="absolute bottom-0 left-0 right-0 p-6 bg-gradient-to-t from-black/60 to-transparent">
+                    <div className="inline-flex items-center gap-2 bg-white/20 backdrop-blur-sm text-white text-xs font-bold px-4 py-2 rounded-full group-hover:bg-white/30 transition-all">
+                      <svg className="w-3.5 h-3.5" fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+                      Play now
+                    </div>
+                  </div>
                 </div>
-                <div className="absolute bottom-4 left-4 bg-gray-900/80 text-white text-[10px] font-bold uppercase tracking-wider px-3 py-1.5 rounded-full">Coming soon</div>
-              </div>
+              </Link>
+            </div>
+
+            {/* New games row */}
+            <div className="grid grid-cols-2 lg:grid-cols-4 gap-5 mt-5">
+              <Link href="/neon-drift" className="group block">
+                <div className="game-tile rounded-3xl overflow-hidden relative aspect-[3/4] bg-[#0a1628]">
+                  <Image src="/images/game-neondrift.png" alt="Neon Drift" fill className="object-cover group-hover:scale-105 transition-all duration-700" />
+                  <div className="absolute bottom-0 left-0 right-0 p-6 bg-gradient-to-t from-black/60 to-transparent">
+                    <div className="inline-flex items-center gap-2 bg-white/20 backdrop-blur-sm text-white text-xs font-bold px-4 py-2 rounded-full group-hover:bg-white/30 transition-all">
+                      <svg className="w-3.5 h-3.5" fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+                      Play now
+                    </div>
+                  </div>
+                </div>
+              </Link>
+              <Link href="/brick-rush" className="group block">
+                <div className="game-tile rounded-3xl overflow-hidden relative aspect-[3/4] bg-[#111111]">
+                  <Image src="/images/game-brickrush.png" alt="Brick Rush" fill className="object-cover group-hover:scale-105 transition-all duration-700" />
+                  <div className="absolute bottom-0 left-0 right-0 p-6 bg-gradient-to-t from-black/60 to-transparent">
+                    <div className="inline-flex items-center gap-2 bg-white/20 backdrop-blur-sm text-white text-xs font-bold px-4 py-2 rounded-full group-hover:bg-white/30 transition-all">
+                      <svg className="w-3.5 h-3.5" fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+                      Play now
+                    </div>
+                  </div>
+                </div>
+              </Link>
+              <Link href="/magnet-flip" className="group block">
+                <div className="game-tile rounded-3xl overflow-hidden relative aspect-[3/4] bg-[#1a1025]">
+                  <Image src="/images/game-magnetflip.png" alt="Magnet Flip" fill className="object-cover group-hover:scale-105 transition-all duration-700" />
+                  <div className="absolute bottom-0 left-0 right-0 p-6 bg-gradient-to-t from-black/60 to-transparent">
+                    <div className="inline-flex items-center gap-2 bg-white/20 backdrop-blur-sm text-white text-xs font-bold px-4 py-2 rounded-full group-hover:bg-white/30 transition-all">
+                      <svg className="w-3.5 h-3.5" fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+                      Play now
+                    </div>
+                  </div>
+                </div>
+              </Link>
+              <Link href="/laser-maze" className="group block">
+                <div className="game-tile rounded-3xl overflow-hidden relative aspect-[3/4] bg-[#0f1f0f]">
+                  <Image src="/images/game-lasermaze.png" alt="Laser Maze" fill className="object-cover group-hover:scale-105 transition-all duration-700" />
+                  <div className="absolute bottom-0 left-0 right-0 p-6 bg-gradient-to-t from-black/60 to-transparent">
+                    <div className="inline-flex items-center gap-2 bg-white/20 backdrop-blur-sm text-white text-xs font-bold px-4 py-2 rounded-full group-hover:bg-white/30 transition-all">
+                      <svg className="w-3.5 h-3.5" fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+                      Play now
+                    </div>
+                  </div>
+                </div>
+              </Link>
             </div>
 
             {/* Other games with artwork */}
