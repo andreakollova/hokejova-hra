@@ -25,7 +25,7 @@ export interface OrbitHopResult {
   sessionId: string;
 }
 
-const CANVAS_W = 600;
+const CANVAS_W = 1200;
 const CANVAS_H = 800;
 
 const PLANET_COLORS = [
