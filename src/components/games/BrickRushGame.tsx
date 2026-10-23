@@ -199,13 +199,6 @@ export default function BrickRushGame({
 
       const input = getGameInput();
 
-      // Back to menu
-      const inExitZone = input.active && input.x > 0.85 && input.y < 0.15;
-      if (inExitZone) {
-        s.backTimer += delta;
-        if (s.backTimer >= 3 && onBackToMenu) { s.finished = true; onBackToMenu(); return; }
-      } else { s.backTimer = 0; }
-
       // Countdown
       if (!s.started) {
         s.countdown -= delta;
@@ -215,6 +208,13 @@ export default function BrickRushGame({
         requestAnimationFrame(loop);
         return;
       }
+
+      // Back to menu (only after game started)
+      const inExitZone = input.active && input.x > 0.85 && input.y < 0.15;
+      if (inExitZone) {
+        s.backTimer += delta;
+        if (s.backTimer >= 3 && onBackToMenu) { s.finished = true; onBackToMenu(); return; }
+      } else { s.backTimer = 0; }
 
       s.elapsedTime = (performance.now() - s.gameStartWallTime) / 1000;
 
