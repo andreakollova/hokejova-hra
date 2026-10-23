@@ -538,11 +538,11 @@ function HeroBanner({ isLoggedIn, onLoginClick }: { isLoggedIn: boolean; onLogin
 
   return (
     <>
-      <section className="relative h-screen overflow-hidden">
+      <section className="relative h-[65vh] sm:h-[70vh] overflow-hidden">
         {/* Background slides */}
         {slides.map((s, i) => (
           <div key={s.src} className={`absolute inset-0 transition-opacity duration-1000 ${i === slide ? 'opacity-100' : 'opacity-0'}`}>
-            <Image src={s.src} alt="" fill className="object-cover object-top" priority={i === 0} />
+            <Image src={s.src} alt="" fill className="object-cover object-center" priority={i === 0} />
           </div>
         ))}
         <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent" />
@@ -562,7 +562,7 @@ function HeroBanner({ isLoggedIn, onLoginClick }: { isLoggedIn: boolean; onLogin
         </button>
 
         {/* Content - bottom left */}
-        <div className="relative z-10 h-full flex flex-col justify-end max-w-7xl mx-auto px-6 sm:px-10 pb-20 sm:pb-24">
+        <div className="relative z-10 h-full flex flex-col justify-end max-w-7xl mx-auto px-6 sm:px-10 pb-10 sm:pb-14">
           <h1
             className="text-6xl sm:text-8xl lg:text-9xl leading-[0.85] tracking-tight transition-colors duration-500"
             style={{ fontFamily: "'GC Bustle Sans', sans-serif", color: slides[slide].dark ? '#111' : '#fff' }}
