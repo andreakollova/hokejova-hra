@@ -219,8 +219,8 @@ export default function NeonDriftGame({
       }
       s.ballX = Math.max(BALL_RADIUS, Math.min(CANVAS_W - BALL_RADIUS, s.ballX));
 
-      // Find track center at ball Y in world coords
-      const ballWorldY = s.scrollOffset + s.ballY;
+      // Find track center at ball Y in world coords (flipped)
+      const ballWorldY = s.scrollOffset + (CANVAS_H - s.ballY);
       const segIdx = Math.floor((ballWorldY - (s.segments.length > 0 ? s.segments[0].y : 0)) / SEGMENT_HEIGHT);
       let trackCenterAtBall = CANVAS_W / 2;
       if (segIdx >= 0 && segIdx < s.segments.length) {
@@ -250,7 +250,7 @@ export default function NeonDriftGame({
         s.cubeSpawnAccum = 0;
         if (Math.random() < config.cubeRate * 30) {
           // Place cube on track ahead
-          const aheadWorldY = s.scrollOffset + 50 + Math.random() * 100;
+          const aheadWorldY = s.scrollOffset + CANVAS_H - 50 - Math.random() * 200;
           const aheadSegIdx = Math.floor((aheadWorldY - (s.segments.length > 0 ? s.segments[0].y : 0)) / SEGMENT_HEIGHT);
           if (aheadSegIdx >= 0 && aheadSegIdx < s.segments.length) {
             const seg = s.segments[aheadSegIdx];
@@ -263,12 +263,11 @@ export default function NeonDriftGame({
       // Check cube collection
       for (const cube of s.cubes) {
         if (cube.collected) continue;
-        const cubeScreenY = cube.y - s.scrollOffset;
-        if (cubeScreenY > CANVAS_H + 50) continue;
-        if (cubeScreenY < -50) { cube.collected = true; continue; }
+        const cubeDrawY = CANVAS_H - (cube.y - s.scrollOffset);
+        if (cubeDrawY < -50 || cubeDrawY > CANVAS_H + 50) continue;
 
         const dx = s.ballX - cube.x;
-        const dy = s.ballY - cubeScreenY;
+        const dy = s.ballY - cubeDrawY;
         if (Math.sqrt(dx * dx + dy * dy) < BALL_RADIUS + 14) {
           cube.collected = true;
           s.cubesCollected++;
@@ -278,8 +277,12 @@ export default function NeonDriftGame({
       }
 
       // Clean old cubes
-      s.cubes = s.cubes.filter(c => !c.collected || (c.y - s.scrollOffset) > -100);
-      s.cubes = s.cubes.filter(c => (c.y - s.scrollOffset) > -200);
+      // Remove cubes that scrolled past (behind the ball = low worldY = high screenY = off bottom)
+      s.cubes = s.cubes.filter(c => {
+        if (c.collected) return false;
+        const drawY = CANVAS_H - (c.y - s.scrollOffset);
+        return drawY > -100 && drawY < CANVAS_H + 200;
+      });
 
       drawGame(ctx, s, 0);
       requestAnimationFrame(loop);
@@ -313,51 +316,51 @@ export default function NeonDriftGame({
     const halfW = config.trackWidth / 2;
     const glowHalfW = halfW + 8;
 
-    for (let screenY = 0; screenY < h; screenY += SEGMENT_HEIGHT) {
-      const worldY = s.scrollOffset + screenY;
+    for (let i = 0; i < Math.ceil(h / SEGMENT_HEIGHT) + 1; i++) {
+      const worldY = s.scrollOffset + i * SEGMENT_HEIGHT;
+      const drawY = h - (worldY - s.scrollOffset) - SEGMENT_HEIGHT; // flip: high worldY = top of screen
+      if (drawY > h || drawY < -SEGMENT_HEIGHT) continue;
       const segIdx = Math.floor((worldY - (s.segments.length > 0 ? s.segments[0].y : 0)) / SEGMENT_HEIGHT);
       if (segIdx < 0 || segIdx >= s.segments.length) continue;
       const seg = s.segments[segIdx];
 
       // Track glow edges (cyan)
       ctx.fillStyle = 'rgba(34, 211, 238, 0.15)';
-      ctx.fillRect(seg.centerX - glowHalfW, screenY, glowHalfW * 2, SEGMENT_HEIGHT);
+      ctx.fillRect(seg.centerX - glowHalfW, drawY, glowHalfW * 2, SEGMENT_HEIGHT);
 
       // Track body (dark blue)
       ctx.fillStyle = 'rgba(59, 130, 246, 0.12)';
-      ctx.fillRect(seg.centerX - halfW, screenY, halfW * 2, SEGMENT_HEIGHT);
+      ctx.fillRect(seg.centerX - halfW, drawY, halfW * 2, SEGMENT_HEIGHT);
 
       // Track edges (neon blue lines)
       ctx.fillStyle = '#3b82f6';
-      ctx.fillRect(seg.centerX - halfW - 2, screenY, 3, SEGMENT_HEIGHT);
-      ctx.fillRect(seg.centerX + halfW - 1, screenY, 3, SEGMENT_HEIGHT);
+      ctx.fillRect(seg.centerX - halfW - 2, drawY, 3, SEGMENT_HEIGHT);
+      ctx.fillRect(seg.centerX + halfW - 1, drawY, 3, SEGMENT_HEIGHT);
 
       // Center dashes
       if (Math.floor(worldY / 30) % 2 === 0) {
         ctx.fillStyle = 'rgba(59, 130, 246, 0.2)';
-        ctx.fillRect(seg.centerX - 1, screenY, 2, SEGMENT_HEIGHT);
+        ctx.fillRect(seg.centerX - 1, drawY, 2, SEGMENT_HEIGHT);
       }
     }
 
     // Draw cubes
     for (const cube of s.cubes) {
       if (cube.collected) continue;
-      const screenY = cube.y - s.scrollOffset;
-      if (screenY < -20 || screenY > h + 20) continue;
+      const drawCubeY = h - (cube.y - s.scrollOffset);
+      if (drawCubeY < -20 || drawCubeY > h + 20) continue;
 
       const cubeSize = 18;
       const pulse = Math.sin(s.pulseTime * 4) * 2;
 
-      // Glow
       ctx.shadowColor = '#f97316';
       ctx.shadowBlur = 12 + pulse;
       ctx.fillStyle = '#f97316';
-      ctx.fillRect(cube.x - cubeSize / 2, screenY - cubeSize / 2, cubeSize, cubeSize);
+      ctx.fillRect(cube.x - cubeSize / 2, drawCubeY - cubeSize / 2, cubeSize, cubeSize);
       ctx.shadowBlur = 0;
 
-      // Inner highlight
       ctx.fillStyle = '#fbbf24';
-      ctx.fillRect(cube.x - cubeSize / 4, screenY - cubeSize / 4, cubeSize / 2, cubeSize / 2);
+      ctx.fillRect(cube.x - cubeSize / 4, drawCubeY - cubeSize / 4, cubeSize / 2, cubeSize / 2);
     }
 
     // Draw ball
@@ -384,8 +387,8 @@ export default function NeonDriftGame({
     ctx.fillStyle = 'rgba(255, 255, 255, 0.6)';
     ctx.fill();
 
-    // Off-track warning glow at ball
-    const ballWorldY = s.scrollOffset + s.ballY;
+    // Off-track warning glow at ball (flipped Y: ball at bottom = high worldY)
+    const ballWorldY = s.scrollOffset + (CANVAS_H - s.ballY);
     const bSegIdx = Math.floor((ballWorldY - (s.segments.length > 0 ? s.segments[0].y : 0)) / SEGMENT_HEIGHT);
     let trackCX = CANVAS_W / 2;
     if (bSegIdx >= 0 && bSegIdx < s.segments.length) {

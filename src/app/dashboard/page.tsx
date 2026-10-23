@@ -215,7 +215,7 @@ export default function DashboardPage() {
           <Link href="/trening" className="group block">
             <div className="relative rounded-2xl overflow-hidden">
               <Image src="/images/hero-clean.png" alt="Hockey Beats" width={1942} height={809} className="w-full h-auto block group-hover:scale-[1.02] transition-transform duration-700" />
-              <div className="absolute bottom-6 left-6 sm:bottom-8 sm:left-[35%]">
+              <div className="absolute bottom-6 left-6 sm:bottom-8 sm:left-[20%]">
                 <div className="inline-flex items-center gap-2.5 bg-emerald-500 hover:bg-emerald-400 text-white text-base font-bold px-8 py-4 rounded-full transition-colors shadow-lg shadow-emerald-500/30">
                   <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
                   Play now
