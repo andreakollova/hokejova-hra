@@ -41,6 +41,7 @@ export default function TercikyPage() {
   const videoRef = useRef<HTMLVideoElement>(null);
   const gameContainerRef = useRef<HTMLDivElement>(null);
   const { startCamera, stopCamera } = useCamera();
+  const pendingStreamRef = useRef<MediaStream | null>(null);
 
   useEffect(() => {
     const saved = localStorage.getItem('ballTracker_calibration') || sessionStorage.getItem('ballTracker_calibration');
@@ -63,7 +64,7 @@ export default function TercikyPage() {
     [tracker]
   );
 
-  const startGame = useCallback(() => {
+  const startGame = useCallback(async () => {
     if (inputMode === 'demo') {
       tracker.startDemo();
       if (bgTrack) playMusic(bgTrack);
@@ -76,6 +77,17 @@ export default function TercikyPage() {
     }
     tracker.setCalibration(calibration);
     if (bgTrack) playMusic(bgTrack);
+    try {
+      const stream = await navigator.mediaDevices.getUserMedia({
+        video: { deviceId: { ideal: calibration.cameraDeviceId }, facingMode: 'environment', width: { ideal: 1280 }, height: { ideal: 720 } },
+      });
+      pendingStreamRef.current = stream;
+    } catch {
+      try {
+        const stream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: 'environment', width: { ideal: 1280 } } });
+        pendingStreamRef.current = stream;
+      } catch {}
+    }
     setGameKey(k => k + 1);
     setPhase('playing');
   }, [inputMode, calibration, tracker, bgTrack, spotify]);
@@ -97,8 +109,17 @@ export default function TercikyPage() {
       const video = videoRef.current;
       if (!video) return;
       tracker.stopTracking();
-      stopCamera();
       tracker.setCalibration(calibration);
+      const pending = pendingStreamRef.current;
+      if (pending) {
+        pendingStreamRef.current = null;
+        video.srcObject = pending;
+        video.setAttribute('playsinline', 'true');
+        await video.play();
+        await new Promise(r => setTimeout(r, 200));
+        if (!cancelled) tracker.startTracking(video);
+        return;
+      }
       let info = await startCamera(calibration.cameraDeviceId, video);
       if (!info) {
         try {

@@ -110,6 +110,7 @@ export default function TreningPage() {
   const videoRef = useRef<HTMLVideoElement>(null);
   const gameContainerRef = useRef<HTMLDivElement>(null);
   const { startCamera, stopCamera } = useCamera();
+  const pendingStreamRef = useRef<MediaStream | null>(null);
 
   // Wall time ref: set when Spotify actually starts playing (after await)
   const gameStartWallTimeRef = useRef(0);
@@ -249,8 +250,19 @@ export default function TreningPage() {
       return;
     }
 
-    // Switch to playing phase FIRST so <video> element renders
+    // Acquire camera stream from click handler (Safari requires user gesture for getUserMedia)
     tracker.setCalibration(calibration);
+    try {
+      const stream = await navigator.mediaDevices.getUserMedia({
+        video: { deviceId: { ideal: calibration.cameraDeviceId }, facingMode: 'environment', width: { ideal: 1280 }, height: { ideal: 720 }, frameRate: { ideal: 60, min: 30 } },
+      });
+      pendingStreamRef.current = stream;
+    } catch {
+      try {
+        const stream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: 'environment', width: { ideal: 1280 } } });
+        pendingStreamRef.current = stream;
+      } catch { /* effect will try again */ }
+    }
     setGameKey(k => k + 1);
     setPhase('playing');
   }, [inputMode, calibration, tracker, startCamera]);
@@ -273,47 +285,39 @@ export default function TreningPage() {
       if (cancelled) return;
 
       const video = videoRef.current;
-      if (!video) {
-        console.error('Video element not found');
+      if (!video) return;
+
+      tracker.stopTracking();
+      tracker.setCalibration(calibration);
+
+      // Use pre-acquired stream from click handler (Safari requires user gesture)
+      const pending = pendingStreamRef.current;
+      if (pending) {
+        pendingStreamRef.current = null;
+        video.srcObject = pending;
+        video.setAttribute('playsinline', 'true');
+        await video.play();
+        await new Promise(r => setTimeout(r, 200));
+        if (!cancelled) tracker.startTracking(video);
         return;
       }
 
-      // Always stop existing tracking before restarting
-      tracker.stopTracking();
-      stopCamera();
-
-      // Re-apply calibration to tracker
-      tracker.setCalibration(calibration);
-
-      // Try saved device, fallback to any camera
+      // Fallback: try startCamera (works on desktop)
       let info = await startCamera(calibration.cameraDeviceId, video);
       if (!info) {
-        // Device ID might have changed - try any camera (mobile-friendly)
         try {
           const stream = await navigator.mediaDevices.getUserMedia({
             video: { facingMode: 'environment', width: { ideal: 1280 }, height: { ideal: 720 } },
           });
           video.srcObject = stream;
           await video.play();
-          info = {
-            width: video.videoWidth,
-            height: video.videoHeight,
-            fps: 30,
-            deviceId: 'fallback',
-            label: 'Fallback camera',
-          };
-        } catch (e) {
-          console.error('Camera failed:', e);
-          return;
-        }
+          info = { width: video.videoWidth, height: video.videoHeight, fps: 30, deviceId: 'fallback', label: 'Fallback' };
+        } catch { return; }
       }
 
       if (!cancelled && info) {
-        // Small delay to let camera warm up
         await new Promise(r => setTimeout(r, 200));
-        if (!cancelled) {
-          tracker.startTracking(video);
-        }
+        if (!cancelled) tracker.startTracking(video);
       }
     };
 
