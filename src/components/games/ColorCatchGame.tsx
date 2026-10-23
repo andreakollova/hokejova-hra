@@ -48,6 +48,7 @@ interface FallingBall {
   y: number;
   caught: boolean;
   missed: boolean;
+  isCar: boolean;
 }
 
 interface CatchParticle {
@@ -166,7 +167,8 @@ export default function ColorCatchGame({
       if (s.spawnTimer <= 0) {
         const lane = Math.floor(Math.random() * 3);
         const colorIdx = Math.floor(Math.random() * 3);
-        s.balls.push({ lane, colorIdx, y: -30, caught: false, missed: false });
+        const isCar = Math.random() < 0.3; // ~30% chance for a car (bonus)
+        s.balls.push({ lane, colorIdx, y: -30, caught: false, missed: false, isCar });
         s.spawnTimer = cfg.spawnInterval * (0.8 + Math.random() * 0.4);
       }
 
@@ -183,7 +185,7 @@ export default function ColorCatchGame({
               // Correct color match
               ball.caught = true;
               s.caught++;
-              s.score += 100;
+              s.score += ball.isCar ? 250 : 100;
               s.flashTimer = 0.3;
               s.flashType = 'correct';
               playSound(880, 0.1);
@@ -328,34 +330,70 @@ export default function ColorCatchGame({
     ctx.closePath();
     ctx.fill();
 
-    // Falling cars
+    // Falling balls and cars
     const carW = 50;
     const carH = 62;
     for (const ball of s.balls) {
       if (ball.caught || ball.missed) continue;
       const bx = LANE_X[ball.lane];
-      const carImg = carImagesRef.current[ball.colorIdx];
-
-      // Trail
       const color = COLORS[ball.colorIdx];
-      ctx.fillStyle = color.fill + '30';
-      ctx.fillRect(bx - 4, ball.y - 50, 8, 50);
 
-      // Shadow
-      ctx.fillStyle = 'rgba(0,0,0,0.2)';
-      ctx.beginPath();
-      ctx.ellipse(bx + 3, ball.y + 3, carW / 2, carH / 2, 0, 0, Math.PI * 2);
-      ctx.fill();
+      if (ball.isCar) {
+        // F1 car (bonus item)
+        const carImg = carImagesRef.current[ball.colorIdx];
 
-      // Car image
-      if (carImg && carImg.complete) {
-        ctx.drawImage(carImg, bx - carW / 2, ball.y - carH / 2, carW, carH);
+        // Trail
+        ctx.fillStyle = color.fill + '30';
+        ctx.fillRect(bx - 4, ball.y - 50, 8, 50);
+
+        // Shadow
+        ctx.fillStyle = 'rgba(0,0,0,0.2)';
+        ctx.beginPath();
+        ctx.ellipse(bx + 3, ball.y + 3, carW / 2, carH / 2, 0, 0, Math.PI * 2);
+        ctx.fill();
+
+        // Car image
+        if (carImg && carImg.complete) {
+          ctx.drawImage(carImg, bx - carW / 2, ball.y - carH / 2, carW, carH);
+        } else {
+          ctx.fillStyle = color.fill;
+          ctx.beginPath();
+          ctx.arc(bx, ball.y, 22, 0, Math.PI * 2);
+          ctx.fill();
+        }
+
+        // Bonus glow
+        ctx.shadowColor = color.fill;
+        ctx.shadowBlur = 15;
+        ctx.strokeStyle = color.fill + '60';
+        ctx.lineWidth = 2;
+        ctx.beginPath();
+        ctx.ellipse(bx, ball.y, carW / 2 + 4, carH / 2 + 4, 0, 0, Math.PI * 2);
+        ctx.stroke();
+        ctx.shadowBlur = 0;
       } else {
-        // Fallback circle if image not loaded yet
+        // Regular ball
+        // Shadow
+        ctx.fillStyle = 'rgba(0,0,0,0.3)';
+        ctx.beginPath();
+        ctx.arc(bx + 3, ball.y + 3, 22, 0, Math.PI * 2);
+        ctx.fill();
+
+        // Ball
         ctx.fillStyle = color.fill;
         ctx.beginPath();
         ctx.arc(bx, ball.y, 22, 0, Math.PI * 2);
         ctx.fill();
+
+        // Highlight
+        ctx.fillStyle = color.light;
+        ctx.beginPath();
+        ctx.arc(bx - 6, ball.y - 6, 8, 0, Math.PI * 2);
+        ctx.fill();
+
+        // Trail
+        ctx.fillStyle = color.fill + '40';
+        ctx.fillRect(bx - 3, ball.y - 40, 6, 40);
       }
     }
 
