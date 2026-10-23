@@ -56,6 +56,10 @@ export function useSettings() {
     const s = loadSettings();
     setSettings(s);
     setLoaded(true);
+    // Sync username cookie for server-side API routes
+    if (s.loggedIn && s.username) {
+      document.cookie = `hb_username=${s.username}; path=/; max-age=${60 * 60 * 24 * 365}`;
+    }
   }, []);
 
   const persist = useCallback((next: UserSettings) => {
@@ -83,6 +87,8 @@ export function useSettings() {
           username: username.toLowerCase(),
         };
         persist(next);
+        // Set username cookie for server-side API routes (Spotify token persistence)
+        document.cookie = `hb_username=${username.toLowerCase()}; path=/; max-age=${60 * 60 * 24 * 365}`;
         return null; // success
       }
       return 'Nespravne meno alebo heslo';

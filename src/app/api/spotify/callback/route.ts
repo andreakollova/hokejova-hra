@@ -1,11 +1,17 @@
 import { NextRequest, NextResponse } from 'next/server';
+import { createClient } from '@supabase/supabase-js';
+
+const supabase = createClient(
+  process.env.NEXT_PUBLIC_SUPABASE_URL!,
+  process.env.SUPABASE_SERVICE_ROLE_KEY!
+);
 
 export async function GET(request: NextRequest) {
   const code = request.nextUrl.searchParams.get('code');
   const error = request.nextUrl.searchParams.get('error');
 
-  // Remember where user came from
   const returnTo = request.cookies.get('spotify_return_to')?.value || '/trening';
+  const username = request.cookies.get('hb_username')?.value;
 
   if (error || !code) {
     return NextResponse.redirect(new URL(`${returnTo}?spotify=error`, request.url));
@@ -34,7 +40,14 @@ export async function GET(request: NextRequest) {
 
   const tokens = await tokenRes.json();
 
-  // Redirect back to original page
+  // Save refresh token to Supabase profile so it persists across devices
+  if (username && tokens.refresh_token) {
+    await supabase
+      .from('profiles')
+      .upsert({ username, spotify_refresh_token: tokens.refresh_token }, { onConflict: 'username' })
+      .then(() => {});
+  }
+
   const response = NextResponse.redirect(new URL(`${returnTo}?spotify=connected`, request.url));
   response.cookies.delete('spotify_return_to');
 
@@ -50,11 +63,10 @@ export async function GET(request: NextRequest) {
     httpOnly: true,
     secure: process.env.NODE_ENV === 'production',
     sameSite: 'lax',
-    maxAge: 60 * 60 * 24 * 30, // 30 days
+    maxAge: 60 * 60 * 24 * 30,
     path: '/',
   });
 
-  // Also pass access token to client for Web Playback SDK (non-httpOnly)
   response.cookies.set('spotify_token_client', tokens.access_token, {
     httpOnly: false,
     secure: process.env.NODE_ENV === 'production',
