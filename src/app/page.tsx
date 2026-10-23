@@ -530,17 +530,15 @@ function HeroBanner({ isLoggedIn, onLoginClick }: { isLoggedIn: boolean; onLogin
         <div className="absolute inset-0">
           <Image src="/images/hero-main.png" alt="" fill className="object-cover object-center" priority />
           {/* Gradient overlays for text readability */}
-          <div className="absolute inset-0 bg-gradient-to-r from-white/95 via-white/70 to-transparent sm:from-white/90 sm:via-white/50" />
-          <div className="absolute inset-0 bg-gradient-to-b from-white/60 via-transparent to-white/40" />
         </div>
 
         {/* Content */}
         <div className="relative z-10 max-w-7xl mx-auto px-6 sm:px-10 pt-28 sm:pt-36 pb-16 min-h-screen flex flex-col justify-center">
           <div className="max-w-2xl">
-            <h1 className="text-5xl sm:text-7xl lg:text-8xl font-black text-gray-900 leading-[0.95] tracking-tight">
+            <h1 className="text-5xl sm:text-7xl lg:text-8xl font-black text-white leading-[0.95] tracking-tight drop-shadow-[0_2px_20px_rgba(0,0,0,0.3)]">
               heads up.<br />game on.
             </h1>
-            <p className="mt-6 text-lg sm:text-xl text-gray-600 max-w-md leading-relaxed">
+            <p className="mt-6 text-lg sm:text-xl text-white/80 max-w-md leading-relaxed drop-shadow-[0_1px_8px_rgba(0,0,0,0.3)]">
               Hockey meets music. Play to the beat.<br />Keep your head up.
             </p>
             <div className="mt-8 flex flex-wrap items-center gap-4">
@@ -566,7 +564,7 @@ function HeroBanner({ isLoggedIn, onLoginClick }: { isLoggedIn: boolean; onLogin
           {/* Bottom tagline */}
           <div className="absolute bottom-6 left-6 sm:left-10 flex items-center gap-2.5">
             <Image src="/images/hb-icon.png" alt="" width={28} height={28} className="h-6 w-auto" />
-            <span className="text-sm font-bold text-gray-500 tracking-tight">Hockey. Music. Play.</span>
+            <span className="text-sm font-bold text-white/60 tracking-tight">Hockey. Music. Play.</span>
           </div>
         </div>
       </section>
