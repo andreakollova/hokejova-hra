@@ -26,6 +26,7 @@ export default function OrbitHopPage() {
   const [calibration, setCalibration] = useState<CalibrationData | null>(null);
   const [bgTrack, setBgTrack] = useState<SpotifyTrack | null>(null);
   const [spotifyReturned, setSpotifyReturned] = useState(false);
+  const [hopSide, setHopSide] = useState<'left' | 'right'>('right');
 
   const tracker = useTracker(inputMode);
   const spotify = useSpotify();
@@ -130,6 +131,7 @@ export default function OrbitHopPage() {
           getGameInput={tracker.getGameInput}
           onFinish={(res) => { setResult(res); setPhase('result'); tracker.stopTracking(); stopCamera(); pauseMusic(); }}
           onBackToMenu={() => { tracker.stopTracking(); stopCamera(); pauseMusic(); setPhase('setup'); }}
+          hopSide={hopSide}
         />
         <button onClick={() => { tracker.stopTracking(); stopCamera(); pauseMusic(); setPhase('setup'); }}
           className="absolute top-4 left-4 bg-white/80 backdrop-blur-sm rounded-lg p-2 text-gray-500 hover:text-gray-900 transition-colors z-10">
@@ -193,6 +195,19 @@ export default function OrbitHopPage() {
               ))}
             </div>
           </div>
+          {/* Hop side */}
+          <div>
+            <label className="text-xs font-semibold text-white/30 uppercase tracking-wider mb-3 block">Hop direction</label>
+            <div className="flex gap-2.5">
+              <button onClick={() => setHopSide('left')} className={`flex-1 rounded-2xl py-3.5 border-2 transition-all text-sm font-semibold ${hopSide === 'left' ? 'border-purple-500 bg-purple-500/10 text-purple-400' : 'border-white/10 bg-white/5 text-white/50 hover:border-white/20'}`}>
+                Left
+              </button>
+              <button onClick={() => setHopSide('right')} className={`flex-1 rounded-2xl py-3.5 border-2 transition-all text-sm font-semibold ${hopSide === 'right' ? 'border-purple-500 bg-purple-500/10 text-purple-400' : 'border-white/10 bg-white/5 text-white/50 hover:border-white/20'}`}>
+                Right
+              </button>
+            </div>
+          </div>
+
           <BackgroundMusic spotify={spotify} onSelect={setBgTrack} selectedTrack={bgTrack} autoOpen={spotifyReturned} />
 
           <button onClick={startGame} className="w-full bg-purple-600 hover:bg-purple-500 text-white font-semibold text-lg py-4 rounded-full transition-all">
