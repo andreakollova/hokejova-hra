@@ -31,61 +31,33 @@ export default function Home() {
 
   return (
     <div className="min-h-screen bg-white flex flex-col">
-      {/* Hero top bar - hamburger left, socials right (visible only on hero) */}
-      <div className={`fixed top-0 left-0 right-0 z-50 px-4 sm:px-8 py-5 transition-all duration-500 ${
-        scrolled ? 'opacity-0 pointer-events-none' : 'opacity-100'
-      }`}>
-        <div className="flex justify-between items-center">
-          {/* Hamburger */}
-          <button className="text-gray-700 hover:text-gray-900 transition-colors p-1">
-            <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-              <path strokeLinecap="round" strokeLinejoin="round" d="M4 6h16M4 12h16M4 18h16" />
-            </svg>
-          </button>
-          {/* Socials */}
-          <div className="flex items-center gap-4">
-            <a href="#" className="text-gray-600 hover:text-gray-900 transition-colors">
-              <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z"/></svg>
-            </a>
-            <a href="#" className="text-gray-600 hover:text-gray-900 transition-colors">
-              <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M19.59 6.69a4.83 4.83 0 01-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 01-2.88 2.5 2.89 2.89 0 01-2.89-2.89 2.89 2.89 0 012.89-2.89c.28 0 .54.04.79.1V9.01a6.27 6.27 0 00-.79-.05 6.34 6.34 0 00-6.34 6.34 6.34 6.34 0 006.34 6.34 6.34 6.34 0 006.34-6.34V8.75a8.18 8.18 0 004.76 1.52V6.84a4.84 4.84 0 01-1-.15z"/></svg>
-            </a>
-            <a href="#" className="text-gray-600 hover:text-gray-900 transition-colors">
-              <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M23.498 6.186a3.016 3.016 0 00-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 00.502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 002.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 002.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg>
-            </a>
-          </div>
-        </div>
-      </div>
-
-      {/* Navigation - glass on scroll */}
+      {/* Navigation - always visible */}
       <header className={`fixed top-0 left-0 right-0 z-50 px-6 sm:px-10 transition-all duration-500 ${
         scrolled
-          ? 'py-3 bg-white/80 backdrop-blur-2xl shadow-[0_1px_20px_-6px_rgba(0,0,0,0.08)] border-b border-gray-100 translate-y-0 opacity-100'
-          : '-translate-y-full opacity-0 py-5'
+          ? 'py-3 bg-white/90 backdrop-blur-2xl shadow-[0_1px_20px_-6px_rgba(0,0,0,0.08)] border-b border-gray-100'
+          : 'py-5'
       }`}>
-        <div className="max-w-6xl mx-auto flex justify-between items-center">
-          <Link href="/">
-            <Image
-              src="/images/hb-logo.png"
-              alt="HockeyBeats"
-              width={160}
-              height={32}
-              className={`transition-all duration-300 ${scrolled ? 'h-7 w-auto' : 'h-8 w-auto'}`}
-            />
+        <div className="max-w-7xl mx-auto flex justify-between items-center">
+          <Link href="/" className="flex items-center gap-2">
+            <Image src="/images/hb-icon.png" alt="" width={32} height={32} className="h-7 w-auto" />
+            <span className="text-lg font-black text-[#6c3ce0] tracking-tight">hockey beats</span>
           </Link>
-          <nav className="flex items-center gap-5 sm:gap-7">
-            <a href="#how-it-works" className="text-sm font-medium tracking-tight text-gray-400 hover:text-gray-900 transition-colors hidden sm:block">How it works</a>
-            <a href="#sports" className="text-sm font-medium tracking-tight text-gray-400 hover:text-gray-900 transition-colors hidden sm:block">Sports</a>
-            <a href="#parents" className="text-sm font-medium tracking-tight text-gray-400 hover:text-gray-900 transition-colors hidden sm:block">For parents</a>
+          <nav className="flex items-center gap-6 sm:gap-8">
+            <a href="#how-it-works" className="text-sm font-medium text-gray-700 hover:text-gray-900 transition-colors hidden sm:block">How it works</a>
+            <a href="#games" className="text-sm font-medium text-gray-700 hover:text-gray-900 transition-colors hidden sm:block">Games</a>
+            <a href="#platforms" className="text-sm font-medium text-gray-700 hover:text-gray-900 transition-colors hidden sm:block">Play anywhere</a>
             {isLoggedIn ? (
               <>
                 {engLoaded && getStreak().currentStreak > 0 && (
                   <StreakBadge currentStreak={getStreak().currentStreak} frozen={getStreak().frozen} size="sm" />
                 )}
-                <Link href="/nastavenia" className="text-sm font-medium text-gray-500">{settings.username}</Link>
+                <Link href="/dashboard" className="text-sm font-medium text-gray-700">{settings.username}</Link>
               </>
             ) : (
-              <Link href="/trening" className="text-sm font-bold tracking-tight px-5 py-2.5 rounded-full border border-gray-300 text-gray-900 hover:bg-gray-900 hover:text-white hover:border-gray-900 transition-all duration-300">Start training</Link>
+              <div className="flex items-center gap-3">
+                <button onClick={() => setShowAuth(true)} className="text-sm font-medium text-gray-700 hover:text-gray-900 transition-colors hidden sm:block">Log in</button>
+                <button onClick={() => setShowAuth(true)} className="text-sm font-bold px-5 py-2.5 rounded-full bg-[#6c3ce0] text-white hover:bg-[#5a2dc5] transition-all duration-300">Sign up</button>
+              </div>
             )}
           </nav>
         </div>
@@ -192,6 +164,60 @@ export default function Home() {
             </div>
           </div>
         </section>
+        {/* Devices / Play anywhere section */}
+        <section id="platforms" className="relative overflow-hidden">
+          <div className="relative">
+            {/* Background image */}
+            <div className="absolute inset-0">
+              <Image src="/images/devices-bg.png" alt="" fill className="object-cover" />
+              <div className="absolute inset-0 bg-gradient-to-r from-[#0a1030]/95 via-[#0a1030]/80 to-transparent" />
+              <div className="absolute inset-0 bg-gradient-to-t from-[#0a1030]/60 to-transparent" />
+            </div>
+
+            <div className="relative z-10 max-w-7xl mx-auto px-6 sm:px-10 py-20 sm:py-28">
+              <div className="max-w-lg">
+                <h2 className="text-4xl sm:text-5xl font-black text-white leading-[0.95] tracking-tight">
+                  your game.<br />your screen.
+                </h2>
+                <p className="mt-5 text-base sm:text-lg text-white/60 leading-relaxed">
+                  Play in your browser after signing in, or download HockeyBeats for mobile, desktop, or TV.
+                </p>
+
+                <div className="mt-10 grid grid-cols-2 sm:grid-cols-4 gap-4">
+                  {[
+                    { icon: 'M12 21a9.004 9.004 0 008.716-6.747M12 21a9.004 9.004 0 01-8.716-6.747M12 21c2.485 0 4.5-4.03 4.5-9S14.485 3 12 3m0 18c-2.485 0-4.5-4.03-4.5-9S9.515 3 12 3m0 0a8.997 8.997 0 017.843 4.582M12 3a8.997 8.997 0 00-7.843 4.582m15.686 0A11.953 11.953 0 0112 10.5c-2.998 0-5.74-1.1-7.843-2.918m15.686 0A8.959 8.959 0 0121 12c0 .778-.099 1.533-.284 2.253m0 0A17.919 17.919 0 0112 16.5c-3.162 0-6.133-.815-8.716-2.247m0 0A9.015 9.015 0 013 12c0-1.605.42-3.113 1.157-4.418', label: 'Browser' },
+                    { icon: 'M10.5 1.5H8.25A2.25 2.25 0 006 3.75v16.5a2.25 2.25 0 002.25 2.25h7.5A2.25 2.25 0 0018 20.25V3.75a2.25 2.25 0 00-2.25-2.25H13.5m-3 0V3h3V1.5m-3 0h3m-3 18.75h3', label: 'Mobile' },
+                    { icon: 'M9 17.25v1.007a3 3 0 01-.879 2.122L7.5 21h9l-.621-.621A3 3 0 0115 18.257V17.25m6-12V15a2.25 2.25 0 01-2.25 2.25H5.25A2.25 2.25 0 013 15V5.25A2.25 2.25 0 015.25 3h13.5A2.25 2.25 0 0121 5.25z', label: 'Desktop' },
+                    { icon: 'M6 20.25h12m-7.5-3v3m3-3v3m-10.125-3h17.25c.621 0 1.125-.504 1.125-1.125V4.875c0-.621-.504-1.125-1.125-1.125H3.375c-.621 0-1.125.504-1.125 1.125v11.25c0 .621.504 1.125 1.125 1.125z', label: 'TV' },
+                  ].map((p) => (
+                    <div key={p.label} className="flex flex-col items-center gap-2 bg-white/5 border border-white/10 rounded-2xl py-4 px-3">
+                      <svg className="w-6 h-6 text-white/60" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}><path strokeLinecap="round" strokeLinejoin="round" d={p.icon} /></svg>
+                      <span className="text-xs font-bold text-white/80">{p.label}</span>
+                    </div>
+                  ))}
+                </div>
+
+                <div className="mt-8 flex flex-wrap gap-3">
+                  <button
+                    onClick={() => {
+                      if (isLoggedIn) { window.location.href = '/dashboard'; }
+                      else { setShowAuth(true); }
+                    }}
+                    className="bg-blue-600 hover:bg-blue-500 text-white font-bold text-sm px-6 py-3 rounded-full transition-all inline-flex items-center gap-2"
+                  >
+                    Log in to play
+                    <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}><path strokeLinecap="round" strokeLinejoin="round" d="M13 7l5 5m0 0l-5 5m5-5H6" /></svg>
+                  </button>
+                  <a href="#" className="bg-white/10 hover:bg-white/20 border border-white/20 text-white font-bold text-sm px-6 py-3 rounded-full transition-all inline-flex items-center gap-2">
+                    Get the app
+                    <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}><path strokeLinecap="round" strokeLinejoin="round" d="M13 7l5 5m0 0l-5 5m5-5H6" /></svg>
+                  </a>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
         {/* 3. Sports */}
         <section id="sports" className="py-24 sm:py-32">
           <div className="max-w-6xl mx-auto px-6 sm:px-10">
@@ -497,181 +523,55 @@ export default function Home() {
 
 // Hero Banner - fullscreen with background image, CTA and platform selector
 function HeroBanner({ isLoggedIn, onLoginClick }: { isLoggedIn: boolean; onLoginClick: () => void }) {
-  const [showPlatform, setShowPlatform] = useState(false);
-  const [selectedPlatform, setSelectedPlatform] = useState<'mobile' | 'desktop' | 'tv' | null>(null);
-
   return (
     <>
-      <section className="relative h-screen flex flex-col overflow-hidden bg-[#eef0f4]">
-        {/* Text overlay on top */}
-        <div className="relative z-20 flex flex-col items-center text-center pt-28 sm:pt-32 px-6">
-          <div className="flex items-center gap-5 mb-5">
-            <div className="flex items-center gap-1.5">
-              <span className="text-sm font-bold text-gray-900">4.8</span>
-              <div className="flex gap-0.5">
-                {[...Array(5)].map((_, i) => (
-                  <svg key={i} className="w-3 h-3 text-amber-400" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
-                ))}
-              </div>
-              <span className="text-xs text-gray-400">on App Store</span>
-            </div>
-            <div className="w-px h-4 bg-gray-200" />
-            <div className="flex items-center gap-1.5">
-              <span className="text-sm font-bold text-gray-900">4.8</span>
-              <div className="flex gap-0.5">
-                {[...Array(5)].map((_, i) => (
-                  <svg key={i} className="w-3 h-3 text-amber-400" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
-                ))}
-              </div>
-              <span className="text-xs text-gray-400">on Google Play</span>
-            </div>
-          </div>
-          <Image src="/images/hb-logo-stacked.png" alt="HockeyBeats" width={250} height={150} className="h-24 sm:h-36 w-auto" />
-          <p className="mt-4 text-sm sm:text-base text-gray-600 max-w-lg">
-            A game you want to play. Practice the coach will notice.
-          </p>
-          <div className="mt-8">
-            <button
-              onClick={() => {
-                if (isLoggedIn) { window.location.href = '/dashboard'; }
-                else { onLoginClick(); }
-              }}
-              className="bg-gray-900 text-white font-medium text-sm px-7 py-3 rounded-full hover:bg-gray-800 hover:shadow-lg active:scale-[0.97] transition-all duration-300 inline-flex items-center gap-2"
-            >
-              <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
-              Play now — it&apos;s free
-            </button>
-          </div>
-          <div className="mt-5 flex items-center gap-3">
-            <a href="#"><img src="/images/badge-appstore.svg" alt="Download on the App Store" className="h-9 hover:opacity-80 transition-opacity" /></a>
-            <a href="#"><img src="/images/badge-googleplay.svg" alt="Get it on Google Play" className="h-9 hover:opacity-80 transition-opacity" /></a>
-          </div>
+      <section className="relative min-h-screen overflow-hidden bg-white">
+        {/* Background image - full bleed */}
+        <div className="absolute inset-0">
+          <Image src="/images/hero-main.png" alt="" fill className="object-cover object-center" priority />
+          {/* Gradient overlays for text readability */}
+          <div className="absolute inset-0 bg-gradient-to-r from-white/95 via-white/70 to-transparent sm:from-white/90 sm:via-white/50" />
+          <div className="absolute inset-0 bg-gradient-to-b from-white/60 via-transparent to-white/40" />
         </div>
 
-        {/* Video fills bottom portion, bleeds behind text */}
-        <div className="relative flex-1 mt-[-2vh]">
-          <div className="absolute inset-0 overflow-hidden">
-            <iframe
-              src="https://www.youtube.com/embed/7mGtwXDxupA?autoplay=1&mute=1&loop=1&controls=0&showinfo=0&rel=0&playlist=7mGtwXDxupA&playsinline=1&modestbranding=1&iv_load_policy=3&disablekb=1"
-              className="absolute pointer-events-none border-0"
-              style={{ top: '30%', left: '50%', transform: 'translate(-50%, -50%)', width: 'max(100vw, 177.78vh)', height: 'max(100%, 56.25vw)' }}
-              allow="autoplay; encrypted-media"
-              title="Background"
-            />
+        {/* Content */}
+        <div className="relative z-10 max-w-7xl mx-auto px-6 sm:px-10 pt-28 sm:pt-36 pb-16 min-h-screen flex flex-col justify-center">
+          <div className="max-w-2xl">
+            <h1 className="text-5xl sm:text-7xl lg:text-8xl font-black text-gray-900 leading-[0.95] tracking-tight">
+              heads up.<br />game on.
+            </h1>
+            <p className="mt-6 text-lg sm:text-xl text-gray-600 max-w-md leading-relaxed">
+              Hockey meets music. Play to the beat.<br />Keep your head up.
+            </p>
+            <div className="mt-8 flex flex-wrap items-center gap-4">
+              <button
+                onClick={() => {
+                  if (isLoggedIn) { window.location.href = '/dashboard'; }
+                  else { onLoginClick(); }
+                }}
+                className="bg-[#6c3ce0] text-white font-bold text-base px-8 py-4 rounded-full hover:bg-[#5a2dc5] active:scale-[0.97] transition-all duration-300 inline-flex items-center gap-2 shadow-lg shadow-purple-500/25"
+              >
+                Create your account
+                <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}><path strokeLinecap="round" strokeLinejoin="round" d="M13 7l5 5m0 0l-5 5m5-5H6" /></svg>
+              </button>
+              <a
+                href="#how-it-works"
+                className="font-bold text-base px-8 py-4 rounded-full border-2 border-[#6c3ce0] text-[#6c3ce0] hover:bg-[#6c3ce0] hover:text-white transition-all duration-300"
+              >
+                See how it works
+              </a>
+            </div>
           </div>
-          {/* Fade from bg color into video */}
-          <div className="absolute inset-x-0 top-0 h-28 bg-gradient-to-b from-[#eef0f4] to-transparent z-10" />
 
-          {/* Sports bar bottom left */}
-          <div className="absolute bottom-4 left-6 z-10 flex items-center gap-3">
-            <span className="text-[10px] font-bold uppercase tracking-[0.15em] text-white/60">Ice Hockey</span>
-            <span className="text-white/30">/</span>
-            <span className="text-[10px] font-bold uppercase tracking-[0.15em] text-white/60">Field Hockey</span>
-            <span className="text-white/30">/</span>
-            <span className="text-[10px] font-bold uppercase tracking-[0.15em] text-white/60">Floorball</span>
+          {/* Bottom tagline */}
+          <div className="absolute bottom-6 left-6 sm:left-10 flex items-center gap-2.5">
+            <Image src="/images/hb-icon.png" alt="" width={28} height={28} className="h-6 w-auto" />
+            <span className="text-sm font-bold text-gray-500 tracking-tight">Hockey. Music. Play.</span>
           </div>
         </div>
       </section>
 
-      {/* Anchor for scroll */}
       <div id="more" />
-
-      {/* Platform selector modal */}
-      {showPlatform && (
-        <div className="fixed inset-0 bg-black/30 backdrop-blur-md flex items-center justify-center z-50 p-4">
-          <div className="bg-white rounded-3xl p-8 w-full max-w-md shadow-2xl shadow-gray-900/10 border border-gray-100">
-            <div className="flex justify-between items-center mb-6">
-              <h2 className="text-xl font-extrabold text-gray-900 tracking-tight">Choose your platform</h2>
-              <button onClick={() => { setShowPlatform(false); setSelectedPlatform(null); }} className="text-gray-400 hover:text-gray-600 text-xl">x</button>
-            </div>
-
-            {!selectedPlatform ? (
-              <div className="space-y-3">
-                <button onClick={() => setSelectedPlatform('mobile')} className="w-full flex items-center gap-4 rounded-2xl p-4 border-2 border-gray-100 hover:border-gray-300 hover:shadow-md transition-all duration-300 text-left">
-                  <div className="w-12 h-12 bg-gray-50 rounded-xl flex items-center justify-center">
-                    <svg className="w-6 h-6 text-gray-700" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}><rect x="6" y="2" width="12" height="20" rx="2" /><line x1="10" y1="18" x2="14" y2="18" /></svg>
-                  </div>
-                  <div>
-                    <div className="font-bold text-gray-900 tracking-tight">Mobile</div>
-                    <div className="text-xs text-gray-400">iPhone, Android</div>
-                  </div>
-                </button>
-                <button onClick={() => setSelectedPlatform('desktop')} className="w-full flex items-center gap-4 rounded-2xl p-4 border-2 border-gray-100 hover:border-gray-300 hover:shadow-md transition-all duration-300 text-left">
-                  <div className="w-12 h-12 bg-gray-50 rounded-xl flex items-center justify-center">
-                    <svg className="w-6 h-6 text-gray-700" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}><rect x="2" y="3" width="20" height="14" rx="2" /><line x1="8" y1="21" x2="16" y2="21" /><line x1="12" y1="17" x2="12" y2="21" /></svg>
-                  </div>
-                  <div>
-                    <div className="font-bold text-gray-900 tracking-tight">Desktop</div>
-                    <div className="text-xs text-gray-400">Mac, Windows, Linux</div>
-                  </div>
-                </button>
-                <button onClick={() => setSelectedPlatform('tv')} className="w-full flex items-center gap-4 rounded-2xl p-4 border-2 border-gray-100 hover:border-gray-300 hover:shadow-md transition-all duration-300 text-left">
-                  <div className="w-12 h-12 bg-gray-50 rounded-xl flex items-center justify-center">
-                    <svg className="w-6 h-6 text-gray-700" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}><rect x="2" y="4" width="20" height="13" rx="2" /><line x1="7" y1="21" x2="17" y2="21" /><line x1="9" y1="17" x2="9" y2="21" /><line x1="15" y1="17" x2="15" y2="21" /></svg>
-                  </div>
-                  <div>
-                    <div className="font-bold text-gray-900 tracking-tight">TV</div>
-                    <div className="text-xs text-gray-400">Samsung, LG, TCL, Hisense</div>
-                  </div>
-                </button>
-              </div>
-            ) : selectedPlatform === 'mobile' ? (
-              <div className="space-y-3">
-                <button onClick={() => setSelectedPlatform(null)} className="text-sm text-gray-400 hover:text-gray-600 mb-2 flex items-center gap-1">
-                  <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M15 19l-7-7 7-7" /></svg> Back
-                </button>
-                <h3 className="text-lg font-bold text-gray-900 mb-4">Mobile</h3>
-                <Link href="/trening" onClick={() => setShowPlatform(false)} className="w-full flex items-center gap-4 rounded-2xl p-4 bg-gray-50 hover:bg-gray-100 transition-colors">
-                  <svg className="w-8 h-8 text-gray-700" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}><circle cx="12" cy="12" r="10" /><path d="M8 12h8M12 8v8" /></svg>
-                  <div><div className="font-bold text-gray-900 tracking-tight">Browser</div><div className="text-xs text-gray-400">Play instantly — no download</div></div>
-                </Link>
-                <a href="#" className="w-full flex items-center gap-4 rounded-2xl p-4 bg-gray-50 hover:bg-gray-100 transition-colors">
-                  <svg className="w-8 h-8 text-gray-700" viewBox="0 0 24 24" fill="currentColor"><path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.8-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M13 3.5c.73-.83 1.94-1.46 2.94-1.5.13 1.17-.34 2.35-1.04 3.19-.69.85-1.83 1.51-2.95 1.42-.15-1.15.41-2.35 1.05-3.11z"/></svg>
-                  <div><div className="font-bold text-gray-900 tracking-tight">App Store</div><div className="text-xs text-gray-400">Download for iPhone</div></div>
-                </a>
-                <a href="#" className="w-full flex items-center gap-4 rounded-2xl p-4 bg-gray-50 hover:bg-gray-100 transition-colors">
-                  <svg className="w-8 h-8 text-gray-700" viewBox="0 0 24 24" fill="currentColor"><path d="M3.609 1.814L13.792 12 3.61 22.186a.996.996 0 01-.61-.92V2.734a1 1 0 01.609-.92zm10.89 10.893l2.302 2.302-10.937 6.333 8.635-8.635zm3.199-1.842l2.458 1.42c.544.317.544 1.114 0 1.43l-2.458 1.42-2.534-2.535 2.534-2.535zM5.864 3.458L16.8 9.79l-2.302 2.302-8.635-8.635z"/></svg>
-                  <div><div className="font-bold text-gray-900 tracking-tight">Google Play</div><div className="text-xs text-gray-400">Download for Android</div></div>
-                </a>
-              </div>
-            ) : selectedPlatform === 'desktop' ? (
-              <div className="space-y-3">
-                <button onClick={() => setSelectedPlatform(null)} className="text-sm text-gray-400 hover:text-gray-600 mb-2 flex items-center gap-1">
-                  <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M15 19l-7-7 7-7" /></svg> Back
-                </button>
-                <h3 className="text-lg font-bold text-gray-900 mb-4">Desktop</h3>
-                <Link href="/trening" onClick={() => setShowPlatform(false)} className="w-full flex items-center gap-4 rounded-2xl p-4 bg-gray-50 hover:bg-gray-100 transition-colors">
-                  <svg className="w-8 h-8 text-gray-700" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}><circle cx="12" cy="12" r="10" /><path d="M8 12h8M12 8v8" /></svg>
-                  <div><div className="font-bold text-gray-900 tracking-tight">Browser</div><div className="text-xs text-gray-400">Play instantly on any browser</div></div>
-                </Link>
-              </div>
-            ) : (
-              <div className="space-y-3">
-                <button onClick={() => setSelectedPlatform(null)} className="text-sm text-gray-400 hover:text-gray-600 mb-2 flex items-center gap-1">
-                  <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M15 19l-7-7 7-7" /></svg> Back
-                </button>
-                <h3 className="text-lg font-bold text-gray-900 mb-4">TV</h3>
-                <Link href="/trening" onClick={() => setShowPlatform(false)} className="w-full flex items-center gap-4 rounded-2xl p-4 bg-gray-50 hover:bg-gray-100 transition-colors">
-                  <svg className="w-8 h-8 text-gray-700" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}><circle cx="12" cy="12" r="10" /><path d="M8 12h8M12 8v8" /></svg>
-                  <div><div className="font-bold text-gray-900 tracking-tight">Browser via HDMI</div><div className="text-xs text-gray-400">Connect laptop to TV</div></div>
-                </Link>
-                <a href="#" className="w-full flex items-center gap-4 rounded-2xl p-4 bg-gray-50 hover:bg-gray-100 transition-colors">
-                  <div className="w-8 h-8 bg-gray-200 rounded-lg flex items-center justify-center text-xs font-bold text-gray-600">S</div>
-                  <div><div className="font-bold text-gray-900 tracking-tight">Samsung Tizen</div><div className="text-xs text-gray-400">Download from Samsung Store</div></div>
-                </a>
-                <a href="#" className="w-full flex items-center gap-4 rounded-2xl p-4 bg-gray-50 hover:bg-gray-100 transition-colors">
-                  <div className="w-8 h-8 bg-gray-200 rounded-lg flex items-center justify-center text-xs font-bold text-gray-600">LG</div>
-                  <div><div className="font-bold text-gray-900 tracking-tight">LG webOS</div><div className="text-xs text-gray-400">Download from LG Content Store</div></div>
-                </a>
-                <a href="#" className="w-full flex items-center gap-4 rounded-2xl p-4 bg-gray-50 hover:bg-gray-100 transition-colors">
-                  <div className="w-8 h-8 bg-gray-200 rounded-lg flex items-center justify-center text-xs font-bold text-gray-600">T</div>
-                  <div><div className="font-bold text-gray-900 tracking-tight">TCL &amp; Hisense</div><div className="text-xs text-gray-400">Download from app store</div></div>
-                </a>
-              </div>
-            )}
-          </div>
-        </div>
-      )}
     </>
   );
 }
