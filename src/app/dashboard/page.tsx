@@ -123,7 +123,7 @@ export default function DashboardPage() {
 
   const favorites = [...musicHistory].sort((a, b) => b.playCount - a.playCount).slice(0, 5);
   const favoriteIds = new Set(favorites.map(f => f.track.id));
-  const recent = [...musicHistory].filter(r => !favoriteIds.has(r.track.id)).sort((a, b) => b.lastPlayed - a.lastPlayed).slice(0, 3);
+  const recent = [...musicHistory].filter(r => !favoriteIds.has(r.track.id)).sort((a, b) => b.lastPlayed - a.lastPlayed).slice(0, 5);
 
   const myRank = topScores.findIndex(s => s.username === settings.username) + 1;
 
