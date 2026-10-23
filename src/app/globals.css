@@ -1,5 +1,13 @@
 @import "tailwindcss";
 
+@font-face {
+  font-family: 'GC Bustle Sans';
+  src: url('/fonts/GCBustleSans-ExtraBold.ttf') format('truetype');
+  font-weight: 800;
+  font-style: normal;
+  font-display: swap;
+}
+
 @theme inline {
   --color-background: #ffffff;
   --color-foreground: #111827;

@@ -525,9 +525,9 @@ export default function Home() {
 function HeroBanner({ isLoggedIn, onLoginClick }: { isLoggedIn: boolean; onLoginClick: () => void }) {
   const [slide, setSlide] = useState(0);
   const slides = [
-    { src: '/images/hero-main.png', logo: '/images/hb-logo-hero.png' },
-    { src: '/images/hero-slide2.png', logo: '/images/hb-logo-hero.png' },
-    { src: '/images/hero-slide3.png', logo: '/images/hb-logo-hero-dark.png' },
+    { src: '/images/hero-main.png', dark: false },
+    { src: '/images/hero-slide2.png', dark: false },
+    { src: '/images/hero-slide3.png', dark: true },
   ];
 
   // Auto-rotate every 6s
@@ -563,20 +563,27 @@ function HeroBanner({ isLoggedIn, onLoginClick }: { isLoggedIn: boolean; onLogin
 
         {/* Content - bottom left */}
         <div className="relative z-10 h-full flex flex-col justify-end max-w-7xl mx-auto px-6 sm:px-10 pb-20 sm:pb-24">
-          <Image src={slides[slide].logo} alt="hockey beats" width={600} height={250} className="h-28 sm:h-40 lg:h-52 w-auto transition-opacity duration-500" />
+          <h1
+            className="text-6xl sm:text-8xl lg:text-9xl leading-[0.85] tracking-tight transition-colors duration-500"
+            style={{ fontFamily: "'GC Bustle Sans', sans-serif", color: slides[slide].dark ? '#111' : '#fff' }}
+          >
+            hockey<br />beats
+          </h1>
           <div className="mt-6 flex flex-wrap items-center gap-4">
             <button
               onClick={() => {
                 if (isLoggedIn) { window.location.href = '/dashboard'; }
                 else { onLoginClick(); }
               }}
-              className="bg-white text-gray-900 font-bold text-base px-8 py-4 rounded-full hover:bg-gray-100 active:scale-[0.97] transition-all duration-300"
+              className={`font-bold text-base px-8 py-4 rounded-full active:scale-[0.97] transition-all duration-300 ${slides[slide].dark ? 'bg-gray-900 text-white hover:bg-gray-800' : 'bg-white text-gray-900 hover:bg-gray-100'}`}
+              style={{ fontFamily: "'GC Bustle Sans', sans-serif" }}
             >
               Play now
             </button>
             <a
               href="#how-it-works"
-              className="font-bold text-base text-white hover:text-white/80 transition-colors inline-flex items-center gap-1.5"
+              className={`font-bold text-base transition-colors inline-flex items-center gap-1.5 ${slides[slide].dark ? 'text-gray-900 hover:text-gray-700' : 'text-white hover:text-white/80'}`}
+              style={{ fontFamily: "'GC Bustle Sans', sans-serif" }}
             >
               Learn more
               <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}><path strokeLinecap="round" strokeLinejoin="round" d="M8.25 4.5l7.5 7.5-7.5 7.5" /></svg>
