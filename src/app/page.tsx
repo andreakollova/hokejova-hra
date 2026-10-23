@@ -521,13 +521,12 @@ export default function Home() {
 function HeroBanner({ isLoggedIn, onLoginClick }: { isLoggedIn: boolean; onLoginClick: () => void }) {
   return (
     <>
-      <section className="relative h-[88vh] sm:h-[90vh] overflow-hidden bg-[#e8eaf0]">
-        <div className="absolute inset-0">
-          <Image src="/images/hero-clean.png" alt="" fill className="object-cover object-center" priority />
-        </div>
-
-        {/* Content - left side, vertically centered */}
-        <div className="relative z-10 h-full flex flex-col justify-center max-w-7xl mx-auto px-6 sm:px-10">
+      <section className="relative overflow-hidden bg-[#e8eaf0] pt-20">
+        <div className="relative max-w-7xl mx-auto px-6 sm:px-10">
+          <div className="relative w-full rounded-3xl overflow-hidden">
+            <Image src="/images/hero-clean.png" alt="" width={1942} height={809} className="w-full h-auto block" priority />
+            {/* Content overlay - left side */}
+            <div className="absolute inset-0 flex flex-col justify-center px-8 sm:px-14">
           <div className="max-w-md">
             <h1
               className="text-5xl sm:text-6xl lg:text-7xl leading-[0.85] tracking-tight text-gray-900"
@@ -557,6 +556,7 @@ function HeroBanner({ isLoggedIn, onLoginClick }: { isLoggedIn: boolean; onLogin
                 Learn more
                 <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}><path strokeLinecap="round" strokeLinejoin="round" d="M8.25 4.5l7.5 7.5-7.5 7.5" /></svg>
               </a>
+            </div>
             </div>
           </div>
         </div>
