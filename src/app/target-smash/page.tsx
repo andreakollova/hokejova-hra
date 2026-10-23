@@ -158,7 +158,7 @@ export default function TargetSmashPage() {
           </div>
           <div className="flex gap-3">
             <button onClick={() => { setResult(null); setPhase('playing'); }} className="flex-1 bg-red-500 hover:bg-red-400 text-white font-medium py-3.5 rounded-full transition-all">Play again</button>
-            <Link href="/" className="flex-1 bg-white/50 hover:bg-white/70 text-gray-900 font-medium py-3.5 rounded-full transition-all text-center">Menu</Link>
+            <button onClick={() => { pauseMusic(); spotify.pause(); window.location.href = '/dashboard'; }} className="flex-1 bg-white/50 hover:bg-white/70 text-gray-900 font-medium py-3.5 rounded-full transition-all text-center">Menu</button>
           </div>
         </div>
       </div>

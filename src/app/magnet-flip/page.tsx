@@ -160,7 +160,7 @@ export default function MagnetFlipPage() {
           </div>
           <div className="flex gap-3">
             <button onClick={() => { setResult(null); setPhase('playing'); }} className="flex-1 bg-purple-500 hover:bg-purple-400 text-white font-medium py-3.5 rounded-full transition-all">Play again</button>
-            <Link href="/dashboard" className="flex-1 bg-white/10 hover:bg-white/20 text-white font-medium py-3.5 rounded-full transition-all text-center">Menu</Link>
+            <button onClick={() => { pauseMusic(); spotify.pause(); window.location.href = '/dashboard'; }} className="flex-1 bg-white/10 hover:bg-white/20 text-white font-medium py-3.5 rounded-full transition-all text-center">Menu</button>
           </div>
         </div>
       </div>
