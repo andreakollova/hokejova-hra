@@ -534,9 +534,7 @@ function HeroBanner({ isLoggedIn, onLoginClick }: { isLoggedIn: boolean; onLogin
 
         {/* Content - bottom left */}
         <div className="relative z-10 h-full flex flex-col justify-end max-w-7xl mx-auto px-6 sm:px-10 pb-20 sm:pb-24">
-          <h1 className="text-6xl sm:text-8xl lg:text-9xl font-black text-white leading-[0.9] tracking-tighter">
-            hockey<br />beats
-          </h1>
+          <Image src="/images/hb-logo-hero.png" alt="hockey beats" width={600} height={250} className="h-28 sm:h-40 lg:h-52 w-auto" />
           <div className="mt-6 flex flex-wrap items-center gap-4">
             <button
               onClick={() => {
