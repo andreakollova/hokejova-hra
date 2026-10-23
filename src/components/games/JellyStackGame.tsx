@@ -82,6 +82,7 @@ export default function JellyStackGame({
     lastDropX: -1,
     wasLeft: false,
     currentDropSide: 'left' as 'left' | 'right',
+    consecutiveMisses: 0,
   });
 
   const [hud, setHud] = useState({
@@ -138,13 +139,23 @@ export default function JellyStackGame({
       const overlapW = overlapRight - overlapLeft;
 
       if (overlapW <= 0) {
-        // Miss - no penalty, just skip this block
+        // Miss
         s.flashTimer = 0.5;
         s.flashType = 'miss';
+        s.consecutiveMisses++;
         playSound(150, 0.3, 'square');
-        // Trim fall animation for entire block
         s.trimFallAnim = { x: cur.x, y: top.y - BLOCK_H, w: cur.w, vy: 0, color: cur.color };
+
+        // After 5 consecutive misses, reset with new full-width base
+        if (s.consecutiveMisses >= 5) {
+          s.consecutiveMisses = 0;
+          const topBlock = s.stack[s.stack.length - 1];
+          const resetY = topBlock.y - BLOCK_H;
+          s.stack.push({ x: CANVAS_W / 2, y: resetY, w: START_BLOCK_W, color: '#94a3b8' });
+          s.cameraOffsetY = Math.max(0, STACK_BASE_Y - resetY - 200);
+        }
       } else {
+        s.consecutiveMisses = 0; // Reset on any hit
         const overlap = overlapW / top.w;
         const newX = overlapLeft + overlapW / 2;
         const newY = top.y - BLOCK_H;
@@ -260,9 +271,9 @@ export default function JellyStackGame({
         s.currentBlock.x = s.currentBlock.w / 2;
       }
 
-      // Drop: ball moves into current drop side (far left or far right)
+      // Drop: ball moves into current drop side (wide zones at edges)
       const inDropZone = input.active && (
-        s.currentDropSide === 'left' ? input.x < 0.15 : input.x > 0.85
+        s.currentDropSide === 'left' ? input.x < 0.25 : input.x > 0.75
       );
       if (inDropZone && !s.wasLeft) {
         if (!s.dropAnim) {
@@ -431,12 +442,12 @@ export default function JellyStackGame({
       ctx.globalAlpha = 1;
     }
 
-    // Drop zone indicator (far left / far right)
+    // Drop zone indicator (wide zones at edges)
     if (s.started && !s.finished) {
       const isLeftDrop = s.currentDropSide === 'left';
-      const dzX = isLeftDrop ? 0 : w * 0.85;
-      const dzW = w * 0.15;
-      const dzLabelX = isLeftDrop ? dzW / 2 : w * 0.925;
+      const dzX = isLeftDrop ? 0 : w * 0.75;
+      const dzW = w * 0.25;
+      const dzLabelX = isLeftDrop ? dzW / 2 : w * 0.875;
       ctx.fillStyle = 'rgba(167, 139, 250, 0.06)';
       ctx.fillRect(dzX, 0, dzW, h);
       // Arrow indicator

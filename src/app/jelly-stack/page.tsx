@@ -105,13 +105,13 @@ export default function JellyStackPage() {
       <div className="min-h-screen bg-[#faf5eb] flex items-center justify-center p-6">
         <div className="max-w-md w-full space-y-8">
           <div className="text-center">
-            <h1 className="text-3xl font-extrabold text-gray-900">{result.lives > 0 ? 'Stack Complete' : 'Game Over'}</h1>
+            <h1 className="text-3xl font-extrabold text-gray-900">Stack Complete</h1>
           </div>
           <div className="grid grid-cols-2 gap-3">
             <div className="bg-white rounded-2xl p-4 shadow-sm border border-gray-100"><div className="text-2xl font-bold text-purple-500 tabular-nums">{result.score}</div><div className="text-xs text-gray-400 mt-1">Score</div></div>
             <div className="bg-white rounded-2xl p-4 shadow-sm border border-gray-100"><div className="text-2xl font-bold text-gray-900 tabular-nums">{result.totalStacks}</div><div className="text-xs text-gray-400 mt-1">Stacks</div></div>
             <div className="bg-white rounded-2xl p-4 shadow-sm border border-gray-100"><div className="text-2xl font-bold text-gray-900 tabular-nums">{result.perfectStacks}</div><div className="text-xs text-gray-400 mt-1">Perfect</div></div>
-            <div className="bg-white rounded-2xl p-4 shadow-sm border border-gray-100"><div className="text-2xl font-bold text-red-400 tabular-nums">{'❤'.repeat(result.lives)}{result.lives === 0 && '💀'}</div><div className="text-xs text-gray-400 mt-1">Lives</div></div>
+            <div className="bg-white rounded-2xl p-4 shadow-sm border border-gray-100"><div className="text-2xl font-bold text-purple-500 tabular-nums">{result.totalStacks > 0 ? Math.round((result.score / (result.totalStacks * 100)) * 100) : 0}%</div><div className="text-xs text-gray-400 mt-1">Accuracy</div></div>
           </div>
           <div className="flex gap-3">
             <button onClick={() => { setResult(null); setPhase('playing'); }} className="flex-1 bg-purple-500 hover:bg-purple-400 text-white font-medium py-3.5 rounded-full transition-all">Play again</button>
