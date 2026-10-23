@@ -91,7 +91,8 @@ export default function DashboardPage() {
   const avatar = engLoaded ? getAvatar() : null;
 
   const favorites = [...musicHistory].sort((a, b) => b.playCount - a.playCount).slice(0, 5);
-  const recent = [...musicHistory].sort((a, b) => b.lastPlayed - a.lastPlayed).slice(0, 3);
+  const favoriteIds = new Set(favorites.map(f => f.track.id));
+  const recent = [...musicHistory].filter(r => !favoriteIds.has(r.track.id)).sort((a, b) => b.lastPlayed - a.lastPlayed).slice(0, 3);
 
   const myRank = topScores.findIndex(s => s.username === settings.username) + 1;
 
@@ -245,7 +246,7 @@ export default function DashboardPage() {
 
             {recent.length > 0 && (
               <div>
-                <h3 className="text-sm font-bold text-white/60 mb-3">Recent</h3>
+                <h3 className="text-sm font-bold text-white/60 mb-3">Recently played</h3>
                 <div className="space-y-2">
                   {recent.filter(r => !favorites.find(f => f.track.id === r.track.id)).map((rec) => (
                     <button key={rec.track.id} onClick={() => handleSongClick({ name: rec.track.name, artist: rec.track.artists, id: rec.track.id, albumArt: rec.track.albumArt })}
@@ -320,7 +321,7 @@ export default function DashboardPage() {
                     { rank: 1, name: 'matej_k', score: 2840, song: 'Blinding Lights', acc: 96 },
                     { rank: 2, name: 'zuzka99', score: 2510, song: 'Levitating', acc: 91 },
                     { rank: 3, name: 'hockeyboy', score: 2280, song: 'Flowers', acc: 88 },
-                    { rank: 4, name: settings.username, score: 1950, song: 'Anti-Hero', acc: 85 },
+                    { rank: 4, name: settings.username, score: 1950, song: favorites.length > 0 ? favorites[0].track.name : 'Slalom', acc: 85 },
                     { rank: 5, name: 'petra_h', score: 1720, song: 'Unholy', acc: 82 },
                   ].map((entry) => {
                     const isMe = entry.name === settings.username;
