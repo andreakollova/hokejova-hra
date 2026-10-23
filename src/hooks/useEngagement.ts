@@ -150,7 +150,9 @@ export function useEngagement() {
       gameType: string;
     }): XPBreakdown => {
       const today = getToday();
-      const next = { ...data, streak: { ...data.streak }, xp: { ...data.xp }, avatar: { ...data.avatar } };
+      // Read fresh from localStorage to avoid stale closure data
+      const fresh = loadEngagement();
+      const next = { ...fresh, streak: { ...fresh.streak }, xp: { ...fresh.xp }, avatar: { ...fresh.avatar } };
 
       // --- Streak logic ---
       const wasPlayedToday = next.streak.lastPlayDate === today;
