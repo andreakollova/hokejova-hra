@@ -31,6 +31,7 @@ interface EngagementData {
   personalBest: Record<string, number>; // game_type -> best score
   totalGamesPlayed: number;
   totalMinutesPlayed: number;
+  totalSecondsPlayed: number;
 }
 
 export interface XPBreakdown {
@@ -61,6 +62,7 @@ const defaultEngagement: EngagementData = {
   personalBest: {},
   totalGamesPlayed: 0,
   totalMinutesPlayed: 0,
+  totalSecondsPlayed: 0,
 };
 
 // --- Helpers ---
@@ -218,7 +220,8 @@ export function useEngagement() {
 
       next.xp.totalXP = (next.xp.totalXP || 0) + breakdown.total;
       next.totalGamesPlayed = (next.totalGamesPlayed || 0) + 1;
-      next.totalMinutesPlayed = (next.totalMinutesPlayed || 0) + Math.round(opts.durationSeconds / 60);
+      next.totalSecondsPlayed = (next.totalSecondsPlayed || 0) + opts.durationSeconds;
+      next.totalMinutesPlayed = Math.floor((next.totalSecondsPlayed || 0) / 60);
 
       persist(next);
       return breakdown;

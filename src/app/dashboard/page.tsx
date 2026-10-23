@@ -459,32 +459,41 @@ export default function DashboardPage() {
             <div>
               <h3 className="text-sm font-bold text-white/60 mb-3">Time played</h3>
               <div className="space-y-2">
-                {[
-                  { name: 'hockeyboy', mins: 847 },
-                  { name: 'matej_k', mins: 612 },
-                  { name: 'zuzka99', mins: 534 },
-                  { name: settings.username, mins: engLoaded ? Math.max(engData.totalMinutesPlayed || 0, 1) : 215 },
-                  { name: 'petra_h', mins: 389 },
-                ].sort((a, b) => b.mins - a.mins).map((entry, idx) => {
-                  const isMe = entry.name === settings.username;
-                  const h = Math.floor(entry.mins / 60);
-                  const m = entry.mins % 60;
-                  const timeStr = h > 0 ? `${h}h ${m}m` : `${m}m`;
-                  return (
-                    <div key={entry.name} className={`flex items-center gap-3 rounded-2xl p-3 ${isMe ? 'bg-emerald-500/10 border border-emerald-500/20' : 'bg-white/5 border border-white/5'}`}>
-                      <div className={`w-7 h-7 rounded-full flex items-center justify-center text-xs font-black ${
-                        idx === 0 ? 'bg-amber-400/20 text-amber-400' : idx === 1 ? 'bg-white/10 text-white/60' : idx === 2 ? 'bg-orange-400/20 text-orange-400' : 'bg-white/5 text-white/30'
-                      }`}>{idx + 1}</div>
-                      <div className="flex-1 min-w-0">
-                        <div className="text-sm font-semibold truncate">
-                          {entry.name} {isMe && <span className="text-emerald-400 text-xs">(you)</span>}
+                {(() => {
+                  const mySecs = engLoaded ? (engData.totalSecondsPlayed || (engData.totalMinutesPlayed || 0) * 60 || 0) : 0;
+                  const formatSecs = (secs: number) => {
+                    const hrs = Math.floor(secs / 3600);
+                    const mins = Math.floor((secs % 3600) / 60);
+                    const s = secs % 60;
+                    if (hrs > 0) return `${hrs}h ${mins}m ${s}s`;
+                    if (mins > 0) return `${mins}m ${s}s`;
+                    return `${s}s`;
+                  };
+                  const entries = [
+                    { name: 'hockeyboy', secs: 847 * 60 + 23 },
+                    { name: 'matej_k', secs: 612 * 60 + 45 },
+                    { name: 'zuzka99', secs: 534 * 60 + 12 },
+                    { name: settings.username, secs: mySecs },
+                    { name: 'petra_h', secs: 389 * 60 + 8 },
+                  ].sort((a, b) => b.secs - a.secs);
+                  return entries.map((entry, idx) => {
+                    const isMe = entry.name === settings.username;
+                    return (
+                      <div key={entry.name} className={`flex items-center gap-3 rounded-2xl p-3 ${isMe ? 'bg-emerald-500/10 border border-emerald-500/20' : 'bg-white/5 border border-white/5'}`}>
+                        <div className={`w-7 h-7 rounded-full flex items-center justify-center text-xs font-black ${
+                          idx === 0 ? 'bg-amber-400/20 text-amber-400' : idx === 1 ? 'bg-white/10 text-white/60' : idx === 2 ? 'bg-orange-400/20 text-orange-400' : 'bg-white/5 text-white/30'
+                        }`}>{idx + 1}</div>
+                        <div className="flex-1 min-w-0">
+                          <div className="text-sm font-semibold truncate">
+                            {entry.name} {isMe && <span className="text-emerald-400 text-xs">(you)</span>}
+                          </div>
+                          <div className="text-xs text-white/30">{formatSecs(entry.secs)} of practice</div>
                         </div>
-                        <div className="text-xs text-white/30">{entry.mins >= 60 ? `${Math.floor(entry.mins / 60)} hours` : `${entry.mins} minutes`} of practice</div>
+                        <div className="text-lg font-black tabular-nums">{formatSecs(entry.secs)}</div>
                       </div>
-                      <div className="text-lg font-black tabular-nums">{timeStr}</div>
-                    </div>
-                  );
-                })}
+                    );
+                  });
+                })()}
               </div>
             </div>
           </div>
