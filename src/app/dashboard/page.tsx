@@ -36,8 +36,8 @@ interface ScoreEntry {
 }
 
 const GAMES = [
-  { name: 'HockeyBeats', href: '/trening', image: '/images/game-hockeybeats.png', bg: '#1a1a2e', desc: 'Beat-synced slalom' },
-  { name: 'Target Smash', href: '/target-smash', image: '/images/game-targets.png', bg: '#d4d4d8', desc: 'Smash the bullseyes' },
+  { name: 'HockeyBeats', href: '/trening', image: '/images/game-hockeybeats.png', bg: '#1a1a2e', desc: 'Beat-synced slalom', clean: false },
+  { name: 'Target Smash', href: '/target-smash', image: '/images/game-targets.png', bg: '#1a1a2e', desc: 'Smash the bullseyes', clean: true },
   { name: 'Space Invaders', href: '/space', image: '/images/game-spaceinvaders.png', bg: '#0f172a', desc: 'Shoot the blocks' },
   { name: 'Jelly Stack', href: '/jelly-stack', image: '/images/game-jellystack.png', bg: '#2d1b3d', desc: 'Stack and balance' },
   { name: 'Orbit Hop', href: '/orbit-hop', image: '/images/game-orbithop.png', bg: '#1a2332', desc: 'Jump between planets' },
@@ -346,8 +346,8 @@ export default function DashboardPage() {
             {GAMES.slice(1).map((game) => (
               <Link key={game.href} href={game.href} className="group block">
                 <div className="rounded-2xl overflow-hidden relative aspect-[3/4]" style={{ background: game.bg }}>
-                  <Image src={game.image} alt={game.name} fill className="object-cover opacity-70 group-hover:opacity-100 group-hover:scale-105 transition-all duration-500" />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent" />
+                  <Image src={game.image} alt={game.name} fill className={`object-cover group-hover:scale-105 transition-all duration-500 ${game.clean ? 'opacity-100' : 'opacity-70 group-hover:opacity-100'}`} />
+                  {!game.clean && <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent" />}
                   <div className="absolute bottom-0 left-0 right-0 p-4">
                     <div className="text-sm font-bold">{game.name}</div>
                     <div className="text-[10px] text-white/80 mt-0.5">{game.desc}</div>

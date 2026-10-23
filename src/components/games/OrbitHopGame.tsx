@@ -315,7 +315,7 @@ export default function OrbitHopGame({
 
       // Hop: ball moves to chosen side (always same direction)
       const inHopZone = input.active && (
-        hopSide === 'right' ? input.x > 0.95 : input.x < 0.05
+        hopSide === 'right' ? input.x > 0.78 : input.x < 0.22
       );
       if (inHopZone && !s.wasRight && !s.hopAnim && !s.missAnim) {
         hop(s);
@@ -473,18 +473,26 @@ export default function OrbitHopGame({
     // Hop zone indicator (alternates left/right)
     if (s.started && !s.finished) {
       const isRight = hopSide === 'right';
-      const hzX = isRight ? w * 0.92 : 0;
-      const hzW = w * 0.08;
-      const hzLabelX = isRight ? w * 0.96 : w * 0.04;
+      const hzW = w * 0.22;
+      const hzX = isRight ? w - hzW : 0;
+      const hzLabelX = isRight ? w - hzW / 2 : hzW / 2;
       ctx.fillStyle = 'rgba(139, 92, 246, 0.06)';
       ctx.fillRect(hzX, 0, hzW, h);
-      ctx.fillStyle = 'rgba(139, 92, 246, 0.2)';
-      ctx.font = 'bold 32px sans-serif';
+      // Edge line
+      ctx.strokeStyle = 'rgba(139, 92, 246, 0.12)';
+      ctx.lineWidth = 2;
+      ctx.setLineDash([8, 8]);
+      const edgeX = isRight ? w - hzW : hzW;
+      ctx.beginPath(); ctx.moveTo(edgeX, 0); ctx.lineTo(edgeX, h); ctx.stroke();
+      ctx.setLineDash([]);
+      // Arrow and label
+      ctx.fillStyle = 'rgba(139, 92, 246, 0.25)';
+      ctx.font = 'bold 40px sans-serif';
       ctx.textAlign = 'center';
       ctx.fillText(isRight ? '\u2192' : '\u2190', hzLabelX, h / 2);
-      ctx.fillStyle = 'rgba(139, 92, 246, 0.25)';
-      ctx.font = 'bold 12px sans-serif';
-      ctx.fillText('HOP', hzLabelX, h / 2 + 25);
+      ctx.fillStyle = 'rgba(139, 92, 246, 0.3)';
+      ctx.font = 'bold 14px sans-serif';
+      ctx.fillText('HOP', hzLabelX, h / 2 + 30);
     }
 
     // Flash feedback text
