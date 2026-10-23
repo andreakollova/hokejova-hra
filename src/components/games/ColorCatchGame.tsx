@@ -26,84 +26,63 @@ export interface ColorCatchResult {
 const CANVAS_W = 1200;
 const CANVAS_H = 800;
 
-const BUCKET_Y = 700;
-const BUCKET_W = 80;
-const BUCKET_H = 60;
-const BUCKET_R = 12;
-const BALL_RADIUS = 20;
-
-const BUCKETS = [
-  { x: 300, color: '#3b82f6', label: 'Blue' },
-  { x: 600, color: '#ef4444', label: 'Red' },
-  { x: 900, color: '#eab308', label: 'Yellow' },
+const COLORS = [
+  { name: 'blue', fill: '#3b82f6', light: '#93c5fd', dark: '#1d4ed8' },
+  { name: 'red', fill: '#ef4444', light: '#fca5a5', dark: '#b91c1c' },
+  { name: 'yellow', fill: '#eab308', light: '#fde047', dark: '#a16207' },
 ];
 
-const BALL_COLORS = ['#3b82f6', '#ef4444', '#eab308'];
+const LANE_X = [CANVAS_W * 0.25, CANVAS_W * 0.5, CANVAS_W * 0.75];
+const CATCHER_Y = CANVAS_H - 100;
+const CATCHER_R = 45;
 
 const DIFFICULTY = {
-  easy:   { speed: 2, interval: 1.5 },
-  medium: { speed: 3.5, interval: 1.0 },
-  hard:   { speed: 5, interval: 0.6 },
+  easy:   { fallSpeed: 2.5, spawnInterval: 1.8 },
+  medium: { fallSpeed: 4, spawnInterval: 1.2 },
+  hard:   { fallSpeed: 5.5, spawnInterval: 0.7 },
 };
 
 interface FallingBall {
-  x: number;
+  lane: number;
+  colorIdx: number;
   y: number;
-  color: string;
-  id: number;
-  active: boolean;
+  caught: boolean;
+  missed: boolean;
 }
 
-interface Particle {
-  x: number;
-  y: number;
-  vx: number;
-  vy: number;
-  life: number;
-  maxLife: number;
-  color: string;
-  size: number;
+interface CatchParticle {
+  x: number; y: number; vx: number; vy: number; life: number; color: string;
 }
 
 export default function ColorCatchGame({
-  duration,
-  difficulty,
-  inputMode,
-  getGameInput,
-  onFinish,
-  onBackToMenu,
+  duration, difficulty, inputMode, getGameInput, onFinish, onBackToMenu,
 }: ColorCatchGameProps) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
-  const config = DIFFICULTY[difficulty];
+  const cfg = DIFFICULTY[difficulty];
   const sessionIdRef = useRef(crypto.randomUUID());
 
   const stateRef = useRef({
-    activeBucket: 1, // 0=blue, 1=red, 2=yellow
+    activeLane: 1,
     balls: [] as FallingBall[],
-    particles: [] as Particle[],
+    particles: [] as CatchParticle[],
     score: 0,
     caught: 0,
     wrong: 0,
     missed: 0,
+    spawnTimer: 1,
     elapsedTime: 0,
     started: false,
     finished: false,
     countdown: 3,
     gameStartWallTime: 0,
-    spawnTimer: 0,
-    nextId: 0,
     backTimer: 0,
     flashTimer: 0,
-    flashColor: '',
+    flashType: '' as '' | 'correct' | 'wrong',
   });
 
   const [hud, setHud] = useState({
-    score: 0,
-    timeLeft: duration as number,
-    countdown: 3,
-    caught: 0,
-    accuracy: 100,
-    backProgress: 0,
+    score: 0, timeLeft: duration as number, caught: 0,
+    accuracy: 0, countdown: 3, backProgress: 0,
   });
 
   useEffect(() => {
@@ -121,200 +100,131 @@ export default function ColorCatchGame({
         const osc = actx.createOscillator();
         const gain = actx.createGain();
         osc.connect(gain); gain.connect(actx.destination);
-        osc.frequency.value = freq; osc.type = type; gain.gain.value = 0.08;
+        osc.frequency.value = freq; osc.type = type; gain.gain.value = 0.06;
         osc.start();
         gain.gain.exponentialRampToValueAtTime(0.001, actx.currentTime + dur);
         osc.stop(actx.currentTime + dur);
       } catch {}
     };
 
-    const spawnParticles = (x: number, y: number, color: string) => {
-      const s = stateRef.current;
-      const count = 14;
-      for (let i = 0; i < count; i++) {
-        const angle = (Math.PI * 2 * i) / count + (Math.random() - 0.5) * 0.5;
-        const speed = 2 + Math.random() * 4;
-        s.particles.push({
-          x,
-          y,
-          vx: Math.cos(angle) * speed,
-          vy: Math.sin(angle) * speed - 2,
-          life: 1,
-          maxLife: 1,
-          color,
-          size: 3 + Math.random() * 5,
-        });
-      }
-    };
-
-    const drawRoundedRect = (ctx: CanvasRenderingContext2D, x: number, y: number, w: number, h: number, r: number) => {
-      ctx.beginPath();
-      ctx.moveTo(x + r, y);
-      ctx.lineTo(x + w - r, y);
-      ctx.quadraticCurveTo(x + w, y, x + w, y + r);
-      ctx.lineTo(x + w, y + h - r);
-      ctx.quadraticCurveTo(x + w, y + h, x + w - r, y + h);
-      ctx.lineTo(x + r, y + h);
-      ctx.quadraticCurveTo(x, y + h, x, y + h - r);
-      ctx.lineTo(x, y + r);
-      ctx.quadraticCurveTo(x, y, x + r, y);
-      ctx.closePath();
-    };
-
     const loop = (timestamp: number) => {
       if (!running) return;
-      const delta = lastTime ? (timestamp - lastTime) / 1000 : 0;
+      const delta = lastTime ? Math.min((timestamp - lastTime) / 1000, 0.05) : 0;
       lastTime = timestamp;
-
       const s = stateRef.current;
-      if (s.finished) { requestAnimationFrame(loop); return; }
 
+      if (s.finished) { requestAnimationFrame(loop); return; }
       const input = getGameInput();
 
-      // Back to menu: hold top-right corner for 5s
-      const inExitZone = input.active && input.x > 0.85 && input.y < 0.15;
-      if (inExitZone) {
-        s.backTimer += delta;
-        if (s.backTimer >= 5 && onBackToMenu) { s.finished = true; onBackToMenu(); return; }
-      } else { s.backTimer = 0; }
-
-      // Determine active bucket from input.x
-      if (input.active) {
-        if (input.x < 0.33) {
-          s.activeBucket = 0; // blue
-        } else if (input.x < 0.66) {
-          s.activeBucket = 1; // red
-        } else {
-          s.activeBucket = 2; // yellow
-        }
-      }
+      // Back to menu
+      const inExit = input.active && input.x > 0.85 && input.y < 0.15;
+      if (inExit) { s.backTimer += delta; if (s.backTimer >= 5 && onBackToMenu) { s.finished = true; onBackToMenu(); return; } }
+      else { s.backTimer = 0; }
 
       // Countdown
       if (!s.started) {
         s.countdown -= delta;
         if (s.countdown <= 0) { s.started = true; s.gameStartWallTime = performance.now(); }
         setHud(h => ({ ...h, countdown: Math.ceil(Math.max(0, s.countdown)), backProgress: s.backTimer / 5 }));
-        drawGame(ctx, s, Math.ceil(Math.max(0, s.countdown)));
+        draw(ctx, s, Math.ceil(Math.max(0, s.countdown)));
         requestAnimationFrame(loop);
         return;
       }
 
       s.elapsedTime = (performance.now() - s.gameStartWallTime) / 1000;
-
-      // Time up
       if (s.elapsedTime >= duration) {
         s.finished = true;
+        const total = s.caught + s.wrong + s.missed;
         onFinish({
-          score: s.score,
-          caught: s.caught,
-          wrong: s.wrong,
-          missed: s.missed,
-          duration,
-          difficulty,
-          inputMode,
-          sessionId: sessionIdRef.current,
+          score: s.score, caught: s.caught, wrong: s.wrong, missed: s.missed,
+          duration, difficulty, inputMode, sessionId: sessionIdRef.current,
         });
         return;
       }
 
-      // Flash timer
-      if (s.flashTimer > 0) {
-        s.flashTimer -= delta;
+      // Player lane from input
+      if (input.active) {
+        if (input.x < 0.33) s.activeLane = 0;
+        else if (input.x < 0.66) s.activeLane = 1;
+        else s.activeLane = 2;
       }
 
       // Spawn balls
       s.spawnTimer -= delta;
       if (s.spawnTimer <= 0) {
-        s.spawnTimer = config.interval;
-        const color = BALL_COLORS[Math.floor(Math.random() * BALL_COLORS.length)];
-        const minX = 100;
-        const maxX = CANVAS_W - 100;
-        const x = minX + Math.random() * (maxX - minX);
-        s.balls.push({
-          x,
-          y: -BALL_RADIUS,
-          color,
-          id: s.nextId++,
-          active: true,
-        });
+        const lane = Math.floor(Math.random() * 3);
+        const colorIdx = Math.floor(Math.random() * 3);
+        s.balls.push({ lane, colorIdx, y: -30, caught: false, missed: false });
+        s.spawnTimer = cfg.spawnInterval * (0.8 + Math.random() * 0.4);
       }
 
-      // Move balls and check collisions
+      // Move balls and check catches
       for (const ball of s.balls) {
-        if (!ball.active) continue;
-        ball.y += config.speed;
+        if (ball.caught || ball.missed) continue;
+        ball.y += cfg.fallSpeed;
 
-        // Check if ball reached bucket level
-        if (ball.y >= BUCKET_Y - BUCKET_H / 2) {
-          ball.active = false;
-
-          // Which bucket is closest to the ball's x?
-          let closestBucket = -1;
-          let closestDist = Infinity;
-          for (let i = 0; i < BUCKETS.length; i++) {
-            const d = Math.abs(ball.x - BUCKETS[i].x);
-            if (d < closestDist) {
-              closestDist = d;
-              closestBucket = i;
-            }
-          }
-
-          // Is ball over any bucket?
-          const overBucket = closestDist < BUCKET_W;
-
-          if (overBucket && closestBucket === s.activeBucket) {
-            // Check color match
-            if (ball.color === BUCKETS[closestBucket].color) {
-              // Correct catch
-              s.score += 100;
+        // Check if ball reaches catcher level
+        if (ball.y >= CATCHER_Y - 10 && ball.y <= CATCHER_Y + 20) {
+          if (s.activeLane === ball.lane) {
+            // Player is in this lane
+            if (ball.colorIdx === ball.lane) {
+              // Correct color match
+              ball.caught = true;
               s.caught++;
-              spawnParticles(BUCKETS[closestBucket].x, BUCKET_Y - BUCKET_H / 2, ball.color);
-              playSound(880, 0.12);
+              s.score += 100;
+              s.flashTimer = 0.3;
+              s.flashType = 'correct';
+              playSound(880, 0.1);
+              // Particles
+              for (let i = 0; i < 12; i++) {
+                const angle = (i / 12) * Math.PI * 2;
+                const speed = 3 + Math.random() * 4;
+                s.particles.push({
+                  x: LANE_X[ball.lane], y: CATCHER_Y,
+                  vx: Math.cos(angle) * speed, vy: Math.sin(angle) * speed - 2,
+                  life: 0.6 + Math.random() * 0.3, color: COLORS[ball.colorIdx].fill,
+                });
+              }
             } else {
-              // Wrong bucket color
-              s.score -= 50;
+              // Wrong color - no penalty, just miss it
+              ball.caught = true;
               s.wrong++;
               s.flashTimer = 0.3;
-              s.flashColor = '#ef4444';
-              playSound(220, 0.2, 'square');
+              s.flashType = 'wrong';
+              playSound(200, 0.2, 'square');
             }
-          } else if (overBucket && ball.color === BUCKETS[closestBucket].color && closestBucket !== s.activeBucket) {
-            // Ball landed on correct color bucket but it wasn't active - wrong
-            s.score -= 50;
-            s.wrong++;
-            s.flashTimer = 0.3;
-            s.flashColor = '#ef4444';
-            playSound(220, 0.2, 'square');
-          } else {
-            // Miss - ball didn't land in active bucket or no matching bucket
+          }
+        }
+
+        // Ball fell past all catchers
+        if (ball.y > CANVAS_H + 30) {
+          if (!ball.caught) {
+            ball.missed = true;
             s.missed++;
-            playSound(150, 0.15, 'triangle');
           }
         }
       }
-      s.balls = s.balls.filter(b => b.active || b.y < CANVAS_H + 50);
 
-      // Update particles
+      // Clean old balls
+      s.balls = s.balls.filter(b => b.y < CANVAS_H + 50);
+
+      // Particles
       for (const p of s.particles) {
-        p.x += p.vx;
-        p.y += p.vy;
-        p.vy += 6 * delta;
-        p.life -= delta * 2;
+        p.x += p.vx; p.y += p.vy; p.vy += 8 * delta; p.life -= delta;
       }
       s.particles = s.particles.filter(p => p.life > 0);
 
-      // Update HUD
+      // Flash
+      if (s.flashTimer > 0) s.flashTimer -= delta;
+
       const total = s.caught + s.wrong + s.missed;
       setHud({
-        score: s.score,
-        timeLeft: Math.max(0, duration - s.elapsedTime),
-        countdown: 0,
-        caught: s.caught,
-        accuracy: total > 0 ? Math.round((s.caught / total) * 100) : 100,
-        backProgress: s.backTimer / 5,
+        score: s.score, timeLeft: Math.max(0, duration - s.elapsedTime),
+        caught: s.caught, accuracy: total > 0 ? Math.round((s.caught / total) * 100) : 100,
+        countdown: 0, backProgress: s.backTimer / 5,
       });
 
-      drawGame(ctx, s, 0);
+      draw(ctx, s, 0);
       requestAnimationFrame(loop);
     };
 
@@ -323,186 +233,180 @@ export default function ColorCatchGame({
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [duration, difficulty]);
 
-  const drawGame = (ctx: CanvasRenderingContext2D, s: typeof stateRef.current, countdown: number) => {
+  const draw = (ctx: CanvasRenderingContext2D, s: typeof stateRef.current, countdown: number) => {
     const w = CANVAS_W;
     const h = CANVAS_H;
 
-    // Dark background
-    ctx.fillStyle = '#111111';
+    // Background - dark with subtle track
+    ctx.fillStyle = '#0f0f0f';
     ctx.fillRect(0, 0, w, h);
 
-    // Red flash overlay
-    if (s.flashTimer > 0) {
-      ctx.fillStyle = `rgba(239, 68, 68, ${s.flashTimer * 0.4})`;
-      ctx.fillRect(0, 0, w, h);
-    }
-
-    // Subtle track/road lines at bottom
-    ctx.strokeStyle = 'rgba(255, 255, 255, 0.04)';
-    ctx.lineWidth = 1;
-    for (let x = 0; x <= w; x += 60) {
-      ctx.beginPath(); ctx.moveTo(x, h - 150); ctx.lineTo(x, h); ctx.stroke();
-    }
-    // Horizontal road line
-    ctx.strokeStyle = 'rgba(255, 255, 255, 0.06)';
+    // Road/track at bottom
+    ctx.fillStyle = '#1a1a1a';
+    ctx.fillRect(0, h - 160, w, 160);
+    // Road lines
+    ctx.strokeStyle = '#333';
     ctx.lineWidth = 2;
-    ctx.beginPath(); ctx.moveTo(0, h - 150); ctx.lineTo(w, h - 150); ctx.stroke();
-    ctx.beginPath(); ctx.moveTo(0, h - 30); ctx.lineTo(w, h - 30); ctx.stroke();
+    ctx.setLineDash([30, 20]);
+    ctx.beginPath(); ctx.moveTo(0, h - 160); ctx.lineTo(w, h - 160); ctx.stroke();
+    ctx.setLineDash([]);
+    // Lane dividers
+    ctx.strokeStyle = '#222';
+    ctx.lineWidth = 1;
+    ctx.setLineDash([15, 25]);
+    ctx.beginPath(); ctx.moveTo(w / 3, 0); ctx.lineTo(w / 3, h); ctx.stroke();
+    ctx.beginPath(); ctx.moveTo(w * 2 / 3, 0); ctx.lineTo(w * 2 / 3, h); ctx.stroke();
+    ctx.setLineDash([]);
 
-    // Draw guide lines from top to buckets
-    for (let i = 0; i < BUCKETS.length; i++) {
-      ctx.strokeStyle = `rgba(255, 255, 255, 0.03)`;
-      ctx.lineWidth = 1;
-      ctx.setLineDash([8, 12]);
-      ctx.beginPath();
-      ctx.moveTo(BUCKETS[i].x, 0);
-      ctx.lineTo(BUCKETS[i].x, BUCKET_Y - BUCKET_H);
-      ctx.stroke();
-      ctx.setLineDash([]);
+    // Lane labels at top
+    for (let i = 0; i < 3; i++) {
+      ctx.fillStyle = COLORS[i].fill + '30';
+      ctx.fillRect(i * (w / 3), 0, w / 3, h);
     }
 
-    // Draw buckets
-    for (let i = 0; i < BUCKETS.length; i++) {
-      const bucket = BUCKETS[i];
-      const isActive = i === s.activeBucket;
-      const bx = bucket.x - BUCKET_W / 2;
-      const by = isActive ? BUCKET_Y - BUCKET_H - 8 : BUCKET_Y - BUCKET_H;
+    // Active lane highlight
+    ctx.fillStyle = COLORS[s.activeLane].fill + '15';
+    ctx.fillRect(s.activeLane * (w / 3), 0, w / 3, h);
 
-      // Glow for active bucket
+    // Catchers (bowls/cups) - 3 colored circles
+    for (let i = 0; i < 3; i++) {
+      const cx = LANE_X[i];
+      const isActive = s.activeLane === i;
+      const cy = isActive ? CATCHER_Y - 8 : CATCHER_Y;
+      const r = isActive ? CATCHER_R + 5 : CATCHER_R;
+
+      // Glow for active
       if (isActive) {
-        ctx.shadowColor = bucket.color;
+        ctx.shadowColor = COLORS[i].fill;
         ctx.shadowBlur = 25;
-        ctx.shadowOffsetX = 0;
-        ctx.shadowOffsetY = 0;
       }
 
-      // Bucket body
-      const drawRR = (x: number, y: number, bw: number, bh: number, r: number) => {
-        ctx.beginPath();
-        ctx.moveTo(x + r, y);
-        ctx.lineTo(x + bw - r, y);
-        ctx.quadraticCurveTo(x + bw, y, x + bw, y + r);
-        ctx.lineTo(x + bw, y + bh - r);
-        ctx.quadraticCurveTo(x + bw, y + bh, x + bw - r, y + bh);
-        ctx.lineTo(x + r, y + bh);
-        ctx.quadraticCurveTo(x, y + bh, x, y + bh - r);
-        ctx.lineTo(x, y + r);
-        ctx.quadraticCurveTo(x, y, x + r, y);
-        ctx.closePath();
-      };
-
-      drawRR(bx, by, BUCKET_W, BUCKET_H, BUCKET_R);
-      ctx.fillStyle = bucket.color;
+      // Bowl shape - half circle (cup)
+      ctx.fillStyle = COLORS[i].fill;
+      ctx.beginPath();
+      ctx.arc(cx, cy + 10, r, 0, Math.PI);
       ctx.fill();
 
-      // Lighter inner highlight
-      drawRR(bx + 6, by + 4, BUCKET_W - 12, BUCKET_H - 16, BUCKET_R - 2);
-      ctx.fillStyle = 'rgba(255, 255, 255, 0.2)';
+      // Top rim
+      ctx.fillStyle = COLORS[i].light;
+      ctx.fillRect(cx - r, cy + 5, r * 2, 8);
+
+      // Inner dark
+      ctx.fillStyle = COLORS[i].dark;
+      ctx.beginPath();
+      ctx.arc(cx, cy + 15, r - 8, 0, Math.PI);
       ctx.fill();
 
-      // Reset shadow
-      ctx.shadowColor = 'transparent';
       ctx.shadowBlur = 0;
 
-      // Active indicator triangle
-      if (isActive) {
-        ctx.beginPath();
-        ctx.moveTo(bucket.x, by - 14);
-        ctx.lineTo(bucket.x - 8, by - 24);
-        ctx.lineTo(bucket.x + 8, by - 24);
-        ctx.closePath();
-        ctx.fillStyle = bucket.color;
-        ctx.fill();
-      }
+      // Color label
+      ctx.fillStyle = '#fff';
+      ctx.font = 'bold 14px sans-serif';
+      ctx.textAlign = 'center';
+      ctx.fillText(COLORS[i].name.toUpperCase(), cx, cy + r + 30);
     }
 
-    // Draw falling balls
+    // Arrow indicator above active catcher
+    const acx = LANE_X[s.activeLane];
+    ctx.fillStyle = '#fff';
+    ctx.beginPath();
+    ctx.moveTo(acx, CATCHER_Y - CATCHER_R - 20);
+    ctx.lineTo(acx - 10, CATCHER_Y - CATCHER_R - 35);
+    ctx.lineTo(acx + 10, CATCHER_Y - CATCHER_R - 35);
+    ctx.closePath();
+    ctx.fill();
+
+    // Falling balls
     for (const ball of s.balls) {
-      if (!ball.active) continue;
+      if (ball.caught || ball.missed) continue;
+      const bx = LANE_X[ball.lane];
+      const color = COLORS[ball.colorIdx];
 
       // Ball shadow
+      ctx.fillStyle = 'rgba(0,0,0,0.3)';
       ctx.beginPath();
-      ctx.ellipse(ball.x + 2, ball.y + 3, BALL_RADIUS, BALL_RADIUS * 0.5, 0, 0, Math.PI * 2);
-      ctx.fillStyle = 'rgba(0, 0, 0, 0.3)';
+      ctx.arc(bx + 3, ball.y + 3, 22, 0, Math.PI * 2);
       ctx.fill();
 
-      // Ball body
+      // Ball
+      ctx.fillStyle = color.fill;
       ctx.beginPath();
-      ctx.arc(ball.x, ball.y, BALL_RADIUS, 0, Math.PI * 2);
-      const ballGrad = ctx.createRadialGradient(ball.x - 5, ball.y - 5, 2, ball.x, ball.y, BALL_RADIUS);
-      ballGrad.addColorStop(0, '#ffffff');
-      ballGrad.addColorStop(0.4, ball.color);
-      ballGrad.addColorStop(1, ball.color);
-      ctx.fillStyle = ballGrad;
+      ctx.arc(bx, ball.y, 22, 0, Math.PI * 2);
       ctx.fill();
 
-      // Ball outline
-      ctx.strokeStyle = 'rgba(255, 255, 255, 0.3)';
-      ctx.lineWidth = 1.5;
-      ctx.stroke();
+      // Highlight
+      ctx.fillStyle = color.light;
+      ctx.beginPath();
+      ctx.arc(bx - 6, ball.y - 6, 8, 0, Math.PI * 2);
+      ctx.fill();
+
+      // Trail
+      ctx.fillStyle = color.fill + '40';
+      ctx.fillRect(bx - 3, ball.y - 40, 6, 40);
     }
 
-    // Draw particles
+    // Particles
     for (const p of s.particles) {
-      ctx.globalAlpha = Math.max(0, p.life / p.maxLife);
+      ctx.globalAlpha = Math.max(0, p.life * 2);
       ctx.fillStyle = p.color;
-      ctx.fillRect(p.x - p.size / 2, p.y - p.size / 2, p.size, p.size);
+      ctx.fillRect(p.x - 3, p.y - 3, 6, 6);
     }
     ctx.globalAlpha = 1;
 
-    // Countdown overlay
-    if (countdown > 0) {
-      ctx.fillStyle = 'rgba(0, 0, 0, 0.7)';
+    // Flash
+    if (s.flashTimer > 0) {
+      if (s.flashType === 'correct') {
+        ctx.fillStyle = `rgba(34, 197, 94, ${s.flashTimer * 0.15})`;
+      } else {
+        ctx.fillStyle = `rgba(239, 68, 68, ${s.flashTimer * 0.15})`;
+      }
       ctx.fillRect(0, 0, w, h);
-      ctx.fillStyle = '#ffffff';
+    }
+
+    // Countdown
+    if (countdown > 0) {
+      ctx.fillStyle = 'rgba(15, 15, 15, 0.8)';
+      ctx.fillRect(0, 0, w, h);
+      ctx.fillStyle = '#eab308';
       ctx.font = 'bold 120px sans-serif';
       ctx.textAlign = 'center';
-      ctx.textBaseline = 'middle';
-      ctx.fillText(String(countdown), w / 2, h / 2);
+      ctx.fillText(String(countdown), w / 2, h / 2 + 40);
     }
   };
 
   return (
-    <div className="relative w-full h-full flex items-center justify-center bg-[#111111]">
-      <canvas
-        ref={canvasRef}
-        width={CANVAS_W}
-        height={CANVAS_H}
-        className="max-w-full max-h-full"
-        style={{ imageRendering: 'auto' }}
-      />
+    <div className="relative w-full h-full flex items-center justify-center bg-[#0f0f0f]">
+      <canvas ref={canvasRef} width={CANVAS_W} height={CANVAS_H} className="max-w-full max-h-full" />
 
-      {/* HUD */}
       <div className="absolute top-0 left-0 right-0 p-4 pointer-events-none">
-        <div className="flex justify-between items-start max-w-5xl mx-auto">
-          <div className="bg-white/10 backdrop-blur-md rounded-2xl px-5 py-3">
+        <div className="flex justify-between items-start max-w-2xl mx-auto">
+          <div className="bg-white/10 backdrop-blur-md rounded-2xl px-5 py-3 shadow-sm">
             <div className="text-3xl font-bold text-amber-400 tabular-nums">{hud.score}</div>
-            <div className="text-xs text-white/50 uppercase tracking-wider">Score</div>
+            <div className="text-xs text-white/70 uppercase tracking-wider">Score</div>
           </div>
-          <div className="bg-white/10 backdrop-blur-md rounded-2xl px-5 py-3 text-center">
+          <div className="bg-white/10 backdrop-blur-md rounded-2xl px-5 py-3 text-center shadow-sm">
             <div className="text-3xl font-bold text-white tabular-nums">{Math.ceil(hud.timeLeft)}s</div>
-            <div className="text-xs text-white/50 uppercase tracking-wider">Time</div>
+            <div className="text-xs text-white/70 uppercase tracking-wider">Time</div>
           </div>
-          <div className="bg-white/10 backdrop-blur-md rounded-2xl px-5 py-3 text-center">
+          <div className="bg-white/10 backdrop-blur-md rounded-2xl px-5 py-3 text-center shadow-sm">
             <div className="text-3xl font-bold text-green-400 tabular-nums">{hud.caught}</div>
-            <div className="text-xs text-white/50 uppercase tracking-wider">Caught</div>
+            <div className="text-xs text-white/70 uppercase tracking-wider">Caught</div>
           </div>
-          <div className="bg-white/10 backdrop-blur-md rounded-2xl px-5 py-3 text-center">
-            <div className="text-3xl font-bold text-white tabular-nums">{hud.accuracy}%</div>
-            <div className="text-xs text-white/50 uppercase tracking-wider">Accuracy</div>
+          <div className="bg-white/10 backdrop-blur-md rounded-2xl px-5 py-3 text-right shadow-sm">
+            <div className="text-3xl font-bold text-blue-400 tabular-nums">{hud.accuracy}%</div>
+            <div className="text-xs text-white/70 uppercase tracking-wider">Accuracy</div>
           </div>
         </div>
       </div>
 
-      {/* Back-to-menu progress (5s hold) */}
-      {hud.backProgress > 0.03 && (
-        <div className="absolute top-16 right-4 flex items-center gap-2 bg-white/10 backdrop-blur-md rounded-2xl px-4 py-2 pointer-events-none">
+      {hud.backProgress > 0.05 && (
+        <div className="absolute top-16 right-4 flex items-center gap-2 bg-white/10 backdrop-blur-md rounded-2xl px-4 py-2 pointer-events-none shadow-sm">
           <svg className="w-5 h-5" viewBox="0 0 36 36">
-            <circle cx="18" cy="18" r="15" fill="none" stroke="#555" strokeWidth="3" />
-            <circle cx="18" cy="18" r="15" fill="none" stroke="#ef4444" strokeWidth="3"
+            <circle cx="18" cy="18" r="15" fill="none" stroke="#333" strokeWidth="3" />
+            <circle cx="18" cy="18" r="15" fill="none" stroke="#eab308" strokeWidth="3"
               strokeDasharray={`${hud.backProgress * 94.2} 94.2`} strokeLinecap="round" transform="rotate(-90 18 18)" />
           </svg>
-          <span className="text-xs text-red-400">Back to menu</span>
+          <span className="text-xs text-amber-400 font-medium">Back</span>
         </div>
       )}
     </div>
