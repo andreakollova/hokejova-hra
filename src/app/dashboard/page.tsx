@@ -57,12 +57,33 @@ export default function DashboardPage() {
   const [musicHistory, setMusicHistory] = useState<TrackRecord[]>([]);
   const [topScores, setTopScores] = useState<ScoreEntry[]>([]);
   const [myScores, setMyScores] = useState<ScoreEntry[]>([]);
+  const [showAddFriend, setShowAddFriend] = useState(false);
+  const [friendInput, setFriendInput] = useState('');
+  const [friends, setFriends] = useState<{ username: string; online: boolean; lastPlayed: string; totalTime: string; lastSong: string; lastGame: string; pending: boolean; incoming: boolean }[]>([]);
   const [selectedSong, setSelectedSong] = useState<{ name: string; artist: string; id?: string; albumArt?: string } | null>(null);
   const [showGamePicker, setShowGamePicker] = useState(false);
 
   useEffect(() => {
     setMusicHistory(loadMusicHistory());
     loadScores();
+    // Load friends
+    try {
+      const saved = localStorage.getItem('hb_friends');
+      if (saved) {
+        setFriends(JSON.parse(saved));
+      } else {
+        // Seed mock friends
+        const mock = [
+          { username: 'matej_k', online: true, lastPlayed: '2 min ago', totalTime: '10h 12m', lastSong: 'Blinding Lights', lastGame: 'HockeyBeats', pending: false, incoming: false },
+          { username: 'zuzka99', online: false, lastPlayed: '3 hours ago', totalTime: '8h 54m', lastSong: 'Levitating', lastGame: 'Space Invaders', pending: false, incoming: false },
+          { username: 'hockeyboy', online: true, lastPlayed: '1 min ago', totalTime: '14h 7m', lastSong: 'Flowers', lastGame: 'Neon Drift', pending: false, incoming: false },
+          { username: 'petra_h', online: false, lastPlayed: 'Yesterday', totalTime: '6h 29m', lastSong: 'Unholy', lastGame: 'Jelly Stack', pending: false, incoming: false },
+          { username: 'tomas_s', online: false, lastPlayed: '2 days ago', totalTime: '4h 36m', lastSong: 'As It Was', lastGame: 'Orbit Hop', pending: false, incoming: true },
+        ];
+        setFriends(mock);
+        localStorage.setItem('hb_friends', JSON.stringify(mock));
+      }
+    } catch {}
   }, []);
 
   // Show "streak is back" popup after unfreeze
@@ -210,12 +231,13 @@ export default function DashboardPage() {
           </div>
         )}
 
-        {/* Featured banner */}
-        <div className="mb-6">
+        {/* Featured banner + Friends */}
+        <div className="grid lg:grid-cols-[1fr_320px] gap-4 mb-6">
+          {/* Banner */}
           <Link href="/trening" className="group block">
-            <div className="relative rounded-2xl overflow-hidden">
-              <Image src="/images/hero-clean.png" alt="Hockey Beats" width={1942} height={809} className="w-full h-auto block group-hover:scale-[1.02] transition-transform duration-700" />
-              <div className="absolute bottom-6 left-6 sm:bottom-8 sm:left-[20%]">
+            <div className="relative rounded-2xl overflow-hidden h-full">
+              <Image src="/images/hero-clean.png" alt="Hockey Beats" width={1942} height={809} className="w-full h-full object-cover group-hover:scale-[1.02] transition-transform duration-700" />
+              <div className="absolute bottom-5 left-5 sm:bottom-6 sm:left-8">
                 <div className="inline-flex items-center gap-2.5 bg-emerald-500 hover:bg-emerald-400 text-white text-base font-bold px-8 py-4 rounded-full transition-colors shadow-lg shadow-emerald-500/30">
                   <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
                   Play now
@@ -223,6 +245,97 @@ export default function DashboardPage() {
               </div>
             </div>
           </Link>
+
+          {/* Friends panel */}
+          <div className="bg-white/5 border border-white/8 rounded-2xl p-5 flex flex-col">
+            <div className="flex items-center justify-between mb-4">
+              <h3 className="text-sm font-bold text-white/60">Friend beats</h3>
+              <button onClick={() => setShowAddFriend(true)} className="text-xs font-bold text-emerald-400 hover:text-emerald-300 transition-colors">
+                + Add
+              </button>
+            </div>
+
+            {/* Add friend input */}
+            {showAddFriend && (
+              <div className="mb-4">
+                <div className="flex gap-2">
+                  <input
+                    type="text"
+                    value={friendInput}
+                    onChange={(e) => setFriendInput(e.target.value)}
+                    placeholder="Enter username"
+                    className="flex-1 bg-white/5 border border-white/10 rounded-xl px-3 py-2 text-sm text-white placeholder-white/30 outline-none focus:border-emerald-500/50"
+                  />
+                  <button
+                    onClick={() => {
+                      if (friendInput.trim()) {
+                        const next = [...friends, { username: friendInput.trim(), online: false, lastPlayed: 'Just added', totalTime: '0m', lastSong: '-', lastGame: '-', pending: false, incoming: false }];
+                        setFriends(next);
+                        try { localStorage.setItem('hb_friends', JSON.stringify(next)); } catch {}
+                        setFriendInput('');
+                        setShowAddFriend(false);
+                      }
+                    }}
+                    className="bg-emerald-500 hover:bg-emerald-400 text-white text-xs font-bold px-4 py-2 rounded-xl transition-colors"
+                  >
+                    Send
+                  </button>
+                </div>
+              </div>
+            )}
+
+            {/* Pending requests */}
+            {friends.filter(f => f.incoming).length > 0 && (
+              <div className="mb-3">
+                <div className="text-[10px] font-bold uppercase tracking-wider text-white/30 mb-2">Requests</div>
+                {friends.filter(f => f.incoming).map((f) => (
+                  <div key={f.username} className="flex items-center gap-2.5 rounded-xl p-2 bg-white/5 mb-1.5">
+                    <div className="w-7 h-7 rounded-full bg-white/10 flex items-center justify-center text-[10px] font-bold text-white/50">{f.username[0].toUpperCase()}</div>
+                    <div className="flex-1 min-w-0">
+                      <div className="text-xs font-bold text-white truncate">{f.username}</div>
+                    </div>
+                    <button onClick={() => {
+                      const next = friends.map(fr => fr.username === f.username ? { ...fr, incoming: false } : fr);
+                      setFriends(next);
+                      try { localStorage.setItem('hb_friends', JSON.stringify(next)); } catch {}
+                    }} className="text-[10px] font-bold text-emerald-400 bg-emerald-500/10 px-2 py-1 rounded-lg">Accept</button>
+                    <button onClick={() => {
+                      const next = friends.filter(fr => fr.username !== f.username);
+                      setFriends(next);
+                      try { localStorage.setItem('hb_friends', JSON.stringify(next)); } catch {}
+                    }} className="text-[10px] font-bold text-red-400 bg-red-500/10 px-2 py-1 rounded-lg">Reject</button>
+                  </div>
+                ))}
+              </div>
+            )}
+
+            {/* Friends list */}
+            <div className="flex-1 overflow-y-auto space-y-1.5" style={{ maxHeight: '280px' }}>
+              {friends.filter(f => !f.incoming).length === 0 && !showAddFriend && (
+                <div className="text-center py-6">
+                  <div className="text-sm text-white/20 mb-2">No friends yet</div>
+                  <button onClick={() => setShowAddFriend(true)} className="text-xs font-bold text-emerald-400 hover:text-emerald-300">Add a friend</button>
+                </div>
+              )}
+              {friends.filter(f => !f.incoming).sort((a, b) => (b.online ? 1 : 0) - (a.online ? 1 : 0)).map((f) => (
+                <div key={f.username} className="flex items-center gap-2.5 rounded-xl p-2.5 bg-white/3 hover:bg-white/5 transition-colors">
+                  <div className="relative">
+                    <div className="w-8 h-8 rounded-full bg-white/10 flex items-center justify-center text-xs font-bold text-white/50">{f.username[0].toUpperCase()}</div>
+                    {f.online && <div className="absolute -bottom-0.5 -right-0.5 w-3 h-3 rounded-full bg-emerald-500 border-2 border-[#0a0a0f]" />}
+                  </div>
+                  <div className="flex-1 min-w-0">
+                    <div className="text-xs font-bold text-white truncate">{f.username}</div>
+                    <div className="text-[10px] text-white/30 truncate">
+                      {f.online ? 'Playing now' : f.lastPlayed} · {f.totalTime}
+                    </div>
+                  </div>
+                  <div className="text-right">
+                    <div className="text-[10px] text-white/20 truncate">{f.lastGame}</div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
         </div>
 
         {/* All games grid */}
