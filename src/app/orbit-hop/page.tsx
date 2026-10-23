@@ -199,10 +199,10 @@ export default function OrbitHopPage() {
           <div>
             <label className="text-xs font-semibold text-white/30 uppercase tracking-wider mb-3 block">Hop direction</label>
             <div className="flex gap-2.5">
-              <button onClick={() => setHopSide('left')} className={`flex-1 rounded-2xl py-3.5 border-2 transition-all text-sm font-semibold ${hopSide === 'left' ? 'border-purple-500 bg-purple-500/10 text-purple-400' : 'border-white/10 bg-white/5 text-white/50 hover:border-white/20'}`}>
+              <button onClick={() => setHopSide('left')} className={`flex-1 rounded-2xl py-3.5 border-2 transition-all text-sm font-semibold ${hopSide === 'left' ? 'border-purple-500 bg-purple-500/10 text-purple-400' : 'border-purple-300/30 bg-purple-200/10 text-purple-300 hover:border-purple-300/50'}`}>
                 Left
               </button>
-              <button onClick={() => setHopSide('right')} className={`flex-1 rounded-2xl py-3.5 border-2 transition-all text-sm font-semibold ${hopSide === 'right' ? 'border-purple-500 bg-purple-500/10 text-purple-400' : 'border-white/10 bg-white/5 text-white/50 hover:border-white/20'}`}>
+              <button onClick={() => setHopSide('right')} className={`flex-1 rounded-2xl py-3.5 border-2 transition-all text-sm font-semibold ${hopSide === 'right' ? 'border-purple-500 bg-purple-500/10 text-purple-400' : 'border-purple-300/30 bg-purple-200/10 text-purple-300 hover:border-purple-300/50'}`}>
                 Right
               </button>
             </div>
