@@ -522,8 +522,8 @@ function HeroBanner({ isLoggedIn, onLoginClick }: { isLoggedIn: boolean; onLogin
   return (
     <>
       <section className="bg-white pt-20 pb-8">
-        <div className="max-w-[100vw] overflow-hidden">
-          <Image src="/images/hero-clean.png" alt="Hockey Beats" width={1942} height={809} className="w-full h-auto block" priority />
+        <div className="max-w-7xl mx-auto px-4 sm:px-10">
+          <Image src="/images/hero-clean.png" alt="Hockey Beats" width={1942} height={809} className="w-full h-auto block rounded-2xl" priority />
           <div className="mt-6 flex flex-wrap items-center gap-4 px-6 sm:px-10">
             <button
               onClick={() => {

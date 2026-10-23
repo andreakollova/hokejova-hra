@@ -13,13 +13,7 @@ export default function StreakBadge({ currentStreak, frozen, size = 'md' }: Stre
 
   return (
     <div className={`inline-flex items-center gap-1.5 ${frozen ? 'bg-blue-50 border border-blue-200' : 'bg-orange-50 border border-orange-200'} rounded-full ${isSm ? 'px-2.5 py-1' : 'px-3.5 py-1.5'}`}>
-      <span
-        className={`${isSm ? 'text-sm' : 'text-base'} ${frozen ? '' : 'animate-pulse'}`}
-        role="img"
-        aria-label={frozen ? 'Frozen streak' : 'Active streak'}
-      >
-        {frozen ? '\u2744\uFE0F' : '\uD83D\uDD25'}
-      </span>
+      <i className={`${frozen ? 'fi fi-sr-icicles text-blue-500' : 'fi fi-ss-fire-flame-curved text-orange-500'} ${isSm ? 'text-sm' : 'text-base'} ${frozen ? '' : 'animate-pulse'}`} />
       <span className={`font-bold tabular-nums ${isSm ? 'text-xs' : 'text-sm'} ${frozen ? 'text-blue-700' : 'text-orange-700'}`}>
         {currentStreak}
       </span>
