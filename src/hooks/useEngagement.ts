@@ -8,10 +8,11 @@ const STORAGE_KEY = 'sportqo_engagement';
 
 interface StreakData {
   currentStreak: number;
-  lastPlayDate: string; // YYYY-MM-DD
+  lastPlayDate: string;
   frozen: boolean;
-  frozenDate: string; // YYYY-MM-DD when streak was frozen
+  frozenDate: string;
   consecutiveDaysAfterFreeze: number;
+  justUnfroze?: boolean;
 }
 
 interface XPData {
@@ -156,38 +157,21 @@ export function useEngagement() {
 
       if (!wasPlayedToday) {
         if (next.streak.frozen) {
-          // Playing while frozen - count consecutive days toward unfreeze
-          next.streak.consecutiveDaysAfterFreeze += 1;
-          if (next.streak.consecutiveDaysAfterFreeze >= 3) {
-            // Unfrozen! Continue streak from where it was
-            next.streak.frozen = false;
-            next.streak.frozenDate = '';
-            next.streak.consecutiveDaysAfterFreeze = 0;
-            next.streak.currentStreak += 1;
-          }
+          // Playing while frozen - instant unfreeze! One game is enough
+          next.streak.frozen = false;
+          next.streak.frozenDate = '';
+          next.streak.consecutiveDaysAfterFreeze = 0;
+          next.streak.currentStreak += 1;
+          next.streak.justUnfroze = true;
         } else {
           const yesterday = getYesterday();
           if (next.streak.lastPlayDate === yesterday || next.streak.lastPlayDate === '') {
-            // Continuing streak or starting fresh
             next.streak.currentStreak += 1;
-          } else if (next.streak.lastPlayDate === '') {
-            next.streak.currentStreak = 1;
           }
-          // If lastPlayDate is not yesterday and not empty, the useEffect above would have frozen it
-          // But handle edge case where user opens and plays in same session
-          if (next.streak.lastPlayDate && next.streak.lastPlayDate !== yesterday && next.streak.lastPlayDate !== '' && next.streak.currentStreak === 0) {
+          if (next.streak.currentStreak === 0) {
             next.streak.currentStreak = 1;
           }
         }
-        next.streak.lastPlayDate = today;
-      }
-
-      // Check if 30+ min session unfreezes
-      if (next.streak.frozen && opts.durationSeconds >= 1800) {
-        next.streak.frozen = false;
-        next.streak.frozenDate = '';
-        next.streak.consecutiveDaysAfterFreeze = 0;
-        next.streak.currentStreak += 1;
         next.streak.lastPlayDate = today;
       }
 
@@ -286,6 +270,13 @@ export function useEngagement() {
     [data],
   );
 
+  const clearUnfroze = useCallback(() => {
+    if (data.streak.justUnfroze) {
+      const next = { ...data, streak: { ...data.streak, justUnfroze: false } };
+      persist(next);
+    }
+  }, [data, persist]);
+
   return {
     loaded,
     data,
@@ -297,5 +288,6 @@ export function useEngagement() {
     getLevelProgress,
     getAvatar,
     getPersonalBest,
+    clearUnfroze,
   };
 }

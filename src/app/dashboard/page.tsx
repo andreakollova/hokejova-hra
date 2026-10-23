@@ -51,7 +51,8 @@ const GAMES = [
 
 export default function DashboardPage() {
   const { settings, isLoggedIn, loaded } = useSettings();
-  const { data: engData, getStreak, getLevelProgress, getXP, getAvatar, loaded: engLoaded } = useEngagement();
+  const { data: engData, getStreak, getLevelProgress, getXP, getAvatar, loaded: engLoaded, clearUnfroze } = useEngagement();
+  const [showUnfrozePopup, setShowUnfrozePopup] = useState(false);
   const [musicHistory, setMusicHistory] = useState<TrackRecord[]>([]);
   const [topScores, setTopScores] = useState<ScoreEntry[]>([]);
   const [myScores, setMyScores] = useState<ScoreEntry[]>([]);
@@ -62,6 +63,14 @@ export default function DashboardPage() {
     setMusicHistory(loadMusicHistory());
     loadScores();
   }, []);
+
+  // Show "streak is back" popup after unfreeze
+  useEffect(() => {
+    if (engLoaded && engData.streak.justUnfroze) {
+      setShowUnfrozePopup(true);
+      clearUnfroze();
+    }
+  }, [engLoaded]);
 
   const loadScores = async () => {
     try {
@@ -180,17 +189,33 @@ export default function DashboardPage() {
           </div>
         )}
 
-        {/* Featured game - big hero card */}
+        {/* Frozen streak challenge */}
+        {streak.frozen && (
+          <div className="mb-6 bg-blue-500/10 border border-blue-500/20 rounded-2xl p-6">
+            <div className="flex items-center gap-3 mb-3">
+              <i className="fi fi-sr-icicles text-blue-400 text-xl" />
+              <h3 className="text-lg font-bold text-white">Your streak is frozen</h3>
+            </div>
+            <p className="text-sm text-white/50 mb-4">Play one game to get your streak back. Here is a challenge for you:</p>
+            {(() => {
+              const randomGame = GAMES[Math.floor(Date.now() / 86400000) % GAMES.length];
+              return (
+                <Link href={randomGame.href} className="inline-flex items-center gap-3 bg-blue-500 hover:bg-blue-400 text-white font-bold text-sm px-6 py-3 rounded-full transition-colors">
+                  <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+                  Play {randomGame.name}
+                </Link>
+              );
+            })()}
+          </div>
+        )}
+
+        {/* Featured banner */}
         <div className="mb-6">
-          <Link href={GAMES[0].href} className="group block">
-            <div className="relative rounded-3xl overflow-hidden aspect-[21/9] sm:aspect-[3/1]" style={{ background: GAMES[0].bg }}>
-              <Image src={GAMES[0].image} alt={GAMES[0].name} fill className="object-cover opacity-80 group-hover:opacity-100 group-hover:scale-[1.03] transition-all duration-700" />
-              <div className="absolute inset-0 bg-gradient-to-r from-black/70 via-black/30 to-transparent" />
-              <div className="absolute bottom-0 left-0 p-6 sm:p-10">
-                <div className="text-[10px] font-bold uppercase tracking-[0.2em] text-emerald-400 mb-2">Featured</div>
-                <h2 className="text-2xl sm:text-4xl font-black tracking-tight">{GAMES[0].name}</h2>
-                <p className="text-sm text-white/50 mt-1">{GAMES[0].desc}</p>
-                <div className="mt-4 inline-flex items-center gap-2 bg-white text-black text-sm font-bold px-5 py-2.5 rounded-full group-hover:bg-emerald-400 group-hover:text-black transition-colors">
+          <Link href="/trening" className="group block">
+            <div className="relative rounded-2xl overflow-hidden">
+              <Image src="/images/hero-clean.png" alt="Hockey Beats" width={1942} height={809} className="w-full h-auto block group-hover:scale-[1.02] transition-transform duration-700" />
+              <div className="absolute bottom-0 left-0 p-5 sm:p-8">
+                <div className="inline-flex items-center gap-2 bg-white text-black text-sm font-bold px-5 py-2.5 rounded-full group-hover:bg-emerald-400 transition-colors">
                   <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
                   Play now
                 </div>
@@ -416,6 +441,21 @@ export default function DashboardPage() {
                 </div>
               </div>
             )}
+          </div>
+        </div>
+      )}
+
+      {/* Streak is back popup */}
+      {showUnfrozePopup && (
+        <div className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center z-50 p-4" onClick={() => setShowUnfrozePopup(false)}>
+          <div className="bg-[#1a1a24] rounded-3xl p-8 w-full max-w-xs text-center" onClick={(e) => e.stopPropagation()}>
+            <i className="fi fi-ss-fire-flame-curved text-orange-500 text-5xl block mb-4" />
+            <h2 className="text-2xl font-black text-white mb-2">Streak is back!</h2>
+            <p className="text-sm text-white/50 mb-1">Your {streak.currentStreak} day streak continues.</p>
+            <p className="text-xs text-white/30 mb-6">Keep playing every day to build it up.</p>
+            <button onClick={() => setShowUnfrozePopup(false)} className="bg-emerald-500 hover:bg-emerald-400 text-white font-bold text-sm px-8 py-3 rounded-full transition-colors">
+              Nice!
+            </button>
           </div>
         </div>
       )}
