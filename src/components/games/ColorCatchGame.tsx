@@ -189,14 +189,17 @@ export default function ColorCatchGame({
               s.flashTimer = 0.3;
               s.flashType = 'correct';
               playSound(880, 0.1);
-              // Particles
-              for (let i = 0; i < 12; i++) {
-                const angle = (i / 12) * Math.PI * 2;
-                const speed = 3 + Math.random() * 4;
+              // Particles - more and bigger for cars
+              const pCount = ball.isCar ? 24 : 12;
+              const pSpeed = ball.isCar ? 8 : 4;
+              const pLife = ball.isCar ? 1.0 : 0.6;
+              for (let i = 0; i < pCount; i++) {
+                const angle = (i / pCount) * Math.PI * 2;
+                const speed = pSpeed + Math.random() * pSpeed;
                 s.particles.push({
                   x: LANE_X[ball.lane], y: CATCHER_Y,
-                  vx: Math.cos(angle) * speed, vy: Math.sin(angle) * speed - 2,
-                  life: 0.6 + Math.random() * 0.3, color: COLORS[ball.colorIdx].fill,
+                  vx: Math.cos(angle) * speed, vy: Math.sin(angle) * speed - 3,
+                  life: pLife + Math.random() * 0.3, color: COLORS[ball.colorIdx].fill,
                 });
               }
             } else {
@@ -331,8 +334,8 @@ export default function ColorCatchGame({
     ctx.fill();
 
     // Falling balls and cars
-    const carW = 50;
-    const carH = 62;
+    const carW = 80;
+    const carH = 100;
     for (const ball of s.balls) {
       if (ball.caught || ball.missed) continue;
       const bx = LANE_X[ball.lane];
@@ -344,13 +347,7 @@ export default function ColorCatchGame({
 
         // Trail
         ctx.fillStyle = color.fill + '30';
-        ctx.fillRect(bx - 4, ball.y - 50, 8, 50);
-
-        // Shadow
-        ctx.fillStyle = 'rgba(0,0,0,0.2)';
-        ctx.beginPath();
-        ctx.ellipse(bx + 3, ball.y + 3, carW / 2, carH / 2, 0, 0, Math.PI * 2);
-        ctx.fill();
+        ctx.fillRect(bx - 5, ball.y - 60, 10, 60);
 
         // Car image
         if (carImg && carImg.complete) {
@@ -358,19 +355,9 @@ export default function ColorCatchGame({
         } else {
           ctx.fillStyle = color.fill;
           ctx.beginPath();
-          ctx.arc(bx, ball.y, 22, 0, Math.PI * 2);
+          ctx.arc(bx, ball.y, 30, 0, Math.PI * 2);
           ctx.fill();
         }
-
-        // Bonus glow
-        ctx.shadowColor = color.fill;
-        ctx.shadowBlur = 15;
-        ctx.strokeStyle = color.fill + '60';
-        ctx.lineWidth = 2;
-        ctx.beginPath();
-        ctx.ellipse(bx, ball.y, carW / 2 + 4, carH / 2 + 4, 0, 0, Math.PI * 2);
-        ctx.stroke();
-        ctx.shadowBlur = 0;
       } else {
         // Regular ball
         // Shadow
