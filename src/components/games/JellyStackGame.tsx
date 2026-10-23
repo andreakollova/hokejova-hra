@@ -34,9 +34,9 @@ const STACK_BASE_Y = 700;
 const JELLY_COLORS = ['#f472b6', '#a78bfa', '#fbbf24', '#34d399', '#60a5fa'];
 
 const DIFFICULTY = {
-  easy:   { speed: 2, speedInc: 0.15, lives: 3 },
-  medium: { speed: 3.5, speedInc: 0.25, lives: 3 },
-  hard:   { speed: 5, speedInc: 0.4, lives: 2 },
+  easy:   { speed: 2.1, speedInc: 0.158, lives: 3 },
+  medium: { speed: 3.68, speedInc: 0.263, lives: 3 },
+  hard:   { speed: 5.25, speedInc: 0.42, lives: 2 },
 };
 
 interface StackBlock {

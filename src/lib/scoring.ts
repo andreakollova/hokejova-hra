@@ -117,23 +117,23 @@ export interface SlalomConfig {
 
 export const SLALOM_CONFIGS: Record<string, SlalomConfig> = {
   easy: {
-    coneSpeed: 3.0,
-    minGap: 1.8,
-    maxGap: 2.8,
+    coneSpeed: 3.15,
+    minGap: 1.71,
+    maxGap: 2.66,
     movementRange: 0.3,
     label: 'Easy',
   },
   medium: {
-    coneSpeed: 4.5,
-    minGap: 1.3,
-    maxGap: 2.2,
+    coneSpeed: 4.73,
+    minGap: 1.24,
+    maxGap: 2.09,
     movementRange: 0.4,
     label: 'Medium',
   },
   hard: {
-    coneSpeed: 6.0,
-    minGap: 0.9,
-    maxGap: 1.6,
+    coneSpeed: 6.3,
+    minGap: 0.86,
+    maxGap: 1.52,
     movementRange: 0.5,
     label: 'Hard',
   },

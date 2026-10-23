@@ -27,9 +27,9 @@ const CANVAS_H = 800;
 const BALL_RADIUS = 12;
 
 const DIFFICULTY = {
-  easy:   { trackWidth: 160, speed: 2, cubeRate: 0.025, curveStrength: 0.6 },
-  medium: { trackWidth: 120, speed: 3, cubeRate: 0.020, curveStrength: 1.0 },
-  hard:   { trackWidth: 90,  speed: 4, cubeRate: 0.015, curveStrength: 1.5 },
+  easy:   { trackWidth: 160, speed: 2.1, cubeRate: 0.025, curveStrength: 0.63 },
+  medium: { trackWidth: 120, speed: 3.15, cubeRate: 0.020, curveStrength: 1.05 },
+  hard:   { trackWidth: 90,  speed: 4.2, cubeRate: 0.015, curveStrength: 1.58 },
 };
 
 interface TrackSegment {

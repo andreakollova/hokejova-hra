@@ -34,9 +34,9 @@ const BLOCK_W = 70;
 const BLOCK_H = 25;
 
 const DIFFICULTY = {
-  easy: { asteroidRate: 0.008, asteroidSpeed: 1.5, lives: 5, shootRate: 8, blockHp: 1 },
-  medium: { asteroidRate: 0.015, asteroidSpeed: 2.5, lives: 3, shootRate: 12, blockHp: 2 },
-  hard: { asteroidRate: 0.025, asteroidSpeed: 3.5, lives: 2, shootRate: 15, blockHp: 3 },
+  easy: { asteroidRate: 0.0084, asteroidSpeed: 1.58, lives: 5, shootRate: 8.4, blockHp: 1 },
+  medium: { asteroidRate: 0.0158, asteroidSpeed: 2.63, lives: 3, shootRate: 12.6, blockHp: 2 },
+  hard: { asteroidRate: 0.0263, asteroidSpeed: 3.68, lives: 2, shootRate: 15.75, blockHp: 3 },
 };
 
 interface Bullet { x: number; y: number; active: boolean; }

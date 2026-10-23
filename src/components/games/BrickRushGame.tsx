@@ -35,9 +35,9 @@ const BRICK_RADIUS = 5;
 const TRAIL_LENGTH = 8;
 
 const DIFFICULTY_CFG = {
-  easy:   { paddleW: 150, ballSpeed: 4 },
-  medium: { paddleW: 120, ballSpeed: 6 },
-  hard:   { paddleW: 90,  ballSpeed: 8 },
+  easy:   { paddleW: 150, ballSpeed: 4.2 },
+  medium: { paddleW: 120, ballSpeed: 6.3 },
+  hard:   { paddleW: 90,  ballSpeed: 8.4 },
 };
 
 const BRICK_COLORS = ['#ef4444', '#eab308'];

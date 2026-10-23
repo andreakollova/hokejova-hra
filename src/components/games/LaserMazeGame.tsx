@@ -26,9 +26,9 @@ const CANVAS_W = 600;
 const CANVAS_H = 800;
 
 const DIFFICULTY = {
-  easy:   { lanes: 2, laserInterval: 2.5, warningTime: 1.2, scrollSpeed: 2, checkpointInterval: 3 },
-  medium: { lanes: 3, laserInterval: 1.8, warningTime: 1.0, scrollSpeed: 3, checkpointInterval: 2.5 },
-  hard:   { lanes: 4, laserInterval: 1.2, warningTime: 0.8, scrollSpeed: 4, checkpointInterval: 2 },
+  easy:   { lanes: 2, laserInterval: 2.38, warningTime: 1.14, scrollSpeed: 2.1, checkpointInterval: 2.85 },
+  medium: { lanes: 3, laserInterval: 1.71, warningTime: 0.95, scrollSpeed: 3.15, checkpointInterval: 2.38 },
+  hard:   { lanes: 4, laserInterval: 1.14, warningTime: 0.76, scrollSpeed: 4.2, checkpointInterval: 1.9 },
 };
 
 const LANE_COLORS = ['#22c55e', '#3b82f6', '#a855f7', '#f59e0b'];

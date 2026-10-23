@@ -37,9 +37,9 @@ const CATCHER_Y = CANVAS_H - 100;
 const CATCHER_R = 45;
 
 const DIFFICULTY = {
-  easy:   { fallSpeed: 2.5, spawnInterval: 1.8 },
-  medium: { fallSpeed: 4, spawnInterval: 1.2 },
-  hard:   { fallSpeed: 5.5, spawnInterval: 0.7 },
+  easy:   { fallSpeed: 2.63, spawnInterval: 1.71 },
+  medium: { fallSpeed: 4.2, spawnInterval: 1.14 },
+  hard:   { fallSpeed: 5.78, spawnInterval: 0.67 },
 };
 
 interface FallingBall {

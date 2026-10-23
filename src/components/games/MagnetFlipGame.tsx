@@ -29,9 +29,9 @@ const PLATFORM_H = 20;
 const BALL_RADIUS = 10;
 
 const DIFFICULTY = {
-  easy:   { targetSize: 80, ballSpeed: 4 },
-  medium: { targetSize: 55, ballSpeed: 6 },
-  hard:   { targetSize: 35, ballSpeed: 8 },
+  easy:   { targetSize: 80, ballSpeed: 4.2 },
+  medium: { targetSize: 55, ballSpeed: 6.3 },
+  hard:   { targetSize: 35, ballSpeed: 8.4 },
 };
 
 const PERFECT_DIST = 20;

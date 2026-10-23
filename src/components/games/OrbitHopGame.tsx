@@ -37,9 +37,9 @@ const PLANET_COLORS = [
 ];
 
 const DIFFICULTY = {
-  easy:   { orbitSpeed: 1.2, speedInc: 0.08, lives: 3, planetSizeMin: 35, planetSizeMax: 55 },
-  medium: { orbitSpeed: 1.8, speedInc: 0.12, lives: 3, planetSizeMin: 28, planetSizeMax: 45 },
-  hard:   { orbitSpeed: 2.5, speedInc: 0.18, lives: 2, planetSizeMin: 22, planetSizeMax: 38 },
+  easy:   { orbitSpeed: 1.26, speedInc: 0.084, lives: 3, planetSizeMin: 35, planetSizeMax: 55 },
+  medium: { orbitSpeed: 1.89, speedInc: 0.126, lives: 3, planetSizeMin: 28, planetSizeMax: 45 },
+  hard:   { orbitSpeed: 2.63, speedInc: 0.189, lives: 2, planetSizeMin: 22, planetSizeMax: 38 },
 };
 
 interface Planet {

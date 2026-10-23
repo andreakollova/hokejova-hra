@@ -31,9 +31,9 @@ const TARGET_RADIUS = 25;
 const PERFECT_RADIUS = 10;
 
 const DIFFICULTY = {
-  easy:   { interval: 2.5, speed: 1.2, label: 'Easy' },
-  medium: { interval: 1.8, speed: 1.8, label: 'Medium' },
-  hard:   { interval: 1.2, speed: 2.5, label: 'Hard' },
+  easy:   { interval: 2.38, speed: 1.26, label: 'Easy' },
+  medium: { interval: 1.71, speed: 1.89, label: 'Medium' },
+  hard:   { interval: 1.14, speed: 2.63, label: 'Hard' },
 };
 
 interface Target {
