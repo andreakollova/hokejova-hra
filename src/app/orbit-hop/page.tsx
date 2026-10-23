@@ -111,7 +111,7 @@ export default function OrbitHopPage() {
             <div className="bg-white rounded-2xl p-4 shadow-sm border border-purple-100"><div className="text-2xl font-bold text-purple-600 tabular-nums">{result.score}</div><div className="text-xs text-gray-400 mt-1">Score</div></div>
             <div className="bg-white rounded-2xl p-4 shadow-sm border border-purple-100"><div className="text-2xl font-bold text-gray-900 tabular-nums">{result.totalHops}</div><div className="text-xs text-gray-400 mt-1">Hops</div></div>
             <div className="bg-white rounded-2xl p-4 shadow-sm border border-purple-100"><div className="text-2xl font-bold text-gray-900 tabular-nums">{result.perfectHops}</div><div className="text-xs text-gray-400 mt-1">Perfect</div></div>
-            <div className="bg-white rounded-2xl p-4 shadow-sm border border-purple-100"><div className="text-2xl font-bold text-red-400 tabular-nums">{'❤'.repeat(result.lives)}{result.lives === 0 && '💀'}</div><div className="text-xs text-gray-400 mt-1">Lives</div></div>
+            <div className="bg-white rounded-2xl p-4 shadow-sm border border-purple-100"><div className="text-2xl font-bold text-purple-500 tabular-nums">{result.totalHops > 0 ? Math.round(((result.perfectHops + result.goodHops) / result.totalHops) * 100) : 0}%</div><div className="text-xs text-gray-400 mt-1">Accuracy</div></div>
           </div>
           <div className="flex gap-3">
             <button onClick={() => { setResult(null); setPhase('playing'); }} className="flex-1 bg-purple-600 hover:bg-purple-500 text-white font-medium py-3.5 rounded-full transition-all">Play again</button>
