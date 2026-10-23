@@ -104,13 +104,13 @@ export default function SpacePage() {
       <div className="min-h-screen bg-[#0f172a] flex items-center justify-center p-6">
         <div className="max-w-md w-full space-y-8">
           <div className="text-center">
-            <h1 className="text-3xl font-extrabold text-white">{result.lives > 0 ? 'Mission complete' : 'Game Over'}</h1>
+            <h1 className="text-3xl font-extrabold text-white">Mission complete</h1>
           </div>
           <div className="grid grid-cols-2 gap-3">
             <div className="bg-white/10 rounded-2xl p-4"><div className="text-2xl font-bold text-cyan-400 tabular-nums">{result.score}</div><div className="text-xs text-white/50 mt-1">Score</div></div>
             <div className="bg-white/10 rounded-2xl p-4"><div className="text-2xl font-bold text-white tabular-nums">{result.blocksDestroyed}</div><div className="text-xs text-white/50 mt-1">Blocks</div></div>
             <div className="bg-white/10 rounded-2xl p-4"><div className="text-2xl font-bold text-white tabular-nums">{result.asteroidsHit}</div><div className="text-xs text-white/50 mt-1">Hits</div></div>
-            <div className="bg-white/10 rounded-2xl p-4"><div className="text-2xl font-bold text-red-400 tabular-nums">{'❤'.repeat(result.lives)}{result.lives === 0 && '💀'}</div><div className="text-xs text-white/50 mt-1">Lives</div></div>
+            <div className="bg-white/10 rounded-2xl p-4"><div className="text-2xl font-bold text-cyan-400 tabular-nums">{result.duration}s</div><div className="text-xs text-white/50 mt-1">Duration</div></div>
           </div>
           <div className="flex gap-3">
             <button onClick={() => { setResult(null); setPhase('playing'); }} className="flex-1 bg-cyan-500 hover:bg-cyan-400 text-white font-medium py-3.5 rounded-full transition-all">Play again</button>

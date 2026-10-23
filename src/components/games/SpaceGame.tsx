@@ -83,6 +83,7 @@ export default function SpaceGame({
     timeLeft: duration as number,
     countdown: 3,
     blocksLeft: 0,
+    blocksDestroyed: 0,
     backProgress: 0,
   });
 
@@ -179,8 +180,8 @@ export default function SpaceGame({
         }
       }
 
-      // Time or lives up
-      if (s.elapsedTime >= duration || s.lives <= 0) {
+      // Time up (play full duration)
+      if (s.elapsedTime >= duration) {
         s.finished = true;
         onFinish({
           score: s.score,
@@ -262,7 +263,6 @@ export default function SpaceGame({
           const dx = a.x - s.shipX;
           const dy = a.y - (CANVAS_H - 35);
           if (Math.sqrt(dx * dx + dy * dy) < a.size / 2 + SHIP_W / 3) {
-            s.lives--;
             s.asteroidsHit++;
             a.active = false;
             s.invincible = 1.5;
@@ -280,6 +280,7 @@ export default function SpaceGame({
         timeLeft: Math.max(0, duration - s.elapsedTime),
         countdown: 0,
         blocksLeft: s.blocks.filter(b => b.active).length,
+        blocksDestroyed: s.blocksDestroyed,
         backProgress: s.backTimer / 3,
       });
 
@@ -438,9 +439,9 @@ export default function SpaceGame({
             <div className="text-3xl font-bold text-white tabular-nums">{hud.blocksLeft}</div>
             <div className="text-xs text-white/50 uppercase tracking-wider">Blocks</div>
           </div>
-          <div className="bg-white/10 backdrop-blur-md rounded-2xl px-5 py-3 text-right">
-            <div className="text-3xl font-bold text-red-400 tabular-nums">{'❤'.repeat(Math.max(0, hud.lives))}</div>
-            <div className="text-xs text-white/50 uppercase tracking-wider">Lives</div>
+          <div className="bg-white/10 backdrop-blur-md rounded-2xl px-5 py-3 text-center">
+            <div className="text-3xl font-bold text-cyan-400 tabular-nums">{hud.blocksDestroyed}</div>
+            <div className="text-xs text-white/50 uppercase tracking-wider">Destroyed</div>
           </div>
         </div>
       </div>
