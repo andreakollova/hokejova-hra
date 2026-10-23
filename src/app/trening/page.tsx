@@ -96,7 +96,14 @@ export default function TreningPage() {
   const [result, setResult] = useState<SlalomResult | null>(null);
   const [gameKey, setGameKey] = useState(0);
   const [isPaused, setIsPaused] = useState(false);
-  const [calibration, setCalibration] = useState<CalibrationData | null>(null);
+  const [calibration, setCalibration] = useState<CalibrationData | null>(() => {
+    if (typeof window === 'undefined') return null;
+    try {
+      const saved = localStorage.getItem('ballTracker_calibration') || sessionStorage.getItem('ballTracker_calibration');
+      if (saved) return JSON.parse(saved);
+    } catch {}
+    return null;
+  });
   const [musicConfig, setMusicConfig] = useState<MusicConfig | null>(null);
   const [showMusic, setShowMusic] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
@@ -120,15 +127,7 @@ export default function TreningPage() {
     return () => { spotify.pause(); };
   }, []);
 
-  // Load saved calibration
-  useEffect(() => {
-    const saved = localStorage.getItem('ballTracker_calibration') || sessionStorage.getItem('ballTracker_calibration');
-    if (saved) {
-      try {
-        setCalibration(JSON.parse(saved));
-      } catch {}
-    }
-  }, []);
+  // Calibration loaded synchronously in useState initializer above
 
   // Auto-open music after Spotify OAuth redirect or prefilled track from dashboard
   useEffect(() => {

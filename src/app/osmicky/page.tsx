@@ -32,7 +32,14 @@ export default function OsmickyPage() {
   const [duration, setDuration] = useState<30 | 60 | 90>(60);
   const [result, setResult] = useState<FigureEightResult | null>(null);
   const [isPaused, setIsPaused] = useState(false);
-  const [calibration, setCalibration] = useState<CalibrationData | null>(null);
+  const [calibration, setCalibration] = useState<CalibrationData | null>(() => {
+    if (typeof window === 'undefined') return null;
+    try {
+      const saved = localStorage.getItem('ballTracker_calibration') || sessionStorage.getItem('ballTracker_calibration');
+      if (saved) return JSON.parse(saved);
+    } catch {}
+    return null;
+  });
   const [bgTrack, setBgTrack] = useState<SpotifyTrack | null>(null);
   const [spotifyReturned, setSpotifyReturned] = useState(false);
   const [gameKey, setGameKey] = useState(0);
@@ -46,12 +53,6 @@ export default function OsmickyPage() {
   const pendingStreamRef = useRef<MediaStream | null>(null);
 
   useEffect(() => {
-    const saved = localStorage.getItem('ballTracker_calibration') || sessionStorage.getItem('ballTracker_calibration');
-    if (saved) {
-      try {
-        setCalibration(JSON.parse(saved));
-      } catch {}
-    }
     const params = new URLSearchParams(window.location.search);
     if (params.get('spotify') === 'connected') {
       setSpotifyReturned(true);
