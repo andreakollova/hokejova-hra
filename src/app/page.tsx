@@ -31,7 +31,7 @@ export default function Home() {
 
   return (
     <div className="min-h-screen bg-white flex flex-col">
-      {/* Navigation - always visible */}
+      {/* Navigation */}
       <header className={`fixed top-0 left-0 right-0 z-50 px-6 sm:px-10 transition-all duration-500 ${
         scrolled
           ? 'py-3 bg-white/90 backdrop-blur-2xl shadow-[0_1px_20px_-6px_rgba(0,0,0,0.08)] border-b border-gray-100'
@@ -39,24 +39,24 @@ export default function Home() {
       }`}>
         <div className="max-w-7xl mx-auto flex justify-between items-center">
           <Link href="/" className="flex items-center gap-2">
-            <Image src="/images/hb-icon.png" alt="" width={32} height={32} className="h-7 w-auto" />
-            <span className="text-lg font-black text-[#6c3ce0] tracking-tight">hockey beats</span>
+            <Image src={scrolled ? '/images/hb-icon.png' : '/images/hb-icon.png'} alt="" width={32} height={32} className="h-7 w-auto" />
+            <span className={`text-lg font-black tracking-tight transition-colors ${scrolled ? 'text-gray-900' : 'text-white'}`}>hockey beats</span>
           </Link>
           <nav className="flex items-center gap-6 sm:gap-8">
-            <a href="#how-it-works" className="text-sm font-medium text-gray-700 hover:text-gray-900 transition-colors hidden sm:block">How it works</a>
-            <a href="#games" className="text-sm font-medium text-gray-700 hover:text-gray-900 transition-colors hidden sm:block">Games</a>
-            <a href="#platforms" className="text-sm font-medium text-gray-700 hover:text-gray-900 transition-colors hidden sm:block">Play anywhere</a>
+            <a href="#how-it-works" className={`text-sm font-medium transition-colors hidden sm:block ${scrolled ? 'text-gray-600 hover:text-gray-900' : 'text-white/80 hover:text-white'}`}>How it works</a>
+            <a href="#games" className={`text-sm font-medium transition-colors hidden sm:block ${scrolled ? 'text-gray-600 hover:text-gray-900' : 'text-white/80 hover:text-white'}`}>Games</a>
+            <a href="#platforms" className={`text-sm font-medium transition-colors hidden sm:block ${scrolled ? 'text-gray-600 hover:text-gray-900' : 'text-white/80 hover:text-white'}`}>Play anywhere</a>
             {isLoggedIn ? (
               <>
                 {engLoaded && getStreak().currentStreak > 0 && (
                   <StreakBadge currentStreak={getStreak().currentStreak} frozen={getStreak().frozen} size="sm" />
                 )}
-                <Link href="/dashboard" className="text-sm font-medium text-gray-700">{settings.username}</Link>
+                <Link href="/dashboard" className={`text-sm font-medium ${scrolled ? 'text-gray-700' : 'text-white'}`}>{settings.username}</Link>
               </>
             ) : (
               <div className="flex items-center gap-3">
-                <button onClick={() => setShowAuth(true)} className="text-sm font-medium text-gray-700 hover:text-gray-900 transition-colors hidden sm:block">Log in</button>
-                <button onClick={() => setShowAuth(true)} className="text-sm font-bold px-5 py-2.5 rounded-full bg-[#6c3ce0] text-white hover:bg-[#5a2dc5] transition-all duration-300">Sign up</button>
+                <button onClick={() => setShowAuth(true)} className={`text-sm font-medium transition-colors hidden sm:block ${scrolled ? 'text-gray-700 hover:text-gray-900' : 'text-white/80 hover:text-white'}`}>Log in</button>
+                <button onClick={() => setShowAuth(true)} className="text-sm font-bold px-5 py-2.5 rounded-full bg-white text-gray-900 hover:bg-gray-100 transition-all duration-300">Sign up</button>
               </div>
             )}
           </nav>
@@ -525,49 +525,43 @@ export default function Home() {
 function HeroBanner({ isLoggedIn, onLoginClick }: { isLoggedIn: boolean; onLoginClick: () => void }) {
   return (
     <>
-      <section className="relative min-h-screen overflow-hidden bg-white">
+      <section className="relative h-screen overflow-hidden">
         {/* Background image - full bleed */}
         <div className="absolute inset-0">
-          <Image src="/images/hero-main.png" alt="" fill className="object-cover object-center" priority />
-          {/* Dark scrim on the left half where text lives - keeps photo vivid on right */}
-          <div className="absolute inset-0 bg-gradient-to-r from-black/80 via-black/50 to-transparent" />
-          <div className="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent" />
+          <Image src="/images/hero-main.png" alt="" fill className="object-cover object-top" priority />
+          <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/10 to-transparent" />
         </div>
 
-        {/* Content */}
-        <div className="relative z-10 max-w-7xl mx-auto px-6 sm:px-10 pt-28 sm:pt-36 pb-16 min-h-screen flex flex-col justify-center">
-          <div className="max-w-2xl">
-            <h1 className="text-5xl sm:text-7xl lg:text-8xl font-black text-white leading-[0.95] tracking-tight">
-              heads up.<br />game on.
-            </h1>
-            <p className="mt-6 text-lg sm:text-xl text-white/70 max-w-md leading-relaxed">
-              Hockey meets music. Play to the beat.<br />Keep your head up.
-            </p>
-            <div className="mt-8 flex flex-wrap items-center gap-4">
-              <button
-                onClick={() => {
-                  if (isLoggedIn) { window.location.href = '/dashboard'; }
-                  else { onLoginClick(); }
-                }}
-                className="bg-[#6c3ce0] text-white font-bold text-base px-8 py-4 rounded-full hover:bg-[#5a2dc5] active:scale-[0.97] transition-all duration-300 inline-flex items-center gap-2 shadow-lg shadow-purple-500/25"
-              >
-                Create your account
-                <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}><path strokeLinecap="round" strokeLinejoin="round" d="M13 7l5 5m0 0l-5 5m5-5H6" /></svg>
-              </button>
-              <a
-                href="#how-it-works"
-                className="font-bold text-base px-8 py-4 rounded-full border-2 border-[#6c3ce0] text-[#6c3ce0] hover:bg-[#6c3ce0] hover:text-white transition-all duration-300"
-              >
-                See how it works
-              </a>
-            </div>
+        {/* Content - bottom left */}
+        <div className="relative z-10 h-full flex flex-col justify-end max-w-7xl mx-auto px-6 sm:px-10 pb-20 sm:pb-24">
+          <h1 className="text-6xl sm:text-8xl lg:text-9xl font-black text-white leading-[0.9] tracking-tighter">
+            hockey<br />beats
+          </h1>
+          <div className="mt-6 flex flex-wrap items-center gap-4">
+            <button
+              onClick={() => {
+                if (isLoggedIn) { window.location.href = '/dashboard'; }
+                else { onLoginClick(); }
+              }}
+              className="bg-white text-gray-900 font-bold text-base px-8 py-4 rounded-full hover:bg-gray-100 active:scale-[0.97] transition-all duration-300"
+            >
+              Play now
+            </button>
+            <a
+              href="#how-it-works"
+              className="font-bold text-base text-white hover:text-white/80 transition-colors inline-flex items-center gap-1.5"
+            >
+              Learn more
+              <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}><path strokeLinecap="round" strokeLinejoin="round" d="M8.25 4.5l7.5 7.5-7.5 7.5" /></svg>
+            </a>
           </div>
+        </div>
 
-          {/* Bottom tagline */}
-          <div className="absolute bottom-6 left-6 sm:left-10 flex items-center gap-2.5">
-            <Image src="/images/hb-icon.png" alt="" width={28} height={28} className="h-6 w-auto" />
-            <span className="text-sm font-bold text-white/60 tracking-tight">Hockey. Music. Play.</span>
-          </div>
+        {/* Torn paper edge at bottom */}
+        <div className="absolute bottom-0 left-0 right-0 z-20">
+          <svg viewBox="0 0 1440 40" fill="white" preserveAspectRatio="none" className="w-full h-6 sm:h-10">
+            <path d="M0,40 L0,20 Q30,0 60,18 Q90,35 120,15 Q150,0 180,20 Q210,35 240,12 Q270,0 300,22 Q330,38 360,16 Q390,0 420,20 Q450,36 480,14 Q510,0 540,18 Q570,32 600,12 Q630,0 660,22 Q690,38 720,14 Q750,0 780,20 Q810,35 840,15 Q870,0 900,22 Q930,38 960,16 Q990,0 1020,18 Q1050,32 1080,12 Q1110,0 1140,20 Q1170,36 1200,14 Q1230,0 1260,22 Q1290,38 1320,16 Q1350,0 1380,20 Q1410,35 1440,18 L1440,40 Z" />
+          </svg>
         </div>
       </section>
 
