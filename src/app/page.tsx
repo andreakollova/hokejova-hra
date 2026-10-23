@@ -32,8 +32,8 @@ export default function Home() {
   return (
     <div className="min-h-screen bg-white flex flex-col">
       {/* Header */}
-      <header className="fixed top-0 left-0 right-0 z-50">
-        <div className="max-w-7xl mx-auto px-6 sm:px-10 py-5 flex justify-between items-center">
+      <header className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${scrolled ? 'bg-white shadow-[0_1px_20px_-6px_rgba(0,0,0,0.08)]' : ''}`}>
+        <div className="max-w-7xl mx-auto px-6 sm:px-10 py-4 flex justify-between items-center">
           <Link href="/" className="flex items-center gap-2">
             <Image src="/images/hb-icon.png" alt="" width={32} height={32} className="h-6 w-auto" />
             <span className="text-base font-black tracking-tight text-gray-900" style={{ fontFamily: "'GC Bustle Sans', sans-serif" }}>hockey beats</span>
@@ -521,43 +521,28 @@ export default function Home() {
 function HeroBanner({ isLoggedIn, onLoginClick }: { isLoggedIn: boolean; onLoginClick: () => void }) {
   return (
     <>
-      <section className="relative overflow-hidden bg-[#e8eaf0] pt-20">
-        <div className="relative max-w-7xl mx-auto px-6 sm:px-10">
-          <div className="relative w-full rounded-3xl overflow-hidden">
-            <Image src="/images/hero-clean.png" alt="" width={1942} height={809} className="w-full h-auto block" priority />
-            {/* Content overlay - left side */}
-            <div className="absolute inset-0 flex flex-col justify-center px-8 sm:px-14">
-          <div className="max-w-md">
-            <h1
-              className="text-5xl sm:text-6xl lg:text-7xl leading-[0.85] tracking-tight text-gray-900"
+      <section className="bg-white pt-20 pb-8">
+        <div className="max-w-7xl mx-auto px-4 sm:px-10">
+          <Image src="/images/hero-clean.png" alt="Hockey Beats" width={1942} height={809} className="w-full h-auto block rounded-3xl" priority />
+          <div className="mt-6 flex flex-wrap items-center gap-4 px-2">
+            <button
+              onClick={() => {
+                if (isLoggedIn) { window.location.href = '/dashboard'; }
+                else { onLoginClick(); }
+              }}
+              className="font-bold text-base px-8 py-4 rounded-full bg-gray-900 text-white hover:bg-gray-800 active:scale-[0.97] transition-all duration-300"
               style={{ fontFamily: "'GC Bustle Sans', sans-serif" }}
             >
-              hockey<br />beats
-            </h1>
-            <p className="mt-5 text-base text-gray-500 max-w-sm leading-relaxed">
-              A game you want to play. Practice the coach will notice.
-            </p>
-            <div className="mt-8 flex flex-wrap items-center gap-4">
-              <button
-                onClick={() => {
-                  if (isLoggedIn) { window.location.href = '/dashboard'; }
-                  else { onLoginClick(); }
-                }}
-                className="font-bold text-base px-8 py-4 rounded-full bg-gray-900 text-white hover:bg-gray-800 active:scale-[0.97] transition-all duration-300"
-                style={{ fontFamily: "'GC Bustle Sans', sans-serif" }}
-              >
-                Play now
-              </button>
-              <a
-                href="#how-it-works"
-                className="font-bold text-base text-gray-900 hover:text-gray-600 transition-colors inline-flex items-center gap-1.5"
-                style={{ fontFamily: "'GC Bustle Sans', sans-serif" }}
-              >
-                Learn more
-                <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}><path strokeLinecap="round" strokeLinejoin="round" d="M8.25 4.5l7.5 7.5-7.5 7.5" /></svg>
-              </a>
-            </div>
-            </div>
+              Play now
+            </button>
+            <a
+              href="#how-it-works"
+              className="font-bold text-base text-gray-900 hover:text-gray-600 transition-colors inline-flex items-center gap-1.5"
+              style={{ fontFamily: "'GC Bustle Sans', sans-serif" }}
+            >
+              Learn more
+              <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}><path strokeLinecap="round" strokeLinejoin="round" d="M8.25 4.5l7.5 7.5-7.5 7.5" /></svg>
+            </a>
           </div>
         </div>
       </section>
