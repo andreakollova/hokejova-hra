@@ -215,9 +215,9 @@ export default function DashboardPage() {
           <Link href="/trening" className="group block">
             <div className="relative rounded-2xl overflow-hidden">
               <Image src="/images/hero-clean.png" alt="Hockey Beats" width={1942} height={809} className="w-full h-auto block group-hover:scale-[1.02] transition-transform duration-700" />
-              <div className="absolute bottom-0 left-0 p-5 sm:p-8">
-                <div className="inline-flex items-center gap-2 bg-white text-black text-sm font-bold px-5 py-2.5 rounded-full group-hover:bg-emerald-400 transition-colors">
-                  <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+              <div className="absolute bottom-6 left-6 sm:bottom-8 sm:left-[35%]">
+                <div className="inline-flex items-center gap-2.5 bg-emerald-500 hover:bg-emerald-400 text-white text-base font-bold px-8 py-4 rounded-full transition-colors shadow-lg shadow-emerald-500/30">
+                  <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
                   Play now
                 </div>
               </div>
@@ -361,7 +361,7 @@ export default function DashboardPage() {
                           <div className="text-sm font-semibold truncate">
                             {entry.name} {isMe && <span className="text-emerald-400 text-xs">(you)</span>}
                           </div>
-                          <div className="text-xs text-white/30">{entry.song} · {entry.acc}%</div>
+                          <div className="text-xs text-white/30">{entry.song}</div>
                         </div>
                         <div className="text-lg font-black tabular-nums">{entry.score}</div>
                       </div>

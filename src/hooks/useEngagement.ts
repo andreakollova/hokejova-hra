@@ -155,23 +155,23 @@ export function useEngagement() {
       // --- Streak logic ---
       const wasPlayedToday = next.streak.lastPlayDate === today;
 
-      if (!wasPlayedToday) {
-        if (next.streak.frozen) {
-          // Playing while frozen - instant unfreeze! One game is enough
-          next.streak.frozen = false;
-          next.streak.frozenDate = '';
-          next.streak.consecutiveDaysAfterFreeze = 0;
+      // Always unfreeze when playing a game, regardless of whether played today
+      if (next.streak.frozen) {
+        next.streak.frozen = false;
+        next.streak.frozenDate = '';
+        next.streak.consecutiveDaysAfterFreeze = 0;
+        if (!wasPlayedToday) next.streak.currentStreak += 1;
+        next.streak.justUnfroze = true;
+      } else if (!wasPlayedToday) {
+        const yesterday = getYesterday();
+        if (next.streak.lastPlayDate === yesterday || next.streak.lastPlayDate === '') {
           next.streak.currentStreak += 1;
-          next.streak.justUnfroze = true;
-        } else {
-          const yesterday = getYesterday();
-          if (next.streak.lastPlayDate === yesterday || next.streak.lastPlayDate === '') {
-            next.streak.currentStreak += 1;
-          }
-          if (next.streak.currentStreak === 0) {
-            next.streak.currentStreak = 1;
-          }
         }
+        if (next.streak.currentStreak === 0) {
+          next.streak.currentStreak = 1;
+        }
+      }
+      if (!wasPlayedToday) {
         next.streak.lastPlayDate = today;
       }
 

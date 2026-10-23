@@ -60,7 +60,7 @@ export default function NeonDriftGame({
 
   const stateRef = useRef({
     ballX: CANVAS_W / 2,
-    ballY: 120,
+    ballY: CANVAS_H - 120,
     segments: [] as TrackSegment[],
     cubes: [] as Cube[],
     score: 0,
@@ -219,8 +219,8 @@ export default function NeonDriftGame({
       }
       s.ballX = Math.max(BALL_RADIUS, Math.min(CANVAS_W - BALL_RADIUS, s.ballX));
 
-      // Find track center at ball Y in world coords (flipped)
-      const ballWorldY = s.scrollOffset + (CANVAS_H - s.ballY);
+      // Find track center at ball Y in world coords
+      const ballWorldY = s.scrollOffset + s.ballY;
       const segIdx = Math.floor((ballWorldY - (s.segments.length > 0 ? s.segments[0].y : 0)) / SEGMENT_HEIGHT);
       let trackCenterAtBall = CANVAS_W / 2;
       if (segIdx >= 0 && segIdx < s.segments.length) {
@@ -263,7 +263,7 @@ export default function NeonDriftGame({
       // Check cube collection
       for (const cube of s.cubes) {
         if (cube.collected) continue;
-        const cubeScreenY = CANVAS_H - (cube.y - s.scrollOffset);
+        const cubeScreenY = cube.y - s.scrollOffset;
         if (cubeScreenY > CANVAS_H + 50) continue;
         if (cubeScreenY < -50) { cube.collected = true; continue; }
 
@@ -302,19 +302,19 @@ export default function NeonDriftGame({
     ctx.strokeStyle = 'rgba(59, 130, 246, 0.05)';
     ctx.lineWidth = 1;
     for (let gy = 0; gy < h; gy += 40) {
-      const offset = -(s.scrollOffset * 0.3) % 40;
+      const offset = (s.scrollOffset * 0.3) % 40;
       ctx.beginPath();
       ctx.moveTo(0, gy + offset);
       ctx.lineTo(w, gy + offset);
       ctx.stroke();
     }
 
-    // Draw track (flipped: bottom = behind, top = ahead)
+    // Draw track (scrolls down - top is ahead, bottom is behind)
     const halfW = config.trackWidth / 2;
     const glowHalfW = halfW + 8;
 
     for (let screenY = 0; screenY < h; screenY += SEGMENT_HEIGHT) {
-      const worldY = s.scrollOffset + (h - screenY);
+      const worldY = s.scrollOffset + screenY;
       const segIdx = Math.floor((worldY - (s.segments.length > 0 ? s.segments[0].y : 0)) / SEGMENT_HEIGHT);
       if (segIdx < 0 || segIdx >= s.segments.length) continue;
       const seg = s.segments[segIdx];
@@ -342,7 +342,7 @@ export default function NeonDriftGame({
     // Draw cubes
     for (const cube of s.cubes) {
       if (cube.collected) continue;
-      const screenY = CANVAS_H - (cube.y - s.scrollOffset);
+      const screenY = cube.y - s.scrollOffset;
       if (screenY < -20 || screenY > h + 20) continue;
 
       const cubeSize = 18;
@@ -385,7 +385,7 @@ export default function NeonDriftGame({
     ctx.fill();
 
     // Off-track warning glow at ball
-    const ballWorldY = s.scrollOffset + (CANVAS_H - s.ballY);
+    const ballWorldY = s.scrollOffset + s.ballY;
     const bSegIdx = Math.floor((ballWorldY - (s.segments.length > 0 ? s.segments[0].y : 0)) / SEGMENT_HEIGHT);
     let trackCX = CANVAS_W / 2;
     if (bSegIdx >= 0 && bSegIdx < s.segments.length) {
