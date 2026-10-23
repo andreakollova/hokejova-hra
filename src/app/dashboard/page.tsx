@@ -44,6 +44,7 @@ const GAMES = [
   { name: 'Brick Rush', href: '/brick-rush', image: '/images/game-brickrush.png', bg: '#111111', desc: 'Break the bricks' },
   { name: 'Magnet Flip', href: '/magnet-flip', image: '/images/game-magnetflip.png', bg: '#1a1025', desc: 'Bounce between platforms' },
   { name: 'Laser Maze', href: '/laser-maze', image: '/images/game-lasermaze.png', bg: '#0f1f0f', desc: 'Navigate the laser maze' },
+  { name: 'Color Catch', href: '/color-catch', image: '/images/game-colorcatch.png', bg: '#111111', desc: 'Match colors, catch balls' },
   { name: 'Target Smash', href: '/target-smash', image: '/images/game-targets.png', bg: '#d4d4d8', desc: 'Smash the bullseyes' },
   { name: 'Targets', href: '/terciky', image: '/images/game-targets.png', bg: '#1f2937', desc: 'Hit the targets' },
   { name: 'Figure 8', href: '/osmicky-terciky', image: '/images/game-figure8.png', bg: '#1a2e1a', desc: 'Figure eight drills' },
