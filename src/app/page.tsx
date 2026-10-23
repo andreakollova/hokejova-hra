@@ -523,14 +523,39 @@ export default function Home() {
 
 // Hero Banner - fullscreen with background image, CTA and platform selector
 function HeroBanner({ isLoggedIn, onLoginClick }: { isLoggedIn: boolean; onLoginClick: () => void }) {
+  const [slide, setSlide] = useState(0);
+  const slides = ['/images/hero-main.png', '/images/hero-slide2.png'];
+
+  // Auto-rotate every 6s
+  useEffect(() => {
+    const timer = setInterval(() => setSlide(s => (s + 1) % slides.length), 6000);
+    return () => clearInterval(timer);
+  }, []);
+
   return (
     <>
       <section className="relative h-screen overflow-hidden">
-        {/* Background image - full bleed */}
-        <div className="absolute inset-0">
-          <Image src="/images/hero-main.png" alt="" fill className="object-cover object-top" priority />
-          <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/10 to-transparent" />
-        </div>
+        {/* Background slides */}
+        {slides.map((src, i) => (
+          <div key={src} className={`absolute inset-0 transition-opacity duration-1000 ${i === slide ? 'opacity-100' : 'opacity-0'}`}>
+            <Image src={src} alt="" fill className="object-cover object-top" priority={i === 0} />
+          </div>
+        ))}
+        <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/10 to-transparent" />
+
+        {/* Prev / Next arrows */}
+        <button
+          onClick={() => setSlide(s => (s - 1 + slides.length) % slides.length)}
+          className="absolute left-4 sm:left-8 top-1/2 -translate-y-1/2 z-20 w-12 h-12 rounded-full bg-white/90 hover:bg-white flex items-center justify-center shadow-lg transition-all"
+        >
+          <svg className="w-5 h-5 text-gray-900" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}><path strokeLinecap="round" strokeLinejoin="round" d="M15.75 19.5L8.25 12l7.5-7.5" /></svg>
+        </button>
+        <button
+          onClick={() => setSlide(s => (s + 1) % slides.length)}
+          className="absolute right-4 sm:right-8 top-1/2 -translate-y-1/2 z-20 w-12 h-12 rounded-full bg-white/90 hover:bg-white flex items-center justify-center shadow-lg transition-all"
+        >
+          <svg className="w-5 h-5 text-gray-900" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}><path strokeLinecap="round" strokeLinejoin="round" d="M8.25 4.5l7.5 7.5-7.5 7.5" /></svg>
+        </button>
 
         {/* Content - bottom left */}
         <div className="relative z-10 h-full flex flex-col justify-end max-w-7xl mx-auto px-6 sm:px-10 pb-20 sm:pb-24">
