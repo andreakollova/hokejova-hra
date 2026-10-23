@@ -202,9 +202,9 @@ export default function SpaceGame({
       }
       s.shipX = Math.max(SHIP_W / 2, Math.min(CANVAS_W - SHIP_W / 2, s.shipX));
 
-      // Auto-shoot
+      // Auto-shoot (blocked during invincibility)
       s.shootCooldown -= delta;
-      if (s.shootCooldown <= 0) {
+      if (s.shootCooldown <= 0 && s.invincible <= 0) {
         s.bullets.push({ x: s.shipX, y: CANVAS_H - 50, active: true });
         s.shootCooldown = 1 / config.shootRate;
         playSound(1200, 0.05);
@@ -265,7 +265,7 @@ export default function SpaceGame({
           if (Math.sqrt(dx * dx + dy * dy) < a.size / 2 + SHIP_W / 3) {
             s.asteroidsHit++;
             a.active = false;
-            s.invincible = 1.5;
+            s.invincible = 2;
             s.shakeTimer = 0.3;
             playSound(150, 0.3, 'square');
           }
