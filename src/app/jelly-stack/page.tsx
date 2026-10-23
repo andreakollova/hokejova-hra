@@ -10,6 +10,7 @@ import { useSpotify } from '@/hooks/useSpotify';
 import { useMusicPlayer } from '@/hooks/useMusicPlayer';
 import { SpotifyTrack } from '@/lib/spotify';
 import Link from 'next/link';
+import { useEngagement } from '@/hooks/useEngagement';
 
 const CalibrationWizard = dynamic(() => import('@/components/tracking/CalibrationWizard'), { ssr: false });
 const JellyStackGame = dynamic(() => import('@/components/games/JellyStackGame'), { ssr: false });
@@ -28,6 +29,7 @@ export default function JellyStackPage() {
   const [spotifyReturned, setSpotifyReturned] = useState(false);
   const [dropSide, setDropSide] = useState<'center' | 'left' | 'right'>('center');
 
+  const { recordGame } = useEngagement();
   const tracker = useTracker(inputMode);
   const spotify = useSpotify();
   const { play: playMusic, pause: pauseMusic } = useMusicPlayer();
@@ -95,6 +97,13 @@ export default function JellyStackPage() {
     window.addEventListener('mousemove', handler);
     return () => window.removeEventListener('mousemove', handler);
   }, [phase, inputMode]);
+
+  // Record engagement when game finishes
+  useEffect(() => {
+    if (result) {
+      recordGame({ score: (result as any).score || 0, accuracy: (result as any).accuracy || 0, correctPasses: 0, durationSeconds: (result as any).duration || 60, gameType: 'game' });
+    }
+  }, [result]);
 
   if (phase === 'calibration') {
     return <CalibrationWizard onComplete={(cal) => { setCalibration(cal); tracker.setCalibration(cal); setPhase('setup'); }} onCancel={() => setPhase('setup')} />;
