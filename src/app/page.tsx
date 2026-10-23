@@ -524,7 +524,11 @@ export default function Home() {
 // Hero Banner - fullscreen with background image, CTA and platform selector
 function HeroBanner({ isLoggedIn, onLoginClick }: { isLoggedIn: boolean; onLoginClick: () => void }) {
   const [slide, setSlide] = useState(0);
-  const slides = ['/images/hero-main.png', '/images/hero-slide2.png'];
+  const slides = [
+    { src: '/images/hero-main.png', logo: '/images/hb-logo-hero.png' },
+    { src: '/images/hero-slide2.png', logo: '/images/hb-logo-hero.png' },
+    { src: '/images/hero-slide3.png', logo: '/images/hb-logo-hero-dark.png' },
+  ];
 
   // Auto-rotate every 6s
   useEffect(() => {
@@ -536,12 +540,12 @@ function HeroBanner({ isLoggedIn, onLoginClick }: { isLoggedIn: boolean; onLogin
     <>
       <section className="relative h-screen overflow-hidden">
         {/* Background slides */}
-        {slides.map((src, i) => (
-          <div key={src} className={`absolute inset-0 transition-opacity duration-1000 ${i === slide ? 'opacity-100' : 'opacity-0'}`}>
-            <Image src={src} alt="" fill className="object-cover object-top" priority={i === 0} />
+        {slides.map((s, i) => (
+          <div key={s.src} className={`absolute inset-0 transition-opacity duration-1000 ${i === slide ? 'opacity-100' : 'opacity-0'}`}>
+            <Image src={s.src} alt="" fill className="object-cover object-top" priority={i === 0} />
           </div>
         ))}
-        <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/10 to-transparent" />
+        <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent" />
 
         {/* Prev / Next arrows */}
         <button
@@ -559,7 +563,7 @@ function HeroBanner({ isLoggedIn, onLoginClick }: { isLoggedIn: boolean; onLogin
 
         {/* Content - bottom left */}
         <div className="relative z-10 h-full flex flex-col justify-end max-w-7xl mx-auto px-6 sm:px-10 pb-20 sm:pb-24">
-          <Image src="/images/hb-logo-hero.png" alt="hockey beats" width={600} height={250} className="h-28 sm:h-40 lg:h-52 w-auto" />
+          <Image src={slides[slide].logo} alt="hockey beats" width={600} height={250} className="h-28 sm:h-40 lg:h-52 w-auto transition-opacity duration-500" />
           <div className="mt-6 flex flex-wrap items-center gap-4">
             <button
               onClick={() => {
@@ -580,12 +584,6 @@ function HeroBanner({ isLoggedIn, onLoginClick }: { isLoggedIn: boolean; onLogin
           </div>
         </div>
 
-        {/* Torn paper edge at bottom */}
-        <div className="absolute bottom-0 left-0 right-0 z-20">
-          <svg viewBox="0 0 1440 40" fill="white" preserveAspectRatio="none" className="w-full h-6 sm:h-10">
-            <path d="M0,40 L0,20 Q30,0 60,18 Q90,35 120,15 Q150,0 180,20 Q210,35 240,12 Q270,0 300,22 Q330,38 360,16 Q390,0 420,20 Q450,36 480,14 Q510,0 540,18 Q570,32 600,12 Q630,0 660,22 Q690,38 720,14 Q750,0 780,20 Q810,35 840,15 Q870,0 900,22 Q930,38 960,16 Q990,0 1020,18 Q1050,32 1080,12 Q1110,0 1140,20 Q1170,36 1200,14 Q1230,0 1260,22 Q1290,38 1320,16 Q1350,0 1380,20 Q1410,35 1440,18 L1440,40 Z" />
-          </svg>
-        </div>
       </section>
 
       <div id="more" />
