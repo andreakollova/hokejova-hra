@@ -244,149 +244,136 @@ export default function DashboardPage() {
           </div>
         </div>
 
-        {/* Bottom grid: Music + Ranking */}
-        <div className="grid lg:grid-cols-2 gap-8">
-
-          {/* Music */}
-          <div>
-            <h2 className="text-xs font-bold uppercase tracking-[0.2em] text-white/30 mb-5">Music</h2>
-
-            {favorites.length > 0 && (
-              <div className="mb-6">
-                <h3 className="text-sm font-bold text-white/60 mb-3">Favourites</h3>
-                <div className="space-y-2">
-                  {favorites.map((rec) => (
-                    <button key={rec.track.id} onClick={() => handleSongClick({ name: rec.track.name, artist: rec.track.artists, id: rec.track.id, albumArt: rec.track.albumArt })}
-                      className="w-full flex items-center gap-3 rounded-2xl p-3 bg-white/5 border border-white/5 hover:bg-white/10 hover:border-white/10 transition-all text-left">
-                      {rec.track.albumArt && <img src={rec.track.albumArt} alt="" className="w-10 h-10 rounded-lg object-cover" />}
-                      <div className="flex-1 min-w-0">
-                        <div className="text-sm font-semibold truncate">{rec.track.name}</div>
-                        <div className="text-xs text-white/30 truncate">{rec.track.artists}</div>
-                      </div>
-                      <span className="text-xs text-white/30 tabular-nums">{rec.playCount}x</span>
-                    </button>
-                  ))}
-                </div>
-              </div>
-            )}
-
-            {recent.length > 0 && (
-              <div>
-                <h3 className="text-sm font-bold text-white/60 mb-3">Recently played</h3>
-                <div className="space-y-2">
-                  {recent.filter(r => !favorites.find(f => f.track.id === r.track.id)).map((rec) => (
-                    <button key={rec.track.id} onClick={() => handleSongClick({ name: rec.track.name, artist: rec.track.artists, id: rec.track.id, albumArt: rec.track.albumArt })}
-                      className="w-full flex items-center gap-3 rounded-2xl p-3 bg-white/5 border border-white/5 hover:bg-white/10 hover:border-white/10 transition-all text-left">
-                      {rec.track.albumArt && <img src={rec.track.albumArt} alt="" className="w-10 h-10 rounded-lg object-cover" />}
-                      <div className="flex-1 min-w-0">
-                        <div className="text-sm font-semibold truncate">{rec.track.name}</div>
-                        <div className="text-xs text-white/30 truncate">{rec.track.artists}</div>
-                      </div>
-                    </button>
-                  ))}
-                </div>
-              </div>
-            )}
-
-            {musicHistory.length === 0 && (
+        {/* Music: Favourites + Recently played side by side */}
+        <div className="mb-12">
+          <h2 className="text-xs font-bold uppercase tracking-[0.2em] text-white/30 mb-5">Music</h2>
+          <div className="grid lg:grid-cols-2 gap-6">
+            {/* Favourites */}
+            <div>
+              <h3 className="text-sm font-bold text-white/60 mb-3">Favourites</h3>
               <div className="space-y-2">
-                {[
-                  { name: 'Blinding Lights', artist: 'The Weeknd', plays: 24 },
-                  { name: 'Levitating', artist: 'Dua Lipa', plays: 18 },
-                  { name: 'Flowers', artist: 'Miley Cyrus', plays: 12 },
-                  { name: 'Anti-Hero', artist: 'Taylor Swift', plays: 9 },
-                  { name: 'Unholy', artist: 'Sam Smith, Kim Petras', plays: 7 },
-                ].map((t) => (
-                  <button key={t.name} onClick={() => handleSongClick({ name: t.name, artist: t.artist })}
+                {(favorites.length > 0 ? favorites : [
+                  { track: { id: 'b1', name: 'Blinding Lights', artists: 'The Weeknd', albumArt: '' }, playCount: 24 },
+                  { track: { id: 'l1', name: 'Levitating', artists: 'Dua Lipa', albumArt: '' }, playCount: 18 },
+                  { track: { id: 'f1', name: 'Flowers', artists: 'Miley Cyrus', albumArt: '' }, playCount: 12 },
+                  { track: { id: 'a1', name: 'Anti-Hero', artists: 'Taylor Swift', albumArt: '' }, playCount: 9 },
+                  { track: { id: 'u1', name: 'Unholy', artists: 'Sam Smith, Kim Petras', albumArt: '' }, playCount: 7 },
+                ] as TrackRecord[]).slice(0, 5).map((rec) => (
+                  <button key={rec.track.id} onClick={() => handleSongClick({ name: rec.track.name, artist: rec.track.artists, id: rec.track.id, albumArt: rec.track.albumArt })}
                     className="w-full flex items-center gap-3 rounded-2xl p-3 bg-white/5 border border-white/5 hover:bg-white/10 hover:border-white/10 transition-all text-left">
-                    <div className="w-10 h-10 rounded-lg bg-white/10 flex items-center justify-center">
-                      <svg className="w-4 h-4 text-white/30" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}><path strokeLinecap="round" strokeLinejoin="round" d="M9 19V6l12-3v13M9 19c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zm12-3c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zM9 10l12-3" /></svg>
-                    </div>
+                    {rec.track.albumArt ? <img src={rec.track.albumArt} alt="" className="w-10 h-10 rounded-lg object-cover" /> : (
+                      <div className="w-10 h-10 rounded-lg bg-white/10 flex items-center justify-center">
+                        <svg className="w-4 h-4 text-white/30" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}><path strokeLinecap="round" strokeLinejoin="round" d="M9 19V6l12-3v13M9 19c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zm12-3c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zM9 10l12-3" /></svg>
+                      </div>
+                    )}
                     <div className="flex-1 min-w-0">
-                      <div className="text-sm font-semibold truncate">{t.name}</div>
-                      <div className="text-xs text-white/30 truncate">{t.artist}</div>
+                      <div className="text-sm font-semibold truncate">{rec.track.name}</div>
+                      <div className="text-xs text-white/30 truncate">{rec.track.artists}</div>
                     </div>
-                    <span className="text-xs text-white/30 tabular-nums">{t.plays}x</span>
+                    <span className="text-xs text-white/30 tabular-nums">{rec.playCount}x</span>
                   </button>
                 ))}
               </div>
-            )}
-          </div>
-
-          {/* Rankings */}
-          <div>
-            <div className="flex items-center justify-between mb-5">
-              <h2 className="text-xs font-bold uppercase tracking-[0.2em] text-white/30">Leaderboard</h2>
-              <Link href="/rebricek" className="text-xs text-emerald-400 font-medium hover:text-emerald-300 transition-colors">View all</Link>
             </div>
 
-            {topScores.length > 0 ? (
+            {/* Recently played */}
+            <div>
+              <h3 className="text-sm font-bold text-white/60 mb-3">Recently played</h3>
               <div className="space-y-2">
-                {topScores.map((entry, idx) => {
+                {(recent.length > 0 ? recent : [
+                  { track: { id: 'r1', name: 'As It Was', artists: 'Harry Styles', albumArt: '' }, playCount: 1, lastPlayed: 0 },
+                  { track: { id: 'r2', name: 'Heat Waves', artists: 'Glass Animals', albumArt: '' }, playCount: 1, lastPlayed: 0 },
+                  { track: { id: 'r3', name: 'Shivers', artists: 'Ed Sheeran', albumArt: '' }, playCount: 1, lastPlayed: 0 },
+                  { track: { id: 'r4', name: 'Stay', artists: 'The Kid LAROI, Justin Bieber', albumArt: '' }, playCount: 1, lastPlayed: 0 },
+                  { track: { id: 'r5', name: 'Peaches', artists: 'Justin Bieber', albumArt: '' }, playCount: 1, lastPlayed: 0 },
+                ] as TrackRecord[]).slice(0, 5).map((rec) => (
+                  <button key={rec.track.id} onClick={() => handleSongClick({ name: rec.track.name, artist: rec.track.artists, id: rec.track.id, albumArt: rec.track.albumArt })}
+                    className="w-full flex items-center gap-3 rounded-2xl p-3 bg-white/5 border border-white/5 hover:bg-white/10 hover:border-white/10 transition-all text-left">
+                    {rec.track.albumArt ? <img src={rec.track.albumArt} alt="" className="w-10 h-10 rounded-lg object-cover" /> : (
+                      <div className="w-10 h-10 rounded-lg bg-white/10 flex items-center justify-center">
+                        <svg className="w-4 h-4 text-white/30" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}><path strokeLinecap="round" strokeLinejoin="round" d="M9 19V6l12-3v13M9 19c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zm12-3c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zM9 10l12-3" /></svg>
+                      </div>
+                    )}
+                    <div className="flex-1 min-w-0">
+                      <div className="text-sm font-semibold truncate">{rec.track.name}</div>
+                      <div className="text-xs text-white/30 truncate">{rec.track.artists}</div>
+                    </div>
+                  </button>
+                ))}
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* Leaderboard: Score left + Time Played right */}
+        <div className="mb-8">
+          <div className="flex items-center justify-between mb-5">
+            <h2 className="text-xs font-bold uppercase tracking-[0.2em] text-white/30">Leaderboard</h2>
+            <Link href="/rebricek" className="text-xs text-emerald-400 font-medium hover:text-emerald-300 transition-colors">View all</Link>
+          </div>
+          <div className="grid lg:grid-cols-2 gap-6">
+            {/* Score ranking */}
+            <div>
+              <h3 className="text-sm font-bold text-white/60 mb-3">Best score</h3>
+              <div className="space-y-2">
+                {(topScores.length > 0 ? topScores.slice(0, 5) : [
+                  { id: 'm1', username: 'matej_k', score: 2840, song_name: 'Blinding Lights' },
+                  { id: 'm2', username: 'zuzka99', score: 2510, song_name: 'Levitating' },
+                  { id: 'm3', username: 'hockeyboy', score: 2280, song_name: 'Flowers' },
+                  { id: 'm4', username: settings.username, score: 1950, song_name: favorites.length > 0 ? favorites[0].track.name : 'Slalom' },
+                  { id: 'm5', username: 'petra_h', score: 1720, song_name: 'Unholy' },
+                ] as { id: string; username: string; score: number; song_name: string }[]).map((entry, idx) => {
                   const isMe = entry.username === settings.username;
                   return (
                     <div key={entry.id} className={`flex items-center gap-3 rounded-2xl p-3 ${isMe ? 'bg-emerald-500/10 border border-emerald-500/20' : 'bg-white/5 border border-white/5'}`}>
-                      <div className={`w-8 h-8 rounded-full flex items-center justify-center text-xs font-black ${
+                      <div className={`w-7 h-7 rounded-full flex items-center justify-center text-xs font-black ${
                         idx === 0 ? 'bg-amber-400/20 text-amber-400' : idx === 1 ? 'bg-white/10 text-white/60' : idx === 2 ? 'bg-orange-400/20 text-orange-400' : 'bg-white/5 text-white/30'
                       }`}>{idx + 1}</div>
                       <div className="flex-1 min-w-0">
                         <div className="text-sm font-semibold truncate">
                           {entry.username} {isMe && <span className="text-emerald-400 text-xs">(you)</span>}
                         </div>
-                        <div className="text-xs text-white/30">{entry.song_name || 'Slalom'} · {entry.accuracy}%</div>
+                        <div className="text-xs text-white/30 truncate">{entry.song_name}</div>
                       </div>
                       <div className="text-lg font-black tabular-nums">{entry.score}</div>
                     </div>
                   );
                 })}
               </div>
-            ) : (
-              <div>
-                <div className="space-y-2">
-                  {[
-                    { rank: 1, name: 'matej_k', score: 2840, song: 'Blinding Lights', acc: 96 },
-                    { rank: 2, name: 'zuzka99', score: 2510, song: 'Levitating', acc: 91 },
-                    { rank: 3, name: 'hockeyboy', score: 2280, song: 'Flowers', acc: 88 },
-                    { rank: 4, name: settings.username, score: 1950, song: favorites.length > 0 ? favorites[0].track.name : 'Slalom', acc: 85 },
-                    { rank: 5, name: 'petra_h', score: 1720, song: 'Unholy', acc: 82 },
-                  ].map((entry) => {
-                    const isMe = entry.name === settings.username;
-                    const idx = entry.rank - 1;
-                    return (
-                      <div key={entry.rank} className={`flex items-center gap-3 rounded-2xl p-3 ${isMe ? 'bg-emerald-500/10 border border-emerald-500/20' : 'bg-white/5 border border-white/5'}`}>
-                        <div className={`w-8 h-8 rounded-full flex items-center justify-center text-xs font-black ${
-                          idx === 0 ? 'bg-amber-400/20 text-amber-400' : idx === 1 ? 'bg-white/10 text-white/60' : idx === 2 ? 'bg-orange-400/20 text-orange-400' : 'bg-white/5 text-white/30'
-                        }`}>{entry.rank}</div>
-                        <div className="flex-1 min-w-0">
-                          <div className="text-sm font-semibold truncate">
-                            {entry.name} {isMe && <span className="text-emerald-400 text-xs">(you)</span>}
-                          </div>
-                          <div className="text-xs text-white/30">{entry.song}</div>
-                        </div>
-                        <div className="text-lg font-black tabular-nums">{entry.score}</div>
-                      </div>
-                    );
-                  })}
-                </div>
-              </div>
-            )}
+            </div>
 
-            {myScores.length > 0 && (
-              <div className="mt-6">
-                <h3 className="text-sm font-bold text-white/60 mb-3">Your recent</h3>
-                <div className="space-y-2">
-                  {myScores.slice(0, 3).map((entry) => (
-                    <div key={entry.id} className="flex items-center justify-between rounded-2xl p-3 bg-white/5 border border-white/5">
-                      <div>
-                        <div className="text-sm font-semibold">{entry.score} pts</div>
-                        <div className="text-xs text-white/30">{entry.song_name || 'Slalom'} · {new Date(entry.created_at).toLocaleDateString('en-GB', { day: 'numeric', month: 'short' })}</div>
+            {/* Time played ranking */}
+            <div>
+              <h3 className="text-sm font-bold text-white/60 mb-3">Time played</h3>
+              <div className="space-y-2">
+                {[
+                  { name: 'hockeyboy', mins: 847 },
+                  { name: 'matej_k', mins: 612 },
+                  { name: 'zuzka99', mins: 534 },
+                  { name: settings.username, mins: engLoaded ? Math.max(engData.totalMinutesPlayed || 0, 1) : 215 },
+                  { name: 'petra_h', mins: 389 },
+                ].sort((a, b) => b.mins - a.mins).map((entry, idx) => {
+                  const isMe = entry.name === settings.username;
+                  const h = Math.floor(entry.mins / 60);
+                  const m = entry.mins % 60;
+                  const timeStr = h > 0 ? `${h}h ${m}m` : `${m}m`;
+                  return (
+                    <div key={entry.name} className={`flex items-center gap-3 rounded-2xl p-3 ${isMe ? 'bg-emerald-500/10 border border-emerald-500/20' : 'bg-white/5 border border-white/5'}`}>
+                      <div className={`w-7 h-7 rounded-full flex items-center justify-center text-xs font-black ${
+                        idx === 0 ? 'bg-amber-400/20 text-amber-400' : idx === 1 ? 'bg-white/10 text-white/60' : idx === 2 ? 'bg-orange-400/20 text-orange-400' : 'bg-white/5 text-white/30'
+                      }`}>{idx + 1}</div>
+                      <div className="flex-1 min-w-0">
+                        <div className="text-sm font-semibold truncate">
+                          {entry.name} {isMe && <span className="text-emerald-400 text-xs">(you)</span>}
+                        </div>
+                        <div className="text-xs text-white/30">{entry.mins >= 60 ? `${Math.floor(entry.mins / 60)} hours` : `${entry.mins} minutes`} of practice</div>
                       </div>
-                      <div className="text-xs text-white/30">{entry.accuracy}%</div>
+                      <div className="text-lg font-black tabular-nums">{timeStr}</div>
                     </div>
-                  ))}
-                </div>
+                  );
+                })}
               </div>
-            )}
+            </div>
           </div>
         </div>
       </div>
