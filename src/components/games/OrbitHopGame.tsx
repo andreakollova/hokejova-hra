@@ -315,7 +315,7 @@ export default function OrbitHopGame({
 
       // Hop: ball moves to chosen side (always same direction)
       const inHopZone = input.active && (
-        hopSide === 'right' ? input.x > 0.7 : input.x < 0.3
+        hopSide === 'right' ? input.x > 0.8 : input.x < 0.2
       );
       if (inHopZone && !s.wasRight && !s.hopAnim && !s.missAnim) {
         hop(s);
@@ -473,10 +473,11 @@ export default function OrbitHopGame({
     // Hop zone indicator (alternates left/right)
     if (s.started && !s.finished) {
       const isRight = hopSide === 'right';
-      const hzX = isRight ? w * 0.7 : 0;
-      const hzLabelX = isRight ? w * 0.85 : w * 0.15;
+      const hzX = isRight ? w * 0.8 : 0;
+      const hzW = w * 0.2;
+      const hzLabelX = isRight ? w * 0.9 : w * 0.1;
       ctx.fillStyle = 'rgba(139, 92, 246, 0.06)';
-      ctx.fillRect(hzX, 0, w * 0.3, h);
+      ctx.fillRect(hzX, 0, hzW, h);
       ctx.fillStyle = 'rgba(139, 92, 246, 0.2)';
       ctx.font = 'bold 32px sans-serif';
       ctx.textAlign = 'center';
