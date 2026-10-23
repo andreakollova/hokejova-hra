@@ -49,9 +49,9 @@ interface ActiveTarget {
 
 // Difficulty configs
 const DIFFICULTY = {
-  easy: { targetRadius: 0.6, maxTime: 4, minTargets: 1, maxTargets: 1, shrink: false },
-  medium: { targetRadius: 0.45, maxTime: 3, minTargets: 1, maxTargets: 2, shrink: true },
-  hard: { targetRadius: 0.35, maxTime: 2, minTargets: 1, maxTargets: 3, shrink: true },
+  easy: { targetRadius: 0.6, maxTime: 2.8, minTargets: 1, maxTargets: 2, shrink: false },
+  medium: { targetRadius: 0.45, maxTime: 1.8, minTargets: 2, maxTargets: 3, shrink: true },
+  hard: { targetRadius: 0.35, maxTime: 1.3, minTargets: 2, maxTargets: 4, shrink: true },
 };
 
 function Target({
