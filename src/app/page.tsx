@@ -31,28 +31,28 @@ export default function Home() {
 
   return (
     <div className="min-h-screen bg-white flex flex-col">
-      {/* Header with top gradient fade */}
-      <header className="fixed top-0 left-0 right-0 z-50" style={{ background: 'linear-gradient(to bottom, rgba(0,0,0,0.5) 0%, rgba(0,0,0,0.2) 60%, transparent 100%)' }}>
+      {/* Header */}
+      <header className="fixed top-0 left-0 right-0 z-50">
         <div className="max-w-7xl mx-auto px-6 sm:px-10 py-5 flex justify-between items-center">
           <Link href="/" className="flex items-center gap-2">
             <Image src="/images/hb-icon.png" alt="" width={32} height={32} className="h-6 w-auto" />
-            <span className="text-base font-black tracking-tight text-white" style={{ fontFamily: "'GC Bustle Sans', sans-serif" }}>hockey beats</span>
+            <span className="text-base font-black tracking-tight text-gray-900" style={{ fontFamily: "'GC Bustle Sans', sans-serif" }}>hockey beats</span>
           </Link>
           <nav className="flex items-center gap-5 sm:gap-7">
-            <a href="#how-it-works" className="text-sm font-medium text-white/80 hover:text-white transition-colors hidden sm:block">How it works</a>
-            <a href="#games" className="text-sm font-medium text-white/80 hover:text-white transition-colors hidden sm:block">Games</a>
-            <a href="#platforms" className="text-sm font-medium text-white/80 hover:text-white transition-colors hidden sm:block">Play anywhere</a>
+            <a href="#how-it-works" className="text-sm font-medium text-gray-600 hover:text-gray-900 transition-colors hidden sm:block">How it works</a>
+            <a href="#games" className="text-sm font-medium text-gray-600 hover:text-gray-900 transition-colors hidden sm:block">Games</a>
+            <a href="#platforms" className="text-sm font-medium text-gray-600 hover:text-gray-900 transition-colors hidden sm:block">Play anywhere</a>
             {isLoggedIn ? (
               <>
                 {engLoaded && getStreak().currentStreak > 0 && (
                   <StreakBadge currentStreak={getStreak().currentStreak} frozen={getStreak().frozen} size="sm" />
                 )}
-                <Link href="/dashboard" className="text-sm font-medium text-white">{settings.username}</Link>
+                <Link href="/dashboard" className="text-sm font-medium text-gray-700">{settings.username}</Link>
               </>
             ) : (
               <div className="flex items-center gap-3">
-                <button onClick={() => setShowAuth(true)} className="text-sm font-medium text-white/80 hover:text-white transition-colors hidden sm:block">Log in</button>
-                <button onClick={() => setShowAuth(true)} className="text-sm font-bold px-5 py-2.5 rounded-full bg-white text-gray-900 hover:bg-gray-100 transition-all duration-300">Sign up</button>
+                <button onClick={() => setShowAuth(true)} className="text-sm font-medium text-gray-600 hover:text-gray-900 transition-colors hidden sm:block">Log in</button>
+                <button onClick={() => setShowAuth(true)} className="text-sm font-bold px-5 py-2.5 rounded-full bg-gray-900 text-white hover:bg-gray-800 transition-all duration-300">Sign up</button>
               </div>
             )}
           </nav>
@@ -519,74 +519,47 @@ export default function Home() {
 
 // Hero Banner - fullscreen with background image, CTA and platform selector
 function HeroBanner({ isLoggedIn, onLoginClick }: { isLoggedIn: boolean; onLoginClick: () => void }) {
-  const [slide, setSlide] = useState(0);
-  const slides = [
-    { src: '/images/hero-main.png', dark: false },
-    { src: '/images/hero-slide2.png', dark: false },
-    { src: '/images/hero-slide3.png', dark: true },
-  ];
-
-  // Auto-rotate every 6s
-  useEffect(() => {
-    const timer = setInterval(() => setSlide(s => (s + 1) % slides.length), 6000);
-    return () => clearInterval(timer);
-  }, []);
-
   return (
     <>
-      <section className="relative h-[88vh] sm:h-[90vh] overflow-hidden">
-        {/* Background slides */}
-        {slides.map((s, i) => (
-          <div key={s.src} className={`absolute inset-0 transition-opacity duration-1000 ${i === slide ? 'opacity-100' : 'opacity-0'}`}>
-            <Image src={s.src} alt="" fill className="object-cover object-center" priority={i === 0} />
-          </div>
-        ))}
-        <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent" />
-
-        {/* Prev / Next arrows */}
-        <button
-          onClick={() => setSlide(s => (s - 1 + slides.length) % slides.length)}
-          className="absolute left-4 sm:left-8 top-1/2 -translate-y-1/2 z-20 w-12 h-12 rounded-full bg-white/90 hover:bg-white flex items-center justify-center shadow-lg transition-all"
-        >
-          <svg className="w-5 h-5 text-gray-900" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}><path strokeLinecap="round" strokeLinejoin="round" d="M15.75 19.5L8.25 12l7.5-7.5" /></svg>
-        </button>
-        <button
-          onClick={() => setSlide(s => (s + 1) % slides.length)}
-          className="absolute right-4 sm:right-8 top-1/2 -translate-y-1/2 z-20 w-12 h-12 rounded-full bg-white/90 hover:bg-white flex items-center justify-center shadow-lg transition-all"
-        >
-          <svg className="w-5 h-5 text-gray-900" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}><path strokeLinecap="round" strokeLinejoin="round" d="M8.25 4.5l7.5 7.5-7.5 7.5" /></svg>
-        </button>
-
-        {/* Content - bottom left */}
-        <div className="relative z-10 h-full flex flex-col justify-end max-w-7xl mx-auto px-6 sm:px-10 pb-10 sm:pb-14">
-          <h1
-            className="text-5xl sm:text-6xl lg:text-7xl leading-[0.85] tracking-tight transition-colors duration-500"
-            style={{ fontFamily: "'GC Bustle Sans', sans-serif", color: slides[slide].dark ? '#111' : '#fff' }}
-          >
-            hockey<br />beats
-          </h1>
-          <div className="mt-6 flex flex-wrap items-center gap-4">
-            <button
-              onClick={() => {
-                if (isLoggedIn) { window.location.href = '/dashboard'; }
-                else { onLoginClick(); }
-              }}
-              className={`font-bold text-base px-8 py-4 rounded-full active:scale-[0.97] transition-all duration-300 ${slides[slide].dark ? 'bg-gray-900 text-white hover:bg-gray-800' : 'bg-white text-gray-900 hover:bg-gray-100'}`}
-              style={{ fontFamily: "'GC Bustle Sans', sans-serif" }}
-            >
-              Play now
-            </button>
-            <a
-              href="#how-it-works"
-              className={`font-bold text-base transition-colors inline-flex items-center gap-1.5 ${slides[slide].dark ? 'text-gray-900 hover:text-gray-700' : 'text-white hover:text-white/80'}`}
-              style={{ fontFamily: "'GC Bustle Sans', sans-serif" }}
-            >
-              Learn more
-              <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}><path strokeLinecap="round" strokeLinejoin="round" d="M8.25 4.5l7.5 7.5-7.5 7.5" /></svg>
-            </a>
-          </div>
+      <section className="relative h-[88vh] sm:h-[90vh] overflow-hidden bg-[#e8eaf0]">
+        <div className="absolute inset-0">
+          <Image src="/images/hero-clean.png" alt="" fill className="object-cover object-center" priority />
         </div>
 
+        {/* Content - left side, vertically centered */}
+        <div className="relative z-10 h-full flex flex-col justify-center max-w-7xl mx-auto px-6 sm:px-10">
+          <div className="max-w-md">
+            <h1
+              className="text-5xl sm:text-6xl lg:text-7xl leading-[0.85] tracking-tight text-gray-900"
+              style={{ fontFamily: "'GC Bustle Sans', sans-serif" }}
+            >
+              hockey<br />beats
+            </h1>
+            <p className="mt-5 text-base text-gray-500 max-w-sm leading-relaxed">
+              A game you want to play. Practice the coach will notice.
+            </p>
+            <div className="mt-8 flex flex-wrap items-center gap-4">
+              <button
+                onClick={() => {
+                  if (isLoggedIn) { window.location.href = '/dashboard'; }
+                  else { onLoginClick(); }
+                }}
+                className="font-bold text-base px-8 py-4 rounded-full bg-gray-900 text-white hover:bg-gray-800 active:scale-[0.97] transition-all duration-300"
+                style={{ fontFamily: "'GC Bustle Sans', sans-serif" }}
+              >
+                Play now
+              </button>
+              <a
+                href="#how-it-works"
+                className="font-bold text-base text-gray-900 hover:text-gray-600 transition-colors inline-flex items-center gap-1.5"
+                style={{ fontFamily: "'GC Bustle Sans', sans-serif" }}
+              >
+                Learn more
+                <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}><path strokeLinecap="round" strokeLinejoin="round" d="M8.25 4.5l7.5 7.5-7.5 7.5" /></svg>
+              </a>
+            </div>
+          </div>
+        </div>
       </section>
 
       <div id="more" />
