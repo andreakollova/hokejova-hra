@@ -279,23 +279,9 @@ export default function TargetSmashGame({
     const w = CANVAS_W;
     const h = CANVAS_H;
 
-    // Green field background
-    ctx.fillStyle = '#e8f5e9';
+    // Light grey background (matches slalom)
+    ctx.fillStyle = '#f0f4f8';
     ctx.fillRect(0, 0, w, h);
-
-    // Field lines
-    ctx.strokeStyle = 'rgba(76, 175, 80, 0.15)';
-    ctx.lineWidth = 1;
-    // Vertical center
-    ctx.beginPath(); ctx.moveTo(w / 2, 0); ctx.lineTo(w / 2, h); ctx.stroke();
-    // Horizontal lines
-    for (let y = 0; y <= h; y += 100) {
-      ctx.beginPath(); ctx.moveTo(0, y); ctx.lineTo(w, y); ctx.stroke();
-    }
-    // Border
-    ctx.strokeStyle = 'rgba(76, 175, 80, 0.25)';
-    ctx.lineWidth = 2;
-    ctx.strokeRect(20, 20, w - 40, h - 40);
 
     // Draw targets
     for (const t of s.targets) {
@@ -374,7 +360,7 @@ export default function TargetSmashGame({
   };
 
   return (
-    <div className="relative w-full h-full flex items-center justify-center bg-[#e8f5e9]">
+    <div className="relative w-full h-full flex items-center justify-center bg-[#f0f4f8]">
       <canvas
         ref={canvasRef}
         width={CANVAS_W}
