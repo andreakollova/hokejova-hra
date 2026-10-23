@@ -36,7 +36,7 @@ export default function Home() {
         <div className="max-w-7xl mx-auto px-6 sm:px-10 py-4 flex justify-between items-center">
           <Link href="/" className="flex items-center gap-2">
             <Image src="/images/hb-icon.png" alt="" width={32} height={32} className="h-6 w-auto" />
-            <span className="text-base font-black tracking-tight text-gray-900" style={{ fontFamily: "'GC Bustle Sans', sans-serif" }}>hockey beats</span>
+            <span className="text-base font-black tracking-tight text-gray-900">hockey beats</span>
           </Link>
           <nav className="flex items-center gap-5 sm:gap-7">
             <a href="#how-it-works" className="text-sm font-medium text-gray-600 hover:text-gray-900 transition-colors hidden sm:block">How it works</a>
@@ -531,14 +531,14 @@ function HeroBanner({ isLoggedIn, onLoginClick }: { isLoggedIn: boolean; onLogin
                 else { onLoginClick(); }
               }}
               className="font-bold text-base px-8 py-4 rounded-full bg-gray-900 text-white hover:bg-gray-800 active:scale-[0.97] transition-all duration-300"
-              style={{ fontFamily: "'GC Bustle Sans', sans-serif" }}
+
             >
               Play now
             </button>
             <a
               href="#how-it-works"
               className="font-bold text-base text-gray-900 hover:text-gray-600 transition-colors inline-flex items-center gap-1.5"
-              style={{ fontFamily: "'GC Bustle Sans', sans-serif" }}
+
             >
               Learn more
               <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}><path strokeLinecap="round" strokeLinejoin="round" d="M8.25 4.5l7.5 7.5-7.5 7.5" /></svg>

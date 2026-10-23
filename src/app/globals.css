@@ -8,6 +8,12 @@
   font-display: swap;
 }
 
+h1, h2, h3, h4, h5, h6,
+.font-extrabold,
+.font-black {
+  font-family: 'GC Bustle Sans', var(--font-inter), sans-serif;
+}
+
 @theme inline {
   --color-background: #ffffff;
   --color-foreground: #111827;
