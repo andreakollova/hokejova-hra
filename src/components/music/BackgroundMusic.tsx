@@ -8,7 +8,16 @@ const HISTORY_KEY = 'sportqo_music_history';
 const SERVICE_KEY = 'sportqo_music_service';
 const MAX_HISTORY = 20;
 
-type MusicService = 'spotify' | 'apple';
+type MusicService = 'spotify' | 'apple' | 'free';
+
+const FREE_TRACKS: SpotifyTrack[] = [
+  { id: 'free_1', name: 'Magic', artists: 'Mood Maze', album: 'Uppbeat', albumArt: '', durationMs: 91000, uri: '/music/01-magic.mp3' },
+  { id: 'free_2', name: 'La La Love', artists: 'Vocalista', album: 'Uppbeat', albumArt: '', durationMs: 93000, uri: '/music/02-la-la-love.mp3' },
+  { id: 'free_3', name: 'Break My Fall', artists: 'Haquin', album: 'Uppbeat', albumArt: '', durationMs: 151000, uri: '/music/03-break-my-fall.mp3' },
+  { id: 'free_4', name: 'Fingers Crossed', artists: 'ACADEMY', album: 'Uppbeat', albumArt: '', durationMs: 151000, uri: '/music/04-fingers-crossed.mp3' },
+  { id: 'free_5', name: 'Rome', artists: 'NAIO', album: 'Uppbeat', albumArt: '', durationMs: 233000, uri: '/music/05-rome.mp3' },
+  { id: 'free_6', name: 'Climb On', artists: 'Jay Denton', album: 'Uppbeat', albumArt: '', durationMs: 205000, uri: '/music/06-climb-on.mp3' },
+];
 
 interface TrackRecord {
   track: SpotifyTrack;
@@ -135,7 +144,7 @@ export default function BackgroundMusic({ spotify, onSelect, selectedTrack, auto
           className="w-full rounded-2xl p-4 border-2 border-gray-200 bg-white hover:border-gray-300 transition-all text-left"
         >
           <div className="text-sm font-semibold text-gray-900">Play a song</div>
-          <div className="text-xs text-gray-500 mt-0.5">Spotify or Apple Music</div>
+          <div className="text-xs text-gray-500 mt-0.5">Spotify, Apple Music, or free tracks</div>
         </button>
       )}
 
@@ -165,10 +174,44 @@ export default function BackgroundMusic({ spotify, onSelect, selectedTrack, auto
               </svg>
               Apple Music
             </button>
+            <button
+              onClick={() => switchService('free')}
+              className={`flex-1 flex items-center justify-center gap-1.5 rounded-full py-2 text-xs font-medium transition-all ${
+                service === 'free' ? 'bg-white shadow-sm text-gray-900' : 'text-gray-500'
+              }`}
+            >
+              <svg className="w-4 h-4 text-emerald-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M9 19V6l12-3v13M9 19c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zm12-3c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zM9 10l12-3" /></svg>
+              Free
+            </button>
           </div>
 
+          {/* Free music tracks */}
+          {service === 'free' && (
+            <div>
+              <div className="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-2">Free tracks</div>
+              <div className="space-y-1.5">
+                {FREE_TRACKS.map((track) => (
+                  <button key={track.id} onClick={() => handleSelect(track)}
+                    className="w-full flex items-center gap-2.5 rounded-xl p-2.5 text-left bg-gray-50 hover:bg-gray-100 transition-colors">
+                    <div className="w-9 h-9 rounded-lg bg-emerald-100 flex items-center justify-center">
+                      <svg className="w-4 h-4 text-emerald-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M9 19V6l12-3v13M9 19c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zm12-3c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zM9 10l12-3" /></svg>
+                    </div>
+                    <div className="flex-1 min-w-0">
+                      <div className="text-sm font-medium text-gray-900 truncate">{track.name}</div>
+                      <div className="text-xs text-gray-500 truncate">{track.artists}</div>
+                    </div>
+                    <div className="text-xs text-gray-400">
+                      {Math.floor(track.durationMs / 60000)}:{String(Math.floor((track.durationMs % 60000) / 1000)).padStart(2, '0')}
+                    </div>
+                  </button>
+                ))}
+              </div>
+              <p className="text-[10px] text-gray-400 mt-2">Royalty-free music from Uppbeat</p>
+            </div>
+          )}
+
           {/* Connect */}
-          {!isConnected && (
+          {service !== 'free' && !isConnected && (
             <div className="text-center py-4">
               <button onClick={handleConnect} className="btn-primary text-sm">
                 Connect {service === 'apple' ? 'Apple Music' : 'Spotify'}
@@ -179,7 +222,7 @@ export default function BackgroundMusic({ spotify, onSelect, selectedTrack, auto
             </div>
           )}
 
-          {isConnected && (
+          {service !== 'free' && isConnected && (
             <>
               {/* Favorites */}
               {favorites.length > 0 && !searchQuery && (
