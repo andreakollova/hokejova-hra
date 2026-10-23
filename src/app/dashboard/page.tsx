@@ -174,31 +174,31 @@ export default function DashboardPage() {
             <h1 className="text-2xl sm:text-3xl font-extrabold tracking-tight">
               Welcome back, <span className="text-emerald-400">{settings.username}</span>
             </h1>
-            <p className="text-sm text-white/30 mt-1">Pick a game and start training.</p>
+            <p className="text-sm text-white/70 mt-1">Pick a game and start training.</p>
           </div>
 
           {/* Stat pills */}
           <div className="flex items-center gap-3 flex-wrap">
             <div className="bg-white/5 border border-white/8 rounded-2xl px-5 py-3 text-center min-w-[80px]">
               <div className="text-xl font-black tabular-nums text-emerald-400">{totalXP}</div>
-              <div className="text-[10px] text-white/30 uppercase tracking-wider mt-0.5">XP</div>
+              <div className="text-[10px] text-white/70 uppercase tracking-wider mt-0.5">XP</div>
             </div>
             <div className="bg-white/5 border border-white/8 rounded-2xl px-5 py-3 text-center min-w-[80px]">
               <div className="text-xl font-black tabular-nums">{level.level}</div>
-              <div className="text-[10px] text-white/30 uppercase tracking-wider mt-0.5">Level</div>
+              <div className="text-[10px] text-white/70 uppercase tracking-wider mt-0.5">Level</div>
             </div>
             <div className="bg-white/5 border border-white/8 rounded-2xl px-5 py-3 text-center min-w-[80px]">
               <div className="text-xl font-black tabular-nums">{gamesPlayed}</div>
-              <div className="text-[10px] text-white/30 uppercase tracking-wider mt-0.5">Games</div>
+              <div className="text-[10px] text-white/70 uppercase tracking-wider mt-0.5">Games</div>
             </div>
             <div className="bg-white/5 border border-white/8 rounded-2xl px-5 py-3 text-center min-w-[80px]">
               <div className="text-xl font-black tabular-nums">{streak.currentStreak}<span className="text-sm ml-0.5">d</span></div>
-              <div className="text-[10px] text-white/30 uppercase tracking-wider mt-0.5">Streak</div>
+              <div className="text-[10px] text-white/70 uppercase tracking-wider mt-0.5">Streak</div>
             </div>
             {myRank > 0 && (
               <div className="bg-white/5 border border-white/8 rounded-2xl px-5 py-3 text-center min-w-[80px]">
                 <div className="text-xl font-black tabular-nums text-amber-400">#{myRank}</div>
-                <div className="text-[10px] text-white/30 uppercase tracking-wider mt-0.5">Rank</div>
+                <div className="text-[10px] text-white/70 uppercase tracking-wider mt-0.5">Rank</div>
               </div>
             )}
           </div>
@@ -218,7 +218,7 @@ export default function DashboardPage() {
               <i className="fi fi-sr-icicles text-blue-400 text-xl" />
               <h3 className="text-lg font-bold text-white">Your streak is frozen</h3>
             </div>
-            <p className="text-sm text-white/50 mb-4">Play one game to get your streak back. Here is a challenge for you:</p>
+            <p className="text-sm text-white/80 mb-4">Play one game to get your streak back. Here is a challenge for you:</p>
             {(() => {
               const randomGame = GAMES[Math.floor(Date.now() / 86400000) % GAMES.length];
               return (
@@ -249,7 +249,7 @@ export default function DashboardPage() {
           {/* Friends panel */}
           <div className="bg-white/5 border border-white/8 rounded-2xl p-5 flex flex-col">
             <div className="flex items-center justify-between mb-4">
-              <h3 className="text-sm font-bold text-white/60">Friend beats</h3>
+              <h3 className="text-sm font-bold text-white/90">Friend beats</h3>
               <button onClick={() => setShowAddFriend(true)} className="text-xs font-bold text-emerald-400 hover:text-emerald-300 transition-colors">
                 + Add
               </button>
@@ -287,10 +287,10 @@ export default function DashboardPage() {
             {/* Pending requests */}
             {friends.filter(f => f.incoming).length > 0 && (
               <div className="mb-3">
-                <div className="text-[10px] font-bold uppercase tracking-wider text-white/30 mb-2">Requests</div>
+                <div className="text-[10px] font-bold uppercase tracking-wider text-white/70 mb-2">Requests</div>
                 {friends.filter(f => f.incoming).map((f) => (
                   <div key={f.username} className="flex items-center gap-2.5 rounded-xl p-2 bg-white/5 mb-1.5">
-                    <div className="w-7 h-7 rounded-full bg-white/10 flex items-center justify-center text-[10px] font-bold text-white/50">{f.username[0].toUpperCase()}</div>
+                    <div className="w-7 h-7 rounded-full bg-white/10 flex items-center justify-center text-[10px] font-bold text-white/80">{f.username[0].toUpperCase()}</div>
                     <div className="flex-1 min-w-0">
                       <div className="text-xs font-bold text-white truncate">{f.username}</div>
                     </div>
@@ -320,12 +320,12 @@ export default function DashboardPage() {
               {friends.filter(f => !f.incoming).sort((a, b) => (b.online ? 1 : 0) - (a.online ? 1 : 0)).map((f) => (
                 <div key={f.username} className="flex items-center gap-2.5 rounded-xl p-2.5 bg-white/3 hover:bg-white/5 transition-colors">
                   <div className="relative">
-                    <div className="w-8 h-8 rounded-full bg-white/10 flex items-center justify-center text-xs font-bold text-white/50">{f.username[0].toUpperCase()}</div>
+                    <div className="w-8 h-8 rounded-full bg-white/10 flex items-center justify-center text-xs font-bold text-white/80">{f.username[0].toUpperCase()}</div>
                     {f.online && <div className="absolute -bottom-0.5 -right-0.5 w-3 h-3 rounded-full bg-emerald-500 border-2 border-[#0a0a0f]" />}
                   </div>
                   <div className="flex-1 min-w-0">
                     <div className="text-xs font-bold text-white truncate">{f.username}</div>
-                    <div className="text-[10px] text-white/30 truncate">
+                    <div className="text-[10px] text-white/70 truncate">
                       {f.online ? 'Playing now' : f.lastPlayed} · {f.totalTime}
                     </div>
                   </div>
@@ -340,7 +340,7 @@ export default function DashboardPage() {
 
         {/* All games grid */}
         <div className="mb-12">
-          <h2 className="text-xs font-bold uppercase tracking-[0.2em] text-white/30 mb-5">All games</h2>
+          <h2 className="text-xs font-bold uppercase tracking-[0.2em] text-white mb-5">All games</h2>
           <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-4">
             {GAMES.slice(1).map((game) => (
               <Link key={game.href} href={game.href} className="group block">
@@ -349,7 +349,7 @@ export default function DashboardPage() {
                   <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent" />
                   <div className="absolute bottom-0 left-0 right-0 p-4">
                     <div className="text-sm font-bold">{game.name}</div>
-                    <div className="text-[10px] text-white/40 mt-0.5">{game.desc}</div>
+                    <div className="text-[10px] text-white/80 mt-0.5">{game.desc}</div>
                   </div>
                 </div>
               </Link>
@@ -359,11 +359,11 @@ export default function DashboardPage() {
 
         {/* Music: Favourites + Recently played side by side */}
         <div className="mb-12">
-          <h2 className="text-xs font-bold uppercase tracking-[0.2em] text-white/30 mb-5">Music</h2>
+          <h2 className="text-xs font-bold uppercase tracking-[0.2em] text-white mb-5">Music</h2>
           <div className="grid lg:grid-cols-2 gap-6">
             {/* Favourites */}
             <div>
-              <h3 className="text-sm font-bold text-white/60 mb-3">Favourites</h3>
+              <h3 className="text-sm font-bold text-white/90 mb-3">Favourites</h3>
               <div className="space-y-2">
                 {(favorites.length > 0 ? favorites : [
                   { track: { id: 'b1', name: 'Blinding Lights', artists: 'The Weeknd', albumArt: '' }, playCount: 24 },
@@ -376,14 +376,14 @@ export default function DashboardPage() {
                     className="w-full flex items-center gap-3 rounded-2xl p-3 bg-white/5 border border-white/5 hover:bg-white/10 hover:border-white/10 transition-all text-left">
                     {rec.track.albumArt ? <img src={rec.track.albumArt} alt="" className="w-10 h-10 rounded-lg object-cover" /> : (
                       <div className="w-10 h-10 rounded-lg bg-white/10 flex items-center justify-center">
-                        <svg className="w-4 h-4 text-white/30" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}><path strokeLinecap="round" strokeLinejoin="round" d="M9 19V6l12-3v13M9 19c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zm12-3c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zM9 10l12-3" /></svg>
+                        <svg className="w-4 h-4 text-white/70" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}><path strokeLinecap="round" strokeLinejoin="round" d="M9 19V6l12-3v13M9 19c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zm12-3c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zM9 10l12-3" /></svg>
                       </div>
                     )}
                     <div className="flex-1 min-w-0">
                       <div className="text-sm font-semibold truncate">{rec.track.name}</div>
-                      <div className="text-xs text-white/30 truncate">{rec.track.artists}</div>
+                      <div className="text-xs text-white/70 truncate">{rec.track.artists}</div>
                     </div>
-                    <span className="text-xs text-white/30 tabular-nums">{rec.playCount}x</span>
+                    <span className="text-xs text-white/70 tabular-nums">{rec.playCount}x</span>
                   </button>
                 ))}
               </div>
@@ -391,7 +391,7 @@ export default function DashboardPage() {
 
             {/* Recently played */}
             <div>
-              <h3 className="text-sm font-bold text-white/60 mb-3">Recently played</h3>
+              <h3 className="text-sm font-bold text-white/90 mb-3">Recently played</h3>
               <div className="space-y-2">
                 {(recent.length > 0 ? recent : [
                   { track: { id: 'r1', name: 'As It Was', artists: 'Harry Styles', albumArt: '' }, playCount: 1, lastPlayed: 0 },
@@ -404,12 +404,12 @@ export default function DashboardPage() {
                     className="w-full flex items-center gap-3 rounded-2xl p-3 bg-white/5 border border-white/5 hover:bg-white/10 hover:border-white/10 transition-all text-left">
                     {rec.track.albumArt ? <img src={rec.track.albumArt} alt="" className="w-10 h-10 rounded-lg object-cover" /> : (
                       <div className="w-10 h-10 rounded-lg bg-white/10 flex items-center justify-center">
-                        <svg className="w-4 h-4 text-white/30" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}><path strokeLinecap="round" strokeLinejoin="round" d="M9 19V6l12-3v13M9 19c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zm12-3c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zM9 10l12-3" /></svg>
+                        <svg className="w-4 h-4 text-white/70" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}><path strokeLinecap="round" strokeLinejoin="round" d="M9 19V6l12-3v13M9 19c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zm12-3c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zM9 10l12-3" /></svg>
                       </div>
                     )}
                     <div className="flex-1 min-w-0">
                       <div className="text-sm font-semibold truncate">{rec.track.name}</div>
-                      <div className="text-xs text-white/30 truncate">{rec.track.artists}</div>
+                      <div className="text-xs text-white/70 truncate">{rec.track.artists}</div>
                     </div>
                   </button>
                 ))}
@@ -421,13 +421,13 @@ export default function DashboardPage() {
         {/* Leaderboard: Score left + Time Played right */}
         <div className="mb-8">
           <div className="flex items-center justify-between mb-5">
-            <h2 className="text-xs font-bold uppercase tracking-[0.2em] text-white/30">Leaderboard</h2>
+            <h2 className="text-xs font-bold uppercase tracking-[0.2em] text-white">Leaderboard</h2>
             <Link href="/rebricek" className="text-xs text-emerald-400 font-medium hover:text-emerald-300 transition-colors">View all</Link>
           </div>
           <div className="grid lg:grid-cols-2 gap-6">
             {/* Score ranking */}
             <div>
-              <h3 className="text-sm font-bold text-white/60 mb-3">Best score</h3>
+              <h3 className="text-sm font-bold text-white/90 mb-3">Best score</h3>
               <div className="space-y-2">
                 {(topScores.length > 0 ? topScores.slice(0, 5) : [
                   { id: 'm1', username: 'matej_k', score: 2840, song_name: 'Blinding Lights' },
@@ -440,13 +440,13 @@ export default function DashboardPage() {
                   return (
                     <div key={entry.id} className={`flex items-center gap-3 rounded-2xl p-3 ${isMe ? 'bg-emerald-500/10 border border-emerald-500/20' : 'bg-white/5 border border-white/5'}`}>
                       <div className={`w-7 h-7 rounded-full flex items-center justify-center text-xs font-black ${
-                        idx === 0 ? 'bg-amber-400/20 text-amber-400' : idx === 1 ? 'bg-white/10 text-white/60' : idx === 2 ? 'bg-orange-400/20 text-orange-400' : 'bg-white/5 text-white/30'
+                        idx === 0 ? 'bg-amber-400/20 text-amber-400' : idx === 1 ? 'bg-white/10 text-white/90' : idx === 2 ? 'bg-orange-400/20 text-orange-400' : 'bg-white/5 text-white/70'
                       }`}>{idx + 1}</div>
                       <div className="flex-1 min-w-0">
                         <div className="text-sm font-semibold truncate">
                           {entry.username} {isMe && <span className="text-emerald-400 text-xs">(you)</span>}
                         </div>
-                        <div className="text-xs text-white/30 truncate">{entry.song_name}</div>
+                        <div className="text-xs text-white/70 truncate">{entry.song_name}</div>
                       </div>
                       <div className="text-lg font-black tabular-nums">{entry.score}</div>
                     </div>
@@ -457,7 +457,7 @@ export default function DashboardPage() {
 
             {/* Time played ranking */}
             <div>
-              <h3 className="text-sm font-bold text-white/60 mb-3">Time played</h3>
+              <h3 className="text-sm font-bold text-white/90 mb-3">Time played</h3>
               <div className="space-y-2">
                 {(() => {
                   const mySecs = engLoaded ? (engData.totalSecondsPlayed || (engData.totalMinutesPlayed || 0) * 60 || 0) : 0;
@@ -481,13 +481,13 @@ export default function DashboardPage() {
                     return (
                       <div key={entry.name} className={`flex items-center gap-3 rounded-2xl p-3 ${isMe ? 'bg-emerald-500/10 border border-emerald-500/20' : 'bg-white/5 border border-white/5'}`}>
                         <div className={`w-7 h-7 rounded-full flex items-center justify-center text-xs font-black ${
-                          idx === 0 ? 'bg-amber-400/20 text-amber-400' : idx === 1 ? 'bg-white/10 text-white/60' : idx === 2 ? 'bg-orange-400/20 text-orange-400' : 'bg-white/5 text-white/30'
+                          idx === 0 ? 'bg-amber-400/20 text-amber-400' : idx === 1 ? 'bg-white/10 text-white/90' : idx === 2 ? 'bg-orange-400/20 text-orange-400' : 'bg-white/5 text-white/70'
                         }`}>{idx + 1}</div>
                         <div className="flex-1 min-w-0">
                           <div className="text-sm font-semibold truncate">
                             {entry.name} {isMe && <span className="text-emerald-400 text-xs">(you)</span>}
                           </div>
-                          <div className="text-xs text-white/30">{formatSecs(entry.secs)} of practice</div>
+                          <div className="text-xs text-white/70">{formatSecs(entry.secs)} of practice</div>
                         </div>
                         <div className="text-lg font-black tabular-nums">{formatSecs(entry.secs)}</div>
                       </div>
@@ -510,12 +510,12 @@ export default function DashboardPage() {
                 <img src={selectedSong.albumArt} alt="" className="w-14 h-14 rounded-xl object-cover" />
               ) : (
                 <div className="w-14 h-14 rounded-xl bg-white/10 flex items-center justify-center">
-                  <svg className="w-6 h-6 text-white/30" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}><path strokeLinecap="round" strokeLinejoin="round" d="M9 19V6l12-3v13M9 19c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zm12-3c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zM9 10l12-3" /></svg>
+                  <svg className="w-6 h-6 text-white/70" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}><path strokeLinecap="round" strokeLinejoin="round" d="M9 19V6l12-3v13M9 19c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zm12-3c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zM9 10l12-3" /></svg>
                 </div>
               )}
               <div className="flex-1 min-w-0">
                 <div className="text-base font-bold truncate">{selectedSong.name}</div>
-                <div className="text-sm text-white/40 truncate">{selectedSong.artist}</div>
+                <div className="text-sm text-white/80 truncate">{selectedSong.artist}</div>
               </div>
             </div>
 
@@ -528,7 +528,7 @@ export default function DashboardPage() {
                   Play a game with this song
                 </button>
                 <button onClick={() => { setSelectedSong(null); }}
-                  className="w-full flex items-center gap-3 bg-white/5 hover:bg-white/10 rounded-2xl px-5 py-4 transition-colors text-white/60">
+                  className="w-full flex items-center gap-3 bg-white/5 hover:bg-white/10 rounded-2xl px-5 py-4 transition-colors text-white/90">
                   <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}><path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" /></svg>
                   Cancel
                 </button>
@@ -536,7 +536,7 @@ export default function DashboardPage() {
             ) : (
               /* Game picker */
               <div className="px-6 pb-6">
-                <p className="text-xs font-bold uppercase tracking-[0.2em] text-white/30 mb-3">Choose a game</p>
+                <p className="text-xs font-bold uppercase tracking-[0.2em] text-white/70 mb-3">Choose a game</p>
                 <div className="grid grid-cols-2 gap-2">
                   {GAMES.map((game) => (
                     <button key={game.href} onClick={() => handlePickGame(game.href)}
@@ -561,8 +561,8 @@ export default function DashboardPage() {
           <div className="bg-[#1a1a24] rounded-3xl p-8 w-full max-w-xs text-center" onClick={(e) => e.stopPropagation()}>
             <i className="fi fi-ss-fire-flame-curved text-orange-500 text-5xl block mb-4" />
             <h2 className="text-2xl font-black text-white mb-2">Streak is back!</h2>
-            <p className="text-sm text-white/50 mb-1">Your {streak.currentStreak} day streak continues.</p>
-            <p className="text-xs text-white/30 mb-6">Keep playing every day to build it up.</p>
+            <p className="text-sm text-white/80 mb-1">Your {streak.currentStreak} day streak continues.</p>
+            <p className="text-xs text-white/70 mb-6">Keep playing every day to build it up.</p>
             <button onClick={() => setShowUnfrozePopup(false)} className="bg-emerald-500 hover:bg-emerald-400 text-white font-bold text-sm px-8 py-3 rounded-full transition-colors">
               Nice!
             </button>
