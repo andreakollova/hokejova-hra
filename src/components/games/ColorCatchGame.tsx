@@ -27,9 +27,9 @@ const CANVAS_W = 1200;
 const CANVAS_H = 800;
 
 const COLORS = [
-  { name: 'blue', fill: '#3b82f6', light: '#93c5fd', dark: '#1d4ed8' },
-  { name: 'red', fill: '#ef4444', light: '#fca5a5', dark: '#b91c1c' },
-  { name: 'yellow', fill: '#eab308', light: '#fde047', dark: '#a16207' },
+  { name: 'blue', fill: '#3b82f6', light: '#93c5fd', dark: '#1d4ed8', carSrc: '/images/car-blue.png' },
+  { name: 'red', fill: '#ef4444', light: '#fca5a5', dark: '#b91c1c', carSrc: '/images/car-red.png' },
+  { name: 'yellow', fill: '#eab308', light: '#fde047', dark: '#a16207', carSrc: '/images/car-yellow.png' },
 ];
 
 const LANE_X = [CANVAS_W * 0.25, CANVAS_W * 0.5, CANVAS_W * 0.75];
@@ -60,6 +60,7 @@ export default function ColorCatchGame({
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const cfg = DIFFICULTY[difficulty];
   const sessionIdRef = useRef(crypto.randomUUID());
+  const carImagesRef = useRef<HTMLImageElement[]>([]);
 
   const stateRef = useRef({
     activeLane: 1,
@@ -90,6 +91,17 @@ export default function ColorCatchGame({
     if (!canvas) return;
     const ctx = canvas.getContext('2d');
     if (!ctx) return;
+
+    // Load car images
+    const carImages: HTMLImageElement[] = [];
+    let imagesLoaded = 0;
+    COLORS.forEach((c, i) => {
+      const img = new Image();
+      img.src = c.carSrc;
+      img.onload = () => { imagesLoaded++; };
+      carImages[i] = img;
+    });
+    carImagesRef.current = carImages;
 
     let running = true;
     let lastTime = 0;
@@ -316,33 +328,35 @@ export default function ColorCatchGame({
     ctx.closePath();
     ctx.fill();
 
-    // Falling balls
+    // Falling cars
+    const carW = 50;
+    const carH = 62;
     for (const ball of s.balls) {
       if (ball.caught || ball.missed) continue;
       const bx = LANE_X[ball.lane];
-      const color = COLORS[ball.colorIdx];
-
-      // Ball shadow
-      ctx.fillStyle = 'rgba(0,0,0,0.3)';
-      ctx.beginPath();
-      ctx.arc(bx + 3, ball.y + 3, 22, 0, Math.PI * 2);
-      ctx.fill();
-
-      // Ball
-      ctx.fillStyle = color.fill;
-      ctx.beginPath();
-      ctx.arc(bx, ball.y, 22, 0, Math.PI * 2);
-      ctx.fill();
-
-      // Highlight
-      ctx.fillStyle = color.light;
-      ctx.beginPath();
-      ctx.arc(bx - 6, ball.y - 6, 8, 0, Math.PI * 2);
-      ctx.fill();
+      const carImg = carImagesRef.current[ball.colorIdx];
 
       // Trail
-      ctx.fillStyle = color.fill + '40';
-      ctx.fillRect(bx - 3, ball.y - 40, 6, 40);
+      const color = COLORS[ball.colorIdx];
+      ctx.fillStyle = color.fill + '30';
+      ctx.fillRect(bx - 4, ball.y - 50, 8, 50);
+
+      // Shadow
+      ctx.fillStyle = 'rgba(0,0,0,0.2)';
+      ctx.beginPath();
+      ctx.ellipse(bx + 3, ball.y + 3, carW / 2, carH / 2, 0, 0, Math.PI * 2);
+      ctx.fill();
+
+      // Car image
+      if (carImg && carImg.complete) {
+        ctx.drawImage(carImg, bx - carW / 2, ball.y - carH / 2, carW, carH);
+      } else {
+        // Fallback circle if image not loaded yet
+        ctx.fillStyle = color.fill;
+        ctx.beginPath();
+        ctx.arc(bx, ball.y, 22, 0, Math.PI * 2);
+        ctx.fill();
+      }
     }
 
     // Particles
