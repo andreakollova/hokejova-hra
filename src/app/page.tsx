@@ -221,10 +221,10 @@ export default function Home() {
                 <div className="rounded-3xl overflow-hidden">
                   <Image src="/images/hero-indoor.png" alt="Player practising" width={600} height={450} className="w-full h-auto" />
                 </div>
-                <div className="absolute -left-6 -bottom-6 sm:left-2 sm:-bottom-4 animate-[float_3s_ease-in-out_infinite]">
+                <div className="absolute -right-6 -bottom-6 sm:right-2 sm:-bottom-4 animate-[float_3s_ease-in-out_infinite]">
                   <div className="relative">
                     <div className="absolute inset-0 rounded-full" style={{ background: 'radial-gradient(circle, #a855f740 0%, transparent 70%)', transform: 'scale(2.2)' }} />
-                    <Image src="/images/mascots/mascot-magnet-flip.webp" alt="Magno" width={130} height={130} className="relative z-10 drop-shadow-xl" />
+                    <Image src="/images/mascots/mascot-magnet-flip.webp" alt="Magno" width={160} height={160} className="relative z-10 drop-shadow-xl" />
                   </div>
                 </div>
               </div>
