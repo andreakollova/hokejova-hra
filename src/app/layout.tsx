@@ -10,10 +10,28 @@ const inter = Inter({
 });
 
 export const metadata: Metadata = {
-  title: "HockeyBeats - Get better at hockey to the music you love",
-  description:
-    "Field hockey training game with music. Play along to Spotify or Apple Music, build your score and rank against teammates.",
+  title: {
+    default: "HockeyBeats - Get better at hockey to the music you love",
+    template: "%s | HockeyBeats",
+  },
+  description: "Hockey training games with music. Play along to Spotify, build your score and rank against teammates. Field hockey, ice hockey and floorball.",
+  keywords: ["hockey", "training", "game", "field hockey", "ice hockey", "floorball", "music", "Spotify", "practice"],
   icons: { icon: '/images/hb-favicon.png' },
+  metadataBase: new URL('https://www.hockeybeats.app'),
+  openGraph: {
+    title: "HockeyBeats - Get better at hockey to the music you love",
+    description: "Hockey training games with music. Play along to Spotify, build your score and rank against teammates.",
+    url: 'https://www.hockeybeats.app',
+    siteName: 'HockeyBeats',
+    type: 'website',
+    images: [{ url: '/images/hero-clean.png', width: 1942, height: 809 }],
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: "HockeyBeats - Hockey training games with music",
+    description: "Play along to Spotify, build your score and rank against teammates.",
+    images: ['/images/hero-clean.png'],
+  },
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {

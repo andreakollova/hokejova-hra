@@ -537,7 +537,7 @@ export default function TreningPage() {
     <div className="min-h-screen bg-gray-50/50 px-6 py-8">
       <div className="max-w-lg mx-auto">
         <Link
-          href="/"
+          href="/dashboard"
           className="inline-flex items-center gap-1.5 text-sm text-gray-400 hover:text-gray-600 transition-colors mb-10"
         >
           <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
