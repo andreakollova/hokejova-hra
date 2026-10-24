@@ -125,7 +125,7 @@ export default function Home() {
         <StartNowSection />
 
         {/* Games */}
-        <section id="games" className="py-20 sm:py-28">
+        <section id="games" className="py-14 sm:py-20">
           <div className="max-w-6xl mx-auto px-6 sm:px-10">
             <div className="text-center mb-14">
               <p className="text-xs font-bold uppercase tracking-[0.2em] text-gray-400 mb-4">Game library</p>
@@ -162,7 +162,7 @@ export default function Home() {
         </section>
 
         {/* 01 - Hero subtitle */}
-        <section className="py-20 sm:py-28">
+        <section className="py-14 sm:py-20">
           <div className="max-w-6xl mx-auto px-6 sm:px-10 text-center">
             <p className="text-xs font-bold uppercase tracking-[0.2em] text-gray-400 mb-4">01 / The game</p>
             <h2 className="text-3xl sm:text-5xl font-extrabold text-[#101828] leading-[1.08] tracking-tight">Turn your hockey stick<br />into a game controller.</h2>
@@ -204,7 +204,7 @@ export default function Home() {
         </section>
 
         {/* 02 - The Game */}
-        <section className="bg-gray-50/50 py-20 sm:py-28">
+        <section className="bg-gray-50/50 py-14 sm:py-20">
           <div className="max-w-6xl mx-auto px-6 sm:px-10">
             <div className="grid lg:grid-cols-2 gap-12 items-center">
               <div>
@@ -233,7 +233,7 @@ export default function Home() {
         </section>
 
         {/* 03 - Progression */}
-        <section className="py-20 sm:py-28">
+        <section className="py-14 sm:py-20">
           <div className="max-w-6xl mx-auto px-6 sm:px-10">
             <div className="max-w-2xl mb-14">
               <p className="text-xs font-bold uppercase tracking-[0.2em] text-gray-400 mb-4">03 / Progression</p>
@@ -258,7 +258,7 @@ export default function Home() {
         </section>
 
         {/* 04 - Real Skills */}
-        <section className="bg-gray-50/50 py-20 sm:py-28">
+        <section className="bg-gray-50/50 py-14 sm:py-20">
           <div className="max-w-6xl mx-auto px-6 sm:px-10">
             <div className="grid lg:grid-cols-2 gap-12 items-center">
               <div className="order-2 lg:order-1">
@@ -280,7 +280,7 @@ export default function Home() {
         </section>
 
         {/* 05 - Accessibility */}
-        <section className="py-20 sm:py-28">
+        <section className="py-14 sm:py-20">
           <div className="max-w-6xl mx-auto px-6 sm:px-10 text-center relative">
             {/* Floating mascots */}
             <div className="absolute left-4 top-0 sm:left-10 sm:top-4 animate-[float_4s_ease-in-out_infinite] hidden sm:block">
@@ -299,7 +299,7 @@ export default function Home() {
         </section>
 
         {/* 06 - How it works */}
-        <section id="how-it-works" className="bg-gray-50/50 py-20 sm:py-28">
+        <section id="how-it-works" className="bg-gray-50/50 py-14 sm:py-20">
           <div className="max-w-6xl mx-auto px-6 sm:px-10">
             <div className="text-center mb-14">
               <p className="text-xs font-bold uppercase tracking-[0.2em] text-gray-400 mb-4">06 / How it works</p>
@@ -334,27 +334,29 @@ export default function Home() {
         <AudienceTabs />
 
         {/* 08 - Club experience */}
-        <section className="bg-gray-50/50 py-20 sm:py-28">
+        <section className="py-14 sm:py-20">
           <div className="max-w-6xl mx-auto px-6 sm:px-10">
-            <div className="grid lg:grid-cols-2 gap-12 items-center">
-              <div>
-                <p className="text-xs font-bold uppercase tracking-[0.2em] text-gray-400 mb-4">For clubs &amp; teams</p>
-                <h2 className="text-3xl sm:text-5xl font-extrabold text-[#101828] leading-[1.08] tracking-tight">Bring the whole team into the game.</h2>
-                <p className="mt-6 text-lg text-gray-500 leading-relaxed">Turn individual practice into something your players share. Challenge teammates, play together during camps and keep the competition going between sessions.</p>
-                <p className="mt-3 text-base text-gray-400">Give young players another reason to pick up their sticks, even outside club training.</p>
-                <div className="mt-8">
-                  <Link href="/club" className="btn-primary px-8 py-4">Explore Hockey Beats for Clubs</Link>
+            {/* Full-width banner with overlay */}
+            <div className="relative rounded-3xl overflow-hidden">
+              <Image src="/images/club-team.jpg" alt="Hockey team celebrating" width={1200} height={500} className="w-full h-[400px] sm:h-[500px] object-cover" />
+              <div className="absolute inset-0 bg-gradient-to-r from-[#101828]/90 via-[#101828]/70 to-transparent" />
+              <div className="absolute inset-0 flex items-center px-8 sm:px-14">
+                <div className="max-w-lg">
+                  <p className="text-xs font-bold uppercase tracking-[0.2em] text-emerald-400 mb-4">For clubs &amp; teams</p>
+                  <h2 className="text-3xl sm:text-4xl font-extrabold text-white leading-[1.08] tracking-tight">Bring the whole team into the game.</h2>
+                  <p className="mt-4 text-base text-white/70 leading-relaxed">Turn individual practice into something your players share. Challenge teammates, play together during camps and keep the competition going between sessions.</p>
+                  <p className="mt-3 text-sm text-white/50">Give young players another reason to pick up their sticks, even outside club training.</p>
+                  <div className="mt-6">
+                    <Link href="/club" className="inline-block bg-emerald-500 hover:bg-emerald-400 text-white font-bold px-8 py-4 rounded-full transition-all">Explore Hockey Beats for Clubs</Link>
+                  </div>
                 </div>
-              </div>
-              <div className="rounded-3xl overflow-hidden">
-                <Image src="/images/club-team.jpg" alt="Hockey team celebrating" width={600} height={400} className="w-full h-auto object-cover" />
               </div>
             </div>
           </div>
         </section>
 
         {/* 09 - Bigger picture */}
-        <section className="py-20 sm:py-28">
+        <section className="py-14 sm:py-20">
           <div className="max-w-3xl mx-auto px-6 sm:px-10 text-center">
             <h2 className="text-3xl sm:text-5xl font-extrabold text-[#101828] leading-[1.08] tracking-tight">Hockey doesn&apos;t end when practice does.</h2>
             <p className="mt-6 text-lg text-gray-500 leading-relaxed">The best part of hockey shouldn&apos;t be limited to scheduled training sessions. Hockey Beats makes it easier to keep playing at home, stay connected to the sport and build a habit of regular practice.</p>
@@ -366,7 +368,7 @@ export default function Home() {
         <MascotsShowcase />
 
         {/* Sports */}
-        <section id="sports" className="py-20 sm:py-28">
+        <section id="sports" className="py-14 sm:py-20">
           <div className="max-w-6xl mx-auto px-6 sm:px-10">
             <div className="text-center mb-14">
               <h2 className="text-3xl sm:text-5xl font-extrabold text-[#101828] leading-[1.08] tracking-tight">Three sports. One game.</h2>
@@ -390,7 +392,7 @@ export default function Home() {
         </section>
 
         {/* 10 - Final CTA */}
-        <section className="py-20 sm:py-28">
+        <section className="py-14 sm:py-20">
           <div className="max-w-3xl mx-auto px-6 sm:px-10 text-center">
             <h2 className="text-3xl sm:text-5xl font-extrabold text-[#101828] tracking-tight leading-[1.08]">One more game?</h2>
             <p className="mt-5 text-lg text-gray-500">Grab your stick. Your next high score isn&apos;t going to beat itself.</p>
@@ -401,7 +403,7 @@ export default function Home() {
         </section>
 
         {/* FAQ */}
-        <section className="bg-gray-50/50 py-20 sm:py-28">
+        <section className="bg-gray-50/50 py-14 sm:py-20">
           <div className="max-w-3xl mx-auto px-6 sm:px-10">
             <h2 className="text-3xl sm:text-4xl font-extrabold text-[#101828] mb-10 text-center tracking-tight">Frequently asked questions</h2>
             <div className="space-y-3">
@@ -741,7 +743,7 @@ function AudienceTabs() {
   const active = tabs.find(t => t.id === tab)!;
 
   return (
-    <section className="py-20 sm:py-28">
+    <section className="py-14 sm:py-20">
       <div className="max-w-6xl mx-auto px-6 sm:px-10">
         <div className="flex justify-center gap-2 mb-10">
           {tabs.map(t => (
