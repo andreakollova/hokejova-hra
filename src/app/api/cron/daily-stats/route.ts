@@ -20,6 +20,13 @@ export async function GET(req: NextRequest) {
     await sendSlackMessage(`🚨 *Apple Sign-In JWT has EXPIRED!* Users cannot sign in with Apple until you generate a new secret.`);
   }
 
+  // Music licensing reminder (set 2026-10-24, remind on 2026-10-27)
+  const musicLicenseReminder = new Date('2026-10-27');
+  const daysUntilMusicReminder = Math.floor((musicLicenseReminder.getTime() - Date.now()) / (1000 * 60 * 60 * 24));
+  if (daysUntilMusicReminder === 0) {
+    await sendSlackMessage(`🎵 *REMINDER: Music licensing verification needed*\nBefore public launch of music features, verify that MusicKit and Spotify SDK usage is licensed for rhythm-game synchronization. SDK access alone does not grant this right.\n\nCheck:\n• Apple MusicKit — rhythm game use permitted?\n• Spotify — developer policy approval for gaming?\n• BPM-based gameplay — does it count as synchronization?\n\nContact licensing@apple.com and Spotify developer support.`);
+  }
+
   // --- Auto-cleanup: delete page_views older than 90 days ---
   const ninetyDaysAgo = new Date(Date.now() - 90 * 24 * 60 * 60 * 1000).toISOString();
   const { count: deletedViews } = await supabase
