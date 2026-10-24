@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useEffect, useCallback, useRef } from 'react';
+import { ACHIEVEMENTS, AchievementStats } from '@/lib/achievements';
 
 const STORAGE_KEY = 'sportqo_engagement';
 const SYNC_DEBOUNCE = 2000;
@@ -33,6 +34,9 @@ interface EngagementData {
   totalGamesPlayed: number;
   totalMinutesPlayed: number;
   totalSecondsPlayed: number;
+  unlockedAchievements: string[];
+  gameTypeCounts: Record<string, number>;
+  perfectRounds: number;
 }
 
 export interface XPBreakdown {
@@ -64,6 +68,9 @@ const defaultEngagement: EngagementData = {
   totalGamesPlayed: 0,
   totalMinutesPlayed: 0,
   totalSecondsPlayed: 0,
+  unlockedAchievements: [],
+  gameTypeCounts: {},
+  perfectRounds: 0,
 };
 
 // --- Helpers ---
@@ -114,6 +121,24 @@ function getUsername(): string | null {
     }
   } catch {}
   return null;
+}
+
+function getFriendsCount(): number {
+  if (typeof window === 'undefined') return 0;
+  try {
+    const raw = localStorage.getItem('hb_friends');
+    if (raw) return JSON.parse(raw).filter((f: { incoming?: boolean }) => !f.incoming).length;
+  } catch {}
+  return 0;
+}
+
+function getUniqueSongsCount(): number {
+  if (typeof window === 'undefined') return 0;
+  try {
+    const raw = localStorage.getItem('sportqo_music_history');
+    if (raw) return JSON.parse(raw).length;
+  } catch {}
+  return 0;
 }
 
 // Merge: pick the one with more XP / games (most progressed)
@@ -276,6 +301,41 @@ export function useEngagement() {
       next.totalSecondsPlayed = (next.totalSecondsPlayed || 0) + opts.durationSeconds;
       next.totalMinutesPlayed = Math.floor((next.totalSecondsPlayed || 0) / 60);
 
+      // Track game type counts
+      next.gameTypeCounts = { ...(next.gameTypeCounts || {}) };
+      next.gameTypeCounts[opts.gameType] = (next.gameTypeCounts[opts.gameType] || 0) + 1;
+
+      // Track perfect rounds
+      if (opts.accuracy === 100) {
+        next.perfectRounds = (next.perfectRounds || 0) + 1;
+      }
+
+      // Check achievements
+      const unlocked = next.unlockedAchievements || [];
+      const stats: AchievementStats = {
+        totalSecondsPlayed: next.totalSecondsPlayed,
+        totalGamesPlayed: next.totalGamesPlayed,
+        currentStreak: next.streak.currentStreak,
+        friendsCount: getFriendsCount(),
+        highestScore: Math.max(opts.score, ...Object.values(next.personalBest || {})),
+        perfectRounds: next.perfectRounds || 0,
+        uniqueSongsPlayed: getUniqueSongsCount(),
+        gameTypeCounts: next.gameTypeCounts,
+        totalHoursPlayed: next.totalSecondsPlayed / 3600,
+      };
+      let achievementXP = 0;
+      const newlyUnlocked: string[] = [];
+      for (const ach of ACHIEVEMENTS) {
+        if (!unlocked.includes(ach.id) && ach.check(stats)) {
+          unlocked.push(ach.id);
+          achievementXP += ach.xp;
+          newlyUnlocked.push(ach.id);
+        }
+      }
+      next.unlockedAchievements = unlocked;
+      next.xp.totalXP += achievementXP;
+      breakdown.total += achievementXP;
+
       persist(next);
       return breakdown;
     },
@@ -323,6 +383,36 @@ export function useEngagement() {
     }
   }, [data, persist]);
 
+  const getUnlockedAchievements = useCallback(() => data.unlockedAchievements || [], [data]);
+
+  // Check achievements outside of game (e.g. for friend/social achievements)
+  const checkAchievementsNow = useCallback(() => {
+    const fresh = loadEngagement();
+    const unlocked = fresh.unlockedAchievements || [];
+    const stats: AchievementStats = {
+      totalSecondsPlayed: fresh.totalSecondsPlayed,
+      totalGamesPlayed: fresh.totalGamesPlayed,
+      currentStreak: fresh.streak.currentStreak,
+      friendsCount: getFriendsCount(),
+      highestScore: Math.max(0, ...Object.values(fresh.personalBest || {})),
+      perfectRounds: fresh.perfectRounds || 0,
+      uniqueSongsPlayed: getUniqueSongsCount(),
+      gameTypeCounts: fresh.gameTypeCounts || {},
+      totalHoursPlayed: fresh.totalSecondsPlayed / 3600,
+    };
+    let xpGained = 0;
+    for (const ach of ACHIEVEMENTS) {
+      if (!unlocked.includes(ach.id) && ach.check(stats)) {
+        unlocked.push(ach.id);
+        xpGained += ach.xp;
+      }
+    }
+    if (xpGained > 0) {
+      const next = { ...fresh, unlockedAchievements: unlocked, xp: { ...fresh.xp, totalXP: (fresh.xp.totalXP || 0) + xpGained } };
+      persist(next);
+    }
+  }, [persist]);
+
   return {
     loaded,
     data,
@@ -335,5 +425,7 @@ export function useEngagement() {
     getAvatar,
     getPersonalBest,
     clearUnfroze,
+    getUnlockedAchievements,
+    checkAchievementsNow,
   };
 }

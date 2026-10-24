@@ -53,7 +53,7 @@ const GAMES = [
 
 export default function DashboardPage() {
   const { settings, isLoggedIn, loaded } = useSettings();
-  const { data: engData, getStreak, getLevelProgress, getXP, getAvatar, loaded: engLoaded, clearUnfroze } = useEngagement();
+  const { data: engData, getStreak, getLevelProgress, getXP, getAvatar, loaded: engLoaded, clearUnfroze, checkAchievementsNow } = useEngagement();
   const [showUnfrozePopup, setShowUnfrozePopup] = useState(false);
   const [musicHistory, setMusicHistory] = useState<TrackRecord[]>([]);
   const [topScores, setTopScores] = useState<ScoreEntry[]>([]);
@@ -181,6 +181,9 @@ export default function DashboardPage() {
             <Image src="/images/hb-logo-white.png" alt="HockeyBeats" width={130} height={30} className="h-6 w-auto" />
           </Link>
           <div className="flex items-center gap-4">
+            <Link href="/achievements" className="text-xs font-bold text-amber-400 hover:text-amber-300 bg-amber-500/10 hover:bg-amber-500/20 px-3 py-1.5 rounded-full transition-all">
+              Achievements
+            </Link>
             {streak.currentStreak > 0 && <StreakBadge currentStreak={streak.currentStreak} frozen={streak.frozen} size="sm" />}
             <Link href="/nastavenia" className="flex items-center gap-2.5 bg-white/5 hover:bg-white/10 rounded-full pl-1 pr-4 py-1 transition-colors">
               <Avatar username={settings.username} photoUrl={avatar} size="sm" />
@@ -297,6 +300,7 @@ export default function DashboardPage() {
                         setFriends(next);
                         try { localStorage.setItem('hb_friends', JSON.stringify(next)); } catch {}
                         syncFriendsToCloud(next);
+                        checkAchievementsNow();
                         setFriendInput('');
                         setShowAddFriend(false);
                       }
