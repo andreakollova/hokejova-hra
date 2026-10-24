@@ -220,30 +220,7 @@ export default function Home() {
           </div>
         </section>
         {/* Mascots section */}
-        <section className="py-24 sm:py-32 bg-[#0a0a0f]">
-          <div className="max-w-6xl mx-auto px-6 sm:px-10">
-            <div className="text-center mb-14">
-              <h2 className="text-3xl sm:text-5xl font-extrabold text-white leading-tight tracking-tight">Choose your favorite</h2>
-              <p className="mt-4 text-lg text-white/40 max-w-xl mx-auto">Discover a crew of bold characters, each with a game of their own.</p>
-            </div>
-            <div className="grid grid-cols-3 sm:grid-cols-4 lg:grid-cols-6 gap-4 sm:gap-6">
-              {MASCOTS.map(m => (
-                <div key={m.id} className="group flex flex-col items-center text-center cursor-pointer">
-                  <div className="relative mb-3">
-                    {/* Glow - bigger, always slightly visible, full on hover */}
-                    <div className="absolute inset-0 rounded-full opacity-30 group-hover:opacity-100 transition-opacity duration-500 animate-pulse-glow" style={{ background: `radial-gradient(circle, #22c55e40 0%, #22c55e15 40%, transparent 70%)`, transform: 'scale(2.2)' }} />
-                    {/* Normal image - visible by default, hidden on hover */}
-                    <Image src={m.image} alt={m.name} width={110} height={110} className="relative z-10 rounded-2xl transition-all duration-300 group-hover:opacity-0 group-hover:scale-0" />
-                    {/* Happy image - hidden by default, bounce in on hover */}
-                    <Image src={m.imageHappy} alt={`${m.name} happy`} width={110} height={110} className="absolute inset-0 z-20 rounded-2xl transition-all duration-300 opacity-0 scale-0 group-hover:opacity-100 group-hover:scale-110 group-hover:animate-mascot-bounce" />
-                  </div>
-                  <div className="text-sm font-bold text-white mt-1">{m.name}</div>
-                  <div className="text-[10px] text-white/40">{m.adjective}</div>
-                </div>
-              ))}
-            </div>
-          </div>
-        </section>
+        <MascotsShowcase />
 
         {/* Devices / Play anywhere section */}
         <section id="platforms" className="relative overflow-hidden">
@@ -751,6 +728,74 @@ function HeroBanner({ isLoggedIn, onLoginClick }: { isLoggedIn: boolean; onLogin
 }
 
 // Start Playing section with expandable platform options
+const MASCOT_DESCRIPTIONS: Record<string, string> = {
+  beatbox: 'The original Hockey Beats mascot. Groovy, confident, and always ready to hit the slalom.',
+  smashmouth: 'Fierce and focused. Smashmouth lives for smashing targets and breaking records.',
+  spacepunk: 'A cosmic adventurer who brings arcade energy to hockey training.',
+  jellix: 'Bouncy, colorful, and full of surprises. Stacking is what Jellix does best.',
+  hopper: 'Swift and precise. Hopper jumps between planets with perfect timing.',
+  drifty: 'Cool and slick. Drifty rides the neon track like nobody else.',
+  brickzilla: 'Mighty and unstoppable. Brickzilla breaks through every wall.',
+  magno: 'Electric and magnetic. Magno flips between platforms with style.',
+  laserjaw: 'Sharp reflexes, sharp moves. Laserjaw dodges every laser.',
+  chromer: 'Fast as lightning. Chromer catches everything in the right lane.',
+  fieldster: 'The classic field hockey character. Reliable, focused, and always on target.',
+  icebreaker: 'Cool under pressure. Icebreaker brings ice hockey grit to every game.',
+  floorboss: 'Bold and commanding. Floorboss owns the floorball court.',
+};
+
+function MascotsShowcase() {
+  const [selected, setSelected] = useState(0);
+  const mascot = MASCOTS[selected];
+
+  return (
+    <section className="py-24 sm:py-32 bg-[#0a0a0f]">
+      <div className="max-w-6xl mx-auto px-6 sm:px-10">
+        <div className="text-center mb-14">
+          <h2 className="text-3xl sm:text-5xl font-extrabold text-white leading-tight tracking-tight">Choose your favorite</h2>
+          <p className="mt-4 text-lg text-white/40 max-w-xl mx-auto">Discover a crew of bold characters, each with a game of their own.</p>
+        </div>
+
+        <div className="flex flex-col lg:flex-row gap-8 lg:gap-12">
+          {/* Main highlighted mascot */}
+          <div className="flex-1 flex flex-col items-center text-center">
+            <div className="relative mb-6">
+              <div className="absolute inset-0 rounded-full animate-pulse-glow" style={{ background: `radial-gradient(circle, #22c55e40 0%, #22c55e15 40%, transparent 70%)`, transform: 'scale(2.2)' }} />
+              <Image
+                src={mascot.imageHappy}
+                alt={mascot.name}
+                width={220}
+                height={220}
+                className="relative z-10 rounded-2xl animate-mascot-bounce"
+                key={mascot.id}
+              />
+            </div>
+            <div className="text-2xl font-extrabold text-white tracking-tight">{mascot.name}</div>
+            <div className="text-sm text-emerald-400 font-bold mt-1">{mascot.adjective}</div>
+            <p className="text-sm text-white/50 mt-4 max-w-xs leading-relaxed">{MASCOT_DESCRIPTIONS[mascot.id] || ''}</p>
+          </div>
+
+          {/* Sidebar with all mascots */}
+          <div className="lg:w-80">
+            <div className="grid grid-cols-4 sm:grid-cols-5 lg:grid-cols-3 gap-2">
+              {MASCOTS.map((m, i) => (
+                <button
+                  key={m.id}
+                  onClick={() => setSelected(i)}
+                  className={`flex flex-col items-center gap-1.5 rounded-xl p-2.5 transition-all duration-300 ${selected === i ? 'bg-white/10 border border-emerald-500/50' : 'bg-white/3 border border-transparent hover:bg-white/5'}`}
+                >
+                  <Image src={selected === i ? m.imageHappy : m.image} alt={m.name} width={56} height={56} className="rounded-lg" />
+                  <div className={`text-[10px] font-bold truncate w-full text-center ${selected === i ? 'text-white' : 'text-white/40'}`}>{m.name}</div>
+                </button>
+              ))}
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+}
+
 function StartPlayingSection() {
   const [expanded, setExpanded] = useState<'mobile' | 'desktop' | 'tv' | null>('desktop');
 
