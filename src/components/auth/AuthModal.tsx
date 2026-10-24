@@ -15,7 +15,7 @@ export default function AuthModal({ onClose }: AuthModalProps) {
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
 
-  const { signInWithEmail, signUp } = useAuth();
+  const { signInWithEmail, signUpWithEmail } = useAuth();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -36,9 +36,9 @@ export default function AuthModal({ onClose }: AuthModalProps) {
           setLoading(false);
           return;
         }
-        const err = await signUp(email, password, nickname);
+        const err = await signUpWithEmail(email, password, nickname);
         if (err) {
-          setError(err.message);
+          setError(err);
         } else {
           onClose();
         }

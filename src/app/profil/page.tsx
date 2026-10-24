@@ -20,7 +20,7 @@ interface TrainingRecord {
 }
 
 export default function ProfilPage() {
-  const { user, profile, loading, updateNickname, signOut } = useAuth();
+  const { user, loading, displayName, signOut } = useAuth();
   const [showAuth, setShowAuth] = useState(false);
   const [history, setHistory] = useState<TrainingRecord[]>([]);
   const [editNick, setEditNick] = useState(false);
@@ -43,7 +43,7 @@ export default function ProfilPage() {
 
   const handleSaveNickname = async () => {
     if (newNickname.length < 2) return;
-    await updateNickname(newNickname);
+    // Nickname update not supported in current auth - use settings page
     setEditNick(false);
   };
 
@@ -113,12 +113,12 @@ export default function ProfilPage() {
               ) : (
                 <div className="flex items-center gap-3">
                   <h1 className="text-2xl font-bold text-gray-900">
-                    {profile?.nickname || 'Player'}
+                    {displayName || 'Player'}
                   </h1>
                   <button
                     onClick={() => {
                       setEditNick(true);
-                      setNewNickname(profile?.nickname || '');
+                      setNewNickname(displayName || '');
                     }}
                     className="text-sm text-gray-400 hover:text-gray-600"
                   >
