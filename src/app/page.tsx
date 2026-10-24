@@ -339,55 +339,48 @@ export default function Home() {
         <AudienceTabs />
 
         {/* 08 - Club experience */}
-        <section className="bg-[#101828] py-14 sm:py-20">
+        <section className="py-14 sm:py-20">
           <div className="max-w-6xl mx-auto px-6 sm:px-10">
-            <div className="grid lg:grid-cols-2 gap-10 items-center">
-              {/* Left: content */}
-              <div>
-                <div className="inline-block bg-emerald-500/20 rounded-full px-4 py-1.5 mb-6">
-                  <span className="text-xs font-bold uppercase tracking-[0.2em] text-emerald-400">For clubs &amp; teams</span>
+            {/* Full-width card */}
+            <div className="bg-gray-50 rounded-3xl overflow-hidden border border-gray-100">
+              <div className="grid lg:grid-cols-2">
+                {/* Image */}
+                <div className="h-64 lg:h-auto">
+                  <Image src="/images/club-team.jpg" alt="Hockey team celebrating" width={600} height={450} className="w-full h-full object-cover" />
                 </div>
-                <h2 className="text-3xl sm:text-5xl font-extrabold text-white leading-[1.08] tracking-tight">Bring the whole team into the game.</h2>
-                <p className="mt-6 text-base text-white/70 leading-relaxed">Turn individual practice into something your players share. Challenge teammates, play together during camps and keep the competition going between sessions.</p>
-                <p className="mt-3 text-sm text-white/50">Give young players another reason to pick up their sticks, even outside club training.</p>
+                {/* Content */}
+                <div className="p-8 sm:p-12 flex flex-col justify-center">
+                  <div className="inline-block bg-emerald-50 rounded-full px-4 py-1.5 mb-5 self-start">
+                    <span className="text-xs font-bold uppercase tracking-[0.2em] text-emerald-600">For clubs &amp; teams</span>
+                  </div>
+                  <h2 className="text-2xl sm:text-3xl font-extrabold text-[#101828] leading-[1.12] tracking-tight">Bring the whole team into the game.</h2>
+                  <p className="mt-4 text-base text-gray-500 leading-relaxed">Turn individual practice into something your players share. Challenge teammates, play together during camps and keep the competition going between sessions.</p>
 
-                <div className="mt-8 grid grid-cols-3 gap-4">
-                  <div className="text-center">
-                    <div className="text-2xl font-black text-emerald-400">5–50</div>
-                    <div className="text-[10px] text-white/50 mt-1">Players per club</div>
+                  <div className="mt-6 grid grid-cols-3 gap-4">
+                    <div>
+                      <div className="text-xl font-black text-[#101828]">5–50</div>
+                      <div className="text-[10px] text-gray-400 mt-0.5">Players per club</div>
+                    </div>
+                    <div>
+                      <div className="text-xl font-black text-[#101828]">10–55%</div>
+                      <div className="text-[10px] text-gray-400 mt-0.5">Volume discount</div>
+                    </div>
+                    <div>
+                      <div className="text-xl font-black text-[#101828]">1 code</div>
+                      <div className="text-[10px] text-gray-400 mt-0.5">Per player</div>
+                    </div>
                   </div>
-                  <div className="text-center">
-                    <div className="text-2xl font-black text-emerald-400">10–55%</div>
-                    <div className="text-[10px] text-white/50 mt-1">Volume discount</div>
-                  </div>
-                  <div className="text-center">
-                    <div className="text-2xl font-black text-emerald-400">1 code</div>
-                    <div className="text-[10px] text-white/50 mt-1">Per player</div>
+
+                  <div className="mt-8 flex flex-wrap gap-3">
+                    <Link href="/club" className="btn-primary px-7 py-3.5">Explore Club Plans</Link>
+                    <a href="mailto:studio@drixton.com" className="btn-secondary px-7 py-3.5">Contact Us</a>
                   </div>
                 </div>
-
-                <div className="mt-8 flex flex-wrap gap-3">
-                  <Link href="/club" className="inline-block bg-emerald-500 hover:bg-emerald-400 text-white font-bold px-8 py-4 rounded-full transition-all">Explore Club Plans</Link>
-                  <a href="mailto:studio@drixton.com" className="inline-block bg-white/10 hover:bg-white/15 text-white font-bold px-8 py-4 rounded-full transition-all">Contact Us</a>
-                </div>
-              </div>
-
-              {/* Right: image */}
-              <div className="rounded-3xl overflow-hidden">
-                <Image src="/images/club-team.jpg" alt="Hockey team celebrating" width={600} height={450} className="w-full h-auto object-cover" />
               </div>
             </div>
           </div>
         </section>
 
-        {/* 09 - Bigger picture */}
-        <section className="py-14 sm:py-20">
-          <div className="max-w-3xl mx-auto px-6 sm:px-10 text-center">
-            <h2 className="text-3xl sm:text-5xl font-extrabold text-[#101828] leading-[1.08] tracking-tight">Hockey doesn&apos;t end when practice does.</h2>
-            <p className="mt-6 text-lg text-gray-500 leading-relaxed">The best part of hockey shouldn&apos;t be limited to scheduled training sessions. Hockey Beats makes it easier to keep playing at home, stay connected to the sport and build a habit of regular practice.</p>
-            <p className="mt-3 text-base text-gray-400">We&apos;re starting in your desktop browser, with a bigger vision to bring Hockey Beats to more screens in the future.</p>
-          </div>
-        </section>
 
         {/* Mascots */}
         <MascotsShowcase />
