@@ -605,10 +605,21 @@ export default function Home() {
                 <input type="password" value={authPassword} onChange={e => setAuthPassword(e.target.value)} className="input-field" placeholder="Password" required minLength={6} />
               )}
               {authMode === 'signup' && (
-                <label className="flex items-start gap-2 cursor-pointer">
-                  <input type="checkbox" required className="mt-1 accent-emerald-500" />
-                  <span className="text-xs text-gray-500">I confirm that I am at least 13 years old. If I am under 16, I have parental or guardian consent to use this service. By signing up I agree to the <a href="/privacy" className="underline hover:text-gray-900">Privacy Policy</a>.</span>
-                </label>
+                <div className="space-y-2.5 bg-gray-50 rounded-xl p-3.5">
+                  <p className="text-[10px] font-bold text-gray-400 uppercase tracking-wider">Age requirement</p>
+                  <label className="flex items-start gap-2 cursor-pointer">
+                    <input type="checkbox" required className="mt-0.5 accent-emerald-500" />
+                    <span className="text-xs text-gray-500">I am at least 13 years old.</span>
+                  </label>
+                  <label className="flex items-start gap-2 cursor-pointer">
+                    <input type="checkbox" required className="mt-0.5 accent-emerald-500" />
+                    <span className="text-xs text-gray-500">If I am under 16, I have permission from my parent or legal guardian to use Hockey Beats.</span>
+                  </label>
+                  <label className="flex items-start gap-2 cursor-pointer">
+                    <input type="checkbox" required className="mt-0.5 accent-emerald-500" />
+                    <span className="text-xs text-gray-500">I have read and agree to the <a href="/terms" className="underline hover:text-gray-900">Terms of Service</a> and acknowledge the <a href="/privacy" className="underline hover:text-gray-900">Privacy Policy</a>.</span>
+                  </label>
+                </div>
               )}
               {authError && <p className="text-red-500 text-sm">{authError}</p>}
               {authSuccess && <p className="text-green-600 text-sm">{authSuccess}</p>}

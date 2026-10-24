@@ -426,7 +426,7 @@ export default function NastaveniaPage() {
             onClick={async () => {
               if (!confirm('Are you sure? This will permanently delete all your data including scores, achievements, friends, and music history. This cannot be undone.')) return;
               if (!confirm('This is irreversible. Delete everything?')) return;
-              await fetch('/api/account', { method: 'DELETE', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ username: settings.username }) });
+              await fetch('/api/account', { method: 'DELETE', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ username: settings.username, userId: auth.user?.id }) });
               localStorage.clear();
               await auth.signOut();
               window.location.href = '/';
