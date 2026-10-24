@@ -625,7 +625,7 @@ function MascotsShowcase() {
   const mascot = MASCOTS[selected];
 
   return (
-    <section className="py-24 sm:py-32 bg-[#0a0a0f]">
+    <section className="py-24 sm:py-32 bg-[#101828]">
       <div className="max-w-6xl mx-auto px-6 sm:px-10">
         <div className="text-center mb-14">
           <h2 className="text-3xl sm:text-5xl font-extrabold text-white leading-tight tracking-tight">Choose your favorite</h2>
