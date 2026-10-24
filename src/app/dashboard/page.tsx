@@ -192,7 +192,21 @@ export default function DashboardPage() {
         <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-6 mb-8">
           <div>
             <h1 className="text-2xl sm:text-3xl font-extrabold tracking-tight">
-              Welcome back, <span className="text-emerald-400">{settings.username}</span>
+              {(() => {
+                const greetings = [
+                  `Hey, `,
+                  `What's up, `,
+                  `Ready to roll, `,
+                  `Let's go, `,
+                  `Good to see you, `,
+                  `Game on, `,
+                ];
+                const hour = new Date().getHours();
+                const timeGreetings = hour < 12 ? [`Morning, `, `Rise and grind, `] : hour < 18 ? [`What's up, `, `Hey, `] : [`Evening, `, `Night session, `];
+                const all = [...greetings, ...timeGreetings];
+                const idx = Math.floor((Date.now() / 86400000)) % all.length;
+                return <>{all[idx]}<span className="text-emerald-400">{settings.username}</span>!</>;
+              })()}
             </h1>
             <p className="text-sm text-white/70 mt-1">Pick a game and start training.</p>
           </div>
