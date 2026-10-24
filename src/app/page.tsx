@@ -278,11 +278,17 @@ export default function Home() {
         <section className="py-14 sm:py-20">
           <div className="max-w-6xl mx-auto px-6 sm:px-10 text-center relative">
             {/* Floating mascots */}
-            <div className="absolute left-4 top-0 sm:left-10 sm:top-4 animate-[float_4s_ease-in-out_infinite] hidden sm:block">
-              <Image src="/images/mascots/mascot-slalom.webp" alt="" width={60} height={60} className="opacity-70 drop-shadow-lg" />
+            <div className="absolute left-2 top-0 sm:left-8 sm:top-2 animate-[float_4s_ease-in-out_infinite] hidden sm:block">
+              <Image src="/images/mascots/mascot-slalom.webp" alt="" width={55} height={55} className="opacity-60 drop-shadow-lg" />
             </div>
-            <div className="absolute right-4 top-8 sm:right-10 sm:top-0 animate-[float_3.5s_ease-in-out_infinite_0.5s] hidden sm:block">
-              <Image src="/images/mascots/mascot-space.webp" alt="" width={55} height={55} className="opacity-70 drop-shadow-lg" />
+            <div className="absolute right-2 top-4 sm:right-8 sm:top-0 animate-[float_3.5s_ease-in-out_infinite_0.5s] hidden sm:block">
+              <Image src="/images/mascots/mascot-space.webp" alt="" width={50} height={50} className="opacity-60 drop-shadow-lg" />
+            </div>
+            <div className="absolute left-8 bottom-4 sm:left-20 sm:bottom-8 animate-[float_3s_ease-in-out_infinite_1s] hidden sm:block">
+              <Image src="/images/mascots/mascot-jelly-stack.webp" alt="" width={48} height={48} className="opacity-60 drop-shadow-lg" />
+            </div>
+            <div className="absolute right-8 bottom-0 sm:right-20 sm:bottom-4 animate-[float_4.5s_ease-in-out_infinite_0.8s] hidden sm:block">
+              <Image src="/images/mascots/mascot-brick-rush.webp" alt="" width={52} height={52} className="opacity-60 drop-shadow-lg" />
             </div>
             <p className="text-xs font-bold uppercase tracking-[0.2em] text-gray-400 mb-4">05 / Accessibility</p>
             <h2 className="text-3xl sm:text-5xl font-extrabold text-[#101828] leading-[1.08] tracking-tight">Your room is your arena.</h2>
