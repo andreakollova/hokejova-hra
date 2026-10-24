@@ -71,6 +71,11 @@ export default function TercikyPage() {
       setPhase('playing');
       return;
     }
+    if (inputMode === 'remote') {
+      const sid = localStorage.getItem('hb_remote_session');
+      if (sid) { tracker.startRemote(sid); if (bgTrack) playMusic(bgTrack); setPhase('playing'); return; }
+      setPhase('calibration'); return;
+    }
     if (!calibration) {
       setPhase('calibration');
       return;
@@ -108,7 +113,7 @@ export default function TercikyPage() {
       if (cancelled) return;
       const video = videoRef.current;
       if (!video) return;
-      tracker.stopTracking();
+      tracker.stopTracking(); tracker.stopRemote();
       tracker.setCalibration(calibration);
       const pending = pendingStreamRef.current;
       if (pending) {
@@ -134,13 +139,13 @@ export default function TercikyPage() {
       }
     };
     start();
-    return () => { cancelled = true; tracker.stopTracking(); };
+    return () => { cancelled = true; tracker.stopTracking(); tracker.stopRemote(); };
   }, [phase, inputMode, calibration, gameKey]); // eslint-disable-line react-hooks/exhaustive-deps
 
   const handleFinish = useCallback((res: TargetResult) => {
     setResult(res);
     setPhase('result');
-    tracker.stopTracking();
+    tracker.stopTracking(); tracker.stopRemote();
     stopCamera();
     pauseMusic();
   }, [tracker, stopCamera, spotify]);
@@ -225,7 +230,7 @@ export default function TercikyPage() {
           getGameInput={tracker.getGameInput}
           onFinish={handleFinish}
           onBackToMenu={() => {
-            tracker.stopTracking();
+            tracker.stopTracking(); tracker.stopRemote();
             stopCamera();
             pauseMusic();
             setPhase('setup');
@@ -270,6 +275,9 @@ export default function TercikyPage() {
               </button>
               <button onClick={() => setInputMode('demo')} className={`flex-1 rounded-2xl py-3.5 border-2 transition-all text-sm font-semibold ${inputMode === 'demo' ? `border-[${accent}] bg-[${accent}]/10 text-[${accent}]` : 'border-white/8 bg-white/3 text-white/50 hover:border-white/15'}`} style={inputMode === 'demo' ? { borderColor: accent, backgroundColor: accent + '15', color: accent } : {}}>
                 Demo (mouse)
+              </button>
+              <button onClick={() => setInputMode('remote')} className="flex-1 rounded-2xl py-3.5 border-2 transition-all text-sm font-semibold" style={inputMode === 'remote' ? { borderColor: accent, backgroundColor: accent + '15', color: accent } : { borderColor: 'rgba(255,255,255,0.08)', backgroundColor: 'rgba(255,255,255,0.02)', color: 'rgba(255,255,255,0.5)' }}>
+                Phone
               </button>
             </div>
           </div>

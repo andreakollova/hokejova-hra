@@ -51,6 +51,11 @@ export default function LaserMazePage() {
 
   const startGame = useCallback(async () => {
     if (inputMode === 'demo') { tracker.startDemo(); if (bgTrack) playMusic(bgTrack); setGameKey(k => k + 1); setPhase('playing'); return; }
+    if (inputMode === 'remote') {
+      const sid = localStorage.getItem('hb_remote_session');
+      if (sid) { tracker.startRemote(sid); if (bgTrack) playMusic(bgTrack); setPhase('playing'); return; }
+      setPhase('calibration'); return;
+    }
     if (!calibration) { setPhase('calibration'); return; }
     tracker.setCalibration(calibration);
     if (bgTrack) playMusic(bgTrack);
@@ -83,7 +88,7 @@ export default function LaserMazePage() {
       if (cancelled) return;
       const video = videoRef.current;
       if (!video) return;
-      tracker.stopTracking();
+      tracker.stopTracking(); tracker.stopRemote();
       tracker.setCalibration(calibration);
       const pending = pendingStreamRef.current;
       if (pending) {
@@ -109,7 +114,7 @@ export default function LaserMazePage() {
       }
     };
     start();
-    return () => { cancelled = true; tracker.stopTracking(); };
+    return () => { cancelled = true; tracker.stopTracking(); tracker.stopRemote(); };
   }, [phase, inputMode, calibration, gameKey]); // eslint-disable-line react-hooks/exhaustive-deps
 
   useEffect(() => {
@@ -168,10 +173,10 @@ export default function LaserMazePage() {
         <LaserMazeGame
           duration={duration} difficulty={difficulty} inputMode={inputMode}
           getGameInput={tracker.getGameInput}
-          onFinish={(res) => { setResult(res); setPhase('result'); tracker.stopTracking(); stopCamera(); pauseMusic(); spotify.pause(); }}
-          onBackToMenu={() => { tracker.stopTracking(); stopCamera(); pauseMusic(); spotify.pause(); setPhase('setup'); }}
+          onFinish={(res) => { setResult(res); setPhase('result'); tracker.stopTracking(); tracker.stopRemote(); stopCamera(); pauseMusic(); spotify.pause(); }}
+          onBackToMenu={() => { tracker.stopTracking(); tracker.stopRemote(); stopCamera(); pauseMusic(); spotify.pause(); setPhase('setup'); }}
         />
-        <button onClick={() => { tracker.stopTracking(); stopCamera(); pauseMusic(); spotify.pause(); setPhase('setup'); }}
+        <button onClick={() => { tracker.stopTracking(); tracker.stopRemote(); stopCamera(); pauseMusic(); spotify.pause(); setPhase('setup'); }}
           className="absolute top-4 left-4 bg-white/10 backdrop-blur-sm rounded-lg p-2 text-white/60 hover:text-white transition-colors z-10">
           <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M15 19l-7-7 7-7" /></svg>
         </button>
@@ -208,6 +213,9 @@ export default function LaserMazePage() {
               </button>
               <button onClick={() => setInputMode('demo')} className={`flex-1 rounded-2xl py-3.5 border-2 transition-all text-sm font-semibold ${inputMode === 'demo' ? `border-[${accent}] bg-[${accent}]/10 text-[${accent}]` : 'border-white/8 bg-white/3 text-white/50 hover:border-white/15'}`} style={inputMode === 'demo' ? { borderColor: accent, backgroundColor: accent + '15', color: accent } : {}}>
                 Demo (mouse)
+              </button>
+              <button onClick={() => setInputMode('remote')} className="flex-1 rounded-2xl py-3.5 border-2 transition-all text-sm font-semibold" style={inputMode === 'remote' ? { borderColor: accent, backgroundColor: accent + '15', color: accent } : { borderColor: 'rgba(255,255,255,0.08)', backgroundColor: 'rgba(255,255,255,0.02)', color: 'rgba(255,255,255,0.5)' }}>
+                Phone
               </button>
             </div>
           </div>

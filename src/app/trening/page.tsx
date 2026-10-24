@@ -238,6 +238,12 @@ export default function TreningPage() {
       return;
     }
 
+    if (inputMode === 'remote') {
+      const sid = localStorage.getItem('hb_remote_session');
+      if (sid) { tracker.startRemote(sid); setPhase('playing'); return; }
+      setPhase('calibration'); return;
+    }
+
     if (!calibration) {
       setPhase('calibration');
       return;
@@ -280,7 +286,7 @@ export default function TreningPage() {
       const video = videoRef.current;
       if (!video) return;
 
-      tracker.stopTracking();
+      tracker.stopTracking(); tracker.stopRemote();
       tracker.setCalibration(calibration);
 
       // Use pre-acquired stream from click handler (Safari requires user gesture)
@@ -315,13 +321,13 @@ export default function TreningPage() {
     };
 
     startCameraTracking();
-    return () => { cancelled = true; tracker.stopTracking(); };
+    return () => { cancelled = true; tracker.stopTracking(); tracker.stopRemote(); };
   }, [phase, inputMode, calibration, gameKey]); // eslint-disable-line react-hooks/exhaustive-deps
 
   const handleFinish = useCallback((res: SlalomResult) => {
     setResult(res);
     setPhase('result');
-    tracker.stopTracking();
+    tracker.stopTracking(); tracker.stopRemote();
     stopCamera();
     spotify.pause();
   }, [tracker, stopCamera, spotify]);
@@ -445,7 +451,7 @@ export default function TreningPage() {
           onResume={handleResume}
           isPaused={isPaused}
           onBackToMenu={() => {
-            tracker.stopTracking();
+            tracker.stopTracking(); tracker.stopRemote();
             stopCamera();
             spotify.pause();
             setMusicConfig(null);
@@ -513,7 +519,7 @@ export default function TreningPage() {
 
         {/* Back to menu button */}
         <button
-          onClick={() => { tracker.stopTracking(); stopCamera(); spotify.pause(); setMusicConfig(null); setPhase('setup'); }}
+          onClick={() => { tracker.stopTracking(); tracker.stopRemote(); stopCamera(); spotify.pause(); setMusicConfig(null); setPhase('setup'); }}
           className="absolute top-4 left-4 bg-white/80 backdrop-blur-sm rounded-lg p-2 text-gray-500 hover:text-gray-900 transition-colors shadow-sm z-10"
         >
           <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M15 19l-7-7 7-7" /></svg>
@@ -582,6 +588,10 @@ export default function TreningPage() {
               >
                 <div className="text-sm font-semibold text-gray-900">Demo (mouse)</div>
                 <div className="text-xs text-gray-500 mt-1">Testing without camera</div>
+              </button>
+              <button onClick={() => setInputMode('remote')} className={`flex-1 rounded-2xl p-4 border-2 transition-all ${inputMode === 'remote' ? 'border-green-500 bg-green-50' : 'border-gray-200 bg-white hover:border-gray-300'}`}>
+                <div className="text-sm font-semibold text-gray-900">Phone</div>
+                <div className="text-xs text-gray-500 mt-1">Use phone camera</div>
               </button>
             </div>
           </div>
