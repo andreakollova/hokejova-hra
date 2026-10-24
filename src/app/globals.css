@@ -186,6 +186,12 @@ body {
   animation: pulse-glow-delayed 3s ease-in-out infinite 1.5s;
 }
 
+/* Floating mascot */
+@keyframes float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-12px); }
+}
+
 /* Mascot bounce on hover */
 @keyframes mascot-bounce {
   0% { transform: scale(0.5) translateY(0); }

@@ -140,9 +140,16 @@ export default function Home() {
                   You&apos;re concentrating on the game. You might not even realise how much you&apos;re practising.
                 </p>
               </div>
-              <div>
+              <div className="relative">
                 <div className="rounded-3xl overflow-hidden">
                   <Image src="/images/hero-indoor.png" alt="Player practising at home" width={600} height={450} className="w-full h-auto" />
+                </div>
+                {/* Magno floating */}
+                <div className="absolute -right-4 -bottom-4 sm:right-4 sm:bottom-4 animate-[float_3s_ease-in-out_infinite]">
+                  <div className="relative">
+                    <div className="absolute inset-0 rounded-full" style={{ background: 'radial-gradient(circle, #a855f740 0%, transparent 70%)', transform: 'scale(2)' }} />
+                    <Image src="/images/mascots/mascot-magnet-flip.webp" alt="Magno" width={90} height={90} className="relative z-10 drop-shadow-xl" />
+                  </div>
                 </div>
               </div>
             </div>
