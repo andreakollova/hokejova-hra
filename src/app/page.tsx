@@ -77,7 +77,8 @@ export default function Home() {
   if (showOnboarding) {
     return (
       <Onboarding onComplete={(profile) => {
-        setProfile(profile);
+        const isMinor = authAge === 'under16';
+        setProfile({ ...profile, isMinor, privateProfile: isMinor });
         setShowOnboarding(false);
         window.location.href = '/dashboard';
       }} />

@@ -282,6 +282,33 @@ export default function NastaveniaPage() {
           </div>
         </section>
 
+        {/* Profile privacy */}
+        <section className="mb-10">
+          <h2 className="text-sm font-medium text-gray-400 uppercase tracking-wider mb-3">Profile privacy</h2>
+          <div className="card p-6">
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-sm font-medium text-gray-900">Private profile</p>
+                <p className="text-xs text-gray-400 mt-0.5">Hide your username from public leaderboards and social features. Only your mascot and score will be visible.</p>
+              </div>
+              <button
+                onClick={() => {
+                  const p = getProfile();
+                  setProfile({ ...p, privateProfile: !p.privateProfile });
+                }}
+                className={`relative w-11 h-6 rounded-full transition-colors ${getProfile().privateProfile ? 'bg-emerald-500' : 'bg-gray-200'}`}
+              >
+                <div className={`absolute top-0.5 left-0.5 w-5 h-5 bg-white rounded-full shadow transition-transform ${getProfile().privateProfile ? 'translate-x-5' : ''}`} />
+              </button>
+            </div>
+            {getProfile().isMinor && (
+              <p className="text-xs text-amber-600 bg-amber-50 rounded-lg p-2.5 mt-3">
+                Because your account was created as a player aged 13–15, private profile is enabled by default to protect your privacy.
+              </p>
+            )}
+          </div>
+        </section>
+
         {/* Calibration status */}
         <section className="mb-10">
           <h2 className="text-sm font-medium text-gray-400 uppercase tracking-wider mb-3">Camera calibration</h2>

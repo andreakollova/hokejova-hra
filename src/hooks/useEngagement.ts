@@ -31,6 +31,8 @@ interface ProfileData {
   mascotId: string;
   color: string;
   onboarded: boolean;
+  isMinor?: boolean;        // true if user is 13-15
+  privateProfile?: boolean; // hide from leaderboards/social by default for minors
 }
 
 interface EngagementData {
@@ -439,8 +441,8 @@ export function useEngagement() {
   }, [persist]);
 
   const setProfile = useCallback(
-    (profile: { sport: string; mascotId: string; color: string }) => {
-      const next = { ...data, profile: { ...profile, onboarded: true } };
+    (profile: { sport: string; mascotId: string; color: string; isMinor?: boolean; privateProfile?: boolean }) => {
+      const next = { ...data, profile: { ...data.profile, ...profile, onboarded: true } };
       persist(next);
     },
     [data, persist],
