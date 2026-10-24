@@ -128,13 +128,11 @@ export default function Onboarding({ onComplete, defaultName }: OnboardingProps)
             {/* Preview */}
             {selectedMascot && (
               <div className="mb-6 flex flex-col items-center">
-                <div className="relative w-24 h-24 mb-3">
-                  {/* Color glow behind mascot */}
-                  <div className="absolute inset-0 rounded-full" style={{ background: color ? `radial-gradient(circle, ${color}60 0%, ${color}20 50%, transparent 70%)` : 'radial-gradient(circle, #22c55e40 0%, transparent 70%)', transform: 'scale(2)' }} />
-                  {color && <div className="absolute inset-0 rounded-full animate-pulse-glow" style={{ background: `radial-gradient(circle, ${color}40 0%, transparent 60%)`, transform: 'scale(2.2)' }} />}
-                  <div className="relative z-10 w-24 h-24 rounded-full overflow-hidden border-3" style={{ borderColor: color || '#22c55e' }}>
-                    <Image src={selectedMascot.imageHappy} alt={selectedMascot.name} width={96} height={96} className="w-full h-full object-cover" />
-                  </div>
+                <div className="relative w-28 h-28 mb-3">
+                  {/* Color background circle */}
+                  <div className="absolute inset-0 rounded-full" style={{ backgroundColor: color || '#22c55e' }} />
+                  {color && <div className="absolute inset-0 rounded-full animate-pulse-glow" style={{ background: `radial-gradient(circle, ${color}50 0%, transparent 60%)`, transform: 'scale(1.8)' }} />}
+                  <Image src={selectedMascot.imageHappy} alt={selectedMascot.name} width={112} height={112} className="relative z-10 w-28 h-28 drop-shadow-lg" />
                 </div>
                 <div className="text-lg font-bold text-white">{username}</div>
                 <div className="text-sm font-bold" style={{ color: color || '#22c55e' }}>{selectedMascot.adjective} {selectedMascot.name}</div>
