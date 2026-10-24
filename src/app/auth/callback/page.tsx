@@ -2,18 +2,28 @@
 
 export const dynamic = 'force-dynamic';
 
-import { useEffect, Suspense } from 'react';
+import { useEffect, useState, Suspense } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { getSupabaseBrowser } from '@/lib/supabase-browser';
 
 function CallbackContent() {
   const router = useRouter();
   const params = useSearchParams();
+  const [status, setStatus] = useState('Signing you in...');
 
   useEffect(() => {
     const supabase = getSupabaseBrowser();
 
     const handleCallback = async () => {
+      // Check for errors in hash (e.g. expired link)
+      if (window.location.hash.includes('error=')) {
+        const hashParams = new URLSearchParams(window.location.hash.substring(1));
+        const errorDesc = hashParams.get('error_description') || 'Authentication failed';
+        setStatus(errorDesc.replace(/\+/g, ' '));
+        setTimeout(() => router.push('/'), 3000);
+        return;
+      }
+
       // Try to exchange code from URL params
       const urlParams = new URLSearchParams(window.location.search);
       const code = urlParams.get('code');
