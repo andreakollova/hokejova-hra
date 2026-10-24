@@ -193,7 +193,7 @@ export default function TargetSmashPage() {
 
         {/* Mascot + Title */}
         <div className="flex items-center gap-5 mb-8">
-          <MascotGlow src="/images/mascots/mascot-target-smash.png" color={accent} size={90} />
+          <MascotGlow src="/images/mascots/mascot-target-smash.webp" color={accent} size={90} />
           <div>
             <h1 className="text-3xl font-extrabold text-white tracking-tight">Target Smash</h1>
             <p className="text-white/40 text-sm mt-1">Smash the bullseyes before they disappear</p>

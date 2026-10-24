@@ -253,7 +253,7 @@ export default function TercikyPage() {
 
         {/* Mascot + Title */}
         <div className="flex items-center gap-5 mb-8">
-          <MascotGlow src="/images/mascots/mascot-targets.png" color={accent} size={90} />
+          <MascotGlow src="/images/mascots/mascot-targets.webp" color={accent} size={90} />
           <div>
             <h1 className="text-3xl font-extrabold text-white tracking-tight">Targets</h1>
             <p className="text-white/40 text-sm mt-1">Hit the targets as fast as you can</p>

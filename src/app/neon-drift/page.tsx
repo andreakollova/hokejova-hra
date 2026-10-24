@@ -198,7 +198,7 @@ export default function NeonDriftPage() {
 
         {/* Mascot + Title */}
         <div className="flex items-center gap-5 mb-8">
-          <MascotGlow src="/images/mascots/mascot-neon-drift.png" color={accent} size={90} />
+          <MascotGlow src="/images/mascots/mascot-neon-drift.webp" color={accent} size={90} />
           <div>
             <h1 className="text-3xl font-extrabold text-white tracking-tight">Neon Drift</h1>
             <p className="text-white/40 text-sm mt-1">Ride the neon track and dodge obstacles</p>

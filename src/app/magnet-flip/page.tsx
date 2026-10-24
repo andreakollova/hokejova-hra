@@ -195,7 +195,7 @@ export default function MagnetFlipPage() {
 
         {/* Mascot + Title */}
         <div className="flex items-center gap-5 mb-8">
-          <MascotGlow src="/images/mascots/mascot-magnet-flip.png" color={accent} size={90} />
+          <MascotGlow src="/images/mascots/mascot-magnet-flip.webp" color={accent} size={90} />
           <div>
             <h1 className="text-3xl font-extrabold text-white tracking-tight">Magnet Flip</h1>
             <p className="text-white/40 text-sm mt-1">Bounce between the magnetic platforms</p>

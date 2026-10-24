@@ -194,7 +194,7 @@ export default function OsmickyTercikyPage() {
 
         {/* Mascot + Title */}
         <div className="flex items-center gap-5 mb-8">
-          <MascotGlow src="/images/mascots/mascot-targets.png" color={accent} size={90} />
+          <MascotGlow src="/images/mascots/mascot-targets.webp" color={accent} size={90} />
           <div>
             <h1 className="text-3xl font-extrabold text-white tracking-tight">Figure 8</h1>
             <p className="text-white/40 text-sm mt-1">Figure eight target drills</p>

@@ -194,7 +194,7 @@ export default function OrbitHopPage() {
 
         {/* Mascot + Title */}
         <div className="flex items-center gap-5 mb-8">
-          <MascotGlow src="/images/mascots/mascot-orbit-hop.png" color={accent} size={90} />
+          <MascotGlow src="/images/mascots/mascot-orbit-hop.webp" color={accent} size={90} />
           <div>
             <h1 className="text-3xl font-extrabold text-white tracking-tight">Orbit Hop</h1>
             <p className="text-white/40 text-sm mt-1">Time your hops between planets</p>

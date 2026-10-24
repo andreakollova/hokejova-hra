@@ -201,7 +201,7 @@ export default function JellyStackPage() {
 
         {/* Mascot + Title */}
         <div className="flex items-center gap-5 mb-8">
-          <MascotGlow src="/images/mascots/mascot-jelly-stack.png" color={accent} size={90} />
+          <MascotGlow src="/images/mascots/mascot-jelly-stack.webp" color={accent} size={90} />
           <div>
             <h1 className="text-3xl font-extrabold text-white tracking-tight">Jelly Stack</h1>
             <p className="text-white/40 text-sm mt-1">Stack and balance the jelly blocks</p>
