@@ -10,6 +10,7 @@ import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import { useRef, useState, useEffect } from 'react';
 import { CalibrationData } from '@/lib/tracking';
+import { useAuth } from '@/hooks/useAuth';
 import dynamic from 'next/dynamic';
 
 const CalibrationWizard = dynamic(() => import('@/components/tracking/CalibrationWizard'), { ssr: false });
@@ -18,9 +19,12 @@ export default function NastaveniaPage() {
   const { settings, isLoggedIn, loaded, updateSettings, logout } = useSettings();
   const { data, setAvatar, getStreak, getLevelProgress, getAvatar, loaded: engLoaded } = useEngagement();
   const router = useRouter();
+  const auth = useAuth();
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [showCalibration, setShowCalibration] = useState(false);
   const [calibration, setCalibration] = useState<CalibrationData | null>(null);
+  const [newPassword, setNewPassword] = useState('');
+  const [passwordMsg, setPasswordMsg] = useState('');
 
   useEffect(() => {
     const savedCal = localStorage.getItem('ballTracker_calibration') || sessionStorage.getItem('ballTracker_calibration');
@@ -287,10 +291,43 @@ export default function NastaveniaPage() {
           </div>
         </section>
 
+        {/* Change Password */}
+        {auth.isLoggedIn && auth.user?.app_metadata?.provider === 'email' && (
+          <section className="mb-10">
+            <h2 className="text-sm font-medium text-gray-400 uppercase tracking-wider mb-3">Change password</h2>
+            <div className="card p-6">
+              <form onSubmit={async (e) => {
+                e.preventDefault();
+                setPasswordMsg('');
+                if (newPassword.length < 6) { setPasswordMsg('Password must be at least 6 characters'); return; }
+                const err = await auth.updatePassword(newPassword);
+                if (err) setPasswordMsg(err);
+                else { setPasswordMsg('Password updated!'); setNewPassword(''); }
+              }} className="flex gap-3">
+                <input type="password" value={newPassword} onChange={e => setNewPassword(e.target.value)} placeholder="New password" className="input-field flex-1" minLength={6} required />
+                <button type="submit" className="text-sm font-medium text-green-600 bg-green-50 hover:bg-green-100 px-4 py-2 rounded-xl transition-all">Update</button>
+              </form>
+              {passwordMsg && <p className={`text-sm mt-2 ${passwordMsg.includes('updated') ? 'text-green-600' : 'text-red-500'}`}>{passwordMsg}</p>}
+            </div>
+          </section>
+        )}
+
+        {/* Account info */}
+        {auth.isLoggedIn && auth.user?.email && (
+          <section className="mb-10">
+            <h2 className="text-sm font-medium text-gray-400 uppercase tracking-wider mb-3">Account</h2>
+            <div className="card p-6">
+              <p className="text-sm text-gray-700">{auth.user.email}</p>
+              <p className="text-xs text-gray-400 mt-1">Signed in via {auth.user.app_metadata?.provider || 'email'}</p>
+            </div>
+          </section>
+        )}
+
         {/* Logout */}
         <section>
           <button
-            onClick={() => {
+            onClick={async () => {
+              await auth.signOut();
               logout();
               router.push('/');
             }}

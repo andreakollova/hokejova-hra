@@ -1,81 +1,110 @@
 'use client';
 
 import { useState, useEffect, useCallback } from 'react';
-import { supabase, UserProfile } from '@/lib/supabase';
-import type { User } from '@supabase/supabase-js';
+import { getSupabaseBrowser } from '@/lib/supabase-browser';
+import type { User, Session } from '@supabase/supabase-js';
+
+interface AuthState {
+  user: User | null;
+  session: Session | null;
+  loading: boolean;
+  displayName: string;
+}
 
 export function useAuth() {
-  const [user, setUser] = useState<User | null>(null);
-  const [profile, setProfile] = useState<UserProfile | null>(null);
-  const [loading, setLoading] = useState(true);
+  const [state, setState] = useState<AuthState>({ user: null, session: null, loading: true, displayName: '' });
 
   useEffect(() => {
-    supabase.auth.getSession().then(({ data }) => {
-      setUser(data.session?.user ?? null);
-      if (data.session?.user) loadProfile(data.session.user.id);
-      setLoading(false);
+    const supabase = getSupabaseBrowser();
+    supabase.auth.getSession().then(({ data: { session } }) => {
+      const user = session?.user || null;
+      setState({ user, session, loading: false, displayName: getDisplayName(user) });
+      if (user) syncToLegacySettings(user);
     });
-
-    const {
-      data: { subscription },
-    } = supabase.auth.onAuthStateChange((_event, session) => {
-      setUser(session?.user ?? null);
-      if (session?.user) loadProfile(session.user.id);
-      else setProfile(null);
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
+      const user = session?.user || null;
+      setState({ user, session, loading: false, displayName: getDisplayName(user) });
+      if (user) syncToLegacySettings(user);
+      else clearLegacySettings();
     });
-
     return () => subscription.unsubscribe();
   }, []);
 
-  const loadProfile = async (userId: string) => {
-    const { data } = await supabase
-      .from('profiles')
-      .select('*')
-      .eq('id', userId)
-      .single();
-    if (data) setProfile(data);
-  };
-
   const signInWithEmail = useCallback(async (email: string, password: string) => {
-    const { error } = await supabase.auth.signInWithPassword({ email, password });
-    return error;
+    const { error } = await getSupabaseBrowser().auth.signInWithPassword({ email, password });
+    return error?.message || null;
   }, []);
 
-  const signUp = useCallback(async (email: string, password: string, nickname: string) => {
-    const { data, error } = await supabase.auth.signUp({ email, password });
-    if (error) return error;
-    if (data.user) {
-      await supabase.from('profiles').insert({
-        id: data.user.id,
-        nickname,
-      });
-    }
-    return null;
+  const signUpWithEmail = useCallback(async (email: string, password: string, name: string) => {
+    const { error } = await getSupabaseBrowser().auth.signUp({
+      email, password,
+      options: { data: { display_name: name }, emailRedirectTo: window.location.origin + '/auth/callback?next=/dashboard' },
+    });
+    return error?.message || null;
+  }, []);
+
+  const signInWithGoogle = useCallback(async () => {
+    await getSupabaseBrowser().auth.signInWithOAuth({
+      provider: 'google',
+      options: { redirectTo: window.location.origin + '/auth/callback?next=/dashboard' },
+    });
+  }, []);
+
+  const signInWithApple = useCallback(async () => {
+    await getSupabaseBrowser().auth.signInWithOAuth({
+      provider: 'apple',
+      options: { redirectTo: window.location.origin + '/auth/callback?next=/dashboard' },
+    });
   }, []);
 
   const signOut = useCallback(async () => {
-    await supabase.auth.signOut();
-    setUser(null);
-    setProfile(null);
+    const username = state.displayName;
+    await getSupabaseBrowser().auth.signOut();
+    clearLegacySettings();
+    if (username) fetch('/api/slack-notify', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ type: 'logout', username }) }).catch(() => {});
+  }, [state.displayName]);
+
+  const resetPassword = useCallback(async (email: string) => {
+    const { error } = await getSupabaseBrowser().auth.resetPasswordForEmail(email, {
+      redirectTo: window.location.origin + '/auth/callback?next=/nastavenia',
+    });
+    return error?.message || null;
   }, []);
 
-  const updateNickname = useCallback(async (nickname: string) => {
-    if (!user) return;
-    const { error } = await supabase
-      .from('profiles')
-      .update({ nickname })
-      .eq('id', user.id);
-    if (!error) setProfile((p) => (p ? { ...p, nickname } : p));
-    return error;
-  }, [user]);
+  const updatePassword = useCallback(async (newPassword: string) => {
+    const { error } = await getSupabaseBrowser().auth.updateUser({ password: newPassword });
+    return error?.message || null;
+  }, []);
 
   return {
-    user,
-    profile,
-    loading,
-    signInWithEmail,
-    signUp,
-    signOut,
-    updateNickname,
+    user: state.user, session: state.session, loading: state.loading,
+    isLoggedIn: !!state.user, displayName: state.displayName,
+    signInWithEmail, signUpWithEmail, signInWithGoogle, signInWithApple,
+    signOut, resetPassword, updatePassword,
   };
+}
+
+function getDisplayName(user: User | null): string {
+  if (!user) return '';
+  return user.user_metadata?.display_name || user.user_metadata?.full_name || user.user_metadata?.name || user.email?.split('@')[0] || '';
+}
+
+function syncToLegacySettings(user: User) {
+  try {
+    const name = getDisplayName(user);
+    const raw = localStorage.getItem('sportqo_user_settings');
+    const existing = raw ? JSON.parse(raw) : {};
+    localStorage.setItem('sportqo_user_settings', JSON.stringify({ ...existing, loggedIn: true, username: name }));
+    document.cookie = 'hb_username=' + name + '; path=/; max-age=' + (60 * 60 * 24 * 365);
+    fetch('/api/slack-notify', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ type: 'login', username: name }) }).catch(() => {});
+  } catch {}
+}
+
+function clearLegacySettings() {
+  try {
+    const raw = localStorage.getItem('sportqo_user_settings');
+    const existing = raw ? JSON.parse(raw) : {};
+    localStorage.setItem('sportqo_user_settings', JSON.stringify({ ...existing, loggedIn: false, username: '' }));
+    document.cookie = 'hb_username=; path=/; max-age=0';
+  } catch {}
 }

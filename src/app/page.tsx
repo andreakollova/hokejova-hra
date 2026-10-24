@@ -3,17 +3,25 @@
 import { useState, useEffect } from 'react';
 import { useSettings } from '@/hooks/useSettings';
 import { useEngagement } from '@/hooks/useEngagement';
+import { useAuth } from '@/hooks/useAuth';
 import StreakBadge from '@/components/ui/StreakBadge';
 import Link from 'next/link';
 import Image from 'next/image';
 
 export default function Home() {
-  const { settings, isLoggedIn, login, logout } = useSettings();
+  const { settings, isLoggedIn: legacyLoggedIn } = useSettings();
+  const auth = useAuth();
+  const isLoggedIn = auth.isLoggedIn || legacyLoggedIn;
+  const displayName = auth.displayName || settings.username;
   const { getStreak, getLevelProgress, loaded: engLoaded } = useEngagement();
   const [showAuth, setShowAuth] = useState(false);
-  const [loginUsername, setLoginUsername] = useState('');
-  const [loginPassword, setLoginPassword] = useState('');
-  const [loginError, setLoginError] = useState('');
+  const [authMode, setAuthMode] = useState<'login' | 'signup' | 'forgot'>('login');
+  const [authEmail, setAuthEmail] = useState('');
+  const [authPassword, setAuthPassword] = useState('');
+  const [authName, setAuthName] = useState('');
+  const [authError, setAuthError] = useState('');
+  const [authSuccess, setAuthSuccess] = useState('');
+  const [authLoading, setAuthLoading] = useState(false);
   const [scrolled, setScrolled] = useState(false);
 
   useEffect(() => {
@@ -22,11 +30,25 @@ export default function Home() {
     return () => window.removeEventListener('scroll', onScroll);
   }, []);
 
-  const handleLogin = (e: React.FormEvent) => {
+  const handleEmailAuth = async (e: React.FormEvent) => {
     e.preventDefault();
-    setLoginError('');
-    const err = login(loginUsername, loginPassword);
-    if (err) { setLoginError(err); } else { window.location.href = '/dashboard'; }
+    setAuthError('');
+    setAuthSuccess('');
+    setAuthLoading(true);
+    if (authMode === 'signup') {
+      const err = await auth.signUpWithEmail(authEmail, authPassword, authName);
+      if (err) setAuthError(err);
+      else setAuthSuccess('Check your email to confirm your account.');
+    } else if (authMode === 'login') {
+      const err = await auth.signInWithEmail(authEmail, authPassword);
+      if (err) setAuthError(err);
+      else window.location.href = '/dashboard';
+    } else if (authMode === 'forgot') {
+      const err = await auth.resetPassword(authEmail);
+      if (err) setAuthError(err);
+      else setAuthSuccess('Password reset email sent.');
+    }
+    setAuthLoading(false);
   };
 
   return (
@@ -47,7 +69,7 @@ export default function Home() {
                 {engLoaded && getStreak().currentStreak > 0 && (
                   <StreakBadge currentStreak={getStreak().currentStreak} frozen={getStreak().frozen} size="sm" />
                 )}
-                <Link href="/dashboard" className="text-sm font-medium text-gray-700">{settings.username}</Link>
+                <Link href="/dashboard" className="text-sm font-medium text-gray-700">{displayName}</Link>
               </>
             ) : (
               <div className="flex items-center gap-3">
@@ -498,20 +520,68 @@ export default function Home() {
         </div>
       </footer>
 
-      {/* Login modal */}
+      {/* Auth modal */}
       {showAuth && (
-        <div className="fixed inset-0 bg-black/20 backdrop-blur-md flex items-center justify-center z-50 p-4">
-          <div className="bg-white rounded-3xl p-8 w-full max-w-sm shadow-2xl shadow-gray-900/10 border border-gray-100">
+        <div className="fixed inset-0 bg-black/20 backdrop-blur-md flex items-center justify-center z-50 p-4" onClick={() => setShowAuth(false)}>
+          <div className="bg-white rounded-3xl p-8 w-full max-w-sm shadow-2xl shadow-gray-900/10 border border-gray-100" onClick={e => e.stopPropagation()}>
             <div className="flex justify-between items-center mb-6">
-              <h2 className="text-xl font-extrabold text-gray-900 tracking-tight">Log in</h2>
-              <button onClick={() => { setShowAuth(false); setLoginError(''); }} className="text-gray-400 hover:text-gray-600 text-xl">x</button>
+              <h2 className="text-xl font-extrabold text-gray-900 tracking-tight">
+                {authMode === 'login' ? 'Log in' : authMode === 'signup' ? 'Create account' : 'Reset password'}
+              </h2>
+              <button onClick={() => { setShowAuth(false); setAuthError(''); setAuthSuccess(''); }} className="text-gray-400 hover:text-gray-600 text-xl">&times;</button>
             </div>
-            <form onSubmit={handleLogin} className="space-y-4">
-              <input type="text" value={loginUsername} onChange={(e) => setLoginUsername(e.target.value)} className="input-field" placeholder="Username" required />
-              <input type="password" value={loginPassword} onChange={(e) => setLoginPassword(e.target.value)} className="input-field" placeholder="Password" required />
-              {loginError && <p className="text-red-500 text-sm">{loginError}</p>}
-              <button type="submit" className="btn-primary w-full">Log in</button>
+
+            {/* Social buttons */}
+            {authMode !== 'forgot' && (
+              <div className="space-y-2.5 mb-5">
+                <button onClick={auth.signInWithGoogle} className="w-full flex items-center justify-center gap-3 bg-white border border-gray-200 hover:bg-gray-50 rounded-xl py-3 text-sm font-medium text-gray-700 transition-all">
+                  <svg className="w-5 h-5" viewBox="0 0 24 24"><path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92a5.06 5.06 0 01-2.2 3.32v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.1z" fill="#4285F4"/><path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/><path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" fill="#FBBC05"/><path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/></svg>
+                  Continue with Google
+                </button>
+                <button onClick={auth.signInWithApple} className="w-full flex items-center justify-center gap-3 bg-black hover:bg-gray-900 rounded-xl py-3 text-sm font-medium text-white transition-all">
+                  <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M17.05 20.28c-.98.95-2.05.88-3.08.4-1.09-.5-2.08-.48-3.24 0-1.44.62-2.2.44-3.06-.4C4.24 16.7 4.89 10.33 8.72 10.1c1.26.07 2.13.72 2.87.75.88-.17 1.72-.84 2.9-.76 1.42.1 2.48.83 3.1 2.13-2.78 1.7-2.12 5.47.58 6.52-.5 1.3-.95 2.6-1.12 3.54zM12.03 10c-.12-2.15 1.67-4 3.74-4.15.3 2.4-2.18 4.33-3.74 4.15z"/></svg>
+                  Continue with Apple
+                </button>
+              </div>
+            )}
+
+            {authMode !== 'forgot' && (
+              <div className="flex items-center gap-3 mb-5">
+                <div className="flex-1 h-px bg-gray-200" />
+                <span className="text-xs text-gray-400">or</span>
+                <div className="flex-1 h-px bg-gray-200" />
+              </div>
+            )}
+
+            <form onSubmit={handleEmailAuth} className="space-y-3">
+              {authMode === 'signup' && (
+                <input type="text" value={authName} onChange={e => setAuthName(e.target.value)} className="input-field" placeholder="Your name" required />
+              )}
+              <input type="email" value={authEmail} onChange={e => setAuthEmail(e.target.value)} className="input-field" placeholder="Email" required />
+              {authMode !== 'forgot' && (
+                <input type="password" value={authPassword} onChange={e => setAuthPassword(e.target.value)} className="input-field" placeholder="Password" required minLength={6} />
+              )}
+              {authError && <p className="text-red-500 text-sm">{authError}</p>}
+              {authSuccess && <p className="text-green-600 text-sm">{authSuccess}</p>}
+              <button type="submit" disabled={authLoading} className="btn-primary w-full disabled:opacity-50">
+                {authLoading ? '...' : authMode === 'login' ? 'Log in' : authMode === 'signup' ? 'Create account' : 'Send reset link'}
+              </button>
             </form>
+
+            <div className="mt-4 text-center space-y-1">
+              {authMode === 'login' && (
+                <>
+                  <button onClick={() => { setAuthMode('forgot'); setAuthError(''); setAuthSuccess(''); }} className="text-xs text-gray-400 hover:text-gray-600 block mx-auto">Forgot password?</button>
+                  <p className="text-xs text-gray-400">No account? <button onClick={() => { setAuthMode('signup'); setAuthError(''); setAuthSuccess(''); }} className="text-gray-900 font-medium">Sign up</button></p>
+                </>
+              )}
+              {authMode === 'signup' && (
+                <p className="text-xs text-gray-400">Already have an account? <button onClick={() => { setAuthMode('login'); setAuthError(''); setAuthSuccess(''); }} className="text-gray-900 font-medium">Log in</button></p>
+              )}
+              {authMode === 'forgot' && (
+                <button onClick={() => { setAuthMode('login'); setAuthError(''); setAuthSuccess(''); }} className="text-xs text-gray-400 hover:text-gray-600">Back to login</button>
+              )}
+            </div>
           </div>
         </div>
       )}
