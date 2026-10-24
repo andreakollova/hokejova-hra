@@ -192,12 +192,20 @@ export default function TreningPage() {
         beatMap: { tempo: mapped.bpm, beats: mapped.beats, bars: [], sections: [], durationS: mapped.track_duration_ms / 1000 },
         track: { id: mapped.spotify_track_id, name: mapped.track_name, artists: mapped.track_artist, album: '', albumArt: mapped.track_album_art, durationMs: mapped.track_duration_ms, uri: `spotify:track:${mapped.spotify_track_id}` },
       });
-      setShowMusic(false);
-      setSearchQuery('');
-      setBpmPickerTrack(null);
-      return;
+    } else {
+      // Auto-generate beats at 120 BPM for unmapped tracks
+      const durationS = track.durationMs > 0 ? track.durationMs / 1000 : 180;
+      const beats = generateBeatsForBpm(120, durationS);
+      setMusicConfig({
+        mode: 'spotify',
+        bpm: 120,
+        beatMap: { tempo: 120, beats, bars: [], sections: [], durationS },
+        track,
+      });
     }
-    setBpmPickerTrack(track);
+    setShowMusic(false);
+    setSearchQuery('');
+    setBpmPickerTrack(null);
   };
 
   const handleConfirmBpm = () => {
