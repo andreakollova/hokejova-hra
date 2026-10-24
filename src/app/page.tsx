@@ -573,9 +573,14 @@ export default function Home() {
               <a href="#teams" className="hover:text-gray-900 transition-colors duration-300">For teams</a>
             </div>
           </div>
-          <div className="mt-8 pt-6 border-t border-gray-100 flex flex-wrap gap-4 text-xs text-gray-400 tracking-wide">
-            <span>Privacy Policy</span>
-            <span>Terms of Use</span>
+          <div className="mt-8 pt-6 border-t border-gray-100">
+            <div className="flex flex-wrap gap-x-6 gap-y-2 text-xs text-gray-400 tracking-wide mb-4">
+              <Link href="/privacy" className="hover:text-gray-700 transition-colors">Privacy Policy</Link>
+              <Link href="/terms" className="hover:text-gray-700 transition-colors">Terms of Service</Link>
+              <Link href="/cookies" className="hover:text-gray-700 transition-colors">Cookie Policy</Link>
+              <Link href="/legal" className="hover:text-gray-700 transition-colors">All Policies</Link>
+            </div>
+            <p className="text-[10px] text-gray-300">© {new Date().getFullYear()} DRIXTON s. r. o. All rights reserved. Apple Music is a trademark of Apple Inc.</p>
           </div>
         </div>
       </footer>

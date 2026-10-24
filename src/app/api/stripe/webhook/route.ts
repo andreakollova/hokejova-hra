@@ -52,7 +52,7 @@ export async function POST(req: NextRequest) {
 
   // First real payment after trial
   if (event.type === 'invoice.paid') {
-    const invoice = event.data.object as Stripe.Invoice;
+    const invoice = event.data.object as any;
     const sub = invoice.subscription as string;
     if (sub && invoice.billing_reason === 'subscription_cycle') {
       // Recurring payment
