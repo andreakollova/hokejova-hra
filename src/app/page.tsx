@@ -320,8 +320,11 @@ export default function Home() {
             <div className="bg-gray-50 rounded-3xl overflow-hidden border border-gray-100">
               <div className="grid lg:grid-cols-2">
                 {/* Image */}
-                <div className="h-64 lg:h-auto">
+                <div className="h-64 lg:h-auto relative">
                   <Image src="/images/club-team.jpg" alt="Hockey team celebrating" width={600} height={450} className="w-full h-full object-cover" />
+                  <div className="absolute inset-0 flex items-center justify-center">
+                    <Image src="/images/for-clubs-logo.png" alt="For Clubs" width={200} height={80} className="w-40 sm:w-48 h-auto drop-shadow-xl" />
+                  </div>
                 </div>
                 {/* Content */}
                 <div className="p-8 sm:p-12 flex flex-col justify-center">
