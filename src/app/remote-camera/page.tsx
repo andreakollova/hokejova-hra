@@ -97,6 +97,7 @@ export default function RemoteCameraPage() {
       mirrorX: false,
       resolution: { width: video.videoWidth, height: video.videoHeight },
       cameraDeviceId: 'remote',
+      fps: 30,
     };
 
     trackerRef.current = new BallTracker();
