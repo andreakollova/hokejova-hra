@@ -36,31 +36,48 @@ function RemoteCameraContent() {
   const rafRef = useRef(0);
   const streamRef = useRef<MediaStream | null>(null);
 
-  // Start camera
+  // Start camera - first get the stream, then show video
+  const pendingStreamRef = useRef<MediaStream | null>(null);
+
   const startCamera = useCallback(async () => {
     try {
       const stream = await navigator.mediaDevices.getUserMedia({
         video: { facingMode: 'environment', width: { ideal: 1280 }, height: { ideal: 720 } },
       });
-      const video = videoRef.current;
-      if (!video) return;
-      video.srcObject = stream;
-      video.setAttribute('playsinline', 'true');
-      await video.play();
+      pendingStreamRef.current = stream;
       streamRef.current = stream;
       setCameraStarted(true);
-      // Auto-use full camera view, go straight to color pick
-      setCorners([
-        { x: 0, y: 0 },
-        { x: video.videoWidth, y: 0 },
-        { x: video.videoWidth, y: video.videoHeight },
-        { x: 0, y: video.videoHeight },
-      ]);
-      setPhase('color');
+      setPhase('color'); // This renders the video element
     } catch (e) {
       alert('Camera access denied. Please allow camera access and try again.');
     }
   }, []);
+
+  // Attach stream to video element once it renders
+  useEffect(() => {
+    if (phase !== 'setup' && pendingStreamRef.current && videoRef.current) {
+      const video = videoRef.current;
+      video.srcObject = pendingStreamRef.current;
+      video.setAttribute('playsinline', 'true');
+      video.play().then(() => {
+        // Set corners to full view once video dimensions are available
+        const waitForDimensions = () => {
+          if (video.videoWidth > 0) {
+            setCorners([
+              { x: 0, y: 0 },
+              { x: video.videoWidth, y: 0 },
+              { x: video.videoWidth, y: video.videoHeight },
+              { x: 0, y: video.videoHeight },
+            ]);
+          } else {
+            setTimeout(waitForDimensions, 100);
+          }
+        };
+        waitForDimensions();
+      }).catch(() => {});
+      pendingStreamRef.current = null;
+    }
+  }, [phase]);
 
   // Handle corner tap
   const handleCornerTap = useCallback((e: React.MouseEvent<HTMLVideoElement>) => {
