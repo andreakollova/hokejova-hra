@@ -144,7 +144,7 @@ export default function Home() {
                   { href: '/osmicky-terciky', img: '/images/game-figure8.png', name: 'Figure 8', bg: '#f3f4f6' },
                   { href: '/osmicky', img: '/images/game-classic8s.png', name: 'Classic 8s', bg: '#f3f4f6' },
                 ].map((game) => (
-                  <Link key={game.href} href={game.href} className="group block flex-shrink-0 snap-start" style={{ width: 'clamp(200px, 40vw, 260px)' }}>
+                  <div key={game.href} onClick={() => window.location.href = game.href} className="group block flex-shrink-0 snap-start cursor-pointer" style={{ width: 'clamp(200px, 40vw, 260px)' }}>
                     <div className="game-tile rounded-3xl overflow-hidden relative aspect-[3/4]" style={{ background: game.bg }}>
                       <Image src={game.img} alt={game.name} fill className="object-cover group-hover:scale-105 transition-all duration-700" />
                       <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent pointer-events-none" />
@@ -156,7 +156,7 @@ export default function Home() {
                         </div>
                       </div>
                     </div>
-                  </Link>
+                  </div>
                 ))}
               </div>
             </div>

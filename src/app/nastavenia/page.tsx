@@ -8,13 +8,26 @@ import XPBar from '@/components/ui/XPBar';
 import Link from 'next/link';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
-import { useRef } from 'react';
+import { useRef, useState } from 'react';
+import { CalibrationData } from '@/lib/tracking';
+import dynamic from 'next/dynamic';
+
+const CalibrationWizard = dynamic(() => import('@/components/tracking/CalibrationWizard'), { ssr: false });
 
 export default function NastaveniaPage() {
   const { settings, isLoggedIn, loaded, updateSettings, logout } = useSettings();
   const { data, setAvatar, getStreak, getLevelProgress, getAvatar, loaded: engLoaded } = useEngagement();
   const router = useRouter();
   const fileInputRef = useRef<HTMLInputElement>(null);
+  const [showCalibration, setShowCalibration] = useState(false);
+  const [calibration, setCalibration] = useState<CalibrationData | null>(() => {
+    if (typeof window === 'undefined') return null;
+    try {
+      const saved = localStorage.getItem('ballTracker_calibration') || sessionStorage.getItem('ballTracker_calibration');
+      if (saved) return JSON.parse(saved);
+    } catch {}
+    return null;
+  });
 
   if (!loaded || !engLoaded) {
     return (
@@ -27,6 +40,18 @@ export default function NastaveniaPage() {
   if (!isLoggedIn) {
     router.push('/');
     return null;
+  }
+
+  if (showCalibration) {
+    return (
+      <CalibrationWizard
+        onComplete={(cal) => {
+          setCalibration(cal);
+          setShowCalibration(false);
+        }}
+        onCancel={() => setShowCalibration(false)}
+      />
+    );
   }
 
   const streak = getStreak();
@@ -228,22 +253,35 @@ export default function NastaveniaPage() {
         <section className="mb-10">
           <h2 className="text-sm font-medium text-gray-400 uppercase tracking-wider mb-3">Camera calibration</h2>
           <div className="card p-6">
-            <div className="flex items-center gap-3">
-              <div
-                className={`w-3 h-3 rounded-full ${
-                  settings.calibrationData ? 'bg-green-500' : 'bg-gray-300'
-                }`}
-              />
-              <p className="text-sm text-gray-700">
-                {settings.calibrationData
-                  ? 'Camera is calibrated'
-                  : 'Camera is not yet calibrated'}
-              </p>
-            </div>
-            {settings.calibrationData && (
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-3">
+                <div className={`w-3 h-3 rounded-full ${calibration ? 'bg-green-500' : 'bg-gray-300'}`} />
+                <div>
+                  <p className="text-sm text-gray-700">
+                    {calibration ? 'Camera is calibrated' : 'Camera is not yet calibrated'}
+                  </p>
+                  {calibration && (
+                    <p className="text-xs text-gray-400 mt-0.5">
+                      {calibration.resolution?.width}x{calibration.resolution?.height}
+                    </p>
+                  )}
+                </div>
+              </div>
               <button
-                onClick={() => updateSettings({ calibrationData: null })}
-                className="mt-4 text-sm text-gray-400 hover:text-gray-600 transition-colors"
+                onClick={() => setShowCalibration(true)}
+                className="text-sm font-medium text-green-600 bg-green-50 hover:bg-green-100 px-4 py-2 rounded-xl transition-all"
+              >
+                {calibration ? 'Recalibrate' : 'Calibrate'}
+              </button>
+            </div>
+            {calibration && (
+              <button
+                onClick={() => {
+                  localStorage.removeItem('ballTracker_calibration');
+                  sessionStorage.removeItem('ballTracker_calibration');
+                  setCalibration(null);
+                }}
+                className="mt-4 text-sm text-gray-400 hover:text-red-500 transition-colors"
               >
                 Reset calibration
               </button>
