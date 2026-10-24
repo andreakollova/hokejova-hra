@@ -2,6 +2,7 @@
 
 import { useState, useRef, useCallback, useEffect } from 'react';
 import dynamic from 'next/dynamic';
+import { needsSafetyAcknowledgment } from '@/components/ui/SafetyModal';
 import { CalibrationData, InputMode } from '@/lib/tracking';
 import { BrickRushResult } from '@/components/games/BrickRushGame';
 import { useTracker } from '@/hooks/useTracker';
@@ -18,6 +19,7 @@ import Paywall from '@/components/ui/Paywall';
 const CalibrationWizard = dynamic(() => import('@/components/tracking/CalibrationWizard'), { ssr: false });
 const BrickRushGame = dynamic(() => import('@/components/games/BrickRushGame'), { ssr: false });
 const BackgroundMusic = dynamic(() => import('@/components/music/BackgroundMusic'), { ssr: false });
+const SafetyModal = dynamic(() => import('@/components/ui/SafetyModal'), { ssr: false });
 
 type Phase = 'setup' | 'calibration' | 'playing' | 'result';
 
@@ -32,6 +34,7 @@ export default function BrickRushPage() {
   const [spotifyReturned, setSpotifyReturned] = useState(false);
   const [gameKey, setGameKey] = useState(0);
   const [showPaywall, setShowPaywall] = useState(false);
+  const [showSafety, setShowSafety] = useState(false);
 
   const { recordGame } = useEngagement();
   const tracker = useTracker(inputMode);
@@ -53,6 +56,7 @@ export default function BrickRushPage() {
   }, []);
 
   const startGame = useCallback(async () => {
+    if (needsSafetyAcknowledgment()) { setShowSafety(true); return; }
     if (!canPlayGame('brick-rush')) { setShowPaywall(true); return; }
     if (inputMode === 'demo') { tracker.startDemo(); if (bgTrack) playMusic(bgTrack); setPhase('playing'); return; }
     if (inputMode === 'remote') {
@@ -273,6 +277,7 @@ export default function BrickRushPage() {
           </button>
         </div>
         {showPaywall && <Paywall gameSlug="brick-rush" onDismiss={() => setShowPaywall(false)} />}
+        {showSafety && <SafetyModal onContinue={() => setShowSafety(false)} />}
       </div>
     </div>
   );

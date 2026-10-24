@@ -2,6 +2,7 @@
 
 import { useState, useRef, useCallback, useEffect } from 'react';
 import dynamic from 'next/dynamic';
+import { needsSafetyAcknowledgment } from '@/components/ui/SafetyModal';
 import { CalibrationData, InputMode } from '@/lib/tracking';
 import { FigureEightResult } from '@/components/games/FigureEightGame';
 import { useTracker } from '@/hooks/useTracker';
@@ -26,6 +27,7 @@ const ResultScreen = dynamic(() => import('@/components/ui/ResultScreen'), {
   ssr: false,
 });
 const BackgroundMusic = dynamic(() => import('@/components/music/BackgroundMusic'), { ssr: false });
+const SafetyModal = dynamic(() => import('@/components/ui/SafetyModal'), { ssr: false });
 
 type Phase = 'setup' | 'calibration' | 'playing' | 'result';
 
@@ -40,6 +42,7 @@ export default function OsmickyPage() {
   const [spotifyReturned, setSpotifyReturned] = useState(false);
   const [gameKey, setGameKey] = useState(0);
   const [showPaywall, setShowPaywall] = useState(false);
+  const [showSafety, setShowSafety] = useState(false);
 
   const tracker = useTracker(inputMode);
   const spotify = useSpotify();
@@ -70,6 +73,7 @@ export default function OsmickyPage() {
   );
 
   const startGame = useCallback(async () => {
+    if (needsSafetyAcknowledgment()) { setShowSafety(true); return; }
     if (!canPlayGame('osmicky')) { setShowPaywall(true); return; }
     if (inputMode === 'demo') { tracker.startDemo(); if (bgTrack) playMusic(bgTrack); setPhase('playing'); return; }
     if (inputMode === 'remote') {
@@ -309,6 +313,7 @@ export default function OsmickyPage() {
           </button>
         </div>
         {showPaywall && <Paywall gameSlug="osmicky" onDismiss={() => setShowPaywall(false)} />}
+        {showSafety && <SafetyModal onContinue={() => setShowSafety(false)} />}
       </div>
     </div>
   );

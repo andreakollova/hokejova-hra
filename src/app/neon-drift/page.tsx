@@ -2,6 +2,7 @@
 
 import { useState, useRef, useCallback, useEffect } from 'react';
 import dynamic from 'next/dynamic';
+import { needsSafetyAcknowledgment } from '@/components/ui/SafetyModal';
 import { CalibrationData, InputMode } from '@/lib/tracking';
 import { NeonDriftResult } from '@/components/games/NeonDriftGame';
 import { useTracker } from '@/hooks/useTracker';
@@ -18,6 +19,7 @@ import Paywall from '@/components/ui/Paywall';
 const CalibrationWizard = dynamic(() => import('@/components/tracking/CalibrationWizard'), { ssr: false });
 const NeonDriftGame = dynamic(() => import('@/components/games/NeonDriftGame'), { ssr: false });
 const BackgroundMusic = dynamic(() => import('@/components/music/BackgroundMusic'), { ssr: false });
+const SafetyModal = dynamic(() => import('@/components/ui/SafetyModal'), { ssr: false });
 
 type Phase = 'setup' | 'calibration' | 'playing' | 'result';
 
@@ -32,6 +34,7 @@ export default function NeonDriftPage() {
   const [spotifyReturned, setSpotifyReturned] = useState(false);
   const [gameKey, setGameKey] = useState(0);
   const [showPaywall, setShowPaywall] = useState(false);
+  const [showSafety, setShowSafety] = useState(false);
 
   const { recordGame } = useEngagement();
   const tracker = useTracker(inputMode);
@@ -53,6 +56,7 @@ export default function NeonDriftPage() {
   }, []);
 
   const startGame = useCallback(async () => {
+    if (needsSafetyAcknowledgment()) { setShowSafety(true); return; }
     if (!canPlayGame('neon-drift')) { setShowPaywall(true); return; }
     if (inputMode === 'demo') { tracker.startDemo(); if (bgTrack) playMusic(bgTrack); setGameKey(k => k + 1); setPhase('playing'); return; }
     if (inputMode === 'remote') {
@@ -280,6 +284,7 @@ export default function NeonDriftPage() {
           </button>
         </div>
         {showPaywall && <Paywall gameSlug="neon-drift" onDismiss={() => setShowPaywall(false)} />}
+        {showSafety && <SafetyModal onContinue={() => setShowSafety(false)} />}
       </div>
     </div>
   );

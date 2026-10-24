@@ -2,6 +2,7 @@
 
 import { useState, useRef, useCallback, useEffect } from 'react';
 import dynamic from 'next/dynamic';
+import { needsSafetyAcknowledgment } from '@/components/ui/SafetyModal';
 import { CalibrationData, InputMode } from '@/lib/tracking';
 import { OrbitHopResult } from '@/components/games/OrbitHopGame';
 import { useTracker } from '@/hooks/useTracker';
@@ -18,6 +19,7 @@ import Paywall from '@/components/ui/Paywall';
 const CalibrationWizard = dynamic(() => import('@/components/tracking/CalibrationWizard'), { ssr: false });
 const OrbitHopGame = dynamic(() => import('@/components/games/OrbitHopGame'), { ssr: false });
 const BackgroundMusic = dynamic(() => import('@/components/music/BackgroundMusic'), { ssr: false });
+const SafetyModal = dynamic(() => import('@/components/ui/SafetyModal'), { ssr: false });
 
 type Phase = 'setup' | 'calibration' | 'playing' | 'result';
 
@@ -32,6 +34,7 @@ export default function OrbitHopPage() {
   const [spotifyReturned, setSpotifyReturned] = useState(false);
   const [hopSide, setHopSide] = useState<'left' | 'right'>('right');
   const [showPaywall, setShowPaywall] = useState(false);
+  const [showSafety, setShowSafety] = useState(false);
 
   const { recordGame } = useEngagement();
   const tracker = useTracker(inputMode);
@@ -55,6 +58,7 @@ export default function OrbitHopPage() {
   const [gameKey, setGameKey] = useState(0);
 
   const startGame = useCallback(async () => {
+    if (needsSafetyAcknowledgment()) { setShowSafety(true); return; }
     if (!canPlayGame('orbit-hop')) { setShowPaywall(true); return; }
     if (inputMode === 'demo') { tracker.startDemo(); if (bgTrack) playMusic(bgTrack); setPhase('playing'); return; }
     if (inputMode === 'remote') {
@@ -289,6 +293,7 @@ export default function OrbitHopPage() {
           </button>
         </div>
         {showPaywall && <Paywall gameSlug="orbit-hop" onDismiss={() => setShowPaywall(false)} />}
+        {showSafety && <SafetyModal onContinue={() => setShowSafety(false)} />}
       </div>
     </div>
   );

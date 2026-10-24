@@ -2,6 +2,7 @@
 
 import { useState, useRef, useCallback, useEffect, useMemo } from 'react';
 import dynamic from 'next/dynamic';
+import { needsSafetyAcknowledgment } from '@/components/ui/SafetyModal';
 import { CalibrationData, InputMode, GameInput } from '@/lib/tracking';
 import { SlalomResult } from '@/components/games/SlalomGame';
 import { MusicConfig } from '@/components/music/MusicSelector';
@@ -85,6 +86,7 @@ const ResultScreen = dynamic(() => import('@/components/ui/ResultScreen'), {
 const MusicSelector = dynamic(() => import('@/components/music/MusicSelector'), {
   ssr: false,
 });
+const SafetyModal = dynamic(() => import('@/components/ui/SafetyModal'), { ssr: false });
 
 type Phase = 'setup' | 'calibration' | 'music' | 'playing' | 'result';
 
@@ -99,6 +101,7 @@ export default function TreningPage() {
   const [calibration, setCalibration] = useState<CalibrationData | null>(null);
   const [musicConfig, setMusicConfig] = useState<MusicConfig | null>(null);
   const [showMusic, setShowMusic] = useState(false);
+  const [showSafety, setShowSafety] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
   const [beatMaps, setBeatMaps] = useState<SavedBeatMap[]>([]);
   const [selectedBpm, setSelectedBpm] = useState(120);
@@ -231,6 +234,7 @@ export default function TreningPage() {
   }, [musicConfig, spotify]);
 
   const startGame = useCallback(async () => {
+    if (needsSafetyAcknowledgment()) { setShowSafety(true); return; }
     if (inputMode === 'demo') {
       tracker.startDemo();
       setPhase('playing');
@@ -832,6 +836,7 @@ export default function TreningPage() {
           </button>
 
         </div>
+        {showSafety && <SafetyModal onContinue={() => setShowSafety(false)} />}
       </div>
     </div>
   );
