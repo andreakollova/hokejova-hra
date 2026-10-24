@@ -385,6 +385,36 @@ export default function Home() {
         {/* Mascots */}
         <MascotsShowcase />
 
+        {/* Reviews */}
+        <section className="py-14 sm:py-20 bg-gray-50/50">
+          <div className="max-w-6xl mx-auto px-6 sm:px-10">
+            <div className="text-center mb-10">
+              <h2 className="text-2xl sm:text-3xl font-extrabold text-[#101828] tracking-tight">What players are saying</h2>
+            </div>
+            <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-5">
+              {[
+                { initials: 'MK', text: 'My stickhandling improved so much after just two weeks. I actually look forward to practising now.', role: 'Field hockey player, 15' },
+                { initials: 'TS', text: 'Finally something that makes off-ice training fun. The games are addictive and my hands feel faster on the puck.', role: 'Ice hockey player, 17' },
+                { initials: 'LH', text: 'Our kids love it. They pick up their sticks voluntarily now, which never happened before.', role: 'Parent of two players' },
+                { initials: 'JV', text: 'I use Hockey Beats at camps and the players go crazy for it. Great energy boost between drills.', role: 'Hockey coach' },
+                { initials: 'AK', text: 'The leaderboard keeps our team competitive even outside training. Everyone wants to be on top.', role: 'Club captain, 16' },
+                { initials: 'PD', text: 'Simple to set up, no extra gear needed. Just my stick and a ball. Exactly what I was looking for.', role: 'Floorball player, 14' },
+              ].map((review, i) => (
+                <div key={i} className="bg-white rounded-2xl p-6 border border-gray-100 hover:border-gray-200 hover:shadow-md transition-all">
+                  <div className="flex items-center gap-3 mb-4">
+                    <div className="w-10 h-10 rounded-full bg-emerald-50 flex items-center justify-center text-sm font-bold text-emerald-600">{review.initials}</div>
+                    <div className="text-xs text-gray-400">{review.role}</div>
+                  </div>
+                  <p className="text-sm text-[#101828] leading-relaxed">&ldquo;{review.text}&rdquo;</p>
+                  <div className="mt-3 flex gap-0.5">
+                    {[1,2,3,4,5].map(s => <svg key={s} className="w-4 h-4 text-amber-400" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>)}
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        </section>
+
         {/* 10 - Final CTA */}
         <section className="py-14 sm:py-20">
           <div className="max-w-3xl mx-auto px-6 sm:px-10 text-center">
