@@ -2,6 +2,7 @@
 
 import { useRef, useState, useCallback, useEffect, MutableRefObject } from 'react';
 import { GameInput, InputMode } from '@/lib/tracking';
+import { playSound } from '@/lib/game-audio';
 
 interface SpaceGameProps {
   duration: 30 | 60 | 90;
@@ -86,6 +87,7 @@ export default function SpaceGame({
     blocksDestroyed: 0,
     backProgress: 0,
   });
+  const hudRef = useRef(hud);
 
   // Init blocks
   useEffect(() => {
@@ -118,19 +120,6 @@ export default function SpaceGame({
     let running = true;
     let lastTime = 0;
 
-    const playSound = (freq: number, dur: number, type: OscillatorType = 'sine') => {
-      try {
-        const actx = new AudioContext();
-        const osc = actx.createOscillator();
-        const gain = actx.createGain();
-        osc.connect(gain); gain.connect(actx.destination);
-        osc.frequency.value = freq; osc.type = type; gain.gain.value = 0.06;
-        osc.start();
-        gain.gain.exponentialRampToValueAtTime(0.001, actx.currentTime + dur);
-        osc.stop(actx.currentTime + dur);
-      } catch {}
-    };
-
     const loop = (timestamp: number) => {
       if (!running) return;
       const delta = lastTime ? (timestamp - lastTime) / 1000 : 0;
@@ -152,7 +141,7 @@ export default function SpaceGame({
       if (!s.started) {
         s.countdown -= delta;
         if (s.countdown <= 0) { s.started = true; s.gameStartWallTime = performance.now(); }
-        setHud(h => ({ ...h, countdown: Math.ceil(Math.max(0, s.countdown)), backProgress: s.backTimer / 3 }));
+        hudRef.current = { ...hudRef.current, countdown: Math.ceil(Math.max(0, s.countdown)), backProgress: s.backTimer / 3 };
         drawGame(ctx, s, Math.ceil(Math.max(0, s.countdown)));
         requestAnimationFrame(loop);
         return;
@@ -273,8 +262,8 @@ export default function SpaceGame({
       }
       s.asteroids = s.asteroids.filter(a => a.active);
 
-      // Update HUD periodically
-      setHud({
+      // Update HUD ref
+      hudRef.current = {
         score: s.score,
         lives: s.lives,
         timeLeft: Math.max(0, duration - s.elapsedTime),
@@ -282,7 +271,7 @@ export default function SpaceGame({
         blocksLeft: s.blocks.filter(b => b.active).length,
         blocksDestroyed: s.blocksDestroyed,
         backProgress: s.backTimer / 3,
-      });
+      };
 
       if (s.shakeTimer > 0) s.shakeTimer -= delta;
       drawGame(ctx, s, 0);
@@ -293,6 +282,11 @@ export default function SpaceGame({
     return () => { running = false; };
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [duration, difficulty]);
+
+  useEffect(() => {
+    const interval = setInterval(() => setHud({ ...hudRef.current }), 66);
+    return () => clearInterval(interval);
+  }, []);
 
   const drawGame = (ctx: CanvasRenderingContext2D, s: typeof stateRef.current, countdown: number) => {
     const w = CANVAS_W;

@@ -263,6 +263,11 @@ export default function MagnetFlipGame({
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [duration, difficulty]);
 
+  useEffect(() => {
+    const interval = setInterval(() => setHud({ ...hudRef.current }), 66);
+    return () => clearInterval(interval);
+  }, []);
+
   const drawGame = (ctx: CanvasRenderingContext2D, s: typeof stateRef.current, countdown: number) => {
     const w = CANVAS_W;
     const h = CANVAS_H;
