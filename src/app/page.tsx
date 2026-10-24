@@ -607,7 +607,7 @@ export default function Home() {
               {authMode === 'signup' && (
                 <label className="flex items-start gap-2 cursor-pointer">
                   <input type="checkbox" required className="mt-1 accent-emerald-500" />
-                  <span className="text-xs text-gray-500">I confirm that I am at least 16 years old, or I have parental consent to use this service. By signing up I agree to the <a href="/privacy" className="underline hover:text-gray-900">Privacy Policy</a>.</span>
+                  <span className="text-xs text-gray-500">I confirm that I am at least 13 years old. If I am under 16, I have parental or guardian consent to use this service. By signing up I agree to the <a href="/privacy" className="underline hover:text-gray-900">Privacy Policy</a>.</span>
                 </label>
               )}
               {authError && <p className="text-red-500 text-sm">{authError}</p>}
