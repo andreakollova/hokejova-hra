@@ -64,16 +64,21 @@ export default function DashboardPage() {
   const [selectedSong, setSelectedSong] = useState<{ name: string; artist: string; id?: string; albumArt?: string } | null>(null);
   const [showGamePicker, setShowGamePicker] = useState(false);
 
+  const syncFriendsToCloud = (f: typeof friends) => {
+    if (isLoggedIn && settings.username) {
+      fetch('/api/user-data', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ username: settings.username, friends: f }) }).catch(() => {});
+    }
+  };
+
   useEffect(() => {
     setMusicHistory(loadMusicHistory());
     loadScores();
-    // Load friends
+    // Load friends from localStorage
     try {
       const saved = localStorage.getItem('hb_friends');
       if (saved) {
         setFriends(JSON.parse(saved));
       } else {
-        // Seed mock friends
         const mock = [
           { username: 'matej_k', online: true, lastPlayed: '2 min ago', totalTime: '10h 12m', lastSong: 'Blinding Lights', lastGame: 'HockeyBeats', pending: false, incoming: false },
           { username: 'zuzka99', online: false, lastPlayed: '3 hours ago', totalTime: '8h 54m', lastSong: 'Levitating', lastGame: 'Space Invaders', pending: false, incoming: false },
@@ -85,7 +90,25 @@ export default function DashboardPage() {
         localStorage.setItem('hb_friends', JSON.stringify(mock));
       }
     } catch {}
-  }, []);
+    // Sync from cloud
+    if (isLoggedIn && settings.username) {
+      fetch(`/api/user-data?username=${encodeURIComponent(settings.username)}`)
+        .then(r => r.json())
+        .then(json => {
+          if (json.data) {
+            if (json.data.friends && Array.isArray(json.data.friends) && json.data.friends.length > 0) {
+              setFriends(json.data.friends);
+              localStorage.setItem('hb_friends', JSON.stringify(json.data.friends));
+            }
+            if (json.data.music_history && Array.isArray(json.data.music_history) && json.data.music_history.length > 0) {
+              setMusicHistory(json.data.music_history);
+              localStorage.setItem(HISTORY_KEY, JSON.stringify(json.data.music_history));
+            }
+          }
+        })
+        .catch(() => {});
+    }
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   // Show "streak is back" popup after unfreeze
   useEffect(() => {
@@ -273,6 +296,7 @@ export default function DashboardPage() {
                         const next = [...friends, { username: friendInput.trim(), online: false, lastPlayed: 'Just added', totalTime: '0m', lastSong: '-', lastGame: '-', pending: false, incoming: false }];
                         setFriends(next);
                         try { localStorage.setItem('hb_friends', JSON.stringify(next)); } catch {}
+                        syncFriendsToCloud(next);
                         setFriendInput('');
                         setShowAddFriend(false);
                       }
@@ -299,11 +323,13 @@ export default function DashboardPage() {
                       const next = friends.map(fr => fr.username === f.username ? { ...fr, incoming: false } : fr);
                       setFriends(next);
                       try { localStorage.setItem('hb_friends', JSON.stringify(next)); } catch {}
+                      syncFriendsToCloud(next);
                     }} className="text-[10px] font-bold text-emerald-400 bg-emerald-500/10 px-2 py-1 rounded-lg">Accept</button>
                     <button onClick={() => {
                       const next = friends.filter(fr => fr.username !== f.username);
                       setFriends(next);
                       try { localStorage.setItem('hb_friends', JSON.stringify(next)); } catch {}
+                      syncFriendsToCloud(next);
                     }} className="text-[10px] font-bold text-red-400 bg-red-500/10 px-2 py-1 rounded-lg">Reject</button>
                   </div>
                 ))}

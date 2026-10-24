@@ -45,6 +45,16 @@ function saveToHistory(track: SpotifyTrack) {
   }
   const trimmed = history.sort((a, b) => b.lastPlayed - a.lastPlayed).slice(0, MAX_HISTORY);
   try { localStorage.setItem(HISTORY_KEY, JSON.stringify(trimmed)); } catch {}
+  // Sync to cloud
+  try {
+    const raw = localStorage.getItem('sportqo_user_settings');
+    if (raw) {
+      const s = JSON.parse(raw);
+      if (s.loggedIn && s.username) {
+        fetch('/api/user-data', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ username: s.username, music_history: trimmed }) }).catch(() => {});
+      }
+    }
+  } catch {}
 }
 
 interface BackgroundMusicProps {

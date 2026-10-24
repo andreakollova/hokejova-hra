@@ -1,8 +1,9 @@
 'use client';
 
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, useRef } from 'react';
 
 const STORAGE_KEY = 'sportqo_engagement';
+const SYNC_DEBOUNCE = 2000;
 
 // --- Types ---
 
@@ -17,7 +18,7 @@ interface StreakData {
 
 interface XPData {
   totalXP: number;
-  dailyFirstGameDate: string; // YYYY-MM-DD of last daily bonus
+  dailyFirstGameDate: string;
 }
 
 interface AvatarData {
@@ -28,7 +29,7 @@ interface EngagementData {
   streak: StreakData;
   xp: XPData;
   avatar: AvatarData;
-  personalBest: Record<string, number>; // game_type -> best score
+  personalBest: Record<string, number>;
   totalGamesPlayed: number;
   totalMinutesPlayed: number;
   totalSecondsPlayed: number;
@@ -77,13 +78,6 @@ function getYesterday(): string {
   return d.toISOString().split('T')[0];
 }
 
-function daysBetween(dateA: string, dateB: string): number {
-  if (!dateA || !dateB) return Infinity;
-  const a = new Date(dateA).getTime();
-  const b = new Date(dateB).getTime();
-  return Math.floor(Math.abs(b - a) / (1000 * 60 * 60 * 24));
-}
-
 function calculateLevel(totalXP: number): number {
   return Math.floor(Math.sqrt(totalXP / 100));
 }
@@ -107,9 +101,33 @@ function saveEngagement(data: EngagementData) {
   if (typeof window === 'undefined') return;
   try {
     localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
-  } catch {
-    // localStorage full or unavailable
+  } catch {}
+}
+
+function getUsername(): string | null {
+  if (typeof window === 'undefined') return null;
+  try {
+    const raw = localStorage.getItem('sportqo_user_settings');
+    if (raw) {
+      const s = JSON.parse(raw);
+      return s.loggedIn ? s.username : null;
+    }
+  } catch {}
+  return null;
+}
+
+// Merge: pick the one with more XP / games (most progressed)
+function mergeEngagement(local: EngagementData, cloud: EngagementData): EngagementData {
+  const localXP = local.xp?.totalXP || 0;
+  const cloudXP = cloud.xp?.totalXP || 0;
+  // Use whichever has more progress
+  const base = cloudXP >= localXP ? cloud : local;
+  // But keep the best of both for personal bests
+  const mergedBests = { ...(cloud.personalBest || {}), ...(local.personalBest || {}) };
+  for (const key of Object.keys(mergedBests)) {
+    mergedBests[key] = Math.max(local.personalBest?.[key] || 0, cloud.personalBest?.[key] || 0);
   }
+  return { ...defaultEngagement, ...base, personalBest: mergedBests };
 }
 
 // --- Hook ---
@@ -117,16 +135,32 @@ function saveEngagement(data: EngagementData) {
 export function useEngagement() {
   const [data, setData] = useState<EngagementData>(defaultEngagement);
   const [loaded, setLoaded] = useState(false);
+  const syncTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  const syncToCloud = useCallback((engData: EngagementData) => {
+    const username = getUsername();
+    if (!username) return;
+    if (syncTimerRef.current) clearTimeout(syncTimerRef.current);
+    syncTimerRef.current = setTimeout(async () => {
+      try {
+        // Don't sync avatar base64 in engagement - it's separate
+        const { avatar, ...rest } = engData;
+        await fetch('/api/user-data', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ username, engagement: rest, avatar: avatar.photoBase64 }),
+        });
+      } catch {}
+    }, SYNC_DEBOUNCE);
+  }, []);
 
   useEffect(() => {
     const d = loadEngagement();
-    // Check if streak should be frozen (missed a day)
     const today = getToday();
     const yesterday = getYesterday();
     const last = d.streak.lastPlayDate;
 
     if (last && last !== today && last !== yesterday && !d.streak.frozen && d.streak.currentStreak > 0) {
-      // Missed a day - freeze the streak, NEVER lose it
       d.streak.frozen = true;
       d.streak.frozenDate = last;
       d.streak.consecutiveDaysAfterFreeze = 0;
@@ -135,14 +169,40 @@ export function useEngagement() {
 
     setData(d);
     setLoaded(true);
-  }, []);
+
+    // Load from cloud and merge
+    const username = getUsername();
+    if (username) {
+      fetch(`/api/user-data?username=${encodeURIComponent(username)}`)
+        .then(r => r.json())
+        .then(json => {
+          if (json.data) {
+            const cloudEng = json.data.engagement ? { ...defaultEngagement, ...json.data.engagement } : defaultEngagement;
+            if (json.data.avatar) {
+              cloudEng.avatar = { photoBase64: json.data.avatar };
+            }
+            const merged = mergeEngagement(d, cloudEng);
+            setData(merged);
+            saveEngagement(merged);
+            // If local had more, push to cloud
+            if ((d.xp?.totalXP || 0) > (cloudEng.xp?.totalXP || 0)) {
+              syncToCloud(merged);
+            }
+          } else {
+            // No cloud data yet, push local
+            syncToCloud(d);
+          }
+        })
+        .catch(() => {});
+    }
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   const persist = useCallback((next: EngagementData) => {
     setData(next);
     saveEngagement(next);
-  }, []);
+    syncToCloud(next);
+  }, [syncToCloud]);
 
-  // Record a game and return XP breakdown
   const recordGame = useCallback(
     (opts: {
       score: number;
@@ -152,14 +212,11 @@ export function useEngagement() {
       gameType: string;
     }): XPBreakdown => {
       const today = getToday();
-      // Read fresh from localStorage to avoid stale closure data
       const fresh = loadEngagement();
       const next = { ...fresh, streak: { ...fresh.streak }, xp: { ...fresh.xp }, avatar: { ...fresh.avatar } };
 
-      // --- Streak logic ---
       const wasPlayedToday = next.streak.lastPlayDate === today;
 
-      // Always unfreeze when playing a game, regardless of whether played today
       if (next.streak.frozen) {
         next.streak.frozen = false;
         next.streak.frozenDate = '';
@@ -179,7 +236,6 @@ export function useEngagement() {
         next.streak.lastPlayDate = today;
       }
 
-      // --- XP calculation ---
       const breakdown: XPBreakdown = {
         gameComplete: 50,
         correctPasses: opts.correctPasses * 5,
@@ -190,7 +246,6 @@ export function useEngagement() {
         total: 0,
       };
 
-      // Personal best check
       const prevBest = next.personalBest[opts.gameType] || 0;
       if (opts.score > prevBest) {
         if (prevBest > 0) {
@@ -199,13 +254,11 @@ export function useEngagement() {
         next.personalBest = { ...next.personalBest, [opts.gameType]: opts.score };
       }
 
-      // Daily first game bonus
       if (next.xp.dailyFirstGameDate !== today) {
         breakdown.dailyFirstGame = 50;
         next.xp.dailyFirstGameDate = today;
       }
 
-      // Streak bonus
       if (!next.streak.frozen && next.streak.currentStreak > 0) {
         breakdown.streakBonus = next.streak.currentStreak * 10;
       }
@@ -237,17 +290,9 @@ export function useEngagement() {
     [data, persist],
   );
 
-  const getStreak = useCallback(() => {
-    return data.streak;
-  }, [data]);
-
-  const getXP = useCallback(() => {
-    return data.xp.totalXP || 0;
-  }, [data]);
-
-  const getLevel = useCallback(() => {
-    return calculateLevel(data.xp.totalXP || 0);
-  }, [data]);
+  const getStreak = useCallback(() => data.streak, [data]);
+  const getXP = useCallback(() => data.xp.totalXP || 0, [data]);
+  const getLevel = useCallback(() => calculateLevel(data.xp.totalXP || 0), [data]);
 
   const getLevelProgress = useCallback(() => {
     const totalXP = data.xp.totalXP || 0;
@@ -264,14 +309,10 @@ export function useEngagement() {
     };
   }, [data]);
 
-  const getAvatar = useCallback(() => {
-    return data.avatar.photoBase64;
-  }, [data]);
+  const getAvatar = useCallback(() => data.avatar.photoBase64, [data]);
 
   const getPersonalBest = useCallback(
-    (gameType: string) => {
-      return data.personalBest[gameType] || 0;
-    },
+    (gameType: string) => data.personalBest[gameType] || 0,
     [data],
   );
 
