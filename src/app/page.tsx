@@ -147,8 +147,8 @@ export default function Home() {
                   <Link key={game.href} href={game.href} className="group block flex-shrink-0 snap-start" style={{ width: 'clamp(200px, 40vw, 260px)' }}>
                     <div className="game-tile rounded-3xl overflow-hidden relative aspect-[3/4]" style={{ background: game.bg }}>
                       <Image src={game.img} alt={game.name} fill className="object-cover group-hover:scale-105 transition-all duration-700" />
-                      <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent" />
-                      <div className="absolute bottom-0 left-0 right-0 p-5">
+                      <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent pointer-events-none" />
+                      <div className="absolute bottom-0 left-0 right-0 p-5 pointer-events-none">
                         <div className="text-sm font-bold text-white mb-2">{game.name}</div>
                         <div className="inline-flex items-center gap-1.5 bg-white/20 backdrop-blur-sm text-white text-[11px] font-bold px-3 py-1.5 rounded-full group-hover:bg-white/30 transition-all">
                           <svg className="w-3 h-3" fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
