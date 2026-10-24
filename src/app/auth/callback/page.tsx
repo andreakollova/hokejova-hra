@@ -14,8 +14,21 @@ function CallbackContent() {
     const supabase = getSupabaseBrowser();
 
     const handleCallback = async () => {
-      // Supabase auto-handles the code exchange from URL when using PKCE
-      // Just wait for session to appear
+      // Try to exchange code from URL params
+      const urlParams = new URLSearchParams(window.location.search);
+      const code = urlParams.get('code');
+      if (code) {
+        const { error } = await supabase.auth.exchangeCodeForSession(code);
+        if (error) console.error('Code exchange error:', error);
+      }
+
+      // Also check hash fragment (for implicit flow)
+      if (window.location.hash) {
+        // Supabase client auto-detects hash tokens
+        await new Promise(r => setTimeout(r, 1000));
+      }
+
+      // Wait for session
       let attempts = 0;
       while (attempts < 15) {
         const { data: { session } } = await supabase.auth.getSession();
