@@ -802,7 +802,7 @@ function MascotsShowcase() {
 
           {/* Sidebar with all mascots */}
           <div className="lg:w-[420px]">
-            <div className="grid grid-cols-4 sm:grid-cols-5 lg:grid-cols-4 gap-2">
+            <div className="grid grid-cols-4 sm:grid-cols-5 lg:grid-cols-5 gap-2">
               {MASCOTS.map((m, i) => (
                 <button
                   key={m.id}
