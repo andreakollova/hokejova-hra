@@ -154,6 +154,7 @@ export default function TargetSmashPage() {
           </div>
           <div className="flex gap-3">
             <button onClick={() => { setResult(null); setPhase('playing'); }} className="flex-1 bg-red-500 hover:bg-red-400 text-white font-medium py-3.5 rounded-full transition-all">Play again</button>
+            <button onClick={() => { setResult(null); setBgTrack(null); setPhase('setup'); }} className="flex-1 bg-gray-100 hover:bg-gray-200 text-gray-700 font-medium py-3.5 rounded-full transition-all text-sm">Change song</button>
             <button onClick={() => { pauseMusic(); spotify.pause(); window.location.href = '/dashboard'; }} className="flex-1 bg-white/50 hover:bg-white/70 text-gray-900 font-medium py-3.5 rounded-full transition-all text-center">Menu</button>
           </div>
         </div>

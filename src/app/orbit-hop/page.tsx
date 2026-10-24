@@ -154,6 +154,7 @@ export default function OrbitHopPage() {
           </div>
           <div className="flex gap-3">
             <button onClick={() => { setResult(null); setPhase('playing'); }} className="flex-1 bg-purple-600 hover:bg-purple-500 text-white font-medium py-3.5 rounded-full transition-all">Play again</button>
+            <button onClick={() => { setResult(null); setBgTrack(null); setPhase('setup'); }} className="flex-1 bg-gray-100 hover:bg-gray-200 text-gray-700 font-medium py-3.5 rounded-full transition-all text-sm">Change song</button>
             <button onClick={() => { pauseMusic(); spotify.pause(); window.location.href = '/dashboard'; }} className="flex-1 bg-white hover:bg-gray-50 text-gray-700 font-medium py-3.5 rounded-full transition-all text-center border border-gray-200">Menu</button>
           </div>
         </div>

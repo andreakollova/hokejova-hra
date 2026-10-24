@@ -12,6 +12,7 @@ interface ResultScreenProps {
   result: SlalomResult | FigureEightResult;
   onPlayAgain: () => void;
   onMenu: () => void;
+  onChangeSong?: () => void;
   songName?: string;
   songArtist?: string;
   songBpm?: number;
@@ -22,6 +23,7 @@ export default function ResultScreen({
   result,
   onPlayAgain,
   onMenu,
+  onChangeSong,
   songName,
   songArtist,
   songBpm,
@@ -193,6 +195,9 @@ export default function ResultScreen({
         {/* Actions */}
         <div className="flex gap-3">
           <button onClick={onPlayAgain} className="btn-primary flex-1">Play again</button>
+          {onChangeSong && (
+            <button onClick={onChangeSong} className="flex-1 bg-gray-100 hover:bg-gray-200 text-gray-700 font-medium py-3.5 rounded-full transition-all text-sm">Change song</button>
+          )}
           <a href="/dashboard" className="btn-secondary flex-1 text-center">Menu</a>
         </div>
 

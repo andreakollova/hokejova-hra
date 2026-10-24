@@ -154,6 +154,7 @@ export default function OsmickyTercikyPage() {
           </div>
           <div className="flex gap-3">
             <button onClick={() => { setResult(null); setPhase('playing'); }} className="btn-primary flex-1">Play again</button>
+            <button onClick={() => { setResult(null); setBgTrack(null); setPhase('setup'); }} className="btn-secondary flex-1">Change song</button>
             <button onClick={() => { pauseMusic(); spotify.pause(); window.location.href = '/dashboard'; }} className="btn-secondary flex-1 text-center">Menu</button>
           </div>
         </div>
