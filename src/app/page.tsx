@@ -89,12 +89,23 @@ export default function Home() {
 
   if (showOnboarding) {
     return (
-      <Onboarding onComplete={(profile) => {
-        const isMinor = authAge === 'under16';
-        setProfile({ ...profile, isMinor, privateProfile: isMinor });
-        setShowOnboarding(false);
-        window.location.href = '/dashboard';
-      }} />
+      <Onboarding
+        defaultName={auth.displayName || displayName || ''}
+        onComplete={(profile) => {
+          const isMinor = authAge === 'under16';
+          setProfile({ ...profile, isMinor, privateProfile: isMinor });
+          // Save username to legacy settings
+          if (profile.username) {
+            try {
+              const raw = localStorage.getItem('sportqo_user_settings');
+              const existing = raw ? JSON.parse(raw) : {};
+              localStorage.setItem('sportqo_user_settings', JSON.stringify({ ...existing, username: profile.username }));
+            } catch {}
+          }
+          setShowOnboarding(false);
+          window.location.href = '/dashboard';
+        }}
+      />
     );
   }
 
@@ -142,38 +153,6 @@ export default function Home() {
         {/* Start Now */}
         <StartNowSection />
 
-        {/* Games */}
-        <section id="games" className="py-14 sm:py-20">
-          <div className="max-w-6xl mx-auto px-6 sm:px-10">
-            <div className="relative -mx-6 sm:-mx-10">
-              <div className="flex gap-5 overflow-x-auto px-6 sm:px-10 pb-4 snap-x snap-mandatory scrollbar-hide" style={{ scrollbarWidth: 'none', msOverflowStyle: 'none', WebkitOverflowScrolling: 'touch' }}>
-                {[
-                  { href: '/trening', img: '/images/game-hockeybeats.png', name: 'HockeyBeats', bg: '#e8e0d4' },
-                  { href: '/space', img: '/images/game-spaceinvaders.png', name: 'Space Invaders', bg: '#0f172a' },
-                  { href: '/jelly-stack', img: '/images/game-jellystack.png', name: 'Jelly Stack', bg: '#2d1b3d' },
-                  { href: '/orbit-hop', img: '/images/game-orbithop.png', name: 'Orbit Hop', bg: '#1a2332' },
-                  { href: '/neon-drift', img: '/images/game-neondrift.png', name: 'Neon Drift', bg: '#0a1628' },
-                  { href: '/brick-rush', img: '/images/game-brickrush.png', name: 'Brick Rush', bg: '#111111' },
-                  { href: '/color-catch', img: '/images/game-colorcatch.png', name: 'Color Catch', bg: '#111111' },
-                  { href: '/target-smash', img: '/images/game-targets.png', name: 'Target Smash', bg: '#1a1a2e' },
-                  { href: '/laser-maze', img: '/images/game-lasermaze.png', name: 'Laser Maze', bg: '#0f1f0f' },
-                  { href: '/magnet-flip', img: '/images/game-magnetflip.png', name: 'Magnet Flip', bg: '#1a1025' },
-                  { href: '/terciky', img: '/images/game-targets-classic.png', name: 'Targets', bg: '#f3f4f6' },
-                ].map((game) => (
-                  <div key={game.href} onClick={() => window.location.href = game.href} className="group block flex-shrink-0 snap-start cursor-pointer" style={{ width: 'clamp(200px, 40vw, 260px)' }}>
-                    <div className="game-tile rounded-3xl overflow-hidden relative aspect-[3/4]" style={{ background: game.bg }}>
-                      <Image src={game.img} alt={game.name} fill className="object-cover group-hover:scale-105 transition-all duration-700" />
-                      <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent pointer-events-none" />
-                      <div className="absolute bottom-0 left-0 right-0 p-5 pointer-events-none">
-                        <div className="text-sm font-bold text-white mb-2">{game.name}</div>
-                      </div>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </div>
-          </div>
-        </section>
 
         {/* 01 - Hero subtitle */}
         <section className="py-14 sm:py-20">
@@ -282,7 +261,7 @@ export default function Home() {
               <div className="order-1 lg:order-2">
                 <p className="text-xs font-bold uppercase tracking-[0.2em] text-gray-400 mb-4">04 / Real skills</p>
                 <h2 className="text-3xl sm:text-5xl font-extrabold text-[#101828] leading-[1.08] tracking-tight">Train your stickhandling while keeping your head up.</h2>
-                <p className="mt-6 text-lg text-gray-500 leading-relaxed">This isn&apos;t another game you play with your thumbs. Hockey Beats gets you moving with your actual hockey stick and ball, encouraging better ball control, coordination, reactions and heads-up stickhandling.</p>
+                <p className="mt-6 text-lg text-gray-500 leading-relaxed">This isn&apos;t another game you play with your thumbs. Hockey Beats gets you moving with your actual hockey stick and ball, encouraging better ball control and coordination.</p>
                 <div className="mt-6">
                   <Link href="/dashboard" className="btn-primary px-8 py-4"> Start Playing <svg className="w-4 h-4 ml-1 inline" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}><path strokeLinecap="round" strokeLinejoin="round" d="M8.25 4.5l7.5 7.5-7.5 7.5" /></svg></Link>
                 </div>
