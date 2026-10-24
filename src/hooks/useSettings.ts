@@ -87,19 +87,24 @@ export function useSettings() {
           username: username.toLowerCase(),
         };
         persist(next);
-        // Set username cookie for server-side API routes (Spotify token persistence)
         document.cookie = `hb_username=${username.toLowerCase()}; path=/; max-age=${60 * 60 * 24 * 365}`;
-        return null; // success
+        // Slack notification
+        fetch('/api/slack-notify', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ type: 'login', username: username.toLowerCase() }) }).catch(() => {});
+        return null;
       }
-      return 'Nespravne meno alebo heslo';
+      return 'Wrong username or password';
     },
     [settings, persist],
   );
 
   const logout = useCallback(() => {
+    const username = settings.username;
     const next: UserSettings = { ...defaultSettings };
     persist(next);
-  }, [persist]);
+    if (username) {
+      fetch('/api/slack-notify', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ type: 'logout', username }) }).catch(() => {});
+    }
+  }, [settings, persist]);
 
   return {
     settings,

@@ -336,6 +336,17 @@ export function useEngagement() {
       next.xp.totalXP += achievementXP;
       breakdown.total += achievementXP;
 
+      // Slack notifications for new achievements
+      const username = getUsername();
+      if (username && newlyUnlocked.length > 0) {
+        for (const achId of newlyUnlocked) {
+          const ach = ACHIEVEMENTS.find(a => a.id === achId);
+          if (ach) {
+            fetch('/api/slack-notify', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ type: 'achievement', username, achievementName: ach.name, achievementIcon: ach.icon, xp: ach.xp }) }).catch(() => {});
+          }
+        }
+      }
+
       persist(next);
       return breakdown;
     },
