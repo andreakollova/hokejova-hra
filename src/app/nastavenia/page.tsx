@@ -381,6 +381,52 @@ export default function NastaveniaPage() {
           </section>
         )}
 
+        {/* Club Membership */}
+        <section className="mb-10">
+          <h2 className="text-sm font-medium text-gray-400 uppercase tracking-wider mb-3">Club membership</h2>
+          <div className="card p-6">
+            <p className="text-xs text-gray-500 mb-3">Enter a club code from your team or organization to unlock Premium and connect with teammates.</p>
+            <form onSubmit={async (e) => {
+              e.preventDefault();
+              const input = (e.target as HTMLFormElement).querySelector('input') as HTMLInputElement;
+              const code = input.value.trim();
+              if (!code) return;
+              try {
+                const res = await fetch('/api/club/redeem', {
+                  method: 'POST',
+                  headers: { 'Content-Type': 'application/json' },
+                  body: JSON.stringify({ code, username: settings.username }),
+                });
+                const data = await res.json();
+                if (data.ok) {
+                  // Activate subscription locally
+                  localStorage.setItem('hb_subscription', JSON.stringify({ type: 'club', clubName: data.clubName, expiresAt: data.expiresAt, activatedAt: new Date().toISOString() }));
+                  // Add teammates as friends
+                  if (data.teammates?.length > 0) {
+                    try {
+                      const existing = JSON.parse(localStorage.getItem('hb_friends') || '[]');
+                      const existingNames = new Set(existing.map((f: any) => f.username));
+                      for (const t of data.teammates) {
+                        if (!existingNames.has(t)) {
+                          existing.push({ username: t, online: false, lastPlayed: 'Teammate', totalTime: '', lastSong: '', lastGame: '', pending: false, incoming: false });
+                        }
+                      }
+                      localStorage.setItem('hb_friends', JSON.stringify(existing));
+                    } catch {}
+                  }
+                  alert(`Welcome to ${data.clubName}! Premium unlocked.`);
+                  window.location.reload();
+                } else {
+                  alert(data.error || 'Invalid code');
+                }
+              } catch { alert('Connection error'); }
+            }} className="flex gap-2">
+              <input type="text" placeholder="Enter club code (e.g. HB-XXXX-XXXX)" className="input-field flex-1 text-sm" />
+              <button type="submit" className="text-sm font-medium text-emerald-600 bg-emerald-50 hover:bg-emerald-100 px-4 py-2 rounded-xl transition-all">Redeem</button>
+            </form>
+          </div>
+        </section>
+
         {/* Connected services */}
         <section className="mb-10">
           <h2 className="text-sm font-medium text-gray-400 uppercase tracking-wider mb-3">Connected services</h2>

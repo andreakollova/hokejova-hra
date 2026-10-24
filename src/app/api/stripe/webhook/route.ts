@@ -24,6 +24,39 @@ export async function POST(req: NextRequest) {
     const username = session.metadata?.username;
     const plan = session.metadata?.plan;
 
+    // Club subscription
+    const clubName = session.metadata?.clubName;
+    const seats = parseInt(session.metadata?.seats || '0');
+    if (clubName && seats > 0) {
+      const periodEnd = new Date(Date.now() + 31 * 24 * 60 * 60 * 1000);
+      const { data: club } = await supabase.from('club_subscriptions').insert({
+        club_name: clubName,
+        club_email: session.customer_email || '',
+        plan_id: session.metadata?.planId || '',
+        seats,
+        stripe_customer_id: session.customer,
+        stripe_subscription_id: session.subscription,
+        status: 'active',
+        current_period_end: periodEnd.toISOString(),
+      }).select('id').single();
+
+      if (club) {
+        // Generate codes
+        const chars = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
+        const codes: { club_id: number; code: string }[] = [];
+        for (let i = 0; i < seats; i++) {
+          let code = 'HB-';
+          for (let j = 0; j < 8; j++) {
+            code += chars[Math.floor(Math.random() * chars.length)];
+            if (j === 3) code += '-';
+          }
+          codes.push({ club_id: club.id, code });
+        }
+        await supabase.from('club_codes').insert(codes);
+        await sendSlackMessage(`🏒 Club *${clubName}* subscribed! ${seats} codes generated. Plan: ${session.metadata?.planId}`);
+      }
+    }
+
     if (username) {
       // Trial: 7 days from now, then subscription starts
       const trialEndsAt = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000);
@@ -50,7 +83,50 @@ export async function POST(req: NextRequest) {
     }
   }
 
-  // First real payment after trial
+  // Club subscription renewal - extend existing codes
+  if (event.type === 'invoice.paid') {
+    const invoice = event.data.object as any;
+    const subId = invoice.subscription as string;
+    if (subId) {
+      // Check if this is a club subscription
+      const { data: clubSub } = await supabase
+        .from('club_subscriptions')
+        .select('id, club_name')
+        .eq('stripe_subscription_id', subId)
+        .single();
+
+      if (clubSub) {
+        const newPeriodEnd = new Date(Date.now() + 31 * 24 * 60 * 60 * 1000);
+        await supabase.from('club_subscriptions').update({
+          status: 'active',
+          current_period_end: newPeriodEnd.toISOString(),
+        }).eq('id', clubSub.id);
+
+        // Extend all assigned players' subscriptions
+        const { data: assignedCodes } = await supabase
+          .from('club_codes')
+          .select('assigned_to')
+          .eq('club_id', clubSub.id)
+          .not('assigned_to', 'is', null);
+
+        for (const code of assignedCodes || []) {
+          if (code.assigned_to) {
+            const { data: ud } = await supabase.from('user_data').select('settings').eq('username', code.assigned_to).single();
+            const s = (ud?.settings as any) || {};
+            if (s.subscription?.type === 'club') {
+              await supabase.from('user_data').update({
+                settings: { ...s, subscription: { ...s.subscription, expiresAt: newPeriodEnd.toISOString() } },
+              }).eq('username', code.assigned_to);
+            }
+          }
+        }
+
+        await sendSlackMessage(`🔄 Club *${clubSub.club_name}* renewed. All ${assignedCodes?.length || 0} player licenses extended.`);
+      }
+    }
+  }
+
+  // First real payment after trial (individual)
   if (event.type === 'invoice.paid') {
     const invoice = event.data.object as any;
     const sub = invoice.subscription as string;
