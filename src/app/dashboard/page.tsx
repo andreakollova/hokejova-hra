@@ -65,32 +65,39 @@ export default function DashboardPage() {
   const [selectedSong, setSelectedSong] = useState<{ name: string; artist: string; id?: string; albumArt?: string } | null>(null);
   const [showGamePicker, setShowGamePicker] = useState(false);
 
-  const syncFriendsToCloud = (f: typeof friends) => {
+  const [friendError, setFriendError] = useState('');
+  const [friendSuccess, setFriendSuccess] = useState('');
+  const [friendLoading, setFriendLoading] = useState(false);
+
+  const loadFriends = () => {
     if (isLoggedIn && settings.username) {
-      fetch('/api/user-data', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ username: settings.username, friends: f }) }).catch(() => {});
+      fetch(`/api/friends?username=${encodeURIComponent(settings.username)}`)
+        .then(r => r.json())
+        .then(json => {
+          if (json.friends) {
+            setFriends(json.friends);
+            try { localStorage.setItem('hb_friends', JSON.stringify(json.friends)); } catch {}
+          }
+        })
+        .catch(() => {});
     }
   };
 
   useEffect(() => {
     setMusicHistory(loadMusicHistory());
     loadScores();
-    // Load friends from localStorage
+    // Load friends from localStorage first, then sync from cloud
     try {
       const saved = localStorage.getItem('hb_friends');
-      if (saved) {
-        setFriends(JSON.parse(saved));
-      }
+      if (saved) setFriends(JSON.parse(saved));
     } catch {}
-    // Sync from cloud
+    loadFriends();
+    // Sync music history from cloud
     if (isLoggedIn && settings.username) {
       fetch(`/api/user-data?username=${encodeURIComponent(settings.username)}`)
         .then(r => r.json())
         .then(json => {
           if (json.data) {
-            if (json.data.friends && Array.isArray(json.data.friends) && json.data.friends.length > 0) {
-              setFriends(json.data.friends);
-              localStorage.setItem('hb_friends', JSON.stringify(json.data.friends));
-            }
             if (json.data.music_history && Array.isArray(json.data.music_history) && json.data.music_history.length > 0) {
               setMusicHistory(json.data.music_history);
               localStorage.setItem(HISTORY_KEY, JSON.stringify(json.data.music_history));
@@ -291,32 +298,48 @@ export default function DashboardPage() {
 
             {/* Add friend input */}
             {showAddFriend && (
-              <div className="mb-4">
+              <div className="mb-4 space-y-2">
                 <div className="flex gap-2">
                   <input
                     type="text"
                     value={friendInput}
-                    onChange={(e) => setFriendInput(e.target.value)}
+                    onChange={(e) => { setFriendInput(e.target.value); setFriendError(''); setFriendSuccess(''); }}
                     placeholder="Enter username"
                     className="flex-1 bg-white/5 border border-white/10 rounded-xl px-3 py-2 text-sm text-white placeholder-white/30 outline-none focus:border-emerald-500/50"
                   />
                   <button
-                    onClick={() => {
-                      if (friendInput.trim()) {
-                        const next = [...friends, { username: friendInput.trim(), online: false, lastPlayed: 'Just added', totalTime: '0m', lastSong: '-', lastGame: '-', pending: false, incoming: false }];
-                        setFriends(next);
-                        try { localStorage.setItem('hb_friends', JSON.stringify(next)); } catch {}
-                        syncFriendsToCloud(next);
-                        checkAchievementsNow();
-                        setFriendInput('');
-                        setShowAddFriend(false);
-                      }
+                    disabled={friendLoading}
+                    onClick={async () => {
+                      if (!friendInput.trim()) return;
+                      setFriendLoading(true);
+                      setFriendError('');
+                      setFriendSuccess('');
+                      try {
+                        const res = await fetch('/api/friends', {
+                          method: 'POST',
+                          headers: { 'Content-Type': 'application/json' },
+                          body: JSON.stringify({ action: 'add', username: settings.username, friendUsername: friendInput.trim() }),
+                        });
+                        const data = await res.json();
+                        if (res.ok) {
+                          setFriendSuccess(data.message || 'Request sent!');
+                          setFriendInput('');
+                          loadFriends();
+                          checkAchievementsNow();
+                          setTimeout(() => { setShowAddFriend(false); setFriendSuccess(''); }, 2000);
+                        } else {
+                          setFriendError(data.error || 'Something went wrong');
+                        }
+                      } catch { setFriendError('Connection error'); }
+                      setFriendLoading(false);
                     }}
-                    className="bg-emerald-500 hover:bg-emerald-400 text-white text-xs font-bold px-4 py-2 rounded-xl transition-colors"
+                    className="bg-emerald-500 hover:bg-emerald-400 text-white text-xs font-bold px-4 py-2 rounded-xl transition-colors disabled:opacity-50"
                   >
-                    Send
+                    {friendLoading ? '...' : 'Send'}
                   </button>
                 </div>
+                {friendError && <p className="text-xs text-red-400">{friendError}</p>}
+                {friendSuccess && <p className="text-xs text-emerald-400">{friendSuccess}</p>}
               </div>
             )}
 
@@ -330,17 +353,13 @@ export default function DashboardPage() {
                     <div className="flex-1 min-w-0">
                       <div className="text-xs font-bold text-white truncate">{f.username}</div>
                     </div>
-                    <button onClick={() => {
-                      const next = friends.map(fr => fr.username === f.username ? { ...fr, incoming: false } : fr);
-                      setFriends(next);
-                      try { localStorage.setItem('hb_friends', JSON.stringify(next)); } catch {}
-                      syncFriendsToCloud(next);
+                    <button onClick={async () => {
+                      await fetch('/api/friends', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ action: 'accept', username: settings.username, friendUsername: f.username }) });
+                      loadFriends();
                     }} className="text-[10px] font-bold text-emerald-400 bg-emerald-500/10 px-2 py-1 rounded-lg">Accept</button>
-                    <button onClick={() => {
-                      const next = friends.filter(fr => fr.username !== f.username);
-                      setFriends(next);
-                      try { localStorage.setItem('hb_friends', JSON.stringify(next)); } catch {}
-                      syncFriendsToCloud(next);
+                    <button onClick={async () => {
+                      await fetch('/api/friends', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ action: 'reject', username: settings.username, friendUsername: f.username }) });
+                      loadFriends();
                     }} className="text-[10px] font-bold text-red-400 bg-red-500/10 px-2 py-1 rounded-lg">Reject</button>
                   </div>
                 ))}
@@ -363,13 +382,13 @@ export default function DashboardPage() {
                   </div>
                   <div className="flex-1 min-w-0">
                     <div className="text-xs font-bold text-white truncate">{f.username}</div>
-                    <div className="text-[10px] text-white/70 truncate">
-                      {f.online ? 'Playing now' : f.lastPlayed} · {f.totalTime}
+                    <div className="text-[10px] text-white/30 truncate">
+                      {f.pending ? 'Request sent' : f.online ? 'Playing now' : [f.lastPlayed, f.totalTime].filter(Boolean).join(' · ') || 'No activity yet'}
                     </div>
                   </div>
-                  <div className="text-right">
-                    <div className="text-[10px] text-white/20 truncate">{f.lastGame}</div>
-                  </div>
+                  {f.pending && (
+                    <span className="text-[9px] font-medium text-amber-400/60 bg-amber-500/10 px-2 py-0.5 rounded-full">Pending</span>
+                  )}
                 </div>
               ))}
             </div>
