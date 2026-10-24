@@ -73,6 +73,12 @@ const DOCUMENTS = [
     href: '/complaints',
     desc: 'How to submit complaints, refund requests, statutory withdrawal, and alternative dispute resolution.',
   },
+  {
+    title: 'Promotional Codes, Gift Access & Lifetime Pass Terms',
+    version: 'v1.0',
+    href: '/promotional-terms',
+    desc: 'Promo codes, complimentary access, gift Premium, Lifetime Pass, and activation rules.',
+  },
 ];
 
 export default function LegalPage() {
