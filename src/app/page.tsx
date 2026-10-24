@@ -140,7 +140,7 @@ export default function Home() {
                   { href: '/laser-maze', img: '/images/game-lasermaze.png', name: 'Laser Maze', bg: '#0f1f0f' },
                   { href: '/color-catch', img: '/images/game-colorcatch.png', name: 'Color Catch', bg: '#111111' },
                   { href: '/target-smash', img: '/images/game-targets.png', name: 'Target Smash', bg: '#d4d4d8' },
-                  { href: '/terciky', img: '/images/game-targets.png', name: 'Targets', bg: '#f3f4f6' },
+                  { href: '/terciky', img: '/images/game-targets-classic.png', name: 'Targets', bg: '#f3f4f6' },
                   { href: '/osmicky-terciky', img: '/images/game-figure8.png', name: 'Figure 8', bg: '#f3f4f6' },
                   { href: '/osmicky', img: '/images/game-classic8s.png', name: 'Classic 8s', bg: '#f3f4f6' },
                 ].map((game) => (
