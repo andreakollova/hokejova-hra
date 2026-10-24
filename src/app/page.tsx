@@ -326,7 +326,7 @@ export default function Home() {
                 <div className="h-64 lg:h-auto relative">
                   <Image src="/images/club-team.jpg" alt="Hockey team celebrating" width={600} height={450} className="w-full h-full object-cover" />
                   <div className="absolute inset-0 flex items-center justify-center">
-                    <Image src="/images/for-clubs-logo.png" alt="For Clubs" width={400} height={160} className="w-56 sm:w-72 h-auto drop-shadow-xl" />
+                    <Image src="/images/for-clubs-logo.png" alt="For Clubs" width={500} height={200} className="w-72 sm:w-96 h-auto drop-shadow-xl" />
                   </div>
                 </div>
                 {/* Content */}
