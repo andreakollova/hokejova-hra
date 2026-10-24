@@ -8,7 +8,7 @@ import XPBar from '@/components/ui/XPBar';
 import Link from 'next/link';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
-import { useRef, useState } from 'react';
+import { useRef, useState, useEffect } from 'react';
 import { CalibrationData } from '@/lib/tracking';
 import dynamic from 'next/dynamic';
 
@@ -20,14 +20,12 @@ export default function NastaveniaPage() {
   const router = useRouter();
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [showCalibration, setShowCalibration] = useState(false);
-  const [calibration, setCalibration] = useState<CalibrationData | null>(() => {
-    if (typeof window === 'undefined') return null;
-    try {
-      const saved = localStorage.getItem('ballTracker_calibration') || sessionStorage.getItem('ballTracker_calibration');
-      if (saved) return JSON.parse(saved);
-    } catch {}
-    return null;
-  });
+  const [calibration, setCalibration] = useState<CalibrationData | null>(null);
+
+  useEffect(() => {
+    const savedCal = localStorage.getItem('ballTracker_calibration') || sessionStorage.getItem('ballTracker_calibration');
+    if (savedCal) { try { setCalibration(JSON.parse(savedCal)); } catch {} }
+  }, []);
 
   if (!loaded || !engLoaded) {
     return (
