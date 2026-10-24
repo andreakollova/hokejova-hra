@@ -168,7 +168,7 @@ function RemoteCameraContent() {
     <div className="min-h-screen bg-[#0a0a0f] text-white flex flex-col">
       {/* Header */}
       <div className="p-4 flex items-center gap-3 border-b border-white/10">
-        <Image src="/images/mascots/mascot-default.webp" alt="" width={32} height={32} className="rounded-lg" />
+        <Image src="/images/hb-logo-white.png" alt="Hockey Beats" width={80} height={20} className="h-5 w-auto" />
         <div>
           <div className="text-sm font-bold">HockeyBeats Remote Camera</div>
           <div className="text-[10px] text-white/40">
@@ -222,9 +222,25 @@ function RemoteCameraContent() {
         )}
 
         {phase === 'corners' && (
-          <div className="text-center">
-            <h2 className="text-lg font-bold mb-1">Tap the 4 corners</h2>
-            <p className="text-sm text-white/50">Tap the corners of your training area. {corners.length}/4 set.</p>
+          <div className="text-center space-y-3">
+            <h2 className="text-lg font-bold mb-1">Set training area</h2>
+            <button
+              onClick={() => {
+                const video = videoRef.current;
+                if (!video) return;
+                setCorners([
+                  { x: 0, y: 0 },
+                  { x: video.videoWidth, y: 0 },
+                  { x: video.videoWidth, y: video.videoHeight },
+                  { x: 0, y: video.videoHeight },
+                ]);
+                setPhase('color');
+              }}
+              className="w-full bg-emerald-500 hover:bg-emerald-400 text-white font-bold py-3.5 rounded-full transition-all text-sm"
+            >
+              Use full camera view <span className="text-emerald-200 text-xs ml-1">Recommended</span>
+            </button>
+            <p className="text-xs text-white/30">Or tap 4 corners manually on the video. {corners.length}/4 set.</p>
           </div>
         )}
 

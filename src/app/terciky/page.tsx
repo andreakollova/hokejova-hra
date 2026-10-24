@@ -91,6 +91,12 @@ export default function TercikyPage() {
       setPhase('calibration');
       return;
     }
+    // If calibrated via phone, use remote mode
+    if (calibration.cameraDeviceId === 'remote') {
+      const sid = localStorage.getItem('hb_remote_session');
+      if (sid) { tracker.startRemote(sid); if (bgTrack) playMusic(bgTrack); setPhase('playing'); return; }
+      setPhase('calibration'); return;
+    }
     tracker.setCalibration(calibration);
     if (bgTrack) playMusic(bgTrack);
     try {

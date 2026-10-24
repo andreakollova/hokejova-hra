@@ -4,6 +4,7 @@ import { useState, useRef, useCallback, useEffect } from 'react';
 import { useCamera } from '@/hooks/useCamera';
 import { BallTracker, rgbToHsv } from '@/lib/ball-tracker';
 import { CalibrationData, Point2D } from '@/lib/tracking';
+import { getSupabaseBrowser } from '@/lib/supabase-browser';
 import QRCode from 'qrcode';
 
 interface CalibrationWizardProps {
@@ -54,6 +55,8 @@ export default function CalibrationWizard({
   const [showPhoneQR, setShowPhoneQR] = useState(false);
   const [phoneSessionId] = useState(() => crypto.randomUUID().slice(0, 8));
   const [qrDataUrl, setQrDataUrl] = useState('');
+  const [phoneConnected, setPhoneConnected] = useState(false);
+  const [phoneTracking, setPhoneTracking] = useState(false);
 
   const trackerRef = useRef<BallTracker | null>(null);
   const rafRef = useRef(0);
@@ -80,6 +83,27 @@ export default function CalibrationWizard({
     QRCode.toDataURL(url, { width: 180, margin: 2, color: { dark: '#111827', light: '#ffffff' } })
       .then(setQrDataUrl)
       .catch(() => {});
+  }, [phoneSessionId]);
+
+  // Listen for phone connection via Supabase Realtime
+  useEffect(() => {
+    const supabase = getSupabaseBrowser();
+    const channel = supabase.channel(`remote-camera-${phoneSessionId}`);
+    let gotPosition = false;
+
+    channel
+      .on('broadcast', { event: 'connected' }, () => {
+        setPhoneConnected(true);
+      })
+      .on('broadcast', { event: 'position' }, ({ payload }) => {
+        if (payload && payload.active && !gotPosition) {
+          gotPosition = true;
+          setPhoneTracking(true);
+        }
+      })
+      .subscribe();
+
+    return () => { channel.unsubscribe(); };
   }, [phoneSessionId]);
 
   // Step 1: Select and start camera
@@ -276,16 +300,57 @@ export default function CalibrationWizard({
 
             <div className="grid sm:grid-cols-2 gap-4">
               {/* Option 1: Phone via QR */}
-              <div className="bg-white border-2 border-emerald-500 rounded-2xl p-5 text-center">
+              <div className={`bg-white border-2 rounded-2xl p-5 text-center ${phoneTracking ? 'border-emerald-500 bg-emerald-50' : phoneConnected ? 'border-amber-400' : 'border-emerald-500'}`}>
                 <div className="flex items-center justify-center gap-2 mb-3">
                   <svg className="w-5 h-5 text-emerald-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><rect x="6" y="2" width="12" height="20" rx="2" /><line x1="10" y1="18" x2="14" y2="18" /></svg>
                   <h3 className="text-sm font-bold text-gray-900">Use your phone</h3>
                 </div>
-                {qrDataUrl && (
-                  <img src={qrDataUrl} alt="QR Code" className="mx-auto mb-3 rounded-lg" />
+                {phoneTracking ? (
+                  <div className="space-y-3">
+                    <div className="flex items-center justify-center gap-2">
+                      <div className="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-pulse" />
+                      <span className="text-sm font-bold text-emerald-600">Phone connected & tracking</span>
+                    </div>
+                    <button
+                      onClick={() => {
+                        // Save remote session and complete calibration with a remote marker
+                        localStorage.setItem('hb_remote_session', phoneSessionId);
+                        const remoteCal: CalibrationData = {
+                          corners: [{ x: 0, y: 0 }, { x: 640, y: 0 }, { x: 640, y: 480 }, { x: 0, y: 480 }] as [Point2D, Point2D, Point2D, Point2D],
+                          hsvCenter: [0, 0, 0],
+                          hsvTolerance: [15, 30, 30],
+                          movementRange: { left: 0, right: 1 },
+                          mirrorX: false,
+                          resolution: { width: 640, height: 480 },
+                          cameraDeviceId: 'remote',
+                          fps: 30,
+                        };
+                        const calJson = JSON.stringify(remoteCal);
+                        try { localStorage.setItem('ballTracker_calibration', calJson); } catch {}
+                        try { sessionStorage.setItem('ballTracker_calibration', calJson); } catch {}
+                        onComplete(remoteCal);
+                      }}
+                      className="w-full bg-emerald-500 hover:bg-emerald-400 text-white font-bold py-3 rounded-full transition-all text-sm"
+                    >
+                      Continue to game
+                    </button>
+                  </div>
+                ) : phoneConnected ? (
+                  <div className="space-y-2">
+                    <div className="flex items-center justify-center gap-2">
+                      <div className="w-2.5 h-2.5 rounded-full bg-amber-400 animate-pulse" />
+                      <span className="text-sm font-medium text-amber-600">Phone connected, calibrating...</span>
+                    </div>
+                    <p className="text-xs text-gray-400">Complete the setup on your phone.</p>
+                  </div>
+                ) : (
+                  <>
+                    {qrDataUrl && (
+                      <img src={qrDataUrl} alt="QR Code" className="mx-auto mb-3 rounded-lg" />
+                    )}
+                    <p className="text-xs text-gray-500 mb-2">Scan with your phone camera</p>
+                  </>
                 )}
-                <p className="text-xs text-gray-500 mb-2">Scan with your phone camera</p>
-                <p className="text-[10px] text-gray-300 font-mono break-all">{typeof window !== 'undefined' ? window.location.origin : ''}/remote-camera?session={phoneSessionId}</p>
               </div>
 
               {/* Option 2: Webcam / built-in */}

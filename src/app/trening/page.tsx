@@ -258,6 +258,13 @@ export default function TreningPage() {
       return;
     }
 
+    // If calibrated via phone, use remote mode
+    if (calibration.cameraDeviceId === 'remote') {
+      const sid = localStorage.getItem('hb_remote_session');
+      if (sid) { tracker.startRemote(sid); setPhase('playing'); return; }
+      setPhase('calibration'); return;
+    }
+
     // Acquire camera stream from click handler (Safari requires user gesture for getUserMedia)
     tracker.setCalibration(calibration);
     try {
