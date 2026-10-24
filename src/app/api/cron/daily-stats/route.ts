@@ -82,10 +82,22 @@ export async function GET(req: NextRequest) {
       gamePlays[name] = count;
     }
   }
+  // Get all-time totals for games
+  const { data: allTimeViews } = await supabase
+    .from('page_views')
+    .select('path');
+  const allTimePlays: Record<string, number> = {};
+  for (const v of allTimeViews || []) {
+    if (gamePages.includes(v.path)) {
+      const name = v.path.replace('/', '').replace('trening', 'HockeyBeats');
+      allTimePlays[name] = (allTimePlays[name] || 0) + 1;
+    }
+  }
+
   const topGames = Object.entries(gamePlays)
     .sort((a, b) => b[1] - a[1])
     .slice(0, 5)
-    .map(([name, count]) => `  ${name} — ${count} plays`)
+    .map(([name, count]) => `  ${name} — ${count} today (${allTimePlays[name] || count} total)`)
     .join('\n');
 
   const dateStr = today.toLocaleDateString('en-GB', { weekday: 'long', day: 'numeric', month: 'long' });
