@@ -209,43 +209,45 @@ export default function BrickRushPage() {
   const accent = '#ef4444';
 
   return (
-    <div className="min-h-screen bg-gray-50/50 px-6 py-8">
+    <div className="min-h-screen bg-[#0a0a0f] px-6 py-8">
       <div className="max-w-lg mx-auto">
-        <Link href="/dashboard" className="inline-flex items-center gap-1.5 text-sm text-gray-400 hover:text-gray-600 transition-colors mb-8">
+        <Link href="/dashboard" className="inline-flex items-center gap-1.5 text-sm text-white/40 hover:text-white/70 transition-colors mb-8">
           <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M15 19l-7-7 7-7" /></svg>
           Back
         </Link>
 
         {/* Logo + Mascot */}
         <Link href="/dashboard" className="block mb-4">
-          <Image src="/images/hb-logo-hero-dark.png" alt="Hockey Beats" width={120} height={32} className="h-6 w-auto" />
+          <Image src="/images/hb-logo-white.png" alt="Hockey Beats" width={120} height={32} className="h-6 w-auto" />
         </Link>
         <div className="flex items-center gap-5 mb-8">
           <MascotGlow src="/images/mascots/mascot-brick-rush.webp" color={accent} size={90} />
           <div>
-            <h1 className="text-3xl font-extrabold text-[#101828] tracking-tight">Brick Rush</h1>
-            <p className="text-gray-500 text-sm mt-1">Break the bricks with your paddle</p>
+            <h1 className="text-3xl font-extrabold text-white tracking-tight">Brick Rush</h1>
+            <p className="text-white/40 text-sm mt-1">Break the bricks with your paddle</p>
           </div>
         </div>
 
         <div className="space-y-5">
           {/* Calibration */}
-          <div className="flex items-center justify-between bg-white border border-gray-100 rounded-2xl p-4">
+          <div className="flex items-center justify-between bg-white/5 border border-white/8 rounded-2xl p-4">
             <div>
-              <div className="text-sm font-semibold text-[#101828]">Camera</div>
-              <div className="text-xs text-gray-400 mt-0.5">{calibration ? 'Calibrated' : 'Not configured'}</div>
+              <div className="text-sm font-semibold text-white">Camera</div>
+              <div className="text-xs text-white/30 mt-0.5">{calibration ? 'Calibrated' : 'Not configured'}</div>
             </div>
-            <button onClick={() => setPhase('calibration')} className="text-xs font-bold px-4 py-2 rounded-xl transition-all bg-emerald-50 text-emerald-600 hover:bg-emerald-100">
+            <button onClick={() => setPhase('calibration')} className="text-xs font-bold px-4 py-2 rounded-xl transition-all" style={{ color: accent, backgroundColor: accent + '15' }}>
               {calibration ? 'Recalibrate' : 'Calibrate'}
             </button>
           </div>
 
           {/* Difficulty */}
           <div>
-            <label className="text-[10px] font-bold text-gray-400 uppercase tracking-[0.2em] mb-2.5 block">Difficulty</label>
+            <label className="text-[10px] font-bold text-white/30 uppercase tracking-[0.2em] mb-2.5 block">Difficulty</label>
             <div className="flex gap-2.5">
               {(['easy', 'medium', 'hard'] as const).map((d) => (
-                <button key={d} onClick={() => setDifficulty(d)} className={`flex-1 rounded-2xl py-3.5 border-2 transition-all text-sm font-semibold ${difficulty === d ? 'border-emerald-500 bg-emerald-50 text-emerald-600' : 'border-gray-100 bg-white text-gray-400 hover:border-gray-200'}`}>
+                <button key={d} onClick={() => setDifficulty(d)}
+                  className={`flex-1 rounded-2xl py-3.5 border-2 transition-all text-sm font-semibold ${difficulty !== d ? 'border-white/8 bg-white/3 text-white/50 hover:border-white/15' : ''}`}
+                  style={difficulty === d ? { borderColor: accent, backgroundColor: accent + '15', color: accent } : {}}>
                   {d === 'easy' ? 'Easy' : d === 'medium' ? 'Medium' : 'Hard'}
                 </button>
               ))}
@@ -254,10 +256,12 @@ export default function BrickRushPage() {
 
           {/* Duration */}
           <div>
-            <label className="text-[10px] font-bold text-gray-400 uppercase tracking-[0.2em] mb-2.5 block">Duration</label>
+            <label className="text-[10px] font-bold text-white/30 uppercase tracking-[0.2em] mb-2.5 block">Duration</label>
             <div className="flex gap-2.5">
               {([30, 60, 90] as const).map((d) => (
-                <button key={d} onClick={() => setDuration(d)} className={`flex-1 rounded-2xl py-3.5 border-2 transition-all text-sm font-semibold ${duration === d ? 'border-emerald-500 bg-emerald-50 text-emerald-600' : 'border-gray-100 bg-white text-gray-400 hover:border-gray-200'}`}>
+                <button key={d} onClick={() => setDuration(d)}
+                  className={`flex-1 rounded-2xl py-3.5 border-2 transition-all text-sm font-semibold ${duration !== d ? 'border-white/8 bg-white/3 text-white/50 hover:border-white/15' : ''}`}
+                  style={duration === d ? { borderColor: accent, backgroundColor: accent + '15', color: accent } : {}}>
                   {d}s
                 </button>
               ))}
@@ -267,11 +271,11 @@ export default function BrickRushPage() {
           <BackgroundMusic spotify={spotify} onSelect={setBgTrack} selectedTrack={bgTrack} autoOpen={spotifyReturned} />
 
           {!isGameFree('brick-rush') && getTrialRemaining('brick-rush') > 0 && (
-            <p className="text-xs text-gray-400 text-center">{Math.ceil(getTrialRemaining('brick-rush') / 60)} min free trial remaining</p>
+            <p className="text-xs text-white/30 text-center">{Math.ceil(getTrialRemaining('brick-rush') / 60)} min free trial remaining</p>
           )}
 
           {/* Start */}
-          <button onClick={startGame} className="w-full bg-emerald-500 hover:bg-emerald-600 text-white font-bold text-lg py-4 rounded-full transition-all">
+          <button onClick={startGame} className="w-full hover:brightness-110 text-white font-bold text-lg py-4 rounded-full transition-all" style={{ backgroundColor: accent }}>
             Start breaking
           </button>
         </div>
