@@ -66,6 +66,22 @@ export default function CalibrationWizard({
     }
   };
 
+  // Auto-select first camera when devices list changes
+  useEffect(() => {
+    if (devices.length > 0 && !selectedDevice) {
+      setSelectedDevice(devices[0].deviceId);
+    }
+  }, [devices]);
+
+  // Generate QR code on mount
+  useEffect(() => {
+    const url = `${window.location.origin}/remote-camera?session=${phoneSessionId}`;
+    localStorage.setItem('hb_remote_session', phoneSessionId);
+    QRCode.toDataURL(url, { width: 180, margin: 2, color: { dark: '#111827', light: '#ffffff' } })
+      .then(setQrDataUrl)
+      .catch(() => {});
+  }, [phoneSessionId]);
+
   // Step 1: Select and start camera
   const handleStartCamera = async () => {
     if (!selectedDevice || !videoRef.current) return;
@@ -255,69 +271,68 @@ export default function CalibrationWizard({
           <div className="space-y-6">
             <h2 className="text-2xl font-semibold text-gray-900">Camera setup</h2>
             <p className="text-gray-500">
-              Position a camera to track your ball as you play. A phone works great as a camera.
+              Choose how to connect your camera. A phone works great.
             </p>
 
-            {/* Phone positioning guide */}
-            <div className="bg-gray-50 rounded-2xl p-5 border border-gray-100">
-              <h3 className="text-sm font-bold text-gray-900 mb-3 flex items-center gap-2">
-                <svg className="w-5 h-5 text-emerald-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><rect x="6" y="2" width="12" height="20" rx="2" /><line x1="10" y1="18" x2="14" y2="18" /></svg>
-                How to position your camera
-              </h3>
-              <ol className="text-xs text-gray-600 space-y-2 list-decimal list-inside">
-                <li>Place your phone or webcam on a stable surface (tripod, shelf, or stack of books)</li>
-                <li>Position it <strong>behind and below</strong> your playing area, angled slightly up</li>
-                <li>Make sure the camera can see the entire training area and your ball</li>
-                <li>Use good lighting - avoid backlighting or strong shadows</li>
-              </ol>
-              <div className="mt-3 flex items-center gap-2">
-                <svg className="w-4 h-4 text-emerald-500" fill="currentColor" viewBox="0 0 20 20"><path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clipRule="evenodd" /></svg>
-                <span className="text-[11px] text-gray-500">Tip: A phone tripod or a book stand works great for positioning.</span>
+            <div className="grid sm:grid-cols-2 gap-4">
+              {/* Option 1: Phone via QR */}
+              <div className="bg-white border-2 border-emerald-500 rounded-2xl p-5 text-center">
+                <div className="flex items-center justify-center gap-2 mb-3">
+                  <svg className="w-5 h-5 text-emerald-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><rect x="6" y="2" width="12" height="20" rx="2" /><line x1="10" y1="18" x2="14" y2="18" /></svg>
+                  <h3 className="text-sm font-bold text-gray-900">Use your phone</h3>
+                </div>
+                {qrDataUrl && (
+                  <img src={qrDataUrl} alt="QR Code" className="mx-auto mb-3 rounded-lg" />
+                )}
+                <p className="text-xs text-gray-500 mb-2">Scan with your phone camera</p>
+                <p className="text-[10px] text-gray-300 font-mono break-all">{typeof window !== 'undefined' ? window.location.origin : ''}/remote-camera?session={phoneSessionId}</p>
+              </div>
+
+              {/* Option 2: Webcam / built-in */}
+              <div className="bg-white border border-gray-100 rounded-2xl p-5">
+                <div className="flex items-center justify-center gap-2 mb-3">
+                  <svg className="w-5 h-5 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z" /></svg>
+                  <h3 className="text-sm font-bold text-gray-900">Use webcam</h3>
+                </div>
+                {permission !== 'granted' ? (
+                  <button onClick={handleRequestPermission} className="btn-primary w-full text-sm">
+                    Allow camera access
+                  </button>
+                ) : (
+                  <div className="space-y-3">
+                    <select
+                      className="input-field text-sm"
+                      value={selectedDevice}
+                      onChange={(e) => setSelectedDevice(e.target.value)}
+                    >
+                      <option value="">-- Select camera --</option>
+                      {devices.map((d) => (
+                        <option key={d.deviceId} value={d.deviceId}>{d.label}</option>
+                      ))}
+                    </select>
+                    <button
+                      onClick={handleStartCamera}
+                      disabled={!selectedDevice}
+                      className="btn-primary w-full text-sm disabled:opacity-50"
+                    >
+                      Start camera
+                    </button>
+                  </div>
+                )}
+                {cameraError && <p className="text-red-500 text-xs mt-2">{cameraError}</p>}
+                {permission === 'denied' && <p className="text-red-500 text-xs mt-2">Camera access denied. Check browser settings.</p>}
               </div>
             </div>
 
-            {/* Camera access */}
-            {permission !== 'granted' ? (
-              <button
-                onClick={handleRequestPermission}
-                className="btn-primary w-full"
-              >
-                Allow camera access
-              </button>
-            ) : (
-              <div className="space-y-4">
-                <label className="block text-sm text-gray-500">Select camera</label>
-                <select
-                  className="input-field"
-                  value={selectedDevice}
-                  onChange={(e) => setSelectedDevice(e.target.value)}
-                >
-                  <option value="">-- Select camera --</option>
-                  {devices.map((d) => (
-                    <option key={d.deviceId} value={d.deviceId}>
-                      {d.label}
-                    </option>
-                  ))}
-                </select>
-                <button
-                  onClick={handleStartCamera}
-                  disabled={!selectedDevice}
-                  className="btn-primary w-full disabled:opacity-50"
-                >
-                  Start camera
-                </button>
-              </div>
-            )}
-
-            {cameraError && (
-              <p className="text-red-500 text-sm">{cameraError}</p>
-            )}
-
-            {permission === 'denied' && (
-              <p className="text-red-500 text-sm">
-                Camera access is denied. Check your browser settings.
-              </p>
-            )}
+            {/* Positioning tips */}
+            <div className="bg-gray-50 rounded-xl p-4">
+              <p className="text-[11px] font-bold text-gray-500 uppercase tracking-wider mb-2">Camera positioning</p>
+              <ul className="text-xs text-gray-500 space-y-1.5">
+                <li>Place behind and below your playing area, angled slightly up</li>
+                <li>The camera should see the entire training area and your ball</li>
+                <li>Use good lighting - avoid backlighting or shadows</li>
+              </ul>
+            </div>
           </div>
         );
 
@@ -341,7 +356,13 @@ export default function CalibrationWizard({
                 className="w-full rounded-lg border border-gray-200"
               />
             </div>
-            <button onClick={() => setStep('corners')} className="btn-primary">
+            <button onClick={() => {
+              // Default to full area
+              const w = activeCamera?.width || 640;
+              const h = activeCamera?.height || 480;
+              setCorners([{ x: 0, y: 0 }, { x: w, y: 0 }, { x: w, y: h }, { x: 0, y: h }]);
+              setStep('corners');
+            }} className="btn-primary">
               Continue
             </button>
           </div>
@@ -352,9 +373,31 @@ export default function CalibrationWizard({
           <div className="space-y-4">
             <h2 className="text-2xl font-semibold text-gray-900">Training area</h2>
             <p className="text-gray-400">
-              Click on the 4 corners of the training area in order: top-left, top-right,
-              bottom-right, bottom-left. ({corners.length}/4)
+              Mark the area where you play, or use the full camera view.
             </p>
+
+            {/* Use full area toggle */}
+            <label className="flex items-center gap-3 bg-emerald-50 border border-emerald-100 rounded-xl p-4 cursor-pointer">
+              <input
+                type="checkbox"
+                checked={corners.length === 4 && corners[0].x === 0 && corners[0].y === 0}
+                onChange={(e) => {
+                  if (e.target.checked) {
+                    const w = activeCamera?.width || 640;
+                    const h = activeCamera?.height || 480;
+                    setCorners([{ x: 0, y: 0 }, { x: w, y: 0 }, { x: w, y: h }, { x: 0, y: h }]);
+                  } else {
+                    setCorners([]);
+                  }
+                }}
+                className="w-5 h-5 accent-emerald-500 rounded"
+              />
+              <div>
+                <div className="text-sm font-bold text-gray-900">Use entire camera view <span className="text-emerald-500 text-xs font-medium ml-1">Recommended</span></div>
+                <div className="text-xs text-gray-500">Skip manual corner selection</div>
+              </div>
+            </label>
+
             <div className="relative max-w-2xl">
               <canvas
                 ref={canvasRef}
@@ -362,6 +405,7 @@ export default function CalibrationWizard({
                 onClick={handleCornerClick}
               />
             </div>
+            <p className="text-xs text-gray-400">Or click 4 corners manually: top-left, top-right, bottom-right, bottom-left. ({corners.length}/4)</p>
             <div className="flex gap-3">
               <button
                 onClick={() => setCorners([])}

@@ -418,12 +418,12 @@ export default function Home() {
         </section>
 
         {/* 10 - Final CTA */}
-        <section className="bg-gray-50/50 py-14 sm:py-20">
+        <section className="bg-gray-100 py-14 sm:py-20">
           <div className="max-w-3xl mx-auto px-6 sm:px-10 text-center">
             <h2 className="text-3xl sm:text-5xl font-extrabold text-[#101828] tracking-tight leading-[1.08]">One more game?</h2>
             <p className="mt-5 text-lg text-gray-500">Grab your stick. Your next high score isn&apos;t going to beat itself.</p>
             <div className="mt-10">
-              <Link href="/dashboard" className="inline-block bg-[#101828] hover:bg-[#1a2540] text-white font-bold text-lg px-10 py-5 rounded-full transition-all">Play Hockey Beats</Link>
+              <Link href="/dashboard" className="inline-flex items-center gap-2 bg-[#101828] hover:bg-[#1a2540] text-white font-bold text-lg px-10 py-5 rounded-full transition-all">Play Hockey Beats <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}><path strokeLinecap="round" strokeLinejoin="round" d="M8.25 4.5l7.5 7.5-7.5 7.5" /></svg></Link>
             </div>
           </div>
         </section>

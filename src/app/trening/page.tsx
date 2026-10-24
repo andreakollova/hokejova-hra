@@ -563,7 +563,7 @@ export default function TreningPage() {
 
         {/* Logo + Mascot */}
         <Link href="/dashboard" className="block mb-4">
-          <Image src="/images/hb-logo-hero-dark.png" alt="Hockey Beats" width={120} height={32} className="h-6 w-auto opacity-40" />
+          <Image src="/images/hb-logo-hero-dark.png" alt="Hockey Beats" width={120} height={32} className="h-6 w-auto" />
         </Link>
         <div className="flex items-center gap-5 mb-8">
           <MascotGlow src="/images/mascots/mascot-slalom.webp" color="#22c55e" size={90} />
