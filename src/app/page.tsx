@@ -263,7 +263,7 @@ export default function Home() {
             <div className="grid lg:grid-cols-2 gap-12 items-center">
               <div className="order-2 lg:order-1">
                 <div className="rounded-3xl overflow-hidden">
-                  <Image src="/images/step-gear.jpg" alt="Real hockey equipment" width={600} height={450} className="w-full h-auto" />
+                  <Image src="/images/parents.png" alt="Player practising with head up" width={600} height={400} className="w-full h-auto" />
                 </div>
               </div>
               <div className="order-1 lg:order-2">
