@@ -91,9 +91,10 @@ export default function RemoteCameraPage() {
     // Build calibration and start tracking
     const cal: CalibrationData = {
       corners: corners as [Point2D, Point2D, Point2D, Point2D],
-      ballColor: { h, s, v },
-      tolerance: { hue: 15, sat: 0.3, val: 0.3 },
+      hsvCenter: [h, s * 100, v * 100] as [number, number, number],
+      hsvTolerance: [15, 30, 30] as [number, number, number],
       movementRange: { left: 0.05, right: 0.95 },
+      mirrorX: false,
       resolution: { width: video.videoWidth, height: video.videoHeight },
       cameraDeviceId: 'remote',
     };

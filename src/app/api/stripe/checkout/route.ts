@@ -15,9 +15,9 @@ export async function POST(req: NextRequest) {
     const p = prices[plan];
     if (!p) return NextResponse.json({ error: 'Invalid plan' }, { status: 400 });
 
-    const sessionParams: Stripe.Checkout.SessionCreateParams = {
+    const sessionParams: any = {
       mode: 'subscription',
-      payment_method_types: ['card'] as any,
+      payment_method_types: ['card'],
       customer_email: email || undefined,
       metadata: { username, plan },
       subscription_data: {
