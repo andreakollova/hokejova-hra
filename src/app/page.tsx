@@ -270,7 +270,10 @@ export default function Home() {
                 <p className="text-xs font-bold uppercase tracking-[0.2em] text-gray-400 mb-4">04 / Real skills</p>
                 <h2 className="text-3xl sm:text-5xl font-extrabold text-[#101828] leading-[1.08] tracking-tight">Train your stickhandling while keeping your head up.</h2>
                 <p className="mt-6 text-lg text-gray-500 leading-relaxed">This isn&apos;t another game you play with your thumbs. Hockey Beats gets you moving with your actual hockey stick and ball, encouraging better ball control, coordination, reactions and heads-up stickhandling.</p>
-                <p className="mt-3 text-base text-gray-400 italic">The more you play, the more you practice.</p>
+                <p className="mt-4 text-base font-bold text-[#101828]">The more you play, the more you practice.</p>
+                <div className="mt-6">
+                  <Link href="/dashboard" className="btn-primary px-8 py-4">Start Playing</Link>
+                </div>
               </div>
             </div>
           </div>
