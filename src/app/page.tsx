@@ -209,9 +209,8 @@ export default function Home() {
                 <p className="mt-6 text-lg text-gray-500 leading-relaxed">Hockey Beats makes stickhandling practice something you&apos;ll actually look forward to. Play rhythm-based challenges with your real stick and ball, improve your control and coordination, and build the confidence to keep your head up on the pitch.</p>
                 <div className="mt-6 flex items-center gap-4">
                   <div className="text-4xl font-black text-emerald-500">80%</div>
-                  <p className="text-sm text-gray-400 text-left">Reported improvement in stickhandling after one month of playing Hockey Beats.</p>
+                  <p className="text-sm font-bold text-[#101828] text-left">Reported improvement in stickhandling after one month of playing Hockey Beats.</p>
                 </div>
-                <p className="mt-4 text-base text-[#101828] font-bold italic">More practice, better habits, stronger skills.</p>
               </div>
               <div className="relative">
                 <div className="rounded-3xl overflow-hidden">
@@ -231,7 +230,7 @@ export default function Home() {
         {/* 03 - Progression */}
         <section className="py-14 sm:py-20">
           <div className="max-w-6xl mx-auto px-6 sm:px-10">
-            <div className="max-w-2xl mb-14">
+            <div className="max-w-2xl mx-auto text-center mb-14">
               <p className="text-xs font-bold uppercase tracking-[0.2em] text-gray-400 mb-4">03 / Progression</p>
               <h2 className="text-3xl sm:text-5xl font-extrabold text-[#101828] leading-[1.08] tracking-tight">Get hooked on getting better.</h2>
               <p className="mt-6 text-lg text-gray-500 leading-relaxed">Earn XP, collect badges, build your streak and climb the leaderboards. Every session gives you another reason to play and another chance to beat your best.</p>
