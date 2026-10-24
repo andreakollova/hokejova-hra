@@ -210,12 +210,16 @@ export default function Home() {
             </div>
             <div className="grid grid-cols-3 sm:grid-cols-4 lg:grid-cols-6 gap-4 sm:gap-6">
               {MASCOTS.map(m => (
-                <div key={m.id} className="group flex flex-col items-center text-center">
+                <div key={m.id} className="group flex flex-col items-center text-center cursor-pointer">
                   <div className="relative mb-3">
-                    <div className="absolute inset-0 rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-500" style={{ background: `radial-gradient(circle, #22c55e30 0%, transparent 70%)`, transform: 'scale(1.8)' }} />
-                    <Image src={m.image} alt={m.name} width={100} height={100} className="relative z-10 rounded-2xl group-hover:scale-110 transition-transform duration-500" />
+                    {/* Glow - bigger, always slightly visible, full on hover */}
+                    <div className="absolute inset-0 rounded-full opacity-30 group-hover:opacity-100 transition-opacity duration-500 animate-pulse-glow" style={{ background: `radial-gradient(circle, #22c55e40 0%, #22c55e15 40%, transparent 70%)`, transform: 'scale(2.2)' }} />
+                    {/* Normal image - visible by default, hidden on hover */}
+                    <Image src={m.image} alt={m.name} width={110} height={110} className="relative z-10 rounded-2xl transition-all duration-300 group-hover:opacity-0 group-hover:scale-0" />
+                    {/* Happy image - hidden by default, bounce in on hover */}
+                    <Image src={m.imageHappy} alt={`${m.name} happy`} width={110} height={110} className="absolute inset-0 z-20 rounded-2xl transition-all duration-300 opacity-0 scale-0 group-hover:opacity-100 group-hover:scale-110 group-hover:animate-mascot-bounce" />
                   </div>
-                  <div className="text-sm font-bold text-white">{m.name}</div>
+                  <div className="text-sm font-bold text-white mt-1">{m.name}</div>
                   <div className="text-[10px] text-white/40">{m.adjective}</div>
                 </div>
               ))}
