@@ -331,9 +331,7 @@ export default function Home() {
                 </div>
                 {/* Content */}
                 <div className="p-8 sm:p-12 flex flex-col justify-center">
-                  <div className="inline-block bg-emerald-50 rounded-full px-4 py-1.5 mb-5 self-start">
-                    <span className="text-xs font-bold uppercase tracking-[0.2em] text-emerald-600">For clubs &amp; teams</span>
-                  </div>
+                  <span className="text-xs font-bold uppercase tracking-[0.2em] mb-5 block" style={{ color: '#1059ce' }}>For clubs &amp; teams</span>
                   <h2 className="text-2xl sm:text-3xl font-extrabold text-[#101828] leading-[1.12] tracking-tight">Bring the whole team into the game.</h2>
                   <p className="mt-4 text-base text-gray-500 leading-relaxed">Turn individual practice into something your players share. Challenge teammates, play together during camps and keep the competition going between sessions.</p>
 
