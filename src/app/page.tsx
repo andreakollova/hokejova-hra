@@ -337,7 +337,7 @@ export default function Home() {
                 </div>
               </div>
               <div className="rounded-3xl overflow-hidden">
-                <Image src="/images/parents.png" alt="Club training" width={600} height={400} className="w-full h-auto" />
+                <Image src="/images/club-team.jpg" alt="Hockey team celebrating" width={600} height={400} className="w-full h-auto object-cover" />
               </div>
             </div>
           </div>
