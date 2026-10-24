@@ -259,6 +259,25 @@ export default function CalibrationWizard({
               at the training area.
             </p>
 
+            {/* Phone camera setup guide */}
+            <div className="bg-emerald-50 rounded-2xl p-5 border border-emerald-100">
+              <h3 className="text-sm font-bold text-emerald-800 mb-3 flex items-center gap-2">
+                <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><rect x="6" y="2" width="12" height="20" rx="2" /><line x1="10" y1="18" x2="14" y2="18" /></svg>
+                Using your phone as a camera?
+              </h3>
+              <ol className="text-xs text-emerald-700 space-y-2 list-decimal list-inside">
+                <li>Place your phone on a stable surface (tripod, shelf, or stack of books)</li>
+                <li>Position it <strong>behind and below</strong> your playing area, angled slightly up</li>
+                <li>Make sure the camera can see the entire training area and your ball</li>
+                <li>Keep the phone plugged in so it doesn&apos;t run out of battery</li>
+                <li>Use good lighting - avoid backlighting or strong shadows</li>
+              </ol>
+              <div className="mt-3 flex items-center gap-2">
+                <svg className="w-4 h-4 text-emerald-500" fill="currentColor" viewBox="0 0 20 20"><path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clipRule="evenodd" /></svg>
+                <span className="text-[11px] text-emerald-600">Tip: A phone tripod or a book stand works great for positioning.</span>
+              </div>
+            </div>
+
             {permission !== 'granted' ? (
               <button
                 onClick={handleRequestPermission}
