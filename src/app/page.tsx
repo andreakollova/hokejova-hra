@@ -4,6 +4,8 @@ import { useState, useEffect } from 'react';
 import { useSettings } from '@/hooks/useSettings';
 import { useEngagement } from '@/hooks/useEngagement';
 import { useAuth } from '@/hooks/useAuth';
+import { MASCOTS } from '@/lib/mascots';
+import Onboarding from '@/components/auth/Onboarding';
 import StreakBadge from '@/components/ui/StreakBadge';
 import Link from 'next/link';
 import Image from 'next/image';
@@ -13,7 +15,8 @@ export default function Home() {
   const auth = useAuth();
   const isLoggedIn = auth.isLoggedIn || legacyLoggedIn;
   const displayName = auth.displayName || settings.username;
-  const { getStreak, getLevelProgress, loaded: engLoaded } = useEngagement();
+  const { getStreak, getLevelProgress, getProfile, setProfile, loaded: engLoaded } = useEngagement();
+  const [showOnboarding, setShowOnboarding] = useState(false);
   const [showAuth, setShowAuth] = useState(false);
   const [authMode, setAuthMode] = useState<'login' | 'signup' | 'forgot'>('login');
   const [authEmail, setAuthEmail] = useState('');
@@ -42,7 +45,11 @@ export default function Home() {
     } else if (authMode === 'login') {
       const err = await auth.signInWithEmail(authEmail, authPassword);
       if (err) setAuthError(err);
-      else window.location.href = '/dashboard';
+      else {
+        const p = getProfile();
+        if (!p.onboarded) { setShowAuth(false); setShowOnboarding(true); }
+        else window.location.href = '/dashboard';
+      }
     } else if (authMode === 'forgot') {
       const err = await auth.resetPassword(authEmail);
       if (err) setAuthError(err);
@@ -50,6 +57,16 @@ export default function Home() {
     }
     setAuthLoading(false);
   };
+
+  if (showOnboarding) {
+    return (
+      <Onboarding onComplete={(profile) => {
+        setProfile(profile);
+        setShowOnboarding(false);
+        window.location.href = '/dashboard';
+      }} />
+    );
+  }
 
   return (
     <div className="min-h-screen bg-white flex flex-col">
@@ -184,6 +201,28 @@ export default function Home() {
             </div>
           </div>
         </section>
+        {/* Mascots section */}
+        <section className="py-24 sm:py-32 bg-[#0a0a0f]">
+          <div className="max-w-6xl mx-auto px-6 sm:px-10">
+            <div className="text-center mb-14">
+              <h2 className="text-3xl sm:text-5xl font-extrabold text-white leading-tight tracking-tight">Choose your favorite</h2>
+              <p className="mt-4 text-lg text-white/40 max-w-xl mx-auto">Discover a crew of bold characters, each with a game of their own.</p>
+            </div>
+            <div className="grid grid-cols-3 sm:grid-cols-4 lg:grid-cols-6 gap-4 sm:gap-6">
+              {MASCOTS.map(m => (
+                <div key={m.id} className="group flex flex-col items-center text-center">
+                  <div className="relative mb-3">
+                    <div className="absolute inset-0 rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-500" style={{ background: `radial-gradient(circle, #22c55e30 0%, transparent 70%)`, transform: 'scale(1.8)' }} />
+                    <Image src={m.image} alt={m.name} width={100} height={100} className="relative z-10 rounded-2xl group-hover:scale-110 transition-transform duration-500" />
+                  </div>
+                  <div className="text-sm font-bold text-white">{m.name}</div>
+                  <div className="text-[10px] text-white/40">{m.adjective}</div>
+                </div>
+              ))}
+            </div>
+          </div>
+        </section>
+
         {/* Devices / Play anywhere section */}
         <section id="platforms" className="relative overflow-hidden">
           <div className="relative">

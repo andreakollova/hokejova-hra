@@ -11,13 +11,14 @@ import { useRouter } from 'next/navigation';
 import { useRef, useState, useEffect } from 'react';
 import { CalibrationData } from '@/lib/tracking';
 import { useAuth } from '@/hooks/useAuth';
+import { MASCOTS, PROFILE_COLORS } from '@/lib/mascots';
 import dynamic from 'next/dynamic';
 
 const CalibrationWizard = dynamic(() => import('@/components/tracking/CalibrationWizard'), { ssr: false });
 
 export default function NastaveniaPage() {
   const { settings, isLoggedIn, loaded, updateSettings, logout } = useSettings();
-  const { data, setAvatar, getStreak, getLevelProgress, getAvatar, loaded: engLoaded } = useEngagement();
+  const { data, setAvatar, getStreak, getLevelProgress, getAvatar, getProfile, setProfile, loaded: engLoaded } = useEngagement();
   const router = useRouter();
   const auth = useAuth();
   const fileInputRef = useRef<HTMLInputElement>(null);
@@ -91,27 +92,17 @@ export default function NastaveniaPage() {
       <main className="flex-1 max-w-3xl mx-auto w-full px-6 sm:px-10 py-12">
         <h1 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-10">Settings</h1>
 
-        {/* Profile with Avatar */}
+        {/* Profile with Mascot */}
         <section className="mb-10">
           <h2 className="text-sm font-medium text-gray-400 uppercase tracking-wider mb-3">Profile</h2>
           <div className="card p-6">
             <div className="flex items-center gap-4">
-              <div className="relative group cursor-pointer" onClick={() => fileInputRef.current?.click()}>
-                <Avatar username={settings.username} photoUrl={avatar} size="lg" />
-                <div className="absolute inset-0 bg-black/40 rounded-full opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
-                  <svg className="w-6 h-6 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-                    <path strokeLinecap="round" strokeLinejoin="round" d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z" />
-                    <path strokeLinecap="round" strokeLinejoin="round" d="M15 13a3 3 0 11-6 0 3 3 0 016 0z" />
-                  </svg>
-                </div>
-                <input
-                  ref={fileInputRef}
-                  type="file"
-                  accept="image/*"
-                  className="hidden"
-                  onChange={handleAvatarUpload}
-                />
-              </div>
+              {(() => {
+                const p = getProfile();
+                const mascot = MASCOTS.find(m => m.id === p.mascotId);
+                const mascotImg = mascot?.image || null;
+                return <Avatar username={settings.username} mascotImage={mascotImg} profileColor={p.color} size="lg" />;
+              })()}
               <div>
                 <p className="text-lg font-semibold text-gray-900">{settings.username}</p>
                 <p className="text-sm text-gray-400">Logged in user</p>
@@ -247,6 +238,46 @@ export default function NastaveniaPage() {
               >
                 Apple Music
               </button>
+            </div>
+          </div>
+        </section>
+
+        {/* Change Mascot */}
+        <section className="mb-10">
+          <h2 className="text-sm font-medium text-gray-400 uppercase tracking-wider mb-3">Mascot</h2>
+          <div className="card p-6">
+            <div className="grid grid-cols-4 sm:grid-cols-6 gap-2">
+              {MASCOTS.map(m => {
+                const p = getProfile();
+                const isSelected = p.mascotId === m.id;
+                return (
+                  <button key={m.id} onClick={() => setProfile({ ...p, mascotId: m.id })}
+                    className={`rounded-xl p-2 border-2 transition-all flex flex-col items-center gap-1 ${isSelected ? 'border-emerald-500 bg-emerald-50' : 'border-gray-100 hover:border-gray-300'}`}>
+                    <Image src={m.image} alt={m.name} width={48} height={48} className="rounded-lg" />
+                    <div className="text-[9px] font-bold text-gray-700 truncate w-full text-center">{m.name}</div>
+                  </button>
+                );
+              })}
+            </div>
+          </div>
+        </section>
+
+        {/* Change Color */}
+        <section className="mb-10">
+          <h2 className="text-sm font-medium text-gray-400 uppercase tracking-wider mb-3">Profile color</h2>
+          <div className="card p-6">
+            <div className="flex flex-wrap gap-3">
+              {PROFILE_COLORS.map(c => {
+                const p = getProfile();
+                const isSelected = p.color === c.value;
+                return (
+                  <button key={c.id} onClick={() => setProfile({ ...p, color: c.value })}
+                    className={`flex flex-col items-center gap-1.5 rounded-xl p-2.5 border-2 transition-all ${isSelected ? 'border-gray-900 bg-gray-50' : 'border-gray-100 hover:border-gray-300'}`}>
+                    <div className="w-8 h-8 rounded-full" style={{ backgroundColor: c.value, boxShadow: isSelected ? `0 0 16px ${c.value}50` : 'none' }} />
+                    <div className="text-[9px] font-bold text-gray-500">{c.label}</div>
+                  </button>
+                );
+              })}
             </div>
           </div>
         </section>

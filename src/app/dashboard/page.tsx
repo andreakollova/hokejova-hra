@@ -8,6 +8,7 @@ import XPBar from '@/components/ui/XPBar';
 import Avatar from '@/components/ui/Avatar';
 import Link from 'next/link';
 import Image from 'next/image';
+import { MASCOTS } from '@/lib/mascots';
 
 const HISTORY_KEY = 'sportqo_music_history';
 
@@ -53,7 +54,7 @@ const GAMES = [
 
 export default function DashboardPage() {
   const { settings, isLoggedIn, loaded } = useSettings();
-  const { data: engData, getStreak, getLevelProgress, getXP, getAvatar, loaded: engLoaded, clearUnfroze, checkAchievementsNow } = useEngagement();
+  const { data: engData, getStreak, getLevelProgress, getXP, getAvatar, getProfile, loaded: engLoaded, clearUnfroze, checkAchievementsNow } = useEngagement();
   const [showUnfrozePopup, setShowUnfrozePopup] = useState(false);
   const [musicHistory, setMusicHistory] = useState<TrackRecord[]>([]);
   const [topScores, setTopScores] = useState<ScoreEntry[]>([]);
@@ -144,6 +145,8 @@ export default function DashboardPage() {
   const level = engLoaded ? getLevelProgress() : { level: 0, xpInLevel: 0, xpNeeded: 100, progress: 0 };
   const totalXP = engLoaded ? getXP() : 0;
   const avatar = engLoaded ? getAvatar() : null;
+  const profile = engLoaded ? getProfile() : null;
+  const mascotImage = profile?.mascotId ? MASCOTS.find(m => m.id === profile.mascotId)?.image : null;
 
   const favorites = [...musicHistory].sort((a, b) => b.playCount - a.playCount).slice(0, 5);
   const favoriteIds = new Set(favorites.map(f => f.track.id));
@@ -186,7 +189,7 @@ export default function DashboardPage() {
             </Link>
             {streak.currentStreak > 0 && <StreakBadge currentStreak={streak.currentStreak} frozen={streak.frozen} size="sm" />}
             <Link href="/nastavenia" className="flex items-center gap-2.5 bg-white/5 hover:bg-white/10 rounded-full pl-1 pr-4 py-1 transition-colors">
-              <Avatar username={settings.username} photoUrl={avatar} size="sm" />
+              <Avatar username={settings.username} photoUrl={avatar} mascotImage={mascotImage} profileColor={profile?.color} size="sm" />
               <span className="text-sm font-medium text-white/80 hidden sm:block">{settings.username}</span>
             </Link>
           </div>
