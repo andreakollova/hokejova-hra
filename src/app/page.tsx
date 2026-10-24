@@ -122,18 +122,7 @@ export default function Home() {
         <HeroBanner isLoggedIn={isLoggedIn} onLoginClick={() => setShowAuth(true)} />
 
         {/* Start Now */}
-        <section className="relative bg-[#101828] py-14 sm:py-20 overflow-hidden">
-          <div className="max-w-6xl mx-auto px-6 sm:px-10 text-center">
-            <Image src="/images/logo-startnow.png" alt="Start Now" width={300} height={100} className="h-16 sm:h-20 w-auto mx-auto" />
-            <p className="mt-3 text-white/60 text-sm">Free on desktop browser. Mobile &amp; TV coming soon.</p>
-            <div className="mt-6">
-              <Link href="/dashboard" className="inline-flex items-center gap-2 bg-emerald-500 hover:bg-emerald-400 text-white font-bold px-8 py-4 rounded-full transition-all">
-                <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
-                Play in browser
-              </Link>
-            </div>
-          </div>
-        </section>
+        <StartNowSection />
 
         {/* 01 - Hero subtitle */}
         <section className="py-20 sm:py-28">
@@ -402,29 +391,54 @@ export default function Home() {
       </main>
 
       {/* Footer */}
-      <footer className="border-t border-gray-100 px-6 sm:px-10 py-16 sm:py-20">
+      <footer className="border-t border-gray-200 px-6 sm:px-10 py-16 sm:py-24">
         <div className="max-w-6xl mx-auto">
-          <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-6">
-            <div>
-              <Image src="/images/hb-secondary-light.png" alt="Hockey Beats" width={120} height={110} className="h-16 w-auto mb-2" />
-              <p className="text-xs text-gray-400 tracking-wide">Interactive practice for ice hockey, field hockey and floorball.</p>
+          <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-10 mb-14">
+            {/* Logo + description */}
+            <div className="sm:col-span-2 lg:col-span-1">
+              <Image src="/images/hb-secondary-light.png" alt="Hockey Beats" width={140} height={130} className="h-20 w-auto mb-4" />
+              <p className="text-sm text-[#101828]/60 leading-relaxed">Interactive practice for ice hockey, field hockey and floorball.</p>
             </div>
-            <div className="flex flex-wrap gap-6 text-sm text-gray-400 font-medium tracking-tight">
-              <a href="#how-it-works" className="hover:text-[#101828] transition-colors duration-300">How it works</a>
-              <a href="#sports" className="hover:text-[#101828] transition-colors duration-300">Sports</a>
-              <a href="#games" className="hover:text-[#101828] transition-colors duration-300">Games</a>
-              <a href="#parents" className="hover:text-[#101828] transition-colors duration-300">For parents</a>
-              <a href="#teams" className="hover:text-[#101828] transition-colors duration-300">For teams</a>
+
+            {/* Navigation */}
+            <div>
+              <h4 className="text-sm font-bold text-[#101828] mb-4">Product</h4>
+              <div className="flex flex-col gap-2.5">
+                <a href="#how-it-works" className="text-sm text-[#101828]/60 hover:text-[#101828] transition-colors">How it works</a>
+                <a href="#games" className="text-sm text-[#101828]/60 hover:text-[#101828] transition-colors">Games</a>
+                <a href="#sports" className="text-sm text-[#101828]/60 hover:text-[#101828] transition-colors">Sports</a>
+                <Link href="/club" className="text-sm text-[#101828]/60 hover:text-[#101828] transition-colors">For teams</Link>
+                <Link href="/achievements" className="text-sm text-[#101828]/60 hover:text-[#101828] transition-colors">Achievements</Link>
+              </div>
+            </div>
+
+            {/* Legal */}
+            <div>
+              <h4 className="text-sm font-bold text-[#101828] mb-4">Legal</h4>
+              <div className="flex flex-col gap-2.5">
+                <Link href="/privacy" className="text-sm text-[#101828]/60 hover:text-[#101828] transition-colors">Privacy Policy</Link>
+                <Link href="/terms" className="text-sm text-[#101828]/60 hover:text-[#101828] transition-colors">Terms of Service</Link>
+                <Link href="/cookies" className="text-sm text-[#101828]/60 hover:text-[#101828] transition-colors">Cookie Policy</Link>
+                <Link href="/safety" className="text-sm text-[#101828]/60 hover:text-[#101828] transition-colors">Safety Guidelines</Link>
+                <Link href="/legal" className="text-sm text-[#101828]/60 hover:text-[#101828] transition-colors">All Policies</Link>
+              </div>
+            </div>
+
+            {/* Company */}
+            <div>
+              <h4 className="text-sm font-bold text-[#101828] mb-4">Company</h4>
+              <div className="flex flex-col gap-2.5">
+                <a href="mailto:studio@drixton.com" className="text-sm text-[#101828]/60 hover:text-[#101828] transition-colors">Contact</a>
+                <a href="https://drixton.com" target="_blank" rel="noopener noreferrer" className="text-sm text-[#101828]/60 hover:text-[#101828] transition-colors">Drixton Studio</a>
+                <Link href="/parental-consent" className="text-sm text-[#101828]/60 hover:text-[#101828] transition-colors">For Parents</Link>
+                <Link href="/complaints" className="text-sm text-[#101828]/60 hover:text-[#101828] transition-colors">Support</Link>
+              </div>
             </div>
           </div>
-          <div className="mt-8 pt-6 border-t border-gray-100">
-            <div className="flex flex-wrap gap-x-6 gap-y-2 text-xs text-gray-400 tracking-wide mb-4">
-              <Link href="/privacy" className="hover:text-gray-700 transition-colors">Privacy Policy</Link>
-              <Link href="/terms" className="hover:text-gray-700 transition-colors">Terms of Service</Link>
-              <Link href="/cookies" className="hover:text-gray-700 transition-colors">Cookie Policy</Link>
-              <Link href="/legal" className="hover:text-gray-700 transition-colors">All Policies</Link>
-            </div>
-            <p className="text-[10px] text-gray-300">© {new Date().getFullYear()} DRIXTON s. r. o. All rights reserved. Apple Music is a trademark of Apple Inc.</p>
+
+          <div className="pt-8 border-t border-gray-200">
+            <p className="text-sm text-[#101828]/40">© {new Date().getFullYear()} Hockey Beats by <a href="https://drixton.com" target="_blank" rel="noopener noreferrer" className="hover:text-[#101828]/70 transition-colors">DRIXTON s. r. o.</a> All rights reserved.</p>
+            <p className="text-xs text-[#101828]/25 mt-1">Apple Music is a trademark of Apple Inc.</p>
           </div>
         </div>
       </footer>
@@ -609,6 +623,74 @@ const MASCOT_DESCRIPTIONS: Record<string, string> = {
   icebreaker: 'Cool under pressure. Icebreaker brings ice hockey grit to every game.',
   floorboss: 'Bold and commanding. Floorboss owns the floorball court.',
 };
+
+function StartNowSection() {
+  const [expanded, setExpanded] = useState<'mobile' | 'desktop' | 'tv' | null>('desktop');
+  return (
+    <section className="relative bg-[#101828] py-14 sm:py-20 overflow-hidden">
+      <div className="max-w-6xl mx-auto px-6 sm:px-10">
+        <div className="text-center mb-10">
+          <Image src="/images/logo-startnow.png" alt="Start Now" width={300} height={100} className="h-16 sm:h-20 w-auto mx-auto" />
+          <p className="mt-3 text-white/60 text-sm">Free on all platforms.</p>
+        </div>
+        <div className="flex flex-col sm:flex-row justify-center gap-4 max-w-2xl mx-auto">
+          <div className="flex-1">
+            <button onClick={() => setExpanded(expanded === 'mobile' ? null : 'mobile')} className={`w-full flex flex-col items-center gap-3 rounded-2xl px-6 py-6 transition-all duration-300 ${expanded === 'mobile' ? 'bg-white text-[#101828] shadow-lg' : 'bg-white/5 hover:bg-white/10 text-white border border-white/8'}`}>
+              <svg className={`w-7 h-7 ${expanded === 'mobile' ? 'text-[#101828]' : 'text-white/50'}`} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}><rect x="6" y="2" width="12" height="20" rx="2" /><line x1="10" y1="18" x2="14" y2="18" /></svg>
+              <div className="text-center">
+                <div className={`text-sm font-bold ${expanded === 'mobile' ? 'text-[#101828]' : 'text-white'}`}>mobile</div>
+                <div className={`text-[10px] ${expanded === 'mobile' ? 'text-gray-400' : 'text-white/30'}`}>iOS & Android</div>
+              </div>
+            </button>
+            {expanded === 'mobile' && (
+              <div className="mt-2 space-y-2 animate-[fadeIn_0.2s_ease-out]">
+                <div className="flex items-center gap-3 bg-white/5 border border-white/8 rounded-xl px-5 py-3">
+                  <div><div className="text-sm font-medium text-white/40">App Store</div><div className="text-[10px] text-white/20">Coming soon</div></div>
+                </div>
+                <div className="flex items-center gap-3 bg-white/5 border border-white/8 rounded-xl px-5 py-3">
+                  <div><div className="text-sm font-medium text-white/40">Google Play</div><div className="text-[10px] text-white/20">Coming soon</div></div>
+                </div>
+              </div>
+            )}
+          </div>
+          <div className="flex-1">
+            <button onClick={() => setExpanded(expanded === 'desktop' ? null : 'desktop')} className={`w-full flex flex-col items-center gap-3 rounded-2xl px-6 py-6 transition-all duration-300 ${expanded === 'desktop' ? 'bg-white text-[#101828] shadow-lg' : 'bg-white/5 hover:bg-white/10 text-white border border-white/8'}`}>
+              <svg className={`w-7 h-7 ${expanded === 'desktop' ? 'text-[#101828]' : 'text-white/50'}`} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}><rect x="2" y="3" width="20" height="14" rx="2" /><line x1="8" y1="21" x2="16" y2="21" /><line x1="12" y1="17" x2="12" y2="21" /></svg>
+              <div className="text-center">
+                <div className={`text-sm font-bold ${expanded === 'desktop' ? 'text-[#101828]' : 'text-white'}`}>desktop</div>
+                <div className={`text-[10px] ${expanded === 'desktop' ? 'text-gray-400' : 'text-white/30'}`}>Mac & Windows</div>
+              </div>
+            </button>
+            {expanded === 'desktop' && (
+              <div className="mt-2 animate-[fadeIn_0.2s_ease-out]">
+                <Link href="/dashboard" className="flex items-center justify-center gap-2 bg-emerald-500 hover:bg-emerald-400 rounded-xl px-5 py-3.5 transition-all">
+                  <svg className="w-4 h-4 text-white" fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+                  <div className="text-sm font-bold text-white">Play in browser</div>
+                </Link>
+              </div>
+            )}
+          </div>
+          <div className="flex-1">
+            <button onClick={() => setExpanded(expanded === 'tv' ? null : 'tv')} className={`w-full flex flex-col items-center gap-3 rounded-2xl px-6 py-6 transition-all duration-300 ${expanded === 'tv' ? 'bg-white text-[#101828] shadow-lg' : 'bg-white/5 hover:bg-white/10 text-white border border-white/8'}`}>
+              <svg className={`w-7 h-7 ${expanded === 'tv' ? 'text-[#101828]' : 'text-white/50'}`} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}><rect x="2" y="4" width="20" height="13" rx="2" /><line x1="7" y1="21" x2="17" y2="21" /><line x1="9" y1="17" x2="9" y2="21" /><line x1="15" y1="17" x2="15" y2="21" /></svg>
+              <div className="text-center">
+                <div className={`text-sm font-bold ${expanded === 'tv' ? 'text-[#101828]' : 'text-white'}`}>tv</div>
+                <div className={`text-[10px] ${expanded === 'tv' ? 'text-gray-400' : 'text-white/30'}`}>Smart TV</div>
+              </div>
+            </button>
+            {expanded === 'tv' && (
+              <div className="mt-2 animate-[fadeIn_0.2s_ease-out]">
+                <div className="flex items-center gap-3 bg-white/5 border border-white/8 rounded-xl px-5 py-3">
+                  <div><div className="text-sm font-medium text-white/40">Smart TV</div><div className="text-[10px] text-white/20">Coming soon</div></div>
+                </div>
+              </div>
+            )}
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+}
 
 function AudienceTabs() {
   const [tab, setTab] = useState<'players' | 'coaches' | 'parents'>('players');
