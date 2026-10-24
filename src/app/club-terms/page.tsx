@@ -111,7 +111,7 @@ export default function ClubTermsPage() {
             <tr><td>Club 30</td><td>30</td><td>35%</td><td>€164.78</td></tr>
             <tr><td>Club 35</td><td>35</td><td>40%</td><td>€177.45</td></tr>
             <tr><td>Club 40</td><td>40</td><td>45%</td><td>€185.90</td></tr>
-            <tr><td>Club 45</td><td>45</td><td>50%</td><td>€190.13</td></tr>
+            <tr><td>Club 45</td><td>45</td><td>48%</td><td>€197.73</td></tr>
             <tr><td>Club 50</td><td>50</td><td>55%</td><td>€190.13</td></tr>
             <tr><td>Club 50+</td><td>More than 50</td><td>Custom</td><td>Individual quotation</td></tr>
           </tbody>

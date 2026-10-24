@@ -15,8 +15,8 @@ export const CLUB_PLANS: ClubPlan[] = [
   { id: 'club_30', seats: 30, discount: 35, pricePerMonth: 16477, label: 'Club 30' },
   { id: 'club_35', seats: 35, discount: 40, pricePerMonth: 17745, label: 'Club 35' },
   { id: 'club_40', seats: 40, discount: 45, pricePerMonth: 18590, label: 'Club 40' },
-  { id: 'club_45', seats: 45, discount: 50, pricePerMonth: 19012, label: 'Club 45' },
-  { id: 'club_50', seats: 50, discount: 55, pricePerMonth: 19012, label: 'Club 50' },
+  { id: 'club_45', seats: 45, discount: 48, pricePerMonth: 19773, label: 'Club 45' },
+  { id: 'club_50', seats: 50, discount: 55, pricePerMonth: 19013, label: 'Club 50' },
 ];
 
 export function getClubPlan(id: string): ClubPlan | undefined {
