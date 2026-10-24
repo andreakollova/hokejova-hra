@@ -171,8 +171,8 @@ export default function Home() {
             <h2 className="text-3xl sm:text-5xl font-extrabold text-[#101828] leading-[1.08] tracking-tight">Turn your hockey stick<br />into a game controller.</h2>
             <p className="mt-6 text-lg text-gray-500 max-w-2xl mx-auto leading-relaxed">Meet Hockey Beats, the rhythm-based hockey game where you play with a real stick and ball. Follow the beat, hit your targets and turn every session into a new high score.</p>
             <div className="mt-8 flex flex-wrap gap-4 justify-center">
-              <Link href="/dashboard" className="btn-primary px-8 py-4">Play Now</Link>
-              <a href="#how-it-works" className="btn-secondary px-8 py-4">How It Works</a>
+              <Link href="/dashboard" className="btn-primary px-8 py-4"> Play Now <svg className="w-4 h-4 ml-1 inline" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}><path strokeLinecap="round" strokeLinejoin="round" d="M8.25 4.5l7.5 7.5-7.5 7.5" /></svg></Link>
+              <a href="#how-it-works" className="btn-secondary px-8 py-4"> How It Works <svg className="w-4 h-4 ml-1 inline" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}><path strokeLinecap="round" strokeLinejoin="round" d="M8.25 4.5l7.5 7.5-7.5 7.5" /></svg></a>
             </div>
           </div>
 
@@ -273,7 +273,7 @@ export default function Home() {
                 <h2 className="text-3xl sm:text-5xl font-extrabold text-[#101828] leading-[1.08] tracking-tight">Train your stickhandling while keeping your head up.</h2>
                 <p className="mt-6 text-lg text-gray-500 leading-relaxed">This isn&apos;t another game you play with your thumbs. Hockey Beats gets you moving with your actual hockey stick and ball, encouraging better ball control, coordination, reactions and heads-up stickhandling.</p>
                 <div className="mt-6">
-                  <Link href="/dashboard" className="btn-primary px-8 py-4">Start Playing</Link>
+                  <Link href="/dashboard" className="btn-primary px-8 py-4"> Start Playing <svg className="w-4 h-4 ml-1 inline" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}><path strokeLinecap="round" strokeLinejoin="round" d="M8.25 4.5l7.5 7.5-7.5 7.5" /></svg></Link>
                 </div>
               </div>
             </div>
@@ -300,7 +300,7 @@ export default function Home() {
             <h2 className="text-3xl sm:text-5xl font-extrabold text-[#101828] leading-[1.08] tracking-tight">Your room is your arena.</h2>
             <p className="mt-6 text-lg text-gray-500 max-w-2xl mx-auto leading-relaxed">No expensive training machines. No special sensors. No trip to the pitch.<br />Just your stick, your ball, a camera and a screen. Open Hockey Beats in your desktop browser and start playing wherever you have enough safe space.</p>
             <div className="mt-8">
-              <Link href="/dashboard" className="btn-accent px-8 py-4">Start Playing for Free</Link>
+              <Link href="/dashboard" className="btn-accent px-8 py-4"> Start Playing for Free <svg className="w-4 h-4 ml-1 inline" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}><path strokeLinecap="round" strokeLinejoin="round" d="M8.25 4.5l7.5 7.5-7.5 7.5" /></svg></Link>
             </div>
           </div>
         </section>
@@ -372,8 +372,8 @@ export default function Home() {
                   </div>
 
                   <div className="mt-8 flex flex-wrap gap-3">
-                    <Link href="/club" className="btn-primary px-7 py-3.5">Explore Club Plans</Link>
-                    <a href="mailto:studio@drixton.com" className="btn-secondary px-7 py-3.5">Contact Us</a>
+                    <Link href="/club" className="btn-primary px-7 py-3.5"> Explore Club Plans <svg className="w-4 h-4 ml-1 inline" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}><path strokeLinecap="round" strokeLinejoin="round" d="M8.25 4.5l7.5 7.5-7.5 7.5" /></svg></Link>
+                    <a href="mailto:studio@drixton.com" className="btn-secondary px-7 py-3.5"> Contact Us <svg className="w-4 h-4 ml-1 inline" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}><path strokeLinecap="round" strokeLinejoin="round" d="M8.25 4.5l7.5 7.5-7.5 7.5" /></svg></a>
                   </div>
                 </div>
               </div>
