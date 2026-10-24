@@ -335,22 +335,42 @@ export default function Home() {
         <AudienceTabs />
 
         {/* 08 - Club experience */}
-        <section className="py-14 sm:py-20">
+        <section className="bg-[#101828] py-14 sm:py-20">
           <div className="max-w-6xl mx-auto px-6 sm:px-10">
-            {/* Full-width banner with overlay */}
-            <div className="relative rounded-3xl overflow-hidden">
-              <Image src="/images/club-team.jpg" alt="Hockey team celebrating" width={1200} height={500} className="w-full h-[400px] sm:h-[500px] object-cover" />
-              <div className="absolute inset-0 bg-gradient-to-r from-[#101828]/90 via-[#101828]/70 to-transparent" />
-              <div className="absolute inset-0 flex items-center px-8 sm:px-14">
-                <div className="max-w-lg">
-                  <p className="text-xs font-bold uppercase tracking-[0.2em] text-emerald-400 mb-4">For clubs &amp; teams</p>
-                  <h2 className="text-3xl sm:text-4xl font-extrabold text-white leading-[1.08] tracking-tight">Bring the whole team into the game.</h2>
-                  <p className="mt-4 text-base text-white/70 leading-relaxed">Turn individual practice into something your players share. Challenge teammates, play together during camps and keep the competition going between sessions.</p>
-                  <p className="mt-3 text-sm text-white/50">Give young players another reason to pick up their sticks, even outside club training.</p>
-                  <div className="mt-6">
-                    <Link href="/club" className="inline-block bg-emerald-500 hover:bg-emerald-400 text-white font-bold px-8 py-4 rounded-full transition-all">Explore Hockey Beats for Clubs</Link>
+            <div className="grid lg:grid-cols-2 gap-10 items-center">
+              {/* Left: content */}
+              <div>
+                <div className="inline-block bg-emerald-500/20 rounded-full px-4 py-1.5 mb-6">
+                  <span className="text-xs font-bold uppercase tracking-[0.2em] text-emerald-400">For clubs &amp; teams</span>
+                </div>
+                <h2 className="text-3xl sm:text-5xl font-extrabold text-white leading-[1.08] tracking-tight">Bring the whole team into the game.</h2>
+                <p className="mt-6 text-base text-white/70 leading-relaxed">Turn individual practice into something your players share. Challenge teammates, play together during camps and keep the competition going between sessions.</p>
+                <p className="mt-3 text-sm text-white/50">Give young players another reason to pick up their sticks, even outside club training.</p>
+
+                <div className="mt-8 grid grid-cols-3 gap-4">
+                  <div className="text-center">
+                    <div className="text-2xl font-black text-emerald-400">5–50</div>
+                    <div className="text-[10px] text-white/50 mt-1">Players per club</div>
+                  </div>
+                  <div className="text-center">
+                    <div className="text-2xl font-black text-emerald-400">10–55%</div>
+                    <div className="text-[10px] text-white/50 mt-1">Volume discount</div>
+                  </div>
+                  <div className="text-center">
+                    <div className="text-2xl font-black text-emerald-400">1 code</div>
+                    <div className="text-[10px] text-white/50 mt-1">Per player</div>
                   </div>
                 </div>
+
+                <div className="mt-8 flex flex-wrap gap-3">
+                  <Link href="/club" className="inline-block bg-emerald-500 hover:bg-emerald-400 text-white font-bold px-8 py-4 rounded-full transition-all">Explore Club Plans</Link>
+                  <a href="mailto:studio@drixton.com" className="inline-block bg-white/10 hover:bg-white/15 text-white font-bold px-8 py-4 rounded-full transition-all">Contact Us</a>
+                </div>
+              </div>
+
+              {/* Right: image */}
+              <div className="rounded-3xl overflow-hidden">
+                <Image src="/images/club-team.jpg" alt="Hockey team celebrating" width={600} height={450} className="w-full h-auto object-cover" />
               </div>
             </div>
           </div>
@@ -755,7 +775,7 @@ function MascotsShowcase() {
       <div className="max-w-6xl mx-auto px-6 sm:px-10">
         <div className="text-center mb-10">
           <h2 className="text-3xl sm:text-5xl font-extrabold text-white leading-tight tracking-tight">Choose your favorite</h2>
-          <p className="mt-4 text-lg text-white/70 max-w-xl mx-auto">Discover a crew of bold characters, each with a game of their own.</p>
+          <p className="mt-4 text-lg text-white max-w-xl mx-auto">Discover a crew of bold characters, each with a game of their own.</p>
         </div>
 
         <div className="flex flex-col lg:flex-row gap-8 lg:gap-12">
@@ -774,7 +794,7 @@ function MascotsShowcase() {
             </div>
             <div className="text-2xl font-extrabold text-white tracking-tight">{mascot.name}</div>
             <div className="text-sm text-emerald-400 font-bold mt-1">{mascot.adjective}</div>
-            <p className="text-sm text-white/50 mt-4 max-w-xs leading-relaxed">{MASCOT_DESCRIPTIONS[mascot.id] || ''}</p>
+            <p className="text-sm text-white mt-4 max-w-xs leading-relaxed">{MASCOT_DESCRIPTIONS[mascot.id] || ''}</p>
           </div>
 
           {/* Sidebar with all mascots */}
