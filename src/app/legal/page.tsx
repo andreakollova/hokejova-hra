@@ -55,6 +55,12 @@ const DOCUMENTS = [
     href: '/safety',
     desc: 'Playing environment, equipment safety, physical activity, camera placement, and emergency guidance.',
   },
+  {
+    title: 'Club & Organization Licensing Terms',
+    version: 'v1.1',
+    href: '/club-terms',
+    desc: 'Club Premium packages, activation codes, license management, billing, and organizational access.',
+  },
 ];
 
 export default function LegalPage() {
