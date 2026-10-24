@@ -20,6 +20,10 @@ export async function POST(req: NextRequest) {
       payment_method_types: ['card'],
       customer_email: email || undefined,
       metadata: { username, plan },
+      subscription_data: {
+        trial_period_days: 7,
+        metadata: { username, plan },
+      },
       line_items: [{
         price_data: {
           currency: 'eur',
@@ -27,16 +31,26 @@ export async function POST(req: NextRequest) {
           recurring: { interval: p.interval },
           product_data: {
             name: `HockeyBeats Premium (${plan === 'yearly' ? 'Yearly' : 'Monthly'})`,
-            description: 'Unlock all games, new games included automatically.',
+            description: 'All games unlocked. New games included automatically.',
           },
         },
         quantity: 1,
       }],
+      consent_collection: {
+        terms_of_service: 'required',
+      },
+      custom_text: {
+        submit: {
+          message: 'Your 7-day free trial starts now. You won\'t be charged until the trial ends. Cancel anytime during the trial at no cost.',
+        },
+        terms_of_service_acceptance: {
+          message: `I agree to the [Terms of Service](${req.nextUrl.origin}/terms) and [Privacy Policy](${req.nextUrl.origin}/privacy).`,
+        },
+      },
       success_url: `${req.nextUrl.origin}/subscription/success?session_id={CHECKOUT_SESSION_ID}`,
       cancel_url: `${req.nextUrl.origin}/dashboard`,
     };
 
-    // Apply coupon if provided
     if (coupon) {
       sessionParams.discounts = [{ coupon }];
     }

@@ -68,11 +68,9 @@ export default function Paywall({ gameSlug, onDismiss }: PaywallProps) {
       <div className="bg-[#111118] rounded-3xl p-8 w-full max-w-md border border-white/10">
         <div className="text-center mb-6">
           <div className="text-4xl mb-3">🔒</div>
-          <h2 className="text-2xl font-extrabold text-white">Unlock all games</h2>
+          <h2 className="text-2xl font-extrabold text-white">Start your 7-day free trial</h2>
           <p className="text-white/40 text-sm mt-2">
-            {trialRemaining > 0
-              ? `Your free trial for this game has expired.`
-              : `Get access to all 12+ games with Premium.`}
+            Enjoy full access to all Hockey Beats Premium games and features for 7 days, free of charge.
           </p>
         </div>
 
@@ -95,13 +93,20 @@ export default function Paywall({ gameSlug, onDismiss }: PaywallProps) {
           </button>
         </div>
 
+        {/* Trial info */}
+        <div className="bg-white/5 rounded-xl p-3 mb-4">
+          <p className="text-[11px] text-white/50 leading-relaxed">
+            After your trial ends, your selected plan will automatically begin at {plan === 'yearly' ? '€79.99/year' : '€8.45/month'}, including applicable VAT, unless you cancel before the trial ends. Cancel anytime. If you cancel during your free trial, you won&apos;t be charged.
+          </p>
+        </div>
+
         {/* Subscribe button */}
         <button
           onClick={handleCheckout}
           disabled={loading}
           className="w-full bg-emerald-500 hover:bg-emerald-400 text-white font-bold py-4 rounded-full transition-all disabled:opacity-50 mb-4"
         >
-          {loading ? 'Loading...' : 'Subscribe now'}
+          {loading ? 'Loading...' : 'Start free trial'}
         </button>
 
         {/* Promo code */}
@@ -123,7 +128,7 @@ export default function Paywall({ gameSlug, onDismiss }: PaywallProps) {
         </div>
         {promoError && <p className="text-red-400 text-xs mb-3">{promoError}</p>}
 
-        <p className="text-[10px] text-white/20 text-center">Cancel anytime. 7-day money-back guarantee.</p>
+        <p className="text-[10px] text-white/20 text-center">Your subscription automatically renews until canceled. 7-day money-back guarantee after first payment. <a href="/terms" className="underline">Terms</a> · <a href="/privacy" className="underline">Privacy</a></p>
 
         {onDismiss && (
           <button onClick={onDismiss} className="w-full text-center text-xs text-white/30 hover:text-white/50 mt-4 transition-colors">
