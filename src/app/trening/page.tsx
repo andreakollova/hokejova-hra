@@ -11,6 +11,7 @@ import { useTracker } from '@/hooks/useTracker';
 import { useCamera } from '@/hooks/useCamera';
 import { useSpotify } from '@/hooks/useSpotify';
 import Link from 'next/link';
+import MascotGlow from '@/components/ui/MascotGlow';
 
 const HISTORY_KEY = 'sportqo_music_history';
 const BPM_TEMPLATES = [80, 100, 120, 140, 160];
@@ -544,76 +545,47 @@ export default function TreningPage() {
 
   // Setup phase
   return (
-    <div className="min-h-screen bg-gray-50/50 px-6 py-8">
+    <div className="min-h-screen bg-[#0a0a0f] px-6 py-8">
       <div className="max-w-lg mx-auto">
-        <Link
-          href="/dashboard"
-          className="inline-flex items-center gap-1.5 text-sm text-gray-400 hover:text-gray-600 transition-colors mb-10"
-        >
-          <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-            <path strokeLinecap="round" strokeLinejoin="round" d="M15 19l-7-7 7-7" />
-          </svg>
+        <Link href="/dashboard" className="inline-flex items-center gap-1.5 text-sm text-white/40 hover:text-white/70 transition-colors mb-8">
+          <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M15 19l-7-7 7-7" /></svg>
           Back
         </Link>
 
-        <div className="mb-10">
-          <h1 className="text-4xl font-extrabold text-gray-900 mb-3 tracking-tight">Slalom</h1>
-          <p className="text-gray-500 leading-relaxed">
-            Dodge the cones alternating left and right. The cones approach you
-            and you must guide the ball to the correct side.
-          </p>
+        {/* Mascot + Title */}
+        <div className="flex items-center gap-5 mb-8">
+          <MascotGlow src="/images/mascots/mascot-slalom.webp" color="#22c55e" size={90} />
+          <div>
+            <h1 className="text-3xl font-extrabold text-white tracking-tight">HockeyBeats Slalom</h1>
+            <p className="text-white/70 text-sm mt-1">Dodge the cones left and right</p>
+          </div>
         </div>
 
-        <div className="space-y-7">
-          {/* Input mode */}
+        <div className="space-y-5">
+          {/* Mode */}
           <div>
-            <label className="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-3 block">
-              Input mode
-            </label>
-            <div className="flex gap-3">
-              <button
-                onClick={() => setInputMode('camera')}
-                className={`flex-1 rounded-2xl p-4 border-2 transition-all ${
-                  inputMode === 'camera'
-                    ? 'border-green-500 bg-green-50'
-                    : 'border-gray-200 bg-white hover:border-gray-300'
-                }`}
-              >
-                <div className="text-sm font-semibold text-gray-900">Camera</div>
-                <div className="text-xs text-gray-500 mt-1">Track real ball</div>
-              </button>
-              <button
-                onClick={() => setInputMode('demo')}
-                className={`flex-1 rounded-2xl p-4 border-2 transition-all ${
-                  inputMode === 'demo'
-                    ? 'border-yellow-500 bg-yellow-50'
-                    : 'border-gray-200 bg-white hover:border-gray-300'
-                }`}
-              >
-                <div className="text-sm font-semibold text-gray-900">Demo (mouse)</div>
-                <div className="text-xs text-gray-500 mt-1">Testing without camera</div>
-              </button>
-              <button onClick={() => setInputMode('remote')} className={`flex-1 rounded-2xl p-4 border-2 transition-all ${inputMode === 'remote' ? 'border-green-500 bg-green-50' : 'border-gray-200 bg-white hover:border-gray-300'}`}>
-                <div className="text-sm font-semibold text-gray-900">Phone</div>
-                <div className="text-xs text-gray-500 mt-1">Use phone camera</div>
-              </button>
+            <label className="text-[10px] font-bold text-white/30 uppercase tracking-[0.2em] mb-2.5 block">Mode</label>
+            <div className="flex gap-2.5">
+              {(['camera', 'demo', 'remote'] as const).map(m => (
+                <button key={m} onClick={() => setInputMode(m)} className="flex-1 rounded-2xl py-3.5 border-2 transition-all text-sm font-semibold" style={inputMode === m ? { borderColor: '#22c55e', backgroundColor: '#22c55e15', color: '#22c55e' } : { borderColor: 'rgba(255,255,255,0.08)', backgroundColor: 'rgba(255,255,255,0.02)', color: 'rgba(255,255,255,0.5)' }}>
+                  {m === 'camera' ? 'Camera' : m === 'demo' ? 'Demo' : 'Phone'}
+                </button>
+              ))}
             </div>
           </div>
 
-          {/* Calibration status */}
+          {/* Calibration */}
           {inputMode === 'camera' && (
-            <div className="flex items-center justify-between card p-5">
+            <div className="flex items-center justify-between bg-white/3 border border-white/8 rounded-2xl p-4">
               <div>
-                <div className="text-sm font-semibold text-gray-900">Camera calibration</div>
-                <div className="text-xs text-gray-500 mt-1.5">
-                  {calibration
-                    ? `Saved (${calibration.resolution.width}x${calibration.resolution.height})`
-                    : 'Not configured'}
+                <div className="text-sm font-semibold text-white">Calibration</div>
+                <div className="text-xs text-white/30 mt-0.5">
+                  {calibration ? 'Saved' : 'Not configured'}
                 </div>
               </div>
               <button
                 onClick={() => setPhase('calibration')}
-                className="text-sm font-medium text-green-600 hover:text-green-700 bg-green-50 hover:bg-green-100 px-4 py-2 rounded-xl transition-all"
+                className="text-xs font-bold px-4 py-2 rounded-xl transition-all" style={{ color: '#22c55e', backgroundColor: '#22c55e15' }}
               >
                 {calibration ? 'Recalibrate' : 'Calibrate'}
               </button>
@@ -622,20 +594,10 @@ export default function TreningPage() {
 
           {/* Difficulty */}
           <div>
-            <label className="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-3 block">
-              Difficulty
-            </label>
+            <label className="text-[10px] font-bold text-white/30 uppercase tracking-[0.2em] mb-2.5 block">Difficulty</label>
             <div className="flex gap-2.5">
               {(['easy', 'medium', 'hard'] as const).map((d) => (
-                <button
-                  key={d}
-                  onClick={() => setDifficulty(d)}
-                  className={`flex-1 rounded-2xl py-3.5 border-2 transition-all text-sm font-semibold ${
-                    difficulty === d
-                      ? 'border-green-500 bg-green-50 text-green-600'
-                      : 'border-gray-200 bg-white text-gray-500 hover:border-gray-300 hover:text-gray-700'
-                  }`}
-                >
+                <button key={d} onClick={() => setDifficulty(d)} className="flex-1 rounded-2xl py-3.5 border-2 transition-all text-sm font-semibold" style={difficulty === d ? { borderColor: '#22c55e', backgroundColor: '#22c55e15', color: '#22c55e' } : { borderColor: 'rgba(255,255,255,0.08)', backgroundColor: 'rgba(255,255,255,0.02)', color: 'rgba(255,255,255,0.5)' }}>
                   {d === 'easy' ? 'Easy' : d === 'medium' ? 'Medium' : 'Hard'}
                 </button>
               ))}
@@ -644,21 +606,11 @@ export default function TreningPage() {
 
           {/* Duration */}
           <div>
-            <label className="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-3 block">
-              Duration
-            </label>
+            <label className="text-[10px] font-bold text-white/30 uppercase tracking-[0.2em] mb-2.5 block">Duration</label>
             <div className="flex gap-2.5">
               {([30, 60, 90] as const).map((d) => (
-                <button
-                  key={d}
-                  onClick={() => setDuration(d)}
-                  className={`flex-1 rounded-2xl py-3.5 border-2 transition-all text-sm font-semibold ${
-                    duration === d
-                      ? 'border-green-500 bg-green-50 text-green-600'
-                      : 'border-gray-200 bg-white text-gray-500 hover:border-gray-300 hover:text-gray-700'
-                  }`}
-                >
-                  {d} seconds
+                <button key={d} onClick={() => setDuration(d)} className="flex-1 rounded-2xl py-3.5 border-2 transition-all text-sm font-semibold" style={duration === d ? { borderColor: '#22c55e', backgroundColor: '#22c55e15', color: '#22c55e' } : { borderColor: 'rgba(255,255,255,0.08)', backgroundColor: 'rgba(255,255,255,0.02)', color: 'rgba(255,255,255,0.5)' }}>
+                  {d}s
                 </button>
               ))}
             </div>
@@ -831,7 +783,7 @@ export default function TreningPage() {
           </div>
 
           {/* Start button */}
-          <button onClick={startGame} className="btn-primary w-full text-lg py-4 mt-2">
+          <button onClick={startGame} className="w-full text-white font-bold text-lg py-4 rounded-full transition-all hover:brightness-110 mt-2" style={{ backgroundColor: '#22c55e' }}>
             {musicConfig ? `Play at ${musicConfig.bpm} BPM` : 'Start training'}
           </button>
 

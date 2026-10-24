@@ -93,6 +93,7 @@ function getDisplayName(user: User | null): string {
   return user.user_metadata?.display_name || user.user_metadata?.full_name || user.user_metadata?.name || user.email?.split('@')[0] || '';
 }
 
+let lastSlackNotify = 0;
 function syncToLegacySettings(user: User) {
   try {
     const name = getDisplayName(user);
@@ -100,7 +101,12 @@ function syncToLegacySettings(user: User) {
     const existing = raw ? JSON.parse(raw) : {};
     localStorage.setItem('sportqo_user_settings', JSON.stringify({ ...existing, loggedIn: true, username: name }));
     document.cookie = 'hb_username=' + name + '; path=/; max-age=' + (60 * 60 * 24 * 365);
-    fetch('/api/slack-notify', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ type: 'login', username: name }) }).catch(() => {});
+    // Only send Slack notification once per 5 minutes
+    const now = Date.now();
+    if (now - lastSlackNotify > 300000) {
+      lastSlackNotify = now;
+      fetch('/api/slack-notify', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ type: 'login', username: name }) }).catch(() => {});
+    }
   } catch {}
 }
 
