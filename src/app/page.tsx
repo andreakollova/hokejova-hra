@@ -286,22 +286,21 @@ export default function Home() {
                 Whether you play on ice, on the pitch or in the sports hall, time with your stick matters.
               </p>
             </div>
-            <div className="grid sm:grid-cols-3 gap-6">
-              <div className="sport-card flex flex-col items-center text-center">
-                <Image src="/images/sport-icehockey.png" alt="Ice hockey puck" width={120} height={120} className="w-24 h-24 mb-5" />
-                <h3 className="text-lg font-extrabold text-[#101828] mb-3 tracking-tight">Ice hockey</h3>
-                <p className="text-sm text-gray-500 leading-relaxed">Keep working on your stickhandling away from the rink, with off-ice practice that gets you moving and looking ahead.</p>
-              </div>
-              <div className="sport-card flex flex-col items-center text-center">
-                <Image src="/images/sport-fieldhockey.png" alt="Field hockey ball" width={120} height={120} className="w-24 h-24 mb-5" />
-                <h3 className="text-lg font-extrabold text-[#101828] mb-3 tracking-tight">Field hockey</h3>
-                <p className="text-sm text-gray-500 leading-relaxed">Spend more time on ball control and practise lifting your eyes while your stick stays involved.</p>
-              </div>
-              <div className="sport-card flex flex-col items-center text-center">
-                <Image src="/images/sport-floorball.png" alt="Floorball" width={120} height={120} className="w-24 h-24 mb-5" />
-                <h3 className="text-lg font-extrabold text-[#101828] mb-3 tracking-tight">Floorball</h3>
-                <p className="text-sm text-gray-500 leading-relaxed">Give your stick skills extra attention outside team training, with games that keep you engaged in every movement.</p>
-              </div>
+            <div className="grid sm:grid-cols-3 gap-8">
+              {[
+                { img: '/images/sport-icehockey.png', alt: 'Ice hockey puck', name: 'Ice hockey', desc: 'Keep working on your stickhandling away from the rink, with off-ice practice that gets you moving and looking ahead.', color: '#3b82f6' },
+                { img: '/images/sport-fieldhockey.png', alt: 'Field hockey ball', name: 'Field hockey', desc: 'Spend more time on ball control and practise lifting your eyes while your stick stays involved.', color: '#22c55e' },
+                { img: '/images/sport-floorball.png', alt: 'Floorball', name: 'Floorball', desc: 'Give your stick skills extra attention outside team training, with games that keep you engaged in every movement.', color: '#f59e0b' },
+              ].map(sport => (
+                <div key={sport.name} className="sport-card flex flex-col items-center text-center group">
+                  <div className="relative mb-6">
+                    <div className="absolute inset-0 rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-500" style={{ background: `radial-gradient(circle, ${sport.color}30 0%, transparent 70%)`, transform: 'scale(1.8)' }} />
+                    <Image src={sport.img} alt={sport.alt} width={180} height={180} className="w-36 h-36 relative z-10 group-hover:scale-110 transition-transform duration-500 drop-shadow-lg" />
+                  </div>
+                  <h3 className="text-xl font-extrabold text-[#101828] mb-3 tracking-tight">{sport.name}</h3>
+                  <p className="text-sm text-gray-500 leading-relaxed">{sport.desc}</p>
+                </div>
+              ))}
             </div>
           </div>
         </section>
