@@ -214,7 +214,7 @@ export default function OrbitHopPage() {
   return (
     <div className="min-h-screen bg-gray-50/50 px-6 py-8">
       <div className="max-w-lg mx-auto">
-        <Link href="/dashboard" className="inline-flex items-center gap-1.5 text-sm text-gray-400 hover:text-gray-600 transition-colors mb-8">
+        <Link href="/dashboard" className="inline-flex items-center gap-1.5 text-sm text-gray-500 hover:text-gray-600 transition-colors mb-8">
           <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M15 19l-7-7 7-7" /></svg>
           Back
         </Link>
@@ -238,7 +238,7 @@ export default function OrbitHopPage() {
               <div className="text-sm font-semibold text-[#101828]">Camera</div>
               <div className="text-xs text-gray-400 mt-0.5">{calibration ? 'Calibrated' : 'Not configured'}</div>
             </div>
-            <button onClick={() => setPhase('calibration')} className="text-xs font-bold px-4 py-2 rounded-xl transition-all bg-emerald-50 text-emerald-600 hover:bg-emerald-100">
+            <button onClick={() => setPhase('calibration')} className="text-xs font-bold px-4 py-2 rounded-xl transition-all" style={{ color: accent, backgroundColor: accent + '15' }}>
               {calibration ? 'Recalibrate' : 'Calibrate'}
             </button>
           </div>
@@ -248,7 +248,7 @@ export default function OrbitHopPage() {
             <label className="text-[10px] font-bold text-gray-400 uppercase tracking-[0.2em] mb-2.5 block">Difficulty</label>
             <div className="flex gap-2.5">
               {(['easy', 'medium', 'hard'] as const).map((d) => (
-                <button key={d} onClick={() => setDifficulty(d)} className={`flex-1 rounded-2xl py-3.5 border-2 transition-all text-sm font-semibold ${difficulty === d ? 'border-emerald-500 bg-emerald-50 text-emerald-600' : 'border-gray-100 bg-white text-gray-400 hover:border-gray-200'}`}>
+                <button key={d} onClick={() => setDifficulty(d)} className={`flex-1 rounded-2xl py-3.5 border-2 transition-all text-sm font-semibold ${difficulty === d ? '' : 'border-gray-100 bg-white text-gray-400 hover:border-gray-200'}`} style={difficulty === d ? { borderColor: accent, backgroundColor: accent + '15', color: accent } : {}}>
                   {d === 'easy' ? 'Easy' : d === 'medium' ? 'Medium' : 'Hard'}
                 </button>
               ))}
@@ -260,7 +260,7 @@ export default function OrbitHopPage() {
             <label className="text-[10px] font-bold text-gray-400 uppercase tracking-[0.2em] mb-2.5 block">Duration</label>
             <div className="flex gap-2.5">
               {([30, 60, 90] as const).map((d) => (
-                <button key={d} onClick={() => setDuration(d)} className={`flex-1 rounded-2xl py-3.5 border-2 transition-all text-sm font-semibold ${duration === d ? 'border-emerald-500 bg-emerald-50 text-emerald-600' : 'border-gray-100 bg-white text-gray-400 hover:border-gray-200'}`}>
+                <button key={d} onClick={() => setDuration(d)} className={`flex-1 rounded-2xl py-3.5 border-2 transition-all text-sm font-semibold ${duration === d ? '' : 'border-gray-100 bg-white text-gray-400 hover:border-gray-200'}`} style={duration === d ? { borderColor: accent, backgroundColor: accent + '15', color: accent } : {}}>
                   {d}s
                 </button>
               ))}
@@ -271,10 +271,10 @@ export default function OrbitHopPage() {
           <div>
             <label className="text-[10px] font-bold text-gray-400 uppercase tracking-[0.2em] mb-2.5 block">Hop direction</label>
             <div className="flex gap-2.5">
-              <button onClick={() => setHopSide('left')} className={`flex-1 rounded-2xl py-3.5 border-2 transition-all text-sm font-semibold ${hopSide === 'left' ? 'border-emerald-500 bg-emerald-50 text-emerald-600' : 'border-gray-100 bg-white text-gray-400 hover:border-gray-200'}`}>
+              <button onClick={() => setHopSide('left')} className={`flex-1 rounded-2xl py-3.5 border-2 transition-all text-sm font-semibold ${hopSide === 'left' ? '' : 'border-gray-100 bg-white text-gray-400 hover:border-gray-200'}`} style={hopSide === 'left' ? { borderColor: accent, backgroundColor: accent + '15', color: accent } : {}}>
                 Left
               </button>
-              <button onClick={() => setHopSide('right')} className={`flex-1 rounded-2xl py-3.5 border-2 transition-all text-sm font-semibold ${hopSide === 'right' ? 'border-emerald-500 bg-emerald-50 text-emerald-600' : 'border-gray-100 bg-white text-gray-400 hover:border-gray-200'}`}>
+              <button onClick={() => setHopSide('right')} className={`flex-1 rounded-2xl py-3.5 border-2 transition-all text-sm font-semibold ${hopSide === 'right' ? '' : 'border-gray-100 bg-white text-gray-400 hover:border-gray-200'}`} style={hopSide === 'right' ? { borderColor: accent, backgroundColor: accent + '15', color: accent } : {}}>
                 Right
               </button>
             </div>
@@ -287,7 +287,7 @@ export default function OrbitHopPage() {
           )}
 
           {/* Start */}
-          <button onClick={startGame} className="w-full bg-emerald-500 hover:bg-emerald-600 text-white font-bold text-lg py-4 rounded-full transition-all">
+          <button onClick={startGame} className="w-full text-white font-bold text-lg py-4 rounded-full transition-all hover:brightness-110" style={{ backgroundColor: accent }}>
             Start hopping
           </button>
         </div>
