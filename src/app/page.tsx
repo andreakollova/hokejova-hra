@@ -564,19 +564,67 @@ export default function Home() {
 }
 
 // Hero Banner - fullscreen with background image, CTA and platform selector
+const HERO_BANNERS = [
+  { src: '/images/hero-clean.png', alt: 'Hockey Beats' },
+  { src: '/images/banner-halloween.png', alt: 'Hockey Beats Halloween' },
+];
+
 function HeroBanner({ isLoggedIn, onLoginClick }: { isLoggedIn: boolean; onLoginClick: () => void }) {
+  const [bannerIdx, setBannerIdx] = useState(0);
+  const autoRef = useRef<ReturnType<typeof setInterval> | null>(null);
+
+  const resetAuto = () => {
+    if (autoRef.current) clearInterval(autoRef.current);
+    autoRef.current = setInterval(() => setBannerIdx(i => (i + 1) % HERO_BANNERS.length), 3000);
+  };
+
+  useEffect(() => {
+    resetAuto();
+    return () => { if (autoRef.current) clearInterval(autoRef.current); };
+  }, []);
+
+  const go = (dir: number) => {
+    setBannerIdx(i => (i + dir + HERO_BANNERS.length) % HERO_BANNERS.length);
+    resetAuto();
+  };
+
   return (
     <>
       <section className="bg-white pt-20 pb-8">
         <div className="max-w-7xl mx-auto px-4 sm:px-10">
-          <div className="relative">
-            <Image src="/images/hero-clean.png" alt="Hockey Beats" width={1942} height={809} className="w-full h-auto block rounded-2xl" priority />
+          <div className="relative group">
+            {/* Banners */}
+            {HERO_BANNERS.map((b, i) => (
+              <Image
+                key={b.src}
+                src={b.src}
+                alt={b.alt}
+                width={1942}
+                height={809}
+                className={`w-full h-auto block rounded-2xl transition-opacity duration-700 ${i === bannerIdx ? 'opacity-100' : 'opacity-0 absolute inset-0'}`}
+                priority={i === 0}
+              />
+            ))}
+            {/* Badges */}
             <div className="absolute top-3 right-3 sm:top-5 sm:right-5 flex gap-2">
               <Image src="/images/badge-1.png" alt="Top 1 Game" width={70} height={70} className="w-16 h-16 sm:w-24 sm:h-24 drop-shadow-lg" />
               <Image src="/images/badge-2.png" alt="Free to Play" width={90} height={60} className="w-20 h-auto sm:w-28 sm:h-auto drop-shadow-lg" />
             </div>
+            {/* Arrows */}
+            <button onClick={() => go(-1)} className="absolute left-0 top-1/2 -translate-y-1/2 -translate-x-1/2 w-9 h-9 rounded-full bg-white/80 backdrop-blur-sm shadow-sm flex items-center justify-center text-gray-400 hover:text-gray-700 transition-all opacity-0 group-hover:opacity-100">
+              <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}><path strokeLinecap="round" strokeLinejoin="round" d="M15.75 19.5L8.25 12l7.5-7.5" /></svg>
+            </button>
+            <button onClick={() => go(1)} className="absolute right-0 top-1/2 -translate-y-1/2 translate-x-1/2 w-9 h-9 rounded-full bg-white/80 backdrop-blur-sm shadow-sm flex items-center justify-center text-gray-400 hover:text-gray-700 transition-all opacity-0 group-hover:opacity-100">
+              <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}><path strokeLinecap="round" strokeLinejoin="round" d="M8.25 4.5l7.5 7.5-7.5 7.5" /></svg>
+            </button>
+            {/* Dots */}
+            <div className="absolute bottom-3 left-1/2 -translate-x-1/2 flex gap-1.5">
+              {HERO_BANNERS.map((_, i) => (
+                <button key={i} onClick={() => { setBannerIdx(i); resetAuto(); }} className={`rounded-full transition-all ${i === bannerIdx ? 'w-6 h-1.5 bg-white' : 'w-1.5 h-1.5 bg-white/50'}`} />
+              ))}
+            </div>
           </div>
-          <div className="flex flex-wrap items-center gap-4 px-6 sm:px-10 mt-8">
+          <div className="flex items-center gap-4 px-6 sm:px-10 mt-8">
             <button
               onClick={() => {
                 if (isLoggedIn) { window.location.href = '/dashboard'; }
@@ -593,6 +641,13 @@ function HeroBanner({ isLoggedIn, onLoginClick }: { isLoggedIn: boolean; onLogin
               Learn more
               <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}><path strokeLinecap="round" strokeLinejoin="round" d="M8.25 4.5l7.5 7.5-7.5 7.5" /></svg>
             </a>
+            <div className="hidden sm:block w-px h-8 bg-gray-200 mx-2" />
+            <div className="hidden sm:flex items-center gap-3">
+              <Image src="/images/stick-icehockey-dark.png" alt="Ice Hockey" width={28} height={28} className="w-7 h-7 object-contain opacity-40 hover:opacity-80 transition-opacity" title="Ice Hockey" />
+              <Image src="/images/stick-fieldhockey-dark.png" alt="Field Hockey" width={28} height={28} className="w-7 h-7 object-contain opacity-40 hover:opacity-80 transition-opacity" title="Field Hockey" />
+              <Image src="/images/stick-floorball-dark.png" alt="Floorball" width={28} height={28} className="w-7 h-7 object-contain opacity-40 hover:opacity-80 transition-opacity" title="Floorball" />
+              <span className="text-xs font-medium text-gray-300">+ any stick</span>
+            </div>
           </div>
         </div>
       </section>
