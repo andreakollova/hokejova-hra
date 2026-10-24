@@ -2,6 +2,7 @@
 
 import { useRef, useState, useEffect } from 'react';
 import { GameInput, InputMode } from '@/lib/tracking';
+import { playSound } from '@/lib/game-audio';
 
 interface OrbitHopGameProps {
   duration: 30 | 60 | 90;
@@ -101,6 +102,12 @@ export default function OrbitHopGame({
     hops: 0,
     backProgress: 0,
   });
+  const hudRef = useRef(hud);
+
+  useEffect(() => {
+    const interval = setInterval(() => setHud({ ...hudRef.current }), 66);
+    return () => clearInterval(interval);
+  }, []);
 
   const generatePlanets = () => {
     const planets: Planet[] = [];
@@ -147,19 +154,6 @@ export default function OrbitHopGame({
 
     let running = true;
     let lastTime = 0;
-
-    const playSound = (freq: number, dur: number, type: OscillatorType = 'sine') => {
-      try {
-        const actx = new AudioContext();
-        const osc = actx.createOscillator();
-        const gain = actx.createGain();
-        osc.connect(gain); gain.connect(actx.destination);
-        osc.frequency.value = freq; osc.type = type; gain.gain.value = 0.06;
-        osc.start();
-        gain.gain.exponentialRampToValueAtTime(0.001, actx.currentTime + dur);
-        osc.stop(actx.currentTime + dur);
-      } catch {}
-    };
 
     const hop = (s: typeof stateRef.current) => {
       const curPlanet = s.planets[s.currentPlanetIdx];
@@ -259,7 +253,7 @@ export default function OrbitHopGame({
       if (!s.started) {
         s.countdown -= delta;
         if (s.countdown <= 0) { s.started = true; s.gameStartWallTime = performance.now(); }
-        setHud(h => ({ ...h, countdown: Math.ceil(Math.max(0, s.countdown)), backProgress: s.backTimer / 3 }));
+        hudRef.current = { ...hudRef.current, countdown: Math.ceil(Math.max(0, s.countdown)), backProgress: s.backTimer / 3 };
         drawGame(ctx, s, Math.ceil(Math.max(0, s.countdown)));
         requestAnimationFrame(loop);
         return;
@@ -339,14 +333,14 @@ export default function OrbitHopGame({
       // Flash timer
       if (s.flashTimer > 0) s.flashTimer -= delta;
 
-      setHud({
+      hudRef.current = {
         score: s.score,
         lives: s.lives,
         timeLeft: Math.max(0, duration - s.elapsedTime),
         countdown: 0,
         hops: s.totalHops,
         backProgress: s.backTimer / 3,
-      });
+      };
 
       drawGame(ctx, s, 0);
       requestAnimationFrame(loop);

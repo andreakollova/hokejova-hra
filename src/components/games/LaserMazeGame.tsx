@@ -2,6 +2,7 @@
 
 import { useRef, useState, useEffect } from 'react';
 import { GameInput, InputMode } from '@/lib/tracking';
+import { playSound } from '@/lib/game-audio';
 
 interface LaserMazeGameProps {
   duration: 30 | 60 | 90;
@@ -82,6 +83,12 @@ export default function LaserMazeGame({
     countdown: 3,
     backProgress: 0,
   });
+  const hudRef = useRef(hud);
+
+  useEffect(() => {
+    const interval = setInterval(() => setHud({ ...hudRef.current }), 66);
+    return () => clearInterval(interval);
+  }, []);
 
   useEffect(() => {
     const canvas = canvasRef.current;
@@ -91,19 +98,6 @@ export default function LaserMazeGame({
 
     let running = true;
     let lastTime = 0;
-
-    const playSound = (freq: number, dur: number, type: OscillatorType = 'sine') => {
-      try {
-        const actx = new AudioContext();
-        const osc = actx.createOscillator();
-        const gain = actx.createGain();
-        osc.connect(gain); gain.connect(actx.destination);
-        osc.frequency.value = freq; osc.type = type; gain.gain.value = 0.06;
-        osc.start();
-        gain.gain.exponentialRampToValueAtTime(0.001, actx.currentTime + dur);
-        osc.stop(actx.currentTime + dur);
-      } catch {}
-    };
 
     const laneCount = cfg.lanes;
     const laneW = CANVAS_W / laneCount;
@@ -133,7 +127,7 @@ export default function LaserMazeGame({
       if (!s.started) {
         s.countdown -= delta;
         if (s.countdown <= 0) { s.started = true; s.gameStartWallTime = performance.now(); }
-        setHud(h => ({ ...h, countdown: Math.ceil(Math.max(0, s.countdown)), backProgress: s.backTimer / 5 }));
+        hudRef.current = { ...hudRef.current, countdown: Math.ceil(Math.max(0, s.countdown)), backProgress: s.backTimer / 5 };
         draw(ctx, s, Math.ceil(Math.max(0, s.countdown)), laneCount, laneW, ballY);
         requestAnimationFrame(loop);
         return;
@@ -216,11 +210,11 @@ export default function LaserMazeGame({
       }
       s.checkpointList = s.checkpointList.filter(cp => cp.y < CANVAS_H + 50);
 
-      setHud({
+      hudRef.current = {
         score: s.score, timeLeft: Math.max(0, duration - s.elapsedTime),
         checkpoints: s.checkpoints, laserHits: s.laserHits,
         countdown: 0, backProgress: s.backTimer / 5,
-      });
+      };
 
       draw(ctx, s, 0, laneCount, laneW, ballY);
       requestAnimationFrame(loop);

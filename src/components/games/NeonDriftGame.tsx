@@ -2,6 +2,7 @@
 
 import { useRef, useState, useEffect } from 'react';
 import { GameInput, InputMode } from '@/lib/tracking';
+import { playSound } from '@/lib/game-audio';
 
 interface NeonDriftGameProps {
   duration: 30 | 60 | 90;
@@ -116,19 +117,6 @@ export default function NeonDriftGame({
 
     let running = true;
     let lastTime = 0;
-
-    const playSound = (freq: number, dur: number, type: OscillatorType = 'sine') => {
-      try {
-        const actx = new AudioContext();
-        const osc = actx.createOscillator();
-        const gain = actx.createGain();
-        osc.connect(gain); gain.connect(actx.destination);
-        osc.frequency.value = freq; osc.type = type; gain.gain.value = 0.06;
-        osc.start();
-        gain.gain.exponentialRampToValueAtTime(0.001, actx.currentTime + dur);
-        osc.stop(actx.currentTime + dur);
-      } catch {}
-    };
 
     const addSegments = (s: typeof stateRef.current, count: number) => {
       const lastSeg = s.segments[s.segments.length - 1];

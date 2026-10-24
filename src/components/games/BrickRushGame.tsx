@@ -2,6 +2,7 @@
 
 import { useRef, useState, useEffect } from 'react';
 import { GameInput, InputMode } from '@/lib/tracking';
+import { playSound } from '@/lib/game-audio';
 
 interface BrickRushGameProps {
   duration: 30 | 60 | 90;
@@ -105,6 +106,7 @@ export default function BrickRushGame({
     backProgress: 0,
     respawnTimer: 0,
   });
+  const hudRef = useRef(hud);
 
   const spawnWave = (s: typeof stateRef.current) => {
     s.waves++;
@@ -176,19 +178,6 @@ export default function BrickRushGame({
     let running = true;
     let lastTime = 0;
 
-    const playSound = (freq: number, dur: number, type: OscillatorType = 'sine') => {
-      try {
-        const actx = new AudioContext();
-        const osc = actx.createOscillator();
-        const gain = actx.createGain();
-        osc.connect(gain); gain.connect(actx.destination);
-        osc.frequency.value = freq; osc.type = type; gain.gain.value = 0.06;
-        osc.start();
-        gain.gain.exponentialRampToValueAtTime(0.001, actx.currentTime + dur);
-        osc.stop(actx.currentTime + dur);
-      } catch {}
-    };
-
     const loop = (timestamp: number) => {
       if (!running) return;
       const delta = lastTime ? (timestamp - lastTime) / 1000 : 0;
@@ -203,7 +192,7 @@ export default function BrickRushGame({
       if (!s.started) {
         s.countdown -= delta;
         if (s.countdown <= 0) { s.started = true; s.gameStartWallTime = performance.now(); }
-        setHud(h => ({ ...h, countdown: Math.ceil(Math.max(0, s.countdown)), backProgress: s.backTimer / 3 }));
+        hudRef.current = { ...hudRef.current, countdown: Math.ceil(Math.max(0, s.countdown)), backProgress: s.backTimer / 3 };
         drawGame(ctx, s, Math.ceil(Math.max(0, s.countdown)));
         requestAnimationFrame(loop);
         return;
@@ -368,8 +357,8 @@ export default function BrickRushGame({
       }
       s.particles = s.particles.filter(p => p.life > 0);
 
-      // Update HUD
-      setHud({
+      // Update HUD ref
+      hudRef.current = {
         score: s.score,
         timeLeft: Math.max(0, duration - s.elapsedTime),
         bricksDestroyed: s.bricksDestroyed,
@@ -377,7 +366,7 @@ export default function BrickRushGame({
         countdown: 0,
         backProgress: s.backTimer / 3,
         respawnTimer: s.respawnTimer,
-      });
+      };
 
       drawGame(ctx, s, 0);
       requestAnimationFrame(loop);
@@ -387,6 +376,11 @@ export default function BrickRushGame({
     return () => { running = false; };
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [duration, difficulty]);
+
+  useEffect(() => {
+    const interval = setInterval(() => setHud({ ...hudRef.current }), 66);
+    return () => clearInterval(interval);
+  }, []);
 
   const drawGame = (ctx: CanvasRenderingContext2D, s: typeof stateRef.current, countdown: number) => {
     const w = CANVAS_W;

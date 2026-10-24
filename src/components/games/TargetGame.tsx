@@ -4,6 +4,7 @@ import { useRef, useState, useCallback, useEffect, useMemo, MutableRefObject } f
 import { Canvas, useFrame, useThree } from '@react-three/fiber';
 import * as THREE from 'three';
 import { GameInput, InputMode } from '@/lib/tracking';
+import { playSound as playSoundShared } from '@/lib/game-audio';
 
 interface TargetGameProps {
   duration: 30 | 60 | 90;
@@ -197,19 +198,11 @@ function GameScene({
   const renderThrottle = useRef(0);
 
   const playSound = useCallback((type: 'hit' | 'miss') => {
-    try {
-      const ctx = new AudioContext();
-      const osc = ctx.createOscillator();
-      const gain = ctx.createGain();
-      osc.connect(gain);
-      gain.connect(ctx.destination);
-      osc.frequency.value = type === 'hit' ? 660 : 220;
-      osc.type = type === 'hit' ? 'sine' : 'square';
-      gain.gain.value = 0.08;
-      osc.start();
-      gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.15);
-      osc.stop(ctx.currentTime + 0.15);
-    } catch {}
+    if (type === 'hit') {
+      playSoundShared(660, 0.15, 'sine', 0.08);
+    } else {
+      playSoundShared(220, 0.15, 'square', 0.08);
+    }
   }, []);
 
   const spawnTarget = useCallback((s: typeof stateRef.current) => {

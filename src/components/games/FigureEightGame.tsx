@@ -2,6 +2,7 @@
 
 import { useRef, useState, useCallback, useEffect } from 'react';
 import { GameInput, InputMode } from '@/lib/tracking';
+import { playSound } from '@/lib/game-audio';
 
 interface FigureEightProps {
   duration: 30 | 60 | 90;
@@ -58,6 +59,12 @@ export default function FigureEightGame({
     countdown: 3,
     tempo: 0,
   });
+  const hudRef = useRef(hud);
+
+  useEffect(() => {
+    const interval = setInterval(() => setHud({ ...hudRef.current }), 66);
+    return () => clearInterval(interval);
+  }, []);
 
   const sessionIdRef = useRef(crypto.randomUUID());
   const lastTimeRef = useRef(0);
@@ -104,12 +111,12 @@ export default function FigureEightGame({
         if (state.countdown <= 0) {
           state.started = true;
         }
-        setHud({
+        hudRef.current = {
           completedEights: 0,
           timeLeft: duration,
           countdown: Math.ceil(Math.max(0, state.countdown)),
           tempo: 0,
-        });
+        };
         draw(ctx, canvas, state);
         animFrameRef.current = requestAnimationFrame(loop);
         return;
@@ -164,18 +171,7 @@ export default function FigureEightGame({
         if (state.checkpointsHit > 0 && state.checkpointsHit % CHECKPOINTS.length === 0) {
           state.completedEights++;
 
-          try {
-            const audioCtx = new AudioContext();
-            const osc = audioCtx.createOscillator();
-            const gain = audioCtx.createGain();
-            osc.connect(gain);
-            gain.connect(audioCtx.destination);
-            osc.frequency.value = 660;
-            gain.gain.value = 0.08;
-            osc.start();
-            gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.2);
-            osc.stop(audioCtx.currentTime + 0.2);
-          } catch {}
+          playSound(660, 0.2, 'sine', 0.08);
         }
       }
 
@@ -185,12 +181,12 @@ export default function FigureEightGame({
           ? (state.completedEights / state.elapsedTime) * 60
           : 0;
 
-      setHud({
+      hudRef.current = {
         completedEights: state.completedEights,
         timeLeft,
         countdown: 0,
         tempo: Math.round(tempo * 10) / 10,
-      });
+      };
 
       draw(ctx, canvas, state);
       animFrameRef.current = requestAnimationFrame(loop);

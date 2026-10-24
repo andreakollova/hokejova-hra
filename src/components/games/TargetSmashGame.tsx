@@ -2,6 +2,7 @@
 
 import { useRef, useState, useEffect } from 'react';
 import { GameInput, InputMode } from '@/lib/tracking';
+import { playSound } from '@/lib/game-audio';
 
 interface TargetSmashGameProps {
   duration: 30 | 60 | 90;
@@ -96,6 +97,7 @@ export default function TargetSmashGame({
     accuracy: 0,
     backProgress: 0,
   });
+  const hudRef = useRef(hud);
 
   useEffect(() => {
     const canvas = canvasRef.current;
@@ -105,19 +107,6 @@ export default function TargetSmashGame({
 
     let running = true;
     let lastTime = 0;
-
-    const playSound = (freq: number, dur: number, type: OscillatorType = 'sine') => {
-      try {
-        const actx = new AudioContext();
-        const osc = actx.createOscillator();
-        const gain = actx.createGain();
-        osc.connect(gain); gain.connect(actx.destination);
-        osc.frequency.value = freq; osc.type = type; gain.gain.value = 0.08;
-        osc.start();
-        gain.gain.exponentialRampToValueAtTime(0.001, actx.currentTime + dur);
-        osc.stop(actx.currentTime + dur);
-      } catch {}
-    };
 
     const spawnParticles = (x: number, y: number, perfect: boolean) => {
       const s = stateRef.current;
@@ -159,7 +148,7 @@ export default function TargetSmashGame({
       if (!s.started) {
         s.countdown -= delta;
         if (s.countdown <= 0) { s.started = true; s.gameStartWallTime = performance.now(); }
-        setHud(h => ({ ...h, countdown: Math.ceil(Math.max(0, s.countdown)), backProgress: s.backTimer / 5 }));
+        hudRef.current = { ...hudRef.current, countdown: Math.ceil(Math.max(0, s.countdown)), backProgress: s.backTimer / 5 };
         drawGame(ctx, s, Math.ceil(Math.max(0, s.countdown)));
         requestAnimationFrame(loop);
         return;
@@ -255,16 +244,16 @@ export default function TargetSmashGame({
       }
       s.particles = s.particles.filter(p => p.life > 0);
 
-      // Update HUD
+      // Update HUD ref
       const total = s.targetsHit + s.targetsMissed;
-      setHud({
+      hudRef.current = {
         score: s.score,
         timeLeft: Math.max(0, duration - s.elapsedTime),
         countdown: 0,
         targetsHit: s.targetsHit,
         accuracy: total > 0 ? Math.round((s.targetsHit / total) * 100) : 100,
         backProgress: s.backTimer / 5,
-      });
+      };
 
       drawGame(ctx, s, 0);
       requestAnimationFrame(loop);
@@ -274,6 +263,11 @@ export default function TargetSmashGame({
     return () => { running = false; };
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [duration, difficulty]);
+
+  useEffect(() => {
+    const interval = setInterval(() => setHud({ ...hudRef.current }), 66);
+    return () => clearInterval(interval);
+  }, []);
 
   const drawGame = (ctx: CanvasRenderingContext2D, s: typeof stateRef.current, countdown: number) => {
     const w = CANVAS_W;

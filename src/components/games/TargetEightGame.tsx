@@ -4,6 +4,7 @@ import { useRef, useState, useCallback, useEffect, useMemo, MutableRefObject } f
 import { Canvas, useFrame, useThree } from '@react-three/fiber';
 import * as THREE from 'three';
 import { GameInput, InputMode } from '@/lib/tracking';
+import { playSound as playSoundShared } from '@/lib/game-audio';
 
 interface TargetEightProps {
   duration: 30 | 60 | 90;
@@ -213,19 +214,7 @@ function GameScene({
   const renderThrottle = useRef(0);
 
   const playSound = useCallback(() => {
-    try {
-      const ctx = new AudioContext();
-      const osc = ctx.createOscillator();
-      const gain = ctx.createGain();
-      osc.connect(gain);
-      gain.connect(ctx.destination);
-      osc.frequency.value = 880;
-      osc.type = 'sine';
-      gain.gain.value = 0.06;
-      osc.start();
-      gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.1);
-      osc.stop(ctx.currentTime + 0.1);
-    } catch {}
+    playSoundShared(880, 0.1);
   }, []);
 
   useFrame((_, delta) => {

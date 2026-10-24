@@ -2,6 +2,7 @@
 
 import { useRef, useState, useEffect } from 'react';
 import { GameInput, InputMode } from '@/lib/tracking';
+import { playSound } from '@/lib/game-audio';
 
 interface MagnetFlipGameProps {
   duration: 30 | 60 | 90;
@@ -86,6 +87,7 @@ export default function MagnetFlipGame({
     countdown: 3,
     backProgress: 0,
   });
+  const hudRef = useRef(hud);
 
   useEffect(() => {
     const canvas = canvasRef.current;
@@ -95,19 +97,6 @@ export default function MagnetFlipGame({
 
     let running = true;
     let lastTime = 0;
-
-    const playSound = (freq: number, dur: number, type: OscillatorType = 'sine') => {
-      try {
-        const actx = new AudioContext();
-        const osc = actx.createOscillator();
-        const gain = actx.createGain();
-        osc.connect(gain); gain.connect(actx.destination);
-        osc.frequency.value = freq; osc.type = type; gain.gain.value = 0.06;
-        osc.start();
-        gain.gain.exponentialRampToValueAtTime(0.001, actx.currentTime + dur);
-        osc.stop(actx.currentTime + dur);
-      } catch {}
-    };
 
     const spawnTarget = (onTop: boolean) => {
       const s = stateRef.current;
@@ -141,7 +130,7 @@ export default function MagnetFlipGame({
       if (!s.started) {
         s.countdown -= delta;
         if (s.countdown <= 0) { s.started = true; s.gameStartWallTime = performance.now(); }
-        setHud(h => ({ ...h, countdown: Math.ceil(Math.max(0, s.countdown)), backProgress: s.backTimer / 3 }));
+        hudRef.current = { ...hudRef.current, countdown: Math.ceil(Math.max(0, s.countdown)), backProgress: s.backTimer / 3 };
         drawGame(ctx, s, Math.ceil(Math.max(0, s.countdown)));
         requestAnimationFrame(loop);
         return;
@@ -251,19 +240,19 @@ export default function MagnetFlipGame({
       // Feedback timer
       if (s.feedbackTimer > 0) s.feedbackTimer -= delta;
 
-      // Update HUD
+      // Update HUD ref
       const totalAttempts = s.perfectHits + s.goodHits + (s.totalBounces - s.perfectHits - s.goodHits);
       const hits = s.perfectHits + s.goodHits;
       const accuracy = s.totalBounces > 0 ? Math.round((hits / s.totalBounces) * 100) : 0;
 
-      setHud({
+      hudRef.current = {
         score: s.score,
         timeLeft: Math.max(0, duration - s.elapsedTime),
         bounces: s.totalBounces,
         accuracy,
         countdown: 0,
         backProgress: s.backTimer / 3,
-      });
+      };
 
       drawGame(ctx, s, 0);
       requestAnimationFrame(loop);
