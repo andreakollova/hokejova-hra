@@ -94,10 +94,11 @@ export async function GET(req: NextRequest) {
     }
   }
 
-  const topGames = Object.entries(gamePlays)
-    .sort((a, b) => b[1] - a[1])
-    .slice(0, 5)
-    .map(([name, count]) => `  ${name} — ${count} today (${allTimePlays[name] || count} total)`)
+  // Show all games, not just top 5
+  const allGameNames = [...new Set([...Object.keys(gamePlays), ...Object.keys(allTimePlays)])];
+  const topGames = allGameNames
+    .sort((a, b) => (gamePlays[b] || 0) - (gamePlays[a] || 0) || (allTimePlays[b] || 0) - (allTimePlays[a] || 0))
+    .map(name => `  ${name} — ${gamePlays[name] || 0} today (${allTimePlays[name] || 0} total)`)
     .join('\n');
 
   const dateStr = today.toLocaleDateString('en-GB', { weekday: 'long', day: 'numeric', month: 'long' });
