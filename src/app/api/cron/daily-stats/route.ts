@@ -11,6 +11,15 @@ export async function GET(req: NextRequest) {
 
   const supabase = createServiceClient();
 
+  // Apple JWT secret expiry reminder (generated 2026-10-24, expires ~2027-04-22)
+  const appleJwtExpiry = new Date('2027-04-22');
+  const daysUntilExpiry = Math.floor((appleJwtExpiry.getTime() - Date.now()) / (1000 * 60 * 60 * 24));
+  if (daysUntilExpiry <= 14 && daysUntilExpiry > 0) {
+    await sendSlackMessage(`⚠️ *Apple Sign-In JWT expires in ${daysUntilExpiry} days!*\nGenerate a new one in Supabase → Authentication → Providers → Apple.`);
+  } else if (daysUntilExpiry <= 0) {
+    await sendSlackMessage(`🚨 *Apple Sign-In JWT has EXPIRED!* Users cannot sign in with Apple until you generate a new secret.`);
+  }
+
   // Get today's date range (UTC)
   const today = new Date();
   const startOfDay = new Date(today.getFullYear(), today.getMonth(), today.getDate()).toISOString();
