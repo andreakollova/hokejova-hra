@@ -22,7 +22,8 @@ export default function Home() {
   const [authEmail, setAuthEmail] = useState('');
   const [authPassword, setAuthPassword] = useState('');
   const [authName, setAuthName] = useState('');
-  const [authAge, setAuthAge] = useState<'16plus' | 'under16' | ''>('');
+  const [authAge, setAuthAge] = useState<'16plus' | 'under16' | 'under13' | ''>('');
+  const [authDob, setAuthDob] = useState('');
   const [parentEmail, setParentEmail] = useState('');
   const [authError, setAuthError] = useState('');
   const [authSuccess, setAuthSuccess] = useState('');
@@ -41,7 +42,8 @@ export default function Home() {
     setAuthSuccess('');
     setAuthLoading(true);
     if (authMode === 'signup') {
-      if (!authAge) { setAuthError('Please select your age range.'); setAuthLoading(false); return; }
+      if (!authAge || !authDob) { setAuthError('Please enter your date of birth.'); setAuthLoading(false); return; }
+      if (authAge === 'under13') { setAuthError('You must be at least 13 years old to use Hockey Beats.'); setAuthLoading(false); return; }
       if (authAge === 'under16' && !parentEmail.trim()) { setAuthError('Please enter your parent or guardian\'s email.'); setAuthLoading(false); return; }
       const err = await auth.signUpWithEmail(authEmail, authPassword, authName);
       if (err) { setAuthError(err); }
@@ -628,17 +630,37 @@ export default function Home() {
               )}
               {authMode === 'signup' && (
                 <div className="space-y-3 bg-gray-50 rounded-xl p-3.5">
-                  <p className="text-[10px] font-bold text-gray-400 uppercase tracking-wider">Age</p>
-                  <div className="flex gap-2">
-                    <button type="button" onClick={() => setAuthAge('16plus')}
-                      className={`flex-1 py-2.5 rounded-xl text-xs font-semibold border-2 transition-all ${authAge === '16plus' ? 'border-emerald-500 bg-emerald-50 text-emerald-600' : 'border-gray-200 text-gray-500'}`}>
-                      16 or older
-                    </button>
-                    <button type="button" onClick={() => setAuthAge('under16')}
-                      className={`flex-1 py-2.5 rounded-xl text-xs font-semibold border-2 transition-all ${authAge === 'under16' ? 'border-amber-500 bg-amber-50 text-amber-600' : 'border-gray-200 text-gray-500'}`}>
-                      13–15 years old
-                    </button>
-                  </div>
+                  <p className="text-[10px] font-bold text-gray-400 uppercase tracking-wider">Date of birth</p>
+                  <p className="text-xs text-gray-400">We use your date of birth to check eligibility and apply age-appropriate protections.</p>
+                  <input
+                    type="date"
+                    value={authDob}
+                    onChange={e => {
+                      setAuthDob(e.target.value);
+                      if (e.target.value) {
+                        const birth = new Date(e.target.value);
+                        const now = new Date();
+                        let age = now.getFullYear() - birth.getFullYear();
+                        const m = now.getMonth() - birth.getMonth();
+                        if (m < 0 || (m === 0 && now.getDate() < birth.getDate())) age--;
+                        if (age < 13) setAuthAge('under13');
+                        else if (age < 16) setAuthAge('under16');
+                        else setAuthAge('16plus');
+                      } else {
+                        setAuthAge('');
+                      }
+                    }}
+                    max={new Date().toISOString().split('T')[0]}
+                    className="input-field text-sm"
+                    required
+                  />
+
+                  {authAge === 'under13' && (
+                    <div className="bg-red-50 rounded-lg p-3">
+                      <p className="text-xs text-red-700 font-medium">Hockey Beats is for players aged 13 and older.</p>
+                      <p className="text-xs text-red-600 mt-1">You need to be at least 13 years old to create an account.</p>
+                    </div>
+                  )}
 
                   {authAge === 'under16' && (
                     <div className="space-y-2">
