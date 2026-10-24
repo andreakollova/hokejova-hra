@@ -12,7 +12,7 @@ export default function CopyrightPage() {
       <header className="sticky top-0 z-40 bg-white/90 backdrop-blur-md px-6 sm:px-10 py-4 shadow-sm">
         <div className="max-w-3xl mx-auto flex justify-between items-center">
           <Link href="/">
-            <Image src="/images/hb-logo-hero-dark.png" alt="Hockey Beats" width={130} height={30} className="h-6 w-auto" />
+            <Image src="/images/hb-logo-hero-dark.png" alt="Hockey Beats" width={160} height={36} className="h-8 w-auto" />
           </Link>
           <Link href="/" className="text-sm text-gray-500 hover:text-gray-900 transition-colors">Home</Link>
         </div>

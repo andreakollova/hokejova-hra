@@ -171,7 +171,7 @@ export default function DashboardPage() {
       <header className="border-b border-white/5 px-6 sm:px-10 py-4">
         <div className="max-w-7xl mx-auto flex justify-between items-center">
           <Link href="/">
-            <Image src="/images/hb-logo-white.png" alt="HockeyBeats" width={130} height={30} className="h-6 w-auto" />
+            <Image src="/images/hb-logo-white.png" alt="Hockey Beats" width={160} height={36} className="h-8 w-auto" />
           </Link>
           <div className="flex items-center gap-4">
             <Link href="/achievements" className="text-xs font-bold text-amber-400 hover:text-amber-300 bg-amber-500/10 hover:bg-amber-500/20 px-3 py-1.5 rounded-full transition-all">

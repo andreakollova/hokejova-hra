@@ -27,7 +27,7 @@ export default function AchievementsPage() {
       <header className="border-b border-white/5 px-6 sm:px-10 py-4">
         <div className="max-w-4xl mx-auto flex justify-between items-center">
           <Link href="/dashboard">
-            <Image src="/images/hb-logo-white.png" alt="Hockey Beats" width={130} height={30} className="h-6 w-auto" />
+            <Image src="/images/hb-logo-white.png" alt="Hockey Beats" width={160} height={36} className="h-8 w-auto" />
           </Link>
           <Link href="/dashboard" className="text-sm text-white/50 hover:text-white transition-colors">
             Dashboard

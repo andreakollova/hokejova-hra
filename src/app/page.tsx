@@ -93,7 +93,7 @@ export default function Home() {
       <header className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${scrolled ? 'bg-white shadow-[0_1px_20px_-6px_rgba(0,0,0,0.08)]' : ''}`}>
         <div className="max-w-7xl mx-auto px-6 sm:px-10 py-4 flex justify-between items-center">
           <Link href="/" className="flex items-center gap-2">
-            <Image src="/images/hb-icon.png" alt="" width={32} height={32} className="h-6 w-auto" />
+            <Image src="/images/hb-icon.png" alt="" width={36} height={36} className="h-8 w-auto" />
             <span className="text-base font-black tracking-tight text-gray-900">hockey beats</span>
           </Link>
           <nav className="flex items-center gap-5 sm:gap-7">
@@ -564,7 +564,7 @@ export default function Home() {
         <div className="max-w-6xl mx-auto">
           <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-6">
             <div>
-              <Image src="/images/hb-logo-stacked.png" alt="HockeyBeats" width={80} height={56} className="h-10 w-auto mb-2" />
+              <Image src="/images/hb-secondary-light.png" alt="Hockey Beats" width={120} height={110} className="h-16 w-auto mb-2" />
               <p className="text-xs text-gray-400 tracking-wide">Interactive practice for ice hockey, field hockey and floorball.</p>
             </div>
             <div className="flex flex-wrap gap-6 text-sm text-gray-400 font-medium tracking-tight">
