@@ -61,6 +61,7 @@ export default function DashboardPage() {
   const [myScores, setMyScores] = useState<ScoreEntry[]>([]);
   const [showAddFriend, setShowAddFriend] = useState(false);
   const [friendInput, setFriendInput] = useState('');
+  const [confirmRemove, setConfirmRemove] = useState<string | null>(null);
   const [friends, setFriends] = useState<{ username: string; online: boolean; lastPlayed: string; totalTime: string; lastSong: string; lastGame: string; pending: boolean; incoming: boolean }[]>([]);
   const [selectedSong, setSelectedSong] = useState<{ name: string; artist: string; id?: string; albumArt?: string } | null>(null);
   const [showGamePicker, setShowGamePicker] = useState(false);
@@ -389,16 +390,30 @@ export default function DashboardPage() {
                   {f.pending && (
                     <span className="text-[9px] font-medium text-amber-400/60 bg-amber-500/10 px-2 py-0.5 rounded-full">Pending</span>
                   )}
-                  <button
-                    onClick={async () => {
-                      if (!confirm(`Remove ${f.username} from friends?`)) return;
-                      await fetch('/api/friends', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ action: 'remove', username: settings.username, friendUsername: f.username }) });
-                      loadFriends();
-                    }}
-                    className="opacity-0 group-hover:opacity-100 text-white/20 hover:text-red-400 transition-all p-1"
-                  >
-                    <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" /></svg>
-                  </button>
+                  {confirmRemove === f.username ? (
+                    <div className="flex items-center gap-1.5">
+                      <button
+                        onClick={async () => {
+                          // Remove locally first
+                          const next = friends.filter(fr => fr.username !== f.username);
+                          setFriends(next);
+                          try { localStorage.setItem('hb_friends', JSON.stringify(next)); } catch {}
+                          setConfirmRemove(null);
+                          // Then sync to server
+                          await fetch('/api/friends', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ action: 'remove', username: settings.username, friendUsername: f.username }) }).catch(() => {});
+                        }}
+                        className="text-[10px] font-bold text-red-400 bg-red-500/10 px-2 py-1 rounded-lg"
+                      >Remove</button>
+                      <button onClick={() => setConfirmRemove(null)} className="text-[10px] font-bold text-white/40 px-2 py-1">Cancel</button>
+                    </div>
+                  ) : (
+                    <button
+                      onClick={() => setConfirmRemove(f.username)}
+                      className="opacity-0 group-hover:opacity-100 text-white/20 hover:text-red-400 transition-all p-1"
+                    >
+                      <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" /></svg>
+                    </button>
+                  )}
                 </div>
               ))}
             </div>
