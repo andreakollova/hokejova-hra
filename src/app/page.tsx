@@ -650,7 +650,7 @@ function HeroBanner({ isLoggedIn, onLoginClick }: { isLoggedIn: boolean; onLogin
               <span className="flex items-center gap-1.5 font-medium"><Image src="/images/stick-icehockey-dark.png" alt="Ice Hockey" width={20} height={20} className="w-5 h-5 object-contain" /> Ice Hockey</span>
               <span className="flex items-center gap-1.5 font-medium"><Image src="/images/stick-fieldhockey-dark.png" alt="Field Hockey" width={20} height={20} className="w-5 h-5 object-contain" /> Field Hockey</span>
               <span className="flex items-center gap-1.5 font-medium"><Image src="/images/stick-floorball-dark.png" alt="Floorball" width={20} height={20} className="w-5 h-5 object-contain" /> Floorball</span>
-              <span className="flex items-center gap-1.5 font-medium text-gray-500">+ Any Hockey Sport</span>
+              <span className="flex items-center gap-1.5 font-medium text-gray-500">+ Any Other Hockey Sport</span>
             </div>
           </div>
         </div>
