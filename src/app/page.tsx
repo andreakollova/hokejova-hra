@@ -281,7 +281,14 @@ export default function Home() {
 
         {/* 05 - Accessibility */}
         <section className="py-20 sm:py-28">
-          <div className="max-w-6xl mx-auto px-6 sm:px-10 text-center">
+          <div className="max-w-6xl mx-auto px-6 sm:px-10 text-center relative">
+            {/* Floating mascots */}
+            <div className="absolute left-4 top-0 sm:left-10 sm:top-4 animate-[float_4s_ease-in-out_infinite] hidden sm:block">
+              <Image src="/images/mascots/mascot-slalom.webp" alt="" width={60} height={60} className="opacity-70 drop-shadow-lg" />
+            </div>
+            <div className="absolute right-4 top-8 sm:right-10 sm:top-0 animate-[float_3.5s_ease-in-out_infinite_0.5s] hidden sm:block">
+              <Image src="/images/mascots/mascot-space.webp" alt="" width={55} height={55} className="opacity-70 drop-shadow-lg" />
+            </div>
             <p className="text-xs font-bold uppercase tracking-[0.2em] text-gray-400 mb-4">05 / Accessibility</p>
             <h2 className="text-3xl sm:text-5xl font-extrabold text-[#101828] leading-[1.08] tracking-tight">Your room is your arena.</h2>
             <p className="mt-6 text-lg text-gray-500 max-w-2xl mx-auto leading-relaxed">No expensive training machines. No special sensors. No trip to the pitch.<br />Just your stick, your ball, a camera and a screen. Open Hockey Beats in your desktop browser and start playing wherever you have enough safe space.</p>
