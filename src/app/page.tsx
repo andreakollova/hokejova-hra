@@ -95,21 +95,28 @@ export default function Home() {
           <Link href="/" className="flex items-center gap-2">
             <Image src="/images/hb-logo-hero-dark.png" alt="Hockey Beats" width={240} height={64} className="h-10 sm:h-12 w-auto" />
           </Link>
-          <nav className="flex items-center gap-5 sm:gap-7">
-            <a href="#how-it-works" className="text-sm font-medium text-gray-600 hover:text-[#101828] transition-colors hidden sm:block">How it works</a>
-            <a href="#games" className="text-sm font-medium text-gray-600 hover:text-[#101828] transition-colors hidden sm:block">Games</a>
-            <a href="#platforms" className="text-sm font-medium text-gray-600 hover:text-[#101828] transition-colors hidden sm:block">Play anywhere</a>
+          <nav className="flex items-center gap-4 sm:gap-6">
+            <a href="#how-it-works" className="text-sm font-medium text-gray-600 hover:text-[#101828] transition-colors hidden lg:block">How it works</a>
+            <a href="#games" className="text-sm font-medium text-gray-600 hover:text-[#101828] transition-colors hidden lg:block">Games</a>
+            <Link href="/club" className="text-sm font-medium text-gray-600 hover:text-[#101828] transition-colors hidden lg:block">For clubs</Link>
+            <Link href="/legal" className="text-sm font-medium text-gray-600 hover:text-[#101828] transition-colors hidden lg:block">Legal</Link>
             {isLoggedIn ? (
-              <>
+              <div className="flex items-center gap-3">
                 {engLoaded && getStreak().currentStreak > 0 && (
                   <StreakBadge currentStreak={getStreak().currentStreak} frozen={getStreak().frozen} size="sm" />
                 )}
-                <Link href="/dashboard" className="text-sm font-medium text-gray-700">{displayName}</Link>
-              </>
+                <Link href="/dashboard" className="text-sm font-bold px-5 py-2.5 rounded-full bg-emerald-500 hover:bg-emerald-400 text-white transition-all">Play now</Link>
+                <Link href="/nastavenia" className="w-9 h-9 rounded-full bg-gray-100 hover:bg-gray-200 flex items-center justify-center transition-colors">
+                  <svg className="w-4 h-4 text-gray-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" /></svg>
+                </Link>
+              </div>
             ) : (
               <div className="flex items-center gap-3">
                 <button onClick={() => setShowAuth(true)} className="text-sm font-medium text-gray-600 hover:text-[#101828] transition-colors hidden sm:block">Log in</button>
-                <button onClick={() => setShowAuth(true)} className="text-sm font-bold px-5 py-2.5 rounded-full bg-gray-900 text-white hover:bg-gray-800 transition-all duration-300">Sign up</button>
+                <button onClick={() => { setShowAuth(true); setAuthMode('signup'); }} className="text-sm font-bold px-5 py-2.5 rounded-full bg-emerald-500 hover:bg-emerald-400 text-white transition-all">Play now</button>
+                <button onClick={() => setShowAuth(true)} className="w-9 h-9 rounded-full bg-gray-100 hover:bg-gray-200 flex items-center justify-center transition-colors">
+                  <svg className="w-4 h-4 text-gray-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" /></svg>
+                </button>
               </div>
             )}
           </nav>
