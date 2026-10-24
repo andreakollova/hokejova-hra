@@ -49,6 +49,12 @@ const DOCUMENTS = [
     href: '/fair-play',
     desc: 'Fair gameplay, score integrity, prohibited manipulation, and leaderboard rules.',
   },
+  {
+    title: 'Safety & Physical Activity Guidelines',
+    version: 'v1.0',
+    href: '/safety',
+    desc: 'Playing environment, equipment safety, physical activity, camera placement, and emergency guidance.',
+  },
 ];
 
 export default function LegalPage() {
