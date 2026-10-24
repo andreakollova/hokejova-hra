@@ -604,6 +604,12 @@ export default function Home() {
               {authMode !== 'forgot' && (
                 <input type="password" value={authPassword} onChange={e => setAuthPassword(e.target.value)} className="input-field" placeholder="Password" required minLength={6} />
               )}
+              {authMode === 'signup' && (
+                <label className="flex items-start gap-2 cursor-pointer">
+                  <input type="checkbox" required className="mt-1 accent-emerald-500" />
+                  <span className="text-xs text-gray-500">I confirm that I am at least 16 years old, or I have parental consent to use this service. By signing up I agree to the <a href="/privacy" className="underline hover:text-gray-900">Privacy Policy</a>.</span>
+                </label>
+              )}
               {authError && <p className="text-red-500 text-sm">{authError}</p>}
               {authSuccess && <p className="text-green-600 text-sm">{authSuccess}</p>}
               <button type="submit" disabled={authLoading} className="btn-primary w-full disabled:opacity-50">

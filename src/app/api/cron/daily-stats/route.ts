@@ -20,6 +20,13 @@ export async function GET(req: NextRequest) {
     await sendSlackMessage(`🚨 *Apple Sign-In JWT has EXPIRED!* Users cannot sign in with Apple until you generate a new secret.`);
   }
 
+  // --- Auto-cleanup: delete page_views older than 90 days ---
+  const ninetyDaysAgo = new Date(Date.now() - 90 * 24 * 60 * 60 * 1000).toISOString();
+  const { count: deletedViews } = await supabase
+    .from('page_views')
+    .delete({ count: 'exact' })
+    .lt('created_at', ninetyDaysAgo);
+
   // Get today's date range (UTC)
   const today = new Date();
   const startOfDay = new Date(today.getFullYear(), today.getMonth(), today.getDate()).toISOString();
@@ -103,6 +110,10 @@ export async function GET(req: NextRequest) {
         type: 'section',
         text: { type: 'mrkdwn', text: `*Database*\n\`\`\`\n${tableStats}\n  ──────────\n  Total: ${totalRows.toLocaleString()} rows\n\`\`\`` },
       },
+      ...(deletedViews && deletedViews > 0 ? [{
+        type: 'section',
+        text: { type: 'mrkdwn', text: `🧹 *Cleanup*\nDeleted ${deletedViews} page views older than 90 days` },
+      }] : []),
       ...(warnings.length > 0 ? [{
         type: 'section',
         text: { type: 'mrkdwn', text: `⚠️ *Warnings*\n${warnings.map(w => `• ${w}`).join('\n')}` },

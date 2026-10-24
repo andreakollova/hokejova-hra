@@ -354,8 +354,60 @@ export default function NastaveniaPage() {
           </section>
         )}
 
+        {/* Connected services */}
+        <section className="mb-10">
+          <h2 className="text-sm font-medium text-gray-400 uppercase tracking-wider mb-3">Connected services</h2>
+          <div className="card p-6 space-y-4">
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-sm font-medium text-gray-900">Spotify</p>
+                <p className="text-xs text-gray-400 mt-0.5">Music playback and history</p>
+              </div>
+              <button
+                onClick={async () => {
+                  if (!confirm('Disconnect Spotify and delete all music history?')) return;
+                  await fetch('/api/disconnect-spotify', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ username: settings.username }) });
+                  localStorage.removeItem('sportqo_music_history');
+                  alert('Spotify disconnected and music data deleted.');
+                }}
+                className="text-xs font-medium text-red-500 hover:text-red-600 bg-red-50 hover:bg-red-100 px-3 py-1.5 rounded-lg transition-all"
+              >
+                Disconnect
+              </button>
+            </div>
+            <div className="border-t border-gray-100 pt-4 flex items-center justify-between">
+              <div>
+                <p className="text-sm font-medium text-gray-900">Apple Music</p>
+                <p className="text-xs text-gray-400 mt-0.5">Music playback and history</p>
+              </div>
+              <button
+                onClick={async () => {
+                  if (!confirm('Disconnect Apple Music and delete all music history?')) return;
+                  await fetch('/api/disconnect-spotify', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ username: settings.username }) });
+                  localStorage.removeItem('sportqo_music_history');
+                  localStorage.removeItem('sportqo_music_service');
+                  alert('Apple Music disconnected and music data deleted.');
+                }}
+                className="text-xs font-medium text-red-500 hover:text-red-600 bg-red-50 hover:bg-red-100 px-3 py-1.5 rounded-lg transition-all"
+              >
+                Disconnect
+              </button>
+            </div>
+          </div>
+        </section>
+
+        {/* Data retention info */}
+        <section className="mb-10">
+          <h2 className="text-sm font-medium text-gray-400 uppercase tracking-wider mb-3">Your data</h2>
+          <div className="card p-6 space-y-2">
+            <p className="text-xs text-gray-500">Page visit logs are automatically deleted after <strong>90 days</strong>.</p>
+            <p className="text-xs text-gray-500">Game scores and achievements are kept as long as your account exists.</p>
+            <p className="text-xs text-gray-500">You can delete all your data at any time using the button below.</p>
+          </div>
+        </section>
+
         {/* Logout */}
-        <section>
+        <section className="mb-6">
           <button
             onClick={async () => {
               await auth.signOut();
@@ -365,6 +417,23 @@ export default function NastaveniaPage() {
             className="btn-secondary w-full text-center"
           >
             Log out
+          </button>
+        </section>
+
+        {/* Delete account */}
+        <section className="mb-10">
+          <button
+            onClick={async () => {
+              if (!confirm('Are you sure? This will permanently delete all your data including scores, achievements, friends, and music history. This cannot be undone.')) return;
+              if (!confirm('This is irreversible. Delete everything?')) return;
+              await fetch('/api/account', { method: 'DELETE', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ username: settings.username }) });
+              localStorage.clear();
+              await auth.signOut();
+              window.location.href = '/';
+            }}
+            className="w-full text-center text-sm text-red-400 hover:text-red-600 py-3 transition-colors"
+          >
+            Delete my account and all data
           </button>
         </section>
       </main>
