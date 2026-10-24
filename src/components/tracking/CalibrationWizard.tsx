@@ -361,9 +361,9 @@ export default function CalibrationWizard({
                   <div className="space-y-2">
                     <div className="flex items-center justify-center gap-2">
                       <div className="w-2.5 h-2.5 rounded-full bg-amber-400 animate-pulse" />
-                      <span className="text-sm font-medium text-amber-600">Phone connected, calibrating...</span>
+                      <span className="text-sm font-bold text-amber-600">Phone connected</span>
                     </div>
-                    <p className="text-xs text-gray-400">Complete the setup on your phone.</p>
+                    <p className="text-xs text-gray-500">On your phone, tap the ball in the camera view to start tracking.</p>
                   </div>
                 ) : (
                   <>
