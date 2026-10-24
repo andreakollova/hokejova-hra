@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
+import Image from 'next/image';
 
 const CONSENT_KEY = 'hb_cookie_consent';
 
@@ -41,6 +42,7 @@ export default function CookieBanner() {
     <div className="fixed bottom-0 left-0 right-0 z-50 p-4 sm:p-6">
       <div className="max-w-2xl mx-auto bg-[#111118] border border-white/10 rounded-2xl p-5 sm:p-6 shadow-2xl shadow-black/50">
         <div className="flex flex-col sm:flex-row gap-4 sm:items-start">
+          <Image src="/images/cookie-banner-logo.png" alt="Hockey Beats" width={48} height={48} className="w-12 h-12 rounded-xl flex-shrink-0 hidden sm:block" />
           <div className="flex-1 min-w-0">
             <h3 className="text-sm font-bold text-white mb-1.5">We value your privacy</h3>
             <p className="text-xs text-white/50 leading-relaxed">

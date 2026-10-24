@@ -1,10 +1,10 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { useSettings } from '@/hooks/useSettings';
 import { useEngagement } from '@/hooks/useEngagement';
 import { useAuth } from '@/hooks/useAuth';
-import { MASCOTS } from '@/lib/mascots';
+import { MASCOTS, SPORTS } from '@/lib/mascots';
 import Onboarding from '@/components/auth/Onboarding';
 import StreakBadge from '@/components/ui/StreakBadge';
 import Link from 'next/link';
@@ -34,7 +34,7 @@ export default function Home() {
     const onScroll = () => setScrolled(window.scrollY > 10);
     window.addEventListener('scroll', onScroll, { passive: true });
 
-    // Check if redirected for onboarding after OAuth
+    // Check URL params
     const params = new URLSearchParams(window.location.search);
     if (params.get('onboarding') === 'true') {
       const profile = getProfile();
@@ -42,6 +42,11 @@ export default function Home() {
         setShowOnboarding(true);
         window.history.replaceState({}, '', '/');
       }
+    }
+    // Open login modal if redirected from a game page
+    if (params.get('login') === 'true' && !auth.isLoggedIn) {
+      setShowAuth(true);
+      window.history.replaceState({}, '', '/');
     }
 
     return () => window.removeEventListener('scroll', onScroll);
@@ -53,23 +58,10 @@ export default function Home() {
     setAuthSuccess('');
     setAuthLoading(true);
     if (authMode === 'signup') {
-      if (!authAge || !authDob) { setAuthError('Please enter your date of birth.'); setAuthLoading(false); return; }
-      if (authAge === 'under13') { setAuthError('You must be at least 13 years old to use Hockey Beats.'); setAuthLoading(false); return; }
-      if (authAge === 'under16' && !parentEmail.trim()) { setAuthError('Please enter your parent or guardian\'s email.'); setAuthLoading(false); return; }
       const err = await auth.signUpWithEmail(authEmail, authPassword, authName);
       if (err) { setAuthError(err); }
       else {
-        // If under 16, request parental consent
-        if (authAge === 'under16' && parentEmail.trim()) {
-          await fetch('/api/parental-consent', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ childUsername: authName, childEmail: authEmail, parentEmail: parentEmail.trim() }),
-          }).catch(() => {});
-          setAuthSuccess('Account created! We sent a consent request to your parent. Check your email to verify your account.');
-        } else {
-          setAuthSuccess('Check your email to confirm your account.');
-        }
+        setAuthSuccess('Check your email to confirm your account.');
       }
     } else if (authMode === 'login') {
       const err = await auth.signInWithEmail(authEmail, authPassword);
@@ -117,20 +109,37 @@ export default function Home() {
           <Link href="/" className="flex items-center gap-2">
             <Image src="/images/hb-logo-hero-dark.png" alt="Hockey Beats" width={240} height={64} className="h-10 sm:h-12 w-auto" />
           </Link>
-          <nav className="flex items-center gap-4 sm:gap-6">
-            <a href="#how-it-works" className="text-sm font-medium text-gray-600 hover:text-[#101828] transition-colors hidden lg:block">How it works</a>
+          <nav className="flex items-center gap-4 sm:gap-5">
             <a href="#games" className="text-sm font-medium text-gray-600 hover:text-[#101828] transition-colors hidden lg:block">Games</a>
-            <Link href="/club" className="text-sm font-medium text-gray-600 hover:text-[#101828] transition-colors hidden lg:block">For clubs</Link>
-            <Link href="/legal" className="text-sm font-medium text-gray-600 hover:text-[#101828] transition-colors hidden lg:block">Legal</Link>
+            <a href="#how-it-works" className="text-sm font-medium text-gray-600 hover:text-[#101828] transition-colors hidden lg:block">How to play</a>
+            <a href="#players" className="text-sm font-medium text-gray-600 hover:text-[#101828] transition-colors hidden lg:block">Players</a>
+            <a href="#coaches" className="text-sm font-medium text-gray-600 hover:text-[#101828] transition-colors hidden lg:block">Coaches</a>
+            <a href="#clubs" className="text-sm font-medium text-gray-600 hover:text-[#101828] transition-colors hidden lg:block">Clubs</a>
+            <div className="hidden lg:block w-px h-5 bg-gray-200 mx-1" />
             {isLoggedIn ? (
               <div className="flex items-center gap-3">
                 {engLoaded && getStreak().currentStreak > 0 && (
                   <StreakBadge currentStreak={getStreak().currentStreak} frozen={getStreak().frozen} size="sm" />
                 )}
                 <Link href="/dashboard" className="text-sm font-bold px-5 py-2.5 rounded-full bg-emerald-500 hover:bg-emerald-400 text-white transition-all">Play now</Link>
-                <Link href="/nastavenia" className="w-9 h-9 rounded-full bg-gray-100 hover:bg-gray-200 flex items-center justify-center transition-colors">
-                  <svg className="w-4 h-4 text-gray-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" /></svg>
-                </Link>
+                {(() => {
+                  const p = engLoaded ? getProfile() : null;
+                  const mascot = p ? MASCOTS.find(m => m.id === p.mascotId) : null;
+                  return (
+                    <Link href="/dashboard" className="flex items-center gap-2 hover:opacity-80 transition-opacity">
+                      {mascot ? (
+                        <div className="w-9 h-9 rounded-full overflow-hidden flex items-center justify-center" style={{ backgroundColor: p?.color || '#22c55e' }}>
+                          <Image src={mascot.image} alt={mascot.name} width={36} height={36} className="w-8 h-8 object-cover" />
+                        </div>
+                      ) : (
+                        <div className="w-9 h-9 rounded-full bg-gray-100 flex items-center justify-center">
+                          <svg className="w-4 h-4 text-gray-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" /></svg>
+                        </div>
+                      )}
+                      <span className="text-sm font-semibold text-gray-700 hidden sm:block">{settings.username || displayName}</span>
+                    </Link>
+                  );
+                })()}
               </div>
             ) : (
               <div className="flex items-center gap-3">
@@ -155,7 +164,7 @@ export default function Home() {
 
 
         {/* 01 - Hero subtitle */}
-        <section className="py-14 sm:py-20">
+        <section id="games" className="py-14 sm:py-20">
           <div className="max-w-6xl mx-auto px-6 sm:px-10 text-center">
             <p className="text-xs font-bold uppercase tracking-[0.2em] text-gray-400 mb-4">01 / The game</p>
             <h2 className="text-3xl sm:text-5xl font-extrabold text-[#101828] leading-[1.08] tracking-tight">Turn your hockey stick<br />into a game controller.</h2>
@@ -167,37 +176,11 @@ export default function Home() {
           </div>
 
           {/* Game carousel inline */}
-          <div className="max-w-6xl mx-auto mt-16">
-            <div className="flex gap-5 overflow-x-auto px-6 sm:px-10 pb-4 snap-x snap-mandatory scrollbar-hide" style={{ scrollbarWidth: 'none', msOverflowStyle: 'none', WebkitOverflowScrolling: 'touch' }}>
-              {[
-                { href: '/trening', img: '/images/game-hockeybeats.png', name: 'HockeyBeats', bg: '#e8e0d4' },
-                { href: '/space', img: '/images/game-spaceinvaders.png', name: 'Space Invaders', bg: '#0f172a' },
-                { href: '/jelly-stack', img: '/images/game-jellystack.png', name: 'Jelly Stack', bg: '#2d1b3d' },
-                { href: '/orbit-hop', img: '/images/game-orbithop.png', name: 'Orbit Hop', bg: '#1a2332' },
-                { href: '/neon-drift', img: '/images/game-neondrift.png', name: 'Neon Drift', bg: '#0a1628' },
-                { href: '/brick-rush', img: '/images/game-brickrush.png', name: 'Brick Rush', bg: '#111111' },
-                { href: '/color-catch', img: '/images/game-colorcatch.png', name: 'Color Catch', bg: '#111111' },
-                { href: '/target-smash', img: '/images/game-targets.png', name: 'Target Smash', bg: '#1a1a2e' },
-                { href: '/laser-maze', img: '/images/game-lasermaze.png', name: 'Laser Maze', bg: '#0f1f0f' },
-                { href: '/magnet-flip', img: '/images/game-magnetflip.png', name: 'Magnet Flip', bg: '#1a1025' },
-                { href: '/terciky', img: '/images/game-targets-classic.png', name: 'Targets', bg: '#f3f4f6' },
-              ].map((game) => (
-                <div key={game.href} onClick={() => window.location.href = game.href} className="group block flex-shrink-0 snap-start cursor-pointer" style={{ width: 'clamp(160px, 30vw, 200px)' }}>
-                  <div className="game-tile rounded-2xl overflow-hidden relative aspect-[3/4]" style={{ background: game.bg }}>
-                    <Image src={game.img} alt={game.name} fill className="object-cover group-hover:scale-105 transition-all duration-700" />
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent pointer-events-none" />
-                    <div className="absolute bottom-0 left-0 right-0 p-3 pointer-events-none">
-                      <div className="text-xs font-bold text-white">{game.name}</div>
-                    </div>
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
+          <GameCarousel />
         </section>
 
         {/* 02 - The Game */}
-        <section className="bg-gray-50/50 py-14 sm:py-20">
+        <section id="players" className="bg-gray-50/50 py-14 sm:py-20">
           <div className="max-w-6xl mx-auto px-6 sm:px-10">
             <div className="grid lg:grid-cols-2 gap-12 items-center">
               <div>
@@ -234,15 +217,17 @@ export default function Home() {
             </div>
             <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-5">
               {[
-                { title: 'XP & Levels', desc: 'Earn experience with every game you play', icon: <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M13 10V3L4 14h7v7l9-11h-7z" /></svg> },
-                { title: 'Badges', desc: 'Collect achievements for milestones and challenges', icon: <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M9 12l2 2 4-4M7.835 4.697a3.42 3.42 0 001.946-.806 3.42 3.42 0 014.438 0 3.42 3.42 0 001.946.806 3.42 3.42 0 013.138 3.138 3.42 3.42 0 00.806 1.946 3.42 3.42 0 010 4.438 3.42 3.42 0 00-.806 1.946 3.42 3.42 0 01-3.138 3.138 3.42 3.42 0 00-1.946.806 3.42 3.42 0 01-4.438 0 3.42 3.42 0 00-1.946-.806 3.42 3.42 0 01-3.138-3.138 3.42 3.42 0 00-.806-1.946 3.42 3.42 0 010-4.438 3.42 3.42 0 00.806-1.946 3.42 3.42 0 013.138-3.138z" /></svg> },
-                { title: 'Daily Streaks', desc: 'Play every day to build your streak', icon: <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M17.657 18.657A8 8 0 016.343 7.343S7 9 9 10c0-2 .5-5 2.986-7C14 5 16.09 5.777 17.656 7.343A7.975 7.975 0 0120 13a7.975 7.975 0 01-2.343 5.657z" /><path strokeLinecap="round" strokeLinejoin="round" d="M9.879 16.121A3 3 0 1012.015 11L11 14H9c0 .768.293 1.536.879 2.121z" /></svg> },
-                { title: 'Leaderboards', desc: 'Compete with friends and teammates', icon: <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M3 10h4v11H3zM10 3h4v18h-4zM17 7h4v14h-4z" /></svg> },
+                { title: 'XP & Levels', desc: 'Earn experience with every game you play', color: '#8b5cf6', icon: <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M13 10V3L4 14h7v7l9-11h-7z" /></svg> },
+                { title: 'Badges', desc: 'Collect achievements for milestones and challenges', color: '#f59e0b', icon: <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M9 12l2 2 4-4M7.835 4.697a3.42 3.42 0 001.946-.806 3.42 3.42 0 014.438 0 3.42 3.42 0 001.946.806 3.42 3.42 0 013.138 3.138 3.42 3.42 0 00.806 1.946 3.42 3.42 0 010 4.438 3.42 3.42 0 00-.806 1.946 3.42 3.42 0 01-3.138 3.138 3.42 3.42 0 00-1.946.806 3.42 3.42 0 01-4.438 0 3.42 3.42 0 00-1.946-.806 3.42 3.42 0 01-3.138-3.138 3.42 3.42 0 00-.806-1.946 3.42 3.42 0 010-4.438 3.42 3.42 0 00.806-1.946 3.42 3.42 0 013.138-3.138z" /></svg> },
+                { title: 'Daily Streaks', desc: 'Play every day to build your streak', color: '#ef4444', icon: <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M17.657 18.657A8 8 0 016.343 7.343S7 9 9 10c0-2 .5-5 2.986-7C14 5 16.09 5.777 17.656 7.343A7.975 7.975 0 0120 13a7.975 7.975 0 01-2.343 5.657z" /><path strokeLinecap="round" strokeLinejoin="round" d="M9.879 16.121A3 3 0 1012.015 11L11 14H9c0 .768.293 1.536.879 2.121z" /></svg> },
+                { title: 'Leaderboards', desc: 'Compete with friends and teammates', color: '#3b82f6', icon: <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M3 10h4v11H3zM10 3h4v18h-4zM17 7h4v14h-4z" /></svg> },
               ].map(item => (
-                <div key={item.title} className="bg-white rounded-2xl p-6 border border-gray-100 hover:border-gray-200 hover:shadow-md transition-all">
-                  <div className="w-10 h-10 rounded-xl bg-emerald-50 flex items-center justify-center text-emerald-500 mb-3">{item.icon}</div>
-                  <h3 className="text-base font-extrabold text-[#101828] mb-1 tracking-tight">{item.title}</h3>
-                  <p className="text-sm text-gray-500">{item.desc}</p>
+                <div key={item.title} className="flex items-center gap-4 bg-white rounded-2xl p-5 border border-gray-100 hover:border-gray-200 hover:shadow-md transition-all">
+                  <div className="flex-1 min-w-0">
+                    <h3 className="text-sm font-extrabold text-[#101828] tracking-tight">{item.title}</h3>
+                    <p className="text-xs text-gray-400 mt-0.5 leading-relaxed">{item.desc}</p>
+                  </div>
+                  <div className="w-10 h-10 rounded-xl flex items-center justify-center flex-shrink-0" style={{ backgroundColor: item.color + '15', color: item.color }}>{item.icon}</div>
                 </div>
               ))}
             </div>
@@ -308,9 +293,9 @@ export default function Home() {
                 { step: '2', title: 'Set up your camera', desc: 'Let Hockey Beats track your ball as you play.', img: '/images/step-camera.jpg' },
                 { step: '3', title: 'Play the beat', desc: 'Follow the challenges, score points and level up.', img: '/images/step-play.jpg' },
               ].map(item => (
-                <div key={item.step} className="group bg-white rounded-2xl overflow-hidden border border-gray-100 hover:shadow-lg transition-all duration-300">
+                <div key={item.step} className="bg-white rounded-2xl overflow-hidden border border-gray-100">
                   <div className="overflow-hidden">
-                    <Image src={item.img} alt={item.title} width={400} height={250} className="w-full h-44 object-cover group-hover:scale-105 transition-transform duration-500" />
+                    <Image src={item.img} alt={item.title} width={400} height={250} className="w-full h-44 object-cover" />
                   </div>
                   <div className="p-5">
                     <div className="flex items-center gap-3 mb-2">
@@ -326,10 +311,10 @@ export default function Home() {
         </section>
 
         {/* 07 - For players, coaches, parents */}
-        <AudienceTabs />
+        <div id="coaches"><AudienceTabs /></div>
 
         {/* 08 - Club experience */}
-        <section className="py-14 sm:py-20">
+        <section id="clubs" className="py-14 sm:py-20">
           <div className="max-w-6xl mx-auto px-6 sm:px-10">
             {/* Full-width card */}
             <div className="bg-gray-50 rounded-3xl overflow-hidden border border-gray-100">
@@ -405,19 +390,8 @@ export default function Home() {
           </div>
         </section>
 
-        {/* 10 - Final CTA */}
-        <section className="py-14 sm:py-20">
-          <div className="max-w-3xl mx-auto px-6 sm:px-10 text-center">
-            <h2 className="text-3xl sm:text-5xl font-extrabold text-[#101828] tracking-tight leading-[1.08]">One more game?</h2>
-            <p className="mt-5 text-lg text-gray-500">Grab your stick. Your next high score isn&apos;t going to beat itself.</p>
-            <div className="mt-10">
-              <Link href="/dashboard" className="inline-block bg-[#101828] hover:bg-[#1a2540] text-white font-bold text-lg px-10 py-5 rounded-full transition-all">Play Hockey Beats</Link>
-            </div>
-          </div>
-        </section>
-
         {/* FAQ */}
-        <section className="bg-gray-50/50 py-14 sm:py-20">
+        <section className="py-14 sm:py-20">
           <div className="max-w-3xl mx-auto px-6 sm:px-10">
             <h2 className="text-3xl sm:text-4xl font-extrabold text-[#101828] mb-10 text-center tracking-tight">Frequently asked questions</h2>
             <div className="space-y-3">
@@ -439,6 +413,17 @@ export default function Home() {
                   <p className="mt-4 text-sm text-gray-500 leading-relaxed">{faq.a}</p>
                 </details>
               ))}
+            </div>
+          </div>
+        </section>
+
+        {/* 10 - Final CTA */}
+        <section className="bg-gray-50/50 py-14 sm:py-20">
+          <div className="max-w-3xl mx-auto px-6 sm:px-10 text-center">
+            <h2 className="text-3xl sm:text-5xl font-extrabold text-[#101828] tracking-tight leading-[1.08]">One more game?</h2>
+            <p className="mt-5 text-lg text-gray-500">Grab your stick. Your next high score isn&apos;t going to beat itself.</p>
+            <div className="mt-10">
+              <Link href="/dashboard" className="inline-block bg-[#101828] hover:bg-[#1a2540] text-white font-bold text-lg px-10 py-5 rounded-full transition-all">Play Hockey Beats</Link>
             </div>
           </div>
         </section>
@@ -539,58 +524,10 @@ export default function Home() {
                 <input type="password" value={authPassword} onChange={e => setAuthPassword(e.target.value)} className="input-field" placeholder="Password" required minLength={6} />
               )}
               {authMode === 'signup' && (
-                <div className="space-y-3 bg-gray-50 rounded-xl p-3.5">
-                  <p className="text-[10px] font-bold text-gray-400 uppercase tracking-wider">Date of birth</p>
-                  <p className="text-xs text-gray-400">We use your date of birth to check eligibility and apply age-appropriate protections.</p>
-                  <input
-                    type="date"
-                    value={authDob}
-                    onChange={e => {
-                      setAuthDob(e.target.value);
-                      if (e.target.value) {
-                        const birth = new Date(e.target.value);
-                        const now = new Date();
-                        let age = now.getFullYear() - birth.getFullYear();
-                        const m = now.getMonth() - birth.getMonth();
-                        if (m < 0 || (m === 0 && now.getDate() < birth.getDate())) age--;
-                        if (age < 13) setAuthAge('under13');
-                        else if (age < 16) setAuthAge('under16');
-                        else setAuthAge('16plus');
-                      } else {
-                        setAuthAge('');
-                      }
-                    }}
-                    max={new Date().toISOString().split('T')[0]}
-                    className="input-field text-sm"
-                    required
-                  />
-
-                  {authAge === 'under13' && (
-                    <div className="bg-red-50 rounded-lg p-3">
-                      <p className="text-xs text-red-700 font-medium">Hockey Beats is for players aged 13 and older.</p>
-                      <p className="text-xs text-red-600 mt-1">You need to be at least 13 years old to create an account.</p>
-                    </div>
-                  )}
-
-                  {authAge === 'under16' && (
-                    <div className="space-y-2">
-                      <p className="text-xs text-amber-700 bg-amber-50 rounded-lg p-2.5">
-                        Because you are under 16, we need your parent or guardian to approve your account before you can use Hockey Beats.
-                      </p>
-                      <input
-                        type="email"
-                        value={parentEmail}
-                        onChange={e => setParentEmail(e.target.value)}
-                        className="input-field text-sm"
-                        placeholder="Parent or guardian's email"
-                        required
-                      />
-                    </div>
-                  )}
-
+                <div className="space-y-2.5 pt-1">
                   <label className="flex items-start gap-2 cursor-pointer">
                     <input type="checkbox" required className="mt-0.5 accent-emerald-500" />
-                    <span className="text-xs text-gray-500">I am at least 13 years old.</span>
+                    <span className="text-xs text-gray-500">I confirm I am at least 13 years old.</span>
                   </label>
                   <label className="flex items-start gap-2 cursor-pointer">
                     <input type="checkbox" required className="mt-0.5 accent-emerald-500" />
@@ -639,21 +576,19 @@ function HeroBanner({ isLoggedIn, onLoginClick }: { isLoggedIn: boolean; onLogin
               <Image src="/images/badge-2.png" alt="Free to Play" width={90} height={60} className="w-20 h-auto sm:w-28 sm:h-auto drop-shadow-lg" />
             </div>
           </div>
-          <div className="flex flex-wrap items-center gap-4 px-6 sm:px-10 mt-6">
+          <div className="flex flex-wrap justify-center items-center gap-4 mt-8">
             <button
               onClick={() => {
                 if (isLoggedIn) { window.location.href = '/dashboard'; }
                 else { onLoginClick(); }
               }}
               className="font-bold text-base px-8 py-4 rounded-full bg-gray-900 text-white hover:bg-gray-800 active:scale-[0.97] transition-all duration-300"
-
             >
               Play now
             </button>
             <a
               href="#how-it-works"
               className="font-bold text-base text-[#101828] hover:text-gray-600 transition-colors inline-flex items-center gap-1.5"
-
             >
               Learn more
               <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}><path strokeLinecap="round" strokeLinejoin="round" d="M8.25 4.5l7.5 7.5-7.5 7.5" /></svg>
@@ -684,69 +619,167 @@ const MASCOT_DESCRIPTIONS: Record<string, string> = {
   floorboss: 'Bold and commanding. Floorboss owns the floorball court.',
 };
 
+const GAMES = [
+  { href: '/trening', img: '/images/game-hockeybeats.png', name: 'HockeyBeats', bg: '#e8e0d4' },
+  { href: '/space', img: '/images/game-spaceinvaders.png', name: 'Space Invaders', bg: '#0f172a' },
+  { href: '/jelly-stack', img: '/images/game-jellystack.png', name: 'Jelly Stack', bg: '#2d1b3d' },
+  { href: '/orbit-hop', img: '/images/game-orbithop.png', name: 'Orbit Hop', bg: '#1a2332' },
+  { href: '/neon-drift', img: '/images/game-neondrift.png', name: 'Neon Drift', bg: '#0a1628' },
+  { href: '/brick-rush', img: '/images/game-brickrush.png', name: 'Brick Rush', bg: '#111111' },
+  { href: '/color-catch', img: '/images/game-colorcatch.png', name: 'Color Catch', bg: '#111111' },
+  { href: '/target-smash', img: '/images/game-targets.png', name: 'Target Smash', bg: '#1a1a2e' },
+  { href: '/laser-maze', img: '/images/game-lasermaze.png', name: 'Laser Maze', bg: '#0f1f0f' },
+  { href: '/magnet-flip', img: '/images/game-magnetflip.png', name: 'Magnet Flip', bg: '#1a1025' },
+  { href: '/terciky', img: '/images/game-targets-classic.png', name: 'Targets', bg: '#f3f4f6' },
+];
+
+function GameCarousel() {
+  const scrollRef = useRef<HTMLDivElement>(null);
+  const [scrollProgress, setScrollProgress] = useState(0);
+
+  useEffect(() => {
+    const el = scrollRef.current;
+    if (!el) return;
+    const handleScroll = () => {
+      const maxScroll = el.scrollWidth - el.clientWidth;
+      if (maxScroll > 0) setScrollProgress(el.scrollLeft / maxScroll);
+    };
+    el.addEventListener('scroll', handleScroll, { passive: true });
+    handleScroll();
+    return () => el.removeEventListener('scroll', handleScroll);
+  }, []);
+
+  return (
+    <div className="max-w-6xl mx-auto mt-16">
+      <div
+        ref={scrollRef}
+        className="flex gap-5 overflow-x-auto px-6 sm:px-10 pb-4 snap-x snap-mandatory scrollbar-hide"
+        style={{ scrollbarWidth: 'none', msOverflowStyle: 'none', WebkitOverflowScrolling: 'touch' }}
+      >
+        {GAMES.map((game) => (
+          <div key={game.href} onClick={() => window.location.href = game.href} className="group block flex-shrink-0 snap-start cursor-pointer" style={{ width: 'clamp(160px, 30vw, 200px)' }}>
+            <div className="game-tile rounded-2xl overflow-hidden relative aspect-[3/4]" style={{ background: game.bg }}>
+              <Image src={game.img} alt={game.name} fill className="object-cover group-hover:scale-105 transition-all duration-700" />
+              <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent pointer-events-none" />
+              <div className="absolute bottom-0 left-0 right-0 p-3 pointer-events-none">
+                <div className="text-xs font-bold text-white">{game.name}</div>
+              </div>
+            </div>
+          </div>
+        ))}
+      </div>
+      {/* Scroll progress bar */}
+      <div className="flex items-center justify-center gap-3 mt-4 px-6 sm:px-10">
+        <span className="text-[10px] font-bold text-gray-300 uppercase tracking-wider">{GAMES.length} games</span>
+        <div className="w-32 sm:w-48 h-1 bg-gray-200 rounded-full overflow-hidden">
+          <div
+            className="h-full bg-emerald-500 rounded-full transition-all duration-150"
+            style={{ width: `${Math.max(15, scrollProgress * 100)}%` }}
+          />
+        </div>
+        <svg className="w-3.5 h-3.5 text-gray-300 animate-pulse" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}><path strokeLinecap="round" strokeLinejoin="round" d="M8.25 4.5l7.5 7.5-7.5 7.5" /></svg>
+      </div>
+    </div>
+  );
+}
+
 function StartNowSection() {
   const [expanded, setExpanded] = useState<'mobile' | 'desktop' | 'tv' | null>('desktop');
+  const [showSports, setShowSports] = useState(false);
+  const sectionRef = useRef<HTMLElement>(null);
+
+  useEffect(() => {
+    const el = sectionRef.current;
+    if (!el) return;
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        // When less than 40% of the section is visible (scrolled past), show sports
+        setShowSports(entry.intersectionRatio < 0.4 && entry.boundingClientRect.top < 0);
+      },
+      { threshold: [0, 0.4, 1] }
+    );
+    observer.observe(el);
+    return () => observer.disconnect();
+  }, []);
+
   return (
-    <section className="relative bg-[#101828] py-14 sm:py-20 overflow-hidden">
+    <section ref={sectionRef} className="relative bg-[#0a0a10] py-14 sm:py-20 overflow-hidden">
       <div className="max-w-6xl mx-auto px-6 sm:px-10">
         <div className="text-center mb-10">
           <Image src="/images/logo-startnow.png" alt="Start Now" width={300} height={100} className="h-16 sm:h-20 w-auto mx-auto" />
-          <p className="mt-3 text-white text-sm">Free to play on all platforms. No download required for desktop.</p>
+          <p className="mt-3 text-white text-sm">{showSports ? 'Pick your sport and start playing.' : 'Free to play on all platforms. No download required for desktop.'}</p>
         </div>
-        <div className="flex flex-col sm:flex-row justify-center gap-4 max-w-2xl mx-auto">
-          <div className="flex-1">
-            <button onClick={() => setExpanded(expanded === 'mobile' ? null : 'mobile')} className={`w-full flex flex-col items-center gap-3 rounded-2xl px-6 py-6 transition-all duration-300 ${expanded === 'mobile' ? 'bg-white text-[#101828] shadow-lg' : 'bg-white/5 hover:bg-white/10 text-white border border-white/8'}`}>
-              <svg className={`w-7 h-7 ${expanded === 'mobile' ? 'text-[#101828]' : 'text-white/50'}`} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}><rect x="6" y="2" width="12" height="20" rx="2" /><line x1="10" y1="18" x2="14" y2="18" /></svg>
-              <div className="text-center">
-                <div className={`text-sm font-bold ${expanded === 'mobile' ? 'text-[#101828]' : 'text-white'}`}>mobile</div>
-                <div className={`text-[10px] ${expanded === 'mobile' ? 'text-gray-400' : 'text-white/30'}`}>iOS & Android</div>
-              </div>
-            </button>
-            {expanded === 'mobile' && (
-              <div className="mt-2 space-y-2 animate-[fadeIn_0.2s_ease-out]">
-                <div className="flex items-center gap-3 bg-white/5 border border-white/8 rounded-xl px-5 py-3">
-                  <div><div className="text-sm font-medium text-white/70">App Store</div><div className="text-[10px] text-white/20">Coming soon</div></div>
-                </div>
-                <div className="flex items-center gap-3 bg-white/5 border border-white/8 rounded-xl px-5 py-3">
-                  <div><div className="text-sm font-medium text-white/70">Google Play</div><div className="text-[10px] text-white/20">Coming soon</div></div>
-                </div>
-              </div>
-            )}
-          </div>
-          <div className="flex-1">
-            <button onClick={() => setExpanded(expanded === 'desktop' ? null : 'desktop')} className={`w-full flex flex-col items-center gap-3 rounded-2xl px-6 py-6 transition-all duration-300 ${expanded === 'desktop' ? 'bg-white text-[#101828] shadow-lg' : 'bg-white/5 hover:bg-white/10 text-white border border-white/8'}`}>
-              <svg className={`w-7 h-7 ${expanded === 'desktop' ? 'text-[#101828]' : 'text-white/50'}`} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}><rect x="2" y="3" width="20" height="14" rx="2" /><line x1="8" y1="21" x2="16" y2="21" /><line x1="12" y1="17" x2="12" y2="21" /></svg>
-              <div className="text-center">
-                <div className={`text-sm font-bold ${expanded === 'desktop' ? 'text-[#101828]' : 'text-white'}`}>desktop</div>
-                <div className={`text-[10px] ${expanded === 'desktop' ? 'text-gray-400' : 'text-white/30'}`}>Mac & Windows</div>
-              </div>
-            </button>
-            {expanded === 'desktop' && (
-              <div className="mt-2 animate-[fadeIn_0.2s_ease-out]">
-                <Link href="/dashboard" className="flex items-center justify-center gap-2 bg-emerald-500 hover:bg-emerald-400 rounded-xl px-5 py-3.5 transition-all">
-                  <svg className="w-4 h-4 text-white" fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
-                  <div className="text-sm font-bold text-white">Play in browser</div>
+
+        {showSports ? (
+          <div className="flex flex-col sm:flex-row justify-center gap-4 max-w-2xl mx-auto animate-[fadeIn_0.3s_ease-out]">
+            {SPORTS.map(s => (
+              <div key={s.id} className="flex-1">
+                <Link href="/dashboard" className="w-full flex flex-col items-center gap-3 rounded-2xl px-6 py-6 transition-all duration-300 bg-white/5 hover:bg-white/10 text-white border border-white/8 hover:border-emerald-500/50">
+                  <Image src={s.image} alt={s.label} width={48} height={48} className="w-12 h-12 rounded-xl" />
+                  <div className="text-center">
+                    <div className="text-sm font-bold text-white">{s.label}</div>
+                    <div className="text-[10px] text-emerald-400 font-medium">Play in browser</div>
+                  </div>
                 </Link>
               </div>
-            )}
+            ))}
           </div>
-          <div className="flex-1">
-            <button onClick={() => setExpanded(expanded === 'tv' ? null : 'tv')} className={`w-full flex flex-col items-center gap-3 rounded-2xl px-6 py-6 transition-all duration-300 ${expanded === 'tv' ? 'bg-white text-[#101828] shadow-lg' : 'bg-white/5 hover:bg-white/10 text-white border border-white/8'}`}>
-              <svg className={`w-7 h-7 ${expanded === 'tv' ? 'text-[#101828]' : 'text-white/50'}`} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}><rect x="2" y="4" width="20" height="13" rx="2" /><line x1="7" y1="21" x2="17" y2="21" /><line x1="9" y1="17" x2="9" y2="21" /><line x1="15" y1="17" x2="15" y2="21" /></svg>
-              <div className="text-center">
-                <div className={`text-sm font-bold ${expanded === 'tv' ? 'text-[#101828]' : 'text-white'}`}>tv</div>
-                <div className={`text-[10px] ${expanded === 'tv' ? 'text-gray-400' : 'text-white/30'}`}>Smart TV</div>
-              </div>
-            </button>
-            {expanded === 'tv' && (
-              <div className="mt-2 animate-[fadeIn_0.2s_ease-out]">
-                <div className="flex items-center gap-3 bg-white/5 border border-white/8 rounded-xl px-5 py-3">
-                  <div><div className="text-sm font-medium text-white/70">Smart TV</div><div className="text-[10px] text-white/20">Coming soon</div></div>
+        ) : (
+          <div className="flex flex-col sm:flex-row justify-center gap-4 max-w-2xl mx-auto">
+            <div className="flex-1">
+              <button onClick={() => setExpanded(expanded === 'mobile' ? null : 'mobile')} className={`w-full flex flex-col items-center gap-3 rounded-2xl px-6 py-6 transition-all duration-300 ${expanded === 'mobile' ? 'bg-white text-[#101828] shadow-lg' : 'bg-white/5 hover:bg-white/10 text-white border border-white/8'}`}>
+                <svg className={`w-7 h-7 ${expanded === 'mobile' ? 'text-[#101828]' : 'text-white/50'}`} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}><rect x="6" y="2" width="12" height="20" rx="2" /><line x1="10" y1="18" x2="14" y2="18" /></svg>
+                <div className="text-center">
+                  <div className={`text-sm font-bold ${expanded === 'mobile' ? 'text-[#101828]' : 'text-white'}`}>mobile</div>
+                  <div className={`text-[10px] ${expanded === 'mobile' ? 'text-gray-400' : 'text-white/30'}`}>iOS & Android</div>
                 </div>
-              </div>
-            )}
+              </button>
+              {expanded === 'mobile' && (
+                <div className="mt-2 space-y-2 animate-[fadeIn_0.2s_ease-out]">
+                  <div className="flex items-center gap-3 bg-white/5 border border-white/8 rounded-xl px-5 py-3">
+                    <div><div className="text-sm font-medium text-white/70">App Store</div><div className="text-[10px] text-white/20">Coming soon</div></div>
+                  </div>
+                  <div className="flex items-center gap-3 bg-white/5 border border-white/8 rounded-xl px-5 py-3">
+                    <div><div className="text-sm font-medium text-white/70">Google Play</div><div className="text-[10px] text-white/20">Coming soon</div></div>
+                  </div>
+                </div>
+              )}
+            </div>
+            <div className="flex-1">
+              <button onClick={() => setExpanded(expanded === 'desktop' ? null : 'desktop')} className={`w-full flex flex-col items-center gap-3 rounded-2xl px-6 py-6 transition-all duration-300 ${expanded === 'desktop' ? 'bg-white text-[#101828] shadow-lg' : 'bg-white/5 hover:bg-white/10 text-white border border-white/8'}`}>
+                <svg className={`w-7 h-7 ${expanded === 'desktop' ? 'text-[#101828]' : 'text-white/50'}`} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}><rect x="2" y="3" width="20" height="14" rx="2" /><line x1="8" y1="21" x2="16" y2="21" /><line x1="12" y1="17" x2="12" y2="21" /></svg>
+                <div className="text-center">
+                  <div className={`text-sm font-bold ${expanded === 'desktop' ? 'text-[#101828]' : 'text-white'}`}>desktop</div>
+                  <div className={`text-[10px] ${expanded === 'desktop' ? 'text-gray-400' : 'text-white/30'}`}>Mac & Windows</div>
+                </div>
+              </button>
+              {expanded === 'desktop' && (
+                <div className="mt-2 animate-[fadeIn_0.2s_ease-out]">
+                  <Link href="/dashboard" className="flex items-center justify-center gap-2 bg-emerald-500 hover:bg-emerald-400 rounded-xl px-5 py-3.5 transition-all">
+                    <svg className="w-4 h-4 text-white" fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+                    <div className="text-sm font-bold text-white">Play in browser</div>
+                  </Link>
+                </div>
+              )}
+            </div>
+            <div className="flex-1">
+              <button onClick={() => setExpanded(expanded === 'tv' ? null : 'tv')} className={`w-full flex flex-col items-center gap-3 rounded-2xl px-6 py-6 transition-all duration-300 ${expanded === 'tv' ? 'bg-white text-[#101828] shadow-lg' : 'bg-white/5 hover:bg-white/10 text-white border border-white/8'}`}>
+                <svg className={`w-7 h-7 ${expanded === 'tv' ? 'text-[#101828]' : 'text-white/50'}`} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}><rect x="2" y="4" width="20" height="13" rx="2" /><line x1="7" y1="21" x2="17" y2="21" /><line x1="9" y1="17" x2="9" y2="21" /><line x1="15" y1="17" x2="15" y2="21" /></svg>
+                <div className="text-center">
+                  <div className={`text-sm font-bold ${expanded === 'tv' ? 'text-[#101828]' : 'text-white'}`}>tv</div>
+                  <div className={`text-[10px] ${expanded === 'tv' ? 'text-gray-400' : 'text-white/30'}`}>Smart TV</div>
+                </div>
+              </button>
+              {expanded === 'tv' && (
+                <div className="mt-2 animate-[fadeIn_0.2s_ease-out]">
+                  <div className="flex items-center gap-3 bg-white/5 border border-white/8 rounded-xl px-5 py-3">
+                    <div><div className="text-sm font-medium text-white/70">Smart TV</div><div className="text-[10px] text-white/20">Coming soon</div></div>
+                  </div>
+                </div>
+              )}
+            </div>
           </div>
-        </div>
+        )}
       </div>
     </section>
   );
@@ -794,7 +827,7 @@ function MascotsShowcase() {
   const mascot = MASCOTS[selected];
 
   return (
-    <section className="py-16 sm:py-20 bg-[#101828]">
+    <section className="py-16 sm:py-20 bg-[#0a0a10]">
       <div className="max-w-6xl mx-auto px-6 sm:px-10">
         <div className="text-center mb-10">
           <h2 className="text-3xl sm:text-5xl font-extrabold text-white leading-tight tracking-tight">Choose your favorite</h2>
@@ -807,11 +840,11 @@ function MascotsShowcase() {
             <div className="relative mb-6">
               <div className="absolute inset-0 rounded-full animate-pulse-glow" style={{ background: `radial-gradient(circle, #22c55e40 0%, #22c55e15 40%, transparent 70%)`, transform: 'scale(2.2)' }} />
               <Image
-                src={mascot.imageHappy}
+                src={mascot.image}
                 alt={mascot.name}
                 width={220}
                 height={220}
-                className="relative z-10 rounded-2xl animate-mascot-bounce"
+                className="relative z-10 rounded-2xl"
                 key={mascot.id}
               />
             </div>
@@ -829,7 +862,7 @@ function MascotsShowcase() {
                   onClick={() => setSelected(i)}
                   className={`flex flex-col items-center gap-1.5 rounded-xl p-2.5 transition-all duration-300 ${selected === i ? 'bg-white/10 border border-emerald-500/50' : 'bg-white/3 border border-transparent hover:bg-white/5'}`}
                 >
-                  <Image src={selected === i ? m.imageHappy : m.image} alt={m.name} width={56} height={56} className="rounded-lg" />
+                  <Image src={m.image} alt={m.name} width={56} height={56} className={`rounded-lg transition-transform duration-300 ${selected === i ? 'animate-mascot-bounce' : ''}`} />
                   <div className={`text-[10px] font-bold truncate w-full text-center ${selected === i ? 'text-white' : 'text-white/70'}`}>{m.name}</div>
                 </button>
               ))}

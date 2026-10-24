@@ -6,6 +6,7 @@ import { useAppleMusic } from '@/hooks/useAppleMusic';
 
 const HISTORY_KEY = 'sportqo_music_history';
 const SERVICE_KEY = 'sportqo_music_service';
+const MUSIC_CHOSEN_KEY = 'hb_music_source_chosen';
 const MAX_HISTORY = 20;
 
 type MusicService = 'spotify' | 'apple' | 'free';
@@ -72,10 +73,17 @@ export default function BackgroundMusic({ spotify, onSelect, selectedTrack, auto
   const [searchQuery, setSearchQuery] = useState('');
   const [showSearch, setShowSearch] = useState(autoOpen || false);
   const [history, setHistory] = useState<TrackRecord[]>([]);
+  const [showSourcePicker, setShowSourcePicker] = useState(false);
   const searchTimeout = useRef<ReturnType<typeof setTimeout>>(undefined);
 
   useEffect(() => {
     setHistory(loadHistory());
+    // Show source picker on first ever use
+    try {
+      if (!localStorage.getItem(MUSIC_CHOSEN_KEY)) {
+        setShowSourcePicker(true);
+      }
+    } catch {}
     // Check for prefilled track from dashboard
     try {
       const prefill = localStorage.getItem('hb_prefill_track');
@@ -130,6 +138,55 @@ export default function BackgroundMusic({ spotify, onSelect, selectedTrack, auto
   const favorites = [...history].sort((a, b) => b.playCount - a.playCount).slice(0, 5);
   const favoriteIds = new Set(favorites.map(f => f.track.id));
   const recent = history.filter(h => !favoriteIds.has(h.track.id)).sort((a, b) => b.lastPlayed - a.lastPlayed).slice(0, 3);
+
+  const handleSourcePick = (picked: MusicService | 'none') => {
+    if (picked === 'none') {
+      try { localStorage.removeItem(SERVICE_KEY); } catch {}
+    } else {
+      switchService(picked);
+    }
+    try { localStorage.setItem(MUSIC_CHOSEN_KEY, '1'); } catch {}
+    // Also save to settings
+    try {
+      const raw = localStorage.getItem('sportqo_user_settings');
+      const existing = raw ? JSON.parse(raw) : {};
+      existing.musicService = picked === 'none' ? 'none' : picked === 'free' ? 'playlist' : picked;
+      localStorage.setItem('sportqo_user_settings', JSON.stringify(existing));
+    } catch {}
+    setShowSourcePicker(false);
+    if (picked !== 'none') setShowSearch(true);
+  };
+
+  if (showSourcePicker) {
+    return (
+      <div>
+        <label className="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-3 block">Music</label>
+        <div className="rounded-2xl border-2 border-gray-200 bg-white p-5">
+          <p className="text-sm font-semibold text-gray-900 mb-1">How do you listen?</p>
+          <p className="text-xs text-gray-400 mb-4">Pick your default music source.</p>
+          <div className="space-y-2">
+            <button onClick={() => handleSourcePick('spotify')} className="w-full flex items-center gap-3 rounded-xl p-3 text-left bg-gray-50 hover:bg-gray-100 transition-colors">
+              <svg className="w-5 h-5 text-[#1DB954]" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.4 0 0 5.4 0 12s5.4 12 12 12 12-5.4 12-12S18.66 0 12 0zm5.521 17.34c-.24.359-.66.48-1.021.24-2.82-1.74-6.36-2.101-10.561-1.141-.418.122-.779-.179-.899-.539-.12-.421.18-.78.54-.9 4.56-1.021 8.52-.6 11.64 1.32.42.18.479.659.301 1.02zm1.44-3.3c-.301.42-.841.6-1.262.3-3.239-1.98-8.159-2.58-11.939-1.38-.479.12-1.02-.12-1.14-.6-.12-.48.12-1.021.6-1.141C9.6 9.9 15 10.561 18.72 12.84c.361.181.54.78.241 1.2zm.12-3.36C15.24 8.4 8.82 8.16 5.16 9.301c-.6.179-1.2-.181-1.38-.721-.18-.601.18-1.2.72-1.381 4.26-1.26 11.28-1.02 15.721 1.621.539.3.719 1.02.419 1.56-.299.421-1.02.599-1.559.3z"/></svg>
+              <div><div className="text-sm font-medium text-gray-900">Spotify</div><div className="text-[10px] text-gray-400">Requires Premium</div></div>
+            </button>
+            <button onClick={() => handleSourcePick('apple')} className="w-full flex items-center gap-3 rounded-xl p-3 text-left bg-gray-50 hover:bg-gray-100 transition-colors">
+              <svg className="w-5 h-5 text-[#FC3C44]" viewBox="0 0 24 24" fill="currentColor"><path d="M23.994 6.124a9.23 9.23 0 00-.24-2.19c-.317-1.31-1.062-2.31-2.18-3.043a5.022 5.022 0 00-1.877-.726 10.496 10.496 0 00-1.564-.15c-.04-.003-.083-.01-.124-.013H5.986c-.152.01-.303.017-.455.026-.747.043-1.49.123-2.193.4-1.336.53-2.3 1.452-2.865 2.78-.192.448-.292.925-.363 1.408-.056.392-.088.785-.1 1.18 0 .032-.007.062-.01.093v12.223c.01.14.017.283.027.424.05.815.154 1.624.497 2.373.65 1.42 1.738 2.353 3.234 2.801.42.127.856.187 1.293.228.555.053 1.11.06 1.667.06h11.03a12.5 12.5 0 001.57-.1c.822-.106 1.596-.35 2.296-.81a5.046 5.046 0 001.88-2.207c.186-.42.293-.87.37-1.324.113-.675.138-1.358.137-2.04-.002-3.8 0-7.595-.003-11.393zm-6.423 3.99v5.712c0 .417-.058.827-.244 1.206-.29.59-.76.962-1.388 1.14-.35.1-.706.157-1.07.173-.95.045-1.773-.6-1.943-1.536a1.88 1.88 0 011.038-2.022c.357-.17.724-.283 1.1-.38.36-.094.72-.186 1.073-.305.27-.09.387-.282.39-.568.01-.67 0-1.34.002-2.01v-.153c-.003-.043-.02-.074-.063-.082-.052-.01-.108-.013-.16 0l-3.945.93c-.027.007-.054.023-.063.042-.013.03-.015.064-.015.097v7.384c0 .378-.047.75-.2 1.1-.26.59-.715.98-1.327 1.178-.367.118-.745.185-1.13.207-.94.058-1.797-.548-1.996-1.45-.21-.95.2-1.843 1.032-2.18.36-.145.736-.247 1.108-.345.28-.073.564-.14.84-.228.304-.097.437-.3.44-.618.005-.706.002-1.41.002-2.116V7.076c0-.22.042-.4.198-.55.12-.116.27-.174.43-.207.19-.04.384-.065.578-.097l4.465-1.047c.388-.09.78-.166 1.18-.168.183 0 .36.042.49.196.1.12.15.267.15.422-.01 1.622-.006 3.24-.01 4.86z"/></svg>
+              <div><div className="text-sm font-medium text-gray-900">Apple Music</div><div className="text-[10px] text-gray-400">Requires subscription</div></div>
+            </button>
+            <button onClick={() => handleSourcePick('free')} className="w-full flex items-center gap-3 rounded-xl p-3 text-left bg-gray-50 hover:bg-gray-100 transition-colors">
+              <svg className="w-5 h-5 text-emerald-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M9 19V6l12-3v13M9 19c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zm12-3c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zM9 10l12-3" /></svg>
+              <div><div className="text-sm font-medium text-gray-900">Our Playlist</div><div className="text-[10px] text-gray-400">Free built-in tracks</div></div>
+            </button>
+            <button onClick={() => handleSourcePick('none')} className="w-full flex items-center gap-3 rounded-xl p-3 text-left bg-gray-50 hover:bg-gray-100 transition-colors">
+              <svg className="w-5 h-5 text-gray-300" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M5.586 15H4a1 1 0 01-1-1v-4a1 1 0 011-1h1.586l4.707-4.707C10.923 3.663 12 4.109 12 5v14c0 .891-1.077 1.337-1.707.707L5.586 15z" /><path strokeLinecap="round" strokeLinejoin="round" d="M17 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2" /></svg>
+              <div><div className="text-sm font-medium text-gray-900">No Music</div><div className="text-[10px] text-gray-400">Play without music</div></div>
+            </button>
+          </div>
+          <p className="text-[10px] text-gray-400 mt-3 text-center">Change later in Settings.</p>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div>

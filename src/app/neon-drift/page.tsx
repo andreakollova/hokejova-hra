@@ -11,10 +11,12 @@ import { useSpotify } from '@/hooks/useSpotify';
 import { useMusicPlayer } from '@/hooks/useMusicPlayer';
 import { SpotifyTrack } from '@/lib/spotify';
 import Link from 'next/link';
+import Image from 'next/image';
 import { useEngagement } from '@/hooks/useEngagement';
 import MascotGlow from '@/components/ui/MascotGlow';
 import { canPlayGame, addTrialSeconds, isGameFree, getTrialRemaining } from '@/lib/subscription';
 import Paywall from '@/components/ui/Paywall';
+import { useAuth } from '@/hooks/useAuth';
 
 const CalibrationWizard = dynamic(() => import('@/components/tracking/CalibrationWizard'), { ssr: false });
 const NeonDriftGame = dynamic(() => import('@/components/games/NeonDriftGame'), { ssr: false });
@@ -36,6 +38,7 @@ export default function NeonDriftPage() {
   const [showPaywall, setShowPaywall] = useState(false);
   const [showSafety, setShowSafety] = useState(false);
 
+  const auth = useAuth();
   const { recordGame } = useEngagement();
   const tracker = useTracker(inputMode);
   const spotify = useSpotify();
@@ -147,6 +150,11 @@ export default function NeonDriftPage() {
     }
   }, [result]);
 
+  if (!auth.loading && !auth.isLoggedIn) {
+    if (typeof window !== 'undefined') window.location.href = '/?login=true';
+    return null;
+  }
+
   if (phase === 'calibration') {
     return <CalibrationWizard onComplete={(cal) => { setCalibration(cal); tracker.setCalibration(cal); setPhase('setup'); }} onCancel={() => setPhase('setup')} />;
   }
@@ -167,7 +175,7 @@ export default function NeonDriftPage() {
           <div className="flex gap-3">
             <button onClick={() => { setResult(null); setPhase('playing'); }} className="flex-1 bg-blue-500 hover:bg-blue-400 text-white font-medium py-3.5 rounded-full transition-all">Play again</button>
             <button onClick={() => { setResult(null); setBgTrack(null); setPhase('setup'); }} className="flex-1 bg-white/10 hover:bg-white/20 text-white font-medium py-3.5 rounded-full transition-all text-sm">Change song</button>
-            <button onClick={() => { pauseMusic(); spotify.pause(); window.location.href = '/dashboard'; }} className="flex-1 bg-white/10 hover:bg-white/20 text-white font-medium py-3.5 rounded-full transition-all text-center">Menu</button>
+            <button onClick={() => { pauseMusic(); spotify.pause(); window.location.href = '/dashboard'; }} className="flex-1 bg-white/10 hover:bg-white/20 text-white font-medium py-3.5 rounded-full transition-all text-center">Dashboard</button>
           </div>
         </div>
       </div>
@@ -209,7 +217,10 @@ export default function NeonDriftPage() {
           Back
         </Link>
 
-        {/* Mascot + Title */}
+        {/* Logo + Mascot */}
+        <Link href="/dashboard" className="block mb-4">
+          <Image src="/images/hb-logo-white.png" alt="Hockey Beats" width={120} height={32} className="h-6 w-auto opacity-40" />
+        </Link>
         <div className="flex items-center gap-5 mb-8">
           <MascotGlow src="/images/mascots/mascot-neon-drift.webp" color={accent} size={90} />
           <div>

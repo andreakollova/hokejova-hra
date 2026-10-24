@@ -10,7 +10,9 @@ import { SpotifyTrack } from '@/lib/spotify';
 import { useTracker } from '@/hooks/useTracker';
 import { useCamera } from '@/hooks/useCamera';
 import { useSpotify } from '@/hooks/useSpotify';
+import { useAuth } from '@/hooks/useAuth';
 import Link from 'next/link';
+import Image from 'next/image';
 import MascotGlow from '@/components/ui/MascotGlow';
 
 const HISTORY_KEY = 'sportqo_music_history';
@@ -109,6 +111,7 @@ export default function TreningPage() {
   const [bpmPickerTrack, setBpmPickerTrack] = useState<SpotifyTrack | null>(null);
   const searchTimeout = useRef<ReturnType<typeof setTimeout>>(undefined);
 
+  const auth = useAuth();
   const tracker = useTracker(inputMode);
   const spotify = useSpotify();
   const videoRef = useRef<HTMLVideoElement>(null);
@@ -387,6 +390,11 @@ export default function TreningPage() {
     }
   };
 
+  if (!auth.loading && !auth.isLoggedIn) {
+    if (typeof window !== 'undefined') window.location.href = '/?login=true';
+    return null;
+  }
+
   if (phase === 'calibration') {
     return (
       <CalibrationWizard
@@ -552,7 +560,10 @@ export default function TreningPage() {
           Back
         </Link>
 
-        {/* Mascot + Title */}
+        {/* Logo + Mascot */}
+        <Link href="/dashboard" className="block mb-4">
+          <Image src="/images/hb-logo-white.png" alt="Hockey Beats" width={120} height={32} className="h-6 w-auto opacity-40" />
+        </Link>
         <div className="flex items-center gap-5 mb-8">
           <MascotGlow src="/images/mascots/mascot-slalom.webp" color="#22c55e" size={90} />
           <div>

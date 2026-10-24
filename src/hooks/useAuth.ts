@@ -70,7 +70,7 @@ export function useAuth() {
 
   const resetPassword = useCallback(async (email: string) => {
     const { error } = await getSupabaseBrowser().auth.resetPasswordForEmail(email, {
-      redirectTo: window.location.origin + '/auth/callback?next=/nastavenia',
+      redirectTo: window.location.origin + '/auth/callback?next=/settings',
     });
     return error?.message || null;
   }, []);
@@ -96,9 +96,10 @@ function getDisplayName(user: User | null): string {
 let lastSlackNotify = 0;
 function syncToLegacySettings(user: User) {
   try {
-    const name = getDisplayName(user);
     const raw = localStorage.getItem('sportqo_user_settings');
     const existing = raw ? JSON.parse(raw) : {};
+    // Keep the onboarding-chosen username if it exists; only fallback to OAuth name
+    const name = existing.username || getDisplayName(user);
     localStorage.setItem('sportqo_user_settings', JSON.stringify({ ...existing, loggedIn: true, username: name }));
     document.cookie = 'hb_username=' + name + '; path=/; max-age=' + (60 * 60 * 24 * 365);
     // Only send Slack notification once per 5 minutes

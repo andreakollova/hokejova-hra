@@ -178,7 +178,7 @@ export default function DashboardPage() {
               Achievements
             </Link>
             {streak.currentStreak > 0 && <StreakBadge currentStreak={streak.currentStreak} frozen={streak.frozen} size="sm" />}
-            <Link href="/nastavenia" className="flex items-center gap-2.5 bg-white/5 hover:bg-white/10 rounded-full pl-1 pr-4 py-1 transition-colors">
+            <Link href="/settings" className="flex items-center gap-2.5 bg-white/5 hover:bg-white/10 rounded-full pl-1 pr-4 py-1 transition-colors">
               <Avatar username={settings.username} photoUrl={avatar} mascotImage={mascotImage} profileColor={profile?.color} size="sm" />
               <span className="text-sm font-medium text-white/80 hidden sm:block">{settings.username}</span>
             </Link>
@@ -462,6 +462,15 @@ export default function DashboardPage() {
                       <div className={`w-7 h-7 rounded-full flex items-center justify-center text-xs font-black ${
                         idx === 0 ? 'bg-amber-400/20 text-amber-400' : idx === 1 ? 'bg-white/10 text-white/90' : idx === 2 ? 'bg-orange-400/20 text-orange-400' : 'bg-white/5 text-white/70'
                       }`}>{idx + 1}</div>
+                      {isMe && mascotImage ? (
+                        <div className="w-8 h-8 rounded-full overflow-hidden flex-shrink-0 flex items-center justify-center" style={{ backgroundColor: profile?.color || '#22c55e' }}>
+                          <Image src={mascotImage} alt="" width={32} height={32} className="w-7 h-7 object-cover" />
+                        </div>
+                      ) : (
+                        <div className="w-8 h-8 rounded-full bg-white/10 flex items-center justify-center flex-shrink-0">
+                          <span className="text-xs font-bold text-white/60">{entry.username[0]?.toUpperCase()}</span>
+                        </div>
+                      )}
                       <div className="flex-1 min-w-0">
                         <div className="text-sm font-semibold truncate">
                           {entry.username} {isMe && <span className="text-emerald-400 text-xs">(you)</span>}
@@ -499,6 +508,15 @@ export default function DashboardPage() {
                         <div className={`w-7 h-7 rounded-full flex items-center justify-center text-xs font-black ${
                           idx === 0 ? 'bg-amber-400/20 text-amber-400' : idx === 1 ? 'bg-white/10 text-white/90' : idx === 2 ? 'bg-orange-400/20 text-orange-400' : 'bg-white/5 text-white/70'
                         }`}>{idx + 1}</div>
+                        {isMe && mascotImage ? (
+                          <div className="w-8 h-8 rounded-full overflow-hidden flex-shrink-0 flex items-center justify-center" style={{ backgroundColor: profile?.color || '#22c55e' }}>
+                            <Image src={mascotImage} alt="" width={32} height={32} className="w-7 h-7 object-cover" />
+                          </div>
+                        ) : (
+                          <div className="w-8 h-8 rounded-full bg-white/10 flex items-center justify-center flex-shrink-0">
+                            <span className="text-xs font-bold text-white/60">{entry.name[0]?.toUpperCase()}</span>
+                          </div>
+                        )}
                         <div className="flex-1 min-w-0">
                           <div className="text-sm font-semibold truncate">
                             {entry.name} {isMe && <span className="text-emerald-400 text-xs">(you)</span>}

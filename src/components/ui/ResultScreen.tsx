@@ -198,7 +198,7 @@ export default function ResultScreen({
           {onChangeSong && (
             <button onClick={onChangeSong} className="flex-1 bg-gray-100 hover:bg-gray-200 text-gray-700 font-medium py-3.5 rounded-full transition-all text-sm">Change song</button>
           )}
-          <a href="/dashboard" className="btn-secondary flex-1 text-center">Menu</a>
+          <a href="/dashboard" className="btn-secondary flex-1 text-center">Dashboard</a>
         </div>
 
         <div className="text-center">

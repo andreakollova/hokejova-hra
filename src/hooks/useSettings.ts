@@ -11,7 +11,7 @@ export interface UserSettings {
   loggedIn: boolean;
   username: string;
   platform: 'desktop' | 'mobile';
-  musicService: 'spotify' | 'apple';
+  musicService: 'spotify' | 'apple' | 'playlist' | 'none';
   calibrationData: Record<string, unknown> | null;
   favoriteTrackIds: string[];
   lastTrack: SpotifyTrack | null;

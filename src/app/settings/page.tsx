@@ -16,7 +16,7 @@ import dynamic from 'next/dynamic';
 
 const CalibrationWizard = dynamic(() => import('@/components/tracking/CalibrationWizard'), { ssr: false });
 
-export default function NastaveniaPage() {
+export default function SettingsPage() {
   const { settings, isLoggedIn, loaded, updateSettings, logout } = useSettings();
   const { data, setAvatar, getStreak, getLevelProgress, getAvatar, getProfile, setProfile, loaded: engLoaded } = useEngagement();
   const router = useRouter();
@@ -34,8 +34,8 @@ export default function NastaveniaPage() {
 
   if (!loaded || !engLoaded) {
     return (
-      <div className="min-h-screen bg-white flex items-center justify-center">
-        <p className="text-gray-400">Loading...</p>
+      <div className="min-h-screen bg-[#0a0a0f] flex items-center justify-center">
+        <p className="text-white/40">Loading...</p>
       </div>
     );
   }
@@ -76,26 +76,26 @@ export default function NastaveniaPage() {
   };
 
   return (
-    <div className="min-h-screen bg-white flex flex-col">
+    <div className="min-h-screen bg-[#0a0a0f] flex flex-col">
       {/* Header */}
-      <header className="sticky top-0 z-40 bg-white/90 backdrop-blur-md px-6 sm:px-10 py-4 shadow-sm">
+      <header className="sticky top-0 z-40 bg-[#0a0a0f]/90 backdrop-blur-md px-6 sm:px-10 py-4 border-b border-white/5">
         <div className="max-w-3xl mx-auto flex justify-between items-center">
           <Link href="/dashboard">
-            <Image src="/images/hb-logo-hero-dark.png" alt="Hockey Beats" width={160} height={36} className="h-8 w-auto" />
+            <Image src="/images/hb-logo-hero.png" alt="Hockey Beats" width={160} height={36} className="h-8 w-auto" />
           </Link>
-          <Link href="/dashboard" className="text-sm text-gray-500 hover:text-gray-900 transition-colors">
+          <Link href="/dashboard" className="text-sm text-white/50 hover:text-white transition-colors">
             Dashboard
           </Link>
         </div>
       </header>
 
       <main className="flex-1 max-w-3xl mx-auto w-full px-6 sm:px-10 py-12">
-        <h1 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-10">Settings</h1>
+        <h1 className="text-2xl sm:text-3xl font-bold text-white mb-10">Settings</h1>
 
         {/* Profile with Mascot */}
         <section className="mb-10">
-          <h2 className="text-sm font-medium text-gray-400 uppercase tracking-wider mb-3">Profile</h2>
-          <div className="card p-6">
+          <h2 className="text-xs font-medium text-white/30 uppercase tracking-wider mb-3">Profile</h2>
+          <div className="rounded-2xl bg-white/5 border border-white/8 p-6">
             <div className="flex items-center gap-4">
               {(() => {
                 const p = getProfile();
@@ -104,19 +104,19 @@ export default function NastaveniaPage() {
                 return <Avatar username={settings.username} mascotImage={mascotImg} profileColor={p.color} size="lg" />;
               })()}
               <div>
-                <p className="text-lg font-semibold text-gray-900">{settings.username}</p>
-                <p className="text-sm text-gray-400">Logged in user</p>
+                <p className="text-lg font-semibold text-white">{settings.username}</p>
+                <p className="text-sm text-white/30">Logged in user</p>
                 <div className="flex gap-3 mt-2">
                   <button
                     onClick={() => fileInputRef.current?.click()}
-                    className="text-xs font-medium text-green-600 hover:text-green-700 bg-green-50 hover:bg-green-100 px-3 py-1.5 rounded-lg transition-all"
+                    className="text-xs font-medium text-emerald-400 hover:text-emerald-300 bg-emerald-500/10 hover:bg-emerald-500/20 px-3 py-1.5 rounded-lg transition-all"
                   >
                     {avatar ? 'Change photo' : 'Upload photo'}
                   </button>
                   {avatar && (
                     <button
                       onClick={() => setAvatar(null)}
-                      className="text-xs text-gray-400 hover:text-red-500 transition-colors px-3 py-1.5"
+                      className="text-xs text-white/30 hover:text-red-400 transition-colors px-3 py-1.5"
                     >
                       Remove
                     </button>
@@ -127,37 +127,45 @@ export default function NastaveniaPage() {
           </div>
         </section>
 
+        <input
+          ref={fileInputRef}
+          type="file"
+          accept="image/*"
+          className="hidden"
+          onChange={handleAvatarUpload}
+        />
+
         {/* Streak */}
         <section className="mb-10">
-          <h2 className="text-sm font-medium text-gray-400 uppercase tracking-wider mb-3">Streak</h2>
-          <div className="card p-6">
+          <h2 className="text-xs font-medium text-white/30 uppercase tracking-wider mb-3">Streak</h2>
+          <div className="rounded-2xl bg-white/5 border border-white/8 p-6">
             <div className="flex items-center justify-between mb-4">
               <StreakBadge currentStreak={streak.currentStreak} frozen={streak.frozen} />
               {streak.currentStreak > 0 && (
-                <span className="text-sm text-gray-400">{streak.currentStreak} {streak.currentStreak === 1 ? 'day' : 'days'}</span>
+                <span className="text-sm text-white/40">{streak.currentStreak} {streak.currentStreak === 1 ? 'day' : 'days'}</span>
               )}
             </div>
             {streak.frozen && (
-              <div className="bg-blue-50 rounded-2xl p-4">
-                <p className="text-sm text-blue-700 font-medium">Your streak is frozen</p>
-                <p className="text-xs text-blue-500 mt-1">
+              <div className="bg-blue-500/10 border border-blue-500/20 rounded-2xl p-4">
+                <p className="text-sm text-blue-400 font-medium">Your streak is frozen</p>
+                <p className="text-xs text-blue-400/60 mt-1">
                   Play for {3 - streak.consecutiveDaysAfterFreeze} more consecutive day{3 - streak.consecutiveDaysAfterFreeze !== 1 ? 's' : ''} or play 30 minutes in one session to unfreeze.
                 </p>
               </div>
             )}
             {!streak.frozen && streak.currentStreak === 0 && (
-              <p className="text-sm text-gray-400">Play a game to start your streak!</p>
+              <p className="text-sm text-white/30">Play a game to start your streak!</p>
             )}
             {!streak.frozen && streak.currentStreak > 0 && (
-              <p className="text-sm text-gray-400">Keep it going! Play every day to grow your streak.</p>
+              <p className="text-sm text-white/30">Keep it going! Play every day to grow your streak.</p>
             )}
           </div>
         </section>
 
         {/* XP & Level */}
         <section className="mb-10">
-          <h2 className="text-sm font-medium text-gray-400 uppercase tracking-wider mb-3">Level & XP</h2>
-          <div className="card p-6">
+          <h2 className="text-xs font-medium text-white/30 uppercase tracking-wider mb-3">Level & XP</h2>
+          <div className="rounded-2xl bg-white/5 border border-white/8 p-6">
             <XPBar
               level={levelInfo.level}
               xpInLevel={levelInfo.xpInLevel}
@@ -167,16 +175,16 @@ export default function NastaveniaPage() {
             />
             <div className="grid grid-cols-3 gap-3 mt-5">
               <div className="text-center">
-                <p className="text-xl font-bold text-gray-900 tabular-nums">{data.totalGamesPlayed || 0}</p>
-                <p className="text-xs text-gray-400">Games</p>
+                <p className="text-xl font-bold text-white tabular-nums">{data.totalGamesPlayed || 0}</p>
+                <p className="text-xs text-white/30">Games</p>
               </div>
               <div className="text-center">
-                <p className="text-xl font-bold text-gray-900 tabular-nums">{data.totalMinutesPlayed || 0}</p>
-                <p className="text-xs text-gray-400">Minutes</p>
+                <p className="text-xl font-bold text-white tabular-nums">{data.totalMinutesPlayed || 0}</p>
+                <p className="text-xs text-white/30">Minutes</p>
               </div>
               <div className="text-center">
-                <p className="text-xl font-bold text-gray-900 tabular-nums">{levelInfo.currentXP.toLocaleString()}</p>
-                <p className="text-xs text-gray-400">Total XP</p>
+                <p className="text-xl font-bold text-white tabular-nums">{levelInfo.currentXP.toLocaleString()}</p>
+                <p className="text-xs text-white/30">Total XP</p>
               </div>
             </div>
           </div>
@@ -184,16 +192,16 @@ export default function NastaveniaPage() {
 
         {/* Platform toggle */}
         <section className="mb-10">
-          <h2 className="text-sm font-medium text-gray-400 uppercase tracking-wider mb-3">Platform</h2>
-          <div className="card p-6">
-            <p className="text-sm text-gray-500 mb-4">Select the device you train on.</p>
+          <h2 className="text-xs font-medium text-white/30 uppercase tracking-wider mb-3">Platform</h2>
+          <div className="rounded-2xl bg-white/5 border border-white/8 p-6">
+            <p className="text-sm text-white/40 mb-4">Select the device you train on.</p>
             <div className="flex gap-3">
               <button
                 onClick={() => updateSettings({ platform: 'desktop' })}
                 className={`flex-1 py-3 rounded-full text-sm font-medium transition-all duration-200 ${
                   settings.platform === 'desktop'
-                    ? 'bg-gray-900 text-white'
-                    : 'bg-gray-50 text-gray-500 hover:bg-gray-100 border border-gray-200'
+                    ? 'bg-white text-[#0a0a0f]'
+                    : 'bg-white/5 text-white/50 hover:bg-white/10 border border-white/8'
                 }`}
               >
                 Desktop
@@ -202,8 +210,8 @@ export default function NastaveniaPage() {
                 onClick={() => updateSettings({ platform: 'mobile' })}
                 className={`flex-1 py-3 rounded-full text-sm font-medium transition-all duration-200 ${
                   settings.platform === 'mobile'
-                    ? 'bg-gray-900 text-white'
-                    : 'bg-gray-50 text-gray-500 hover:bg-gray-100 border border-gray-200'
+                    ? 'bg-white text-[#0a0a0f]'
+                    : 'bg-white/5 text-white/50 hover:bg-white/10 border border-white/8'
                 }`}
               >
                 Mobile
@@ -212,49 +220,53 @@ export default function NastaveniaPage() {
           </div>
         </section>
 
-        {/* Music service */}
+        {/* Music source */}
         <section className="mb-10">
-          <h2 className="text-sm font-medium text-gray-400 uppercase tracking-wider mb-3">Music service</h2>
-          <div className="card p-6">
-            <p className="text-sm text-gray-500 mb-4">Default service for Beat mode.</p>
-            <div className="flex gap-3">
-              <button
-                onClick={() => updateSettings({ musicService: 'spotify' })}
-                className={`flex-1 py-3 rounded-full text-sm font-medium transition-all duration-200 ${
-                  settings.musicService === 'spotify'
-                    ? 'bg-gray-900 text-white'
-                    : 'bg-gray-50 text-gray-500 hover:bg-gray-100 border border-gray-200'
-                }`}
-              >
-                Spotify
-              </button>
-              <button
-                onClick={() => updateSettings({ musicService: 'apple' })}
-                className={`flex-1 py-3 rounded-full text-sm font-medium transition-all duration-200 ${
-                  settings.musicService === 'apple'
-                    ? 'bg-gray-900 text-white'
-                    : 'bg-gray-50 text-gray-500 hover:bg-gray-100 border border-gray-200'
-                }`}
-              >
-                Apple Music
-              </button>
+          <h2 className="text-xs font-medium text-white/30 uppercase tracking-wider mb-3">Music source</h2>
+          <div className="rounded-2xl bg-white/5 border border-white/8 p-6">
+            <p className="text-sm text-white/40 mb-4">Default music source for games.</p>
+            <div className="grid grid-cols-2 gap-3">
+              {([
+                { id: 'spotify' as const, label: 'Spotify' },
+                { id: 'apple' as const, label: 'Apple Music' },
+                { id: 'playlist' as const, label: 'Our Playlist' },
+                { id: 'none' as const, label: 'No Music' },
+              ]).map(opt => (
+                <button
+                  key={opt.id}
+                  onClick={() => {
+                    updateSettings({ musicService: opt.id });
+                    try {
+                      if (opt.id === 'none') localStorage.removeItem('sportqo_music_service');
+                      else localStorage.setItem('sportqo_music_service', opt.id === 'playlist' ? 'free' : opt.id);
+                    } catch {}
+                  }}
+                  className={`py-3 rounded-full text-sm font-medium transition-all duration-200 ${
+                    settings.musicService === opt.id
+                      ? 'bg-white text-[#0a0a0f]'
+                      : 'bg-white/5 text-white/50 hover:bg-white/10 border border-white/8'
+                  }`}
+                >
+                  {opt.label}
+                </button>
+              ))}
             </div>
           </div>
         </section>
 
         {/* Change Mascot */}
         <section className="mb-10">
-          <h2 className="text-sm font-medium text-gray-400 uppercase tracking-wider mb-3">Mascot</h2>
-          <div className="card p-6">
+          <h2 className="text-xs font-medium text-white/30 uppercase tracking-wider mb-3">Mascot</h2>
+          <div className="rounded-2xl bg-white/5 border border-white/8 p-6">
             <div className="grid grid-cols-4 sm:grid-cols-6 gap-2">
               {MASCOTS.map(m => {
                 const p = getProfile();
                 const isSelected = p.mascotId === m.id;
                 return (
                   <button key={m.id} onClick={() => setProfile({ ...p, mascotId: m.id })}
-                    className={`rounded-xl p-2 border-2 transition-all flex flex-col items-center gap-1 ${isSelected ? 'border-emerald-500 bg-emerald-50' : 'border-gray-100 hover:border-gray-300'}`}>
+                    className={`rounded-xl p-2 border-2 transition-all flex flex-col items-center gap-1 ${isSelected ? 'border-emerald-500 bg-emerald-500/10' : 'border-white/8 hover:border-white/15'}`}>
                     <Image src={m.image} alt={m.name} width={48} height={48} className="rounded-lg" />
-                    <div className="text-[9px] font-bold text-gray-700 truncate w-full text-center">{m.name}</div>
+                    <div className={`text-[9px] font-bold truncate w-full text-center ${isSelected ? 'text-white' : 'text-white/50'}`}>{m.name}</div>
                   </button>
                 );
               })}
@@ -264,17 +276,17 @@ export default function NastaveniaPage() {
 
         {/* Change Color */}
         <section className="mb-10">
-          <h2 className="text-sm font-medium text-gray-400 uppercase tracking-wider mb-3">Profile color</h2>
-          <div className="card p-6">
+          <h2 className="text-xs font-medium text-white/30 uppercase tracking-wider mb-3">Profile color</h2>
+          <div className="rounded-2xl bg-white/5 border border-white/8 p-6">
             <div className="flex flex-wrap gap-3">
               {PROFILE_COLORS.map(c => {
                 const p = getProfile();
                 const isSelected = p.color === c.value;
                 return (
                   <button key={c.id} onClick={() => setProfile({ ...p, color: c.value })}
-                    className={`flex flex-col items-center gap-1.5 rounded-xl p-2.5 border-2 transition-all ${isSelected ? 'border-gray-900 bg-gray-50' : 'border-gray-100 hover:border-gray-300'}`}>
+                    className={`flex flex-col items-center gap-1.5 rounded-xl p-2.5 border-2 transition-all ${isSelected ? 'border-white/40 bg-white/5' : 'border-white/8 hover:border-white/15'}`}>
                     <div className="w-8 h-8 rounded-full" style={{ backgroundColor: c.value, boxShadow: isSelected ? `0 0 16px ${c.value}50` : 'none' }} />
-                    <div className="text-[9px] font-bold text-gray-500">{c.label}</div>
+                    <div className="text-[9px] font-bold text-white/40">{c.label}</div>
                   </button>
                 );
               })}
@@ -284,26 +296,26 @@ export default function NastaveniaPage() {
 
         {/* Profile privacy */}
         <section className="mb-10">
-          <h2 className="text-sm font-medium text-gray-400 uppercase tracking-wider mb-3">Profile privacy</h2>
-          <div className="card p-6">
+          <h2 className="text-xs font-medium text-white/30 uppercase tracking-wider mb-3">Profile privacy</h2>
+          <div className="rounded-2xl bg-white/5 border border-white/8 p-6">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm font-medium text-gray-900">Private profile</p>
-                <p className="text-xs text-gray-400 mt-0.5">Hide your username from public leaderboards and social features. Only your mascot and score will be visible.</p>
+                <p className="text-sm font-medium text-white">Private profile</p>
+                <p className="text-xs text-white/30 mt-0.5">Hide your username from public leaderboards and social features. Only your mascot and score will be visible.</p>
               </div>
               <button
                 onClick={() => {
                   const p = getProfile();
                   setProfile({ ...p, privateProfile: !p.privateProfile });
                 }}
-                className={`relative w-11 h-6 rounded-full transition-colors ${getProfile().privateProfile ? 'bg-emerald-500' : 'bg-gray-200'}`}
+                className={`relative w-11 h-6 rounded-full transition-colors ${getProfile().privateProfile ? 'bg-emerald-500' : 'bg-white/15'}`}
               >
                 <div className={`absolute top-0.5 left-0.5 w-5 h-5 bg-white rounded-full shadow transition-transform ${getProfile().privateProfile ? 'translate-x-5' : ''}`} />
               </button>
             </div>
             {getProfile().isMinor && (
-              <p className="text-xs text-amber-600 bg-amber-50 rounded-lg p-2.5 mt-3">
-                Because your account was created as a player aged 13–15, private profile is enabled by default to protect your privacy.
+              <p className="text-xs text-amber-400 bg-amber-500/10 border border-amber-500/20 rounded-lg p-2.5 mt-3">
+                Because your account was created as a player aged 13-15, private profile is enabled by default to protect your privacy.
               </p>
             )}
           </div>
@@ -311,17 +323,17 @@ export default function NastaveniaPage() {
 
         {/* Calibration status */}
         <section className="mb-10">
-          <h2 className="text-sm font-medium text-gray-400 uppercase tracking-wider mb-3">Camera calibration</h2>
-          <div className="card p-6">
+          <h2 className="text-xs font-medium text-white/30 uppercase tracking-wider mb-3">Camera calibration</h2>
+          <div className="rounded-2xl bg-white/5 border border-white/8 p-6">
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-3">
-                <div className={`w-3 h-3 rounded-full ${calibration ? 'bg-green-500' : 'bg-gray-300'}`} />
+                <div className={`w-3 h-3 rounded-full ${calibration ? 'bg-emerald-500' : 'bg-white/20'}`} />
                 <div>
-                  <p className="text-sm text-gray-700">
+                  <p className="text-sm text-white/70">
                     {calibration ? 'Camera is calibrated' : 'Camera is not yet calibrated'}
                   </p>
                   {calibration && (
-                    <p className="text-xs text-gray-400 mt-0.5">
+                    <p className="text-xs text-white/30 mt-0.5">
                       {calibration.resolution?.width}x{calibration.resolution?.height}
                     </p>
                   )}
@@ -329,7 +341,7 @@ export default function NastaveniaPage() {
               </div>
               <button
                 onClick={() => setShowCalibration(true)}
-                className="text-sm font-medium text-green-600 bg-green-50 hover:bg-green-100 px-4 py-2 rounded-xl transition-all"
+                className="text-sm font-medium text-emerald-400 bg-emerald-500/10 hover:bg-emerald-500/20 px-4 py-2 rounded-xl transition-all"
               >
                 {calibration ? 'Recalibrate' : 'Calibrate'}
               </button>
@@ -341,7 +353,7 @@ export default function NastaveniaPage() {
                   sessionStorage.removeItem('ballTracker_calibration');
                   setCalibration(null);
                 }}
-                className="mt-4 text-sm text-gray-400 hover:text-red-500 transition-colors"
+                className="mt-4 text-sm text-white/30 hover:text-red-400 transition-colors"
               >
                 Reset calibration
               </button>
@@ -352,8 +364,8 @@ export default function NastaveniaPage() {
         {/* Change Password */}
         {auth.isLoggedIn && auth.user?.app_metadata?.provider === 'email' && (
           <section className="mb-10">
-            <h2 className="text-sm font-medium text-gray-400 uppercase tracking-wider mb-3">Change password</h2>
-            <div className="card p-6">
+            <h2 className="text-xs font-medium text-white/30 uppercase tracking-wider mb-3">Change password</h2>
+            <div className="rounded-2xl bg-white/5 border border-white/8 p-6">
               <form onSubmit={async (e) => {
                 e.preventDefault();
                 setPasswordMsg('');
@@ -362,10 +374,10 @@ export default function NastaveniaPage() {
                 if (err) setPasswordMsg(err);
                 else { setPasswordMsg('Password updated!'); setNewPassword(''); }
               }} className="flex gap-3">
-                <input type="password" value={newPassword} onChange={e => setNewPassword(e.target.value)} placeholder="New password" className="input-field flex-1" minLength={6} required />
-                <button type="submit" className="text-sm font-medium text-green-600 bg-green-50 hover:bg-green-100 px-4 py-2 rounded-xl transition-all">Update</button>
+                <input type="password" value={newPassword} onChange={e => setNewPassword(e.target.value)} placeholder="New password" className="flex-1 bg-white/5 border border-white/10 rounded-xl px-4 py-2.5 text-white text-sm placeholder-white/20 outline-none focus:border-emerald-500/50" minLength={6} required />
+                <button type="submit" className="text-sm font-medium text-emerald-400 bg-emerald-500/10 hover:bg-emerald-500/20 px-4 py-2 rounded-xl transition-all">Update</button>
               </form>
-              {passwordMsg && <p className={`text-sm mt-2 ${passwordMsg.includes('updated') ? 'text-green-600' : 'text-red-500'}`}>{passwordMsg}</p>}
+              {passwordMsg && <p className={`text-sm mt-2 ${passwordMsg.includes('updated') ? 'text-emerald-400' : 'text-red-400'}`}>{passwordMsg}</p>}
             </div>
           </section>
         )}
@@ -373,22 +385,22 @@ export default function NastaveniaPage() {
         {/* Account info */}
         {auth.isLoggedIn && auth.user?.email && (
           <section className="mb-10">
-            <h2 className="text-sm font-medium text-gray-400 uppercase tracking-wider mb-3">Account</h2>
-            <div className="card p-6">
-              <p className="text-sm text-gray-700">{auth.user.email}</p>
-              <p className="text-xs text-gray-400 mt-1">Signed in via {auth.user.app_metadata?.provider || 'email'}</p>
+            <h2 className="text-xs font-medium text-white/30 uppercase tracking-wider mb-3">Account</h2>
+            <div className="rounded-2xl bg-white/5 border border-white/8 p-6">
+              <p className="text-sm text-white/70">{auth.user.email}</p>
+              <p className="text-xs text-white/30 mt-1">Signed in via {auth.user.app_metadata?.provider || 'email'}</p>
             </div>
           </section>
         )}
 
         {/* Subscription Management */}
         <section className="mb-10">
-          <h2 className="text-sm font-medium text-gray-400 uppercase tracking-wider mb-3">Subscription</h2>
-          <div className="card p-6">
+          <h2 className="text-xs font-medium text-white/30 uppercase tracking-wider mb-3">Subscription</h2>
+          <div className="rounded-2xl bg-white/5 border border-white/8 p-6">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm font-medium text-gray-900">Manage your subscription</p>
-                <p className="text-xs text-gray-400 mt-0.5">View billing history, update payment method, or cancel your subscription.</p>
+                <p className="text-sm font-medium text-white">Manage your subscription</p>
+                <p className="text-xs text-white/30 mt-0.5">View billing history, update payment method, or cancel your subscription.</p>
               </div>
               <button
                 onClick={async () => {
@@ -405,7 +417,7 @@ export default function NastaveniaPage() {
                     else alert(data.error || 'No active subscription found.');
                   } catch { alert('Connection error'); }
                 }}
-                className="text-sm font-medium text-green-600 bg-green-50 hover:bg-green-100 px-4 py-2 rounded-xl transition-all"
+                className="text-sm font-medium text-emerald-400 bg-emerald-500/10 hover:bg-emerald-500/20 px-4 py-2 rounded-xl transition-all"
               >
                 Manage
               </button>
@@ -415,9 +427,9 @@ export default function NastaveniaPage() {
 
         {/* Club Membership */}
         <section className="mb-10">
-          <h2 className="text-sm font-medium text-gray-400 uppercase tracking-wider mb-3">Club membership</h2>
-          <div className="card p-6">
-            <p className="text-xs text-gray-500 mb-3">Enter a club code from your team or organization to unlock Premium and connect with teammates.</p>
+          <h2 className="text-xs font-medium text-white/30 uppercase tracking-wider mb-3">Club membership</h2>
+          <div className="rounded-2xl bg-white/5 border border-white/8 p-6">
+            <p className="text-xs text-white/40 mb-3">Enter a club code from your team or organization to unlock Premium and connect with teammates.</p>
             <form onSubmit={async (e) => {
               e.preventDefault();
               const input = (e.target as HTMLFormElement).querySelector('input') as HTMLInputElement;
@@ -431,9 +443,7 @@ export default function NastaveniaPage() {
                 });
                 const data = await res.json();
                 if (data.ok) {
-                  // Activate subscription locally
                   localStorage.setItem('hb_subscription', JSON.stringify({ type: 'club', clubName: data.clubName, expiresAt: data.expiresAt, activatedAt: new Date().toISOString() }));
-                  // Add teammates as friends
                   if (data.teammates?.length > 0) {
                     try {
                       const existing = JSON.parse(localStorage.getItem('hb_friends') || '[]');
@@ -453,20 +463,20 @@ export default function NastaveniaPage() {
                 }
               } catch { alert('Connection error'); }
             }} className="flex gap-2">
-              <input type="text" placeholder="Enter club code (e.g. HB-XXXX-XXXX)" className="input-field flex-1 text-sm" />
-              <button type="submit" className="text-sm font-medium text-emerald-600 bg-emerald-50 hover:bg-emerald-100 px-4 py-2 rounded-xl transition-all">Redeem</button>
+              <input type="text" placeholder="Enter club code (e.g. HB-XXXX-XXXX)" className="flex-1 bg-white/5 border border-white/10 rounded-xl px-4 py-2.5 text-white text-sm placeholder-white/20 outline-none focus:border-emerald-500/50" />
+              <button type="submit" className="text-sm font-medium text-emerald-400 bg-emerald-500/10 hover:bg-emerald-500/20 px-4 py-2 rounded-xl transition-all">Redeem</button>
             </form>
           </div>
         </section>
 
         {/* Connected services */}
         <section className="mb-10">
-          <h2 className="text-sm font-medium text-gray-400 uppercase tracking-wider mb-3">Connected services</h2>
-          <div className="card p-6 space-y-4">
+          <h2 className="text-xs font-medium text-white/30 uppercase tracking-wider mb-3">Connected services</h2>
+          <div className="rounded-2xl bg-white/5 border border-white/8 p-6 space-y-4">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm font-medium text-gray-900">Spotify</p>
-                <p className="text-xs text-gray-400 mt-0.5">Music playback and history</p>
+                <p className="text-sm font-medium text-white">Spotify</p>
+                <p className="text-xs text-white/30 mt-0.5">Music playback and history</p>
               </div>
               <button
                 onClick={async () => {
@@ -475,15 +485,15 @@ export default function NastaveniaPage() {
                   localStorage.removeItem('sportqo_music_history');
                   alert('Spotify disconnected and music data deleted.');
                 }}
-                className="text-xs font-medium text-red-500 hover:text-red-600 bg-red-50 hover:bg-red-100 px-3 py-1.5 rounded-lg transition-all"
+                className="text-xs font-medium text-red-400 hover:text-red-300 bg-red-500/10 hover:bg-red-500/20 px-3 py-1.5 rounded-lg transition-all"
               >
                 Disconnect
               </button>
             </div>
-            <div className="border-t border-gray-100 pt-4 flex items-center justify-between">
+            <div className="border-t border-white/5 pt-4 flex items-center justify-between">
               <div>
-                <p className="text-sm font-medium text-gray-900">Apple Music</p>
-                <p className="text-xs text-gray-400 mt-0.5">Music playback and history</p>
+                <p className="text-sm font-medium text-white">Apple Music</p>
+                <p className="text-xs text-white/30 mt-0.5">Music playback and history</p>
               </div>
               <button
                 onClick={async () => {
@@ -493,7 +503,7 @@ export default function NastaveniaPage() {
                   localStorage.removeItem('sportqo_music_service');
                   alert('Apple Music disconnected and music data deleted.');
                 }}
-                className="text-xs font-medium text-red-500 hover:text-red-600 bg-red-50 hover:bg-red-100 px-3 py-1.5 rounded-lg transition-all"
+                className="text-xs font-medium text-red-400 hover:text-red-300 bg-red-500/10 hover:bg-red-500/20 px-3 py-1.5 rounded-lg transition-all"
               >
                 Disconnect
               </button>
@@ -503,12 +513,12 @@ export default function NastaveniaPage() {
 
         {/* Cookie preferences */}
         <section className="mb-10">
-          <h2 className="text-sm font-medium text-gray-400 uppercase tracking-wider mb-3">Cookie preferences</h2>
-          <div className="card p-6">
+          <h2 className="text-xs font-medium text-white/30 uppercase tracking-wider mb-3">Cookie preferences</h2>
+          <div className="rounded-2xl bg-white/5 border border-white/8 p-6">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm font-medium text-gray-900">Analytics &amp; visit tracking</p>
-                <p className="text-xs text-gray-400 mt-0.5">
+                <p className="text-sm font-medium text-white">Analytics & visit tracking</p>
+                <p className="text-xs text-white/30 mt-0.5">
                   {typeof window !== 'undefined' && localStorage.getItem('hb_cookie_consent') === 'accepted' ? 'Accepted' : 'Essential only'}
                 </p>
               </div>
@@ -517,22 +527,22 @@ export default function NastaveniaPage() {
                   localStorage.removeItem('hb_cookie_consent');
                   window.location.reload();
                 }}
-                className="text-xs font-medium text-gray-500 hover:text-gray-700 bg-gray-100 hover:bg-gray-200 px-3 py-1.5 rounded-lg transition-all"
+                className="text-xs font-medium text-white/50 hover:text-white/70 bg-white/5 hover:bg-white/10 px-3 py-1.5 rounded-lg transition-all"
               >
                 Reset preferences
               </button>
             </div>
-            <p className="text-xs text-gray-400 mt-3">Read our <a href="/cookies" className="underline hover:text-gray-600">Cookie Policy</a>.</p>
+            <p className="text-xs text-white/30 mt-3">Read our <a href="/cookies" className="underline hover:text-white/60">Cookie Policy</a>.</p>
           </div>
         </section>
 
         {/* Data retention info */}
         <section className="mb-10">
-          <h2 className="text-sm font-medium text-gray-400 uppercase tracking-wider mb-3">Your data</h2>
-          <div className="card p-6 space-y-2">
-            <p className="text-xs text-gray-500">Page visit logs are automatically deleted after <strong>90 days</strong>.</p>
-            <p className="text-xs text-gray-500">Game scores and achievements are kept as long as your account exists.</p>
-            <p className="text-xs text-gray-500">You can delete all your data at any time using the button below.</p>
+          <h2 className="text-xs font-medium text-white/30 uppercase tracking-wider mb-3">Your data</h2>
+          <div className="rounded-2xl bg-white/5 border border-white/8 p-6 space-y-2">
+            <p className="text-xs text-white/40">Page visit logs are automatically deleted after <strong className="text-white/60">90 days</strong>.</p>
+            <p className="text-xs text-white/40">Game scores and achievements are kept as long as your account exists.</p>
+            <p className="text-xs text-white/40">You can delete all your data at any time using the button below.</p>
           </div>
         </section>
 
@@ -544,7 +554,7 @@ export default function NastaveniaPage() {
               logout();
               router.push('/');
             }}
-            className="btn-secondary w-full text-center"
+            className="w-full py-3.5 rounded-full border-2 border-white/8 text-white text-sm font-semibold transition-all hover:border-white/15 text-center"
           >
             Log out
           </button>
@@ -561,7 +571,7 @@ export default function NastaveniaPage() {
               await auth.signOut();
               window.location.href = '/';
             }}
-            className="w-full text-center text-sm text-red-400 hover:text-red-600 py-3 transition-colors"
+            className="w-full text-center text-sm text-red-400/60 hover:text-red-400 py-3 transition-colors"
           >
             Delete my account and all data
           </button>
