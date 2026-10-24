@@ -66,6 +66,21 @@ export async function GET(req: NextRequest) {
     .map(([path, count]) => `  ${path} — ${count} views`)
     .join('\n');
 
+  // Most played games (from page views of game pages)
+  const gamePages = ['/trening', '/target-smash', '/space', '/jelly-stack', '/orbit-hop', '/neon-drift', '/brick-rush', '/magnet-flip', '/laser-maze', '/color-catch', '/terciky', '/osmicky-terciky', '/osmicky'];
+  const gamePlays: Record<string, number> = {};
+  for (const [path, count] of Object.entries(pageCounts)) {
+    if (gamePages.includes(path)) {
+      const name = path.replace('/', '').replace('trening', 'HockeyBeats');
+      gamePlays[name] = count;
+    }
+  }
+  const topGames = Object.entries(gamePlays)
+    .sort((a, b) => b[1] - a[1])
+    .slice(0, 5)
+    .map(([name, count]) => `  ${name} — ${count} plays`)
+    .join('\n');
+
   const dateStr = today.toLocaleDateString('en-GB', { weekday: 'long', day: 'numeric', month: 'long' });
 
   // --- Database health check ---
@@ -110,6 +125,10 @@ export async function GET(req: NextRequest) {
         type: 'section',
         text: { type: 'mrkdwn', text: `*Database*\n\`\`\`\n${tableStats}\n  ──────────\n  Total: ${totalRows.toLocaleString()} rows\n\`\`\`` },
       },
+      ...(topGames ? [{
+        type: 'section',
+        text: { type: 'mrkdwn', text: `*Most Played Games*\n\`\`\`\n${topGames}\n\`\`\`` },
+      }] : []),
       ...(deletedViews && deletedViews > 0 ? [{
         type: 'section',
         text: { type: 'mrkdwn', text: `🧹 *Cleanup*\nDeleted ${deletedViews} page views older than 90 days` },

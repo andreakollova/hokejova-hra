@@ -12,6 +12,8 @@ import { SpotifyTrack } from '@/lib/spotify';
 import Link from 'next/link';
 import { useEngagement } from '@/hooks/useEngagement';
 import MascotGlow from '@/components/ui/MascotGlow';
+import { canPlayGame, addTrialSeconds, isGameFree, getTrialRemaining } from '@/lib/subscription';
+import Paywall from '@/components/ui/Paywall';
 
 const CalibrationWizard = dynamic(() => import('@/components/tracking/CalibrationWizard'), { ssr: false });
 const MagnetFlipGame = dynamic(() => import('@/components/games/MagnetFlipGame'), { ssr: false });
@@ -29,6 +31,7 @@ export default function MagnetFlipPage() {
   const [bgTrack, setBgTrack] = useState<SpotifyTrack | null>(null);
   const [spotifyReturned, setSpotifyReturned] = useState(false);
   const [gameKey, setGameKey] = useState(0);
+  const [showPaywall, setShowPaywall] = useState(false);
 
   const { recordGame } = useEngagement();
   const tracker = useTracker(inputMode);
@@ -50,6 +53,7 @@ export default function MagnetFlipPage() {
   }, []);
 
   const startGame = useCallback(async () => {
+    if (!canPlayGame('magnet-flip')) { setShowPaywall(true); return; }
     if (inputMode === 'demo') { tracker.startDemo(); if (bgTrack) playMusic(bgTrack); setGameKey(k => k + 1); setPhase('playing'); return; }
     if (inputMode === 'remote') {
       const sid = localStorage.getItem('hb_remote_session');
@@ -177,7 +181,7 @@ export default function MagnetFlipPage() {
         <MagnetFlipGame
           duration={duration} difficulty={difficulty} inputMode={inputMode}
           getGameInput={tracker.getGameInput}
-          onFinish={(res) => { setResult(res); setPhase('result'); tracker.stopTracking(); tracker.stopRemote(); stopCamera(); pauseMusic(); spotify.pause(); }}
+          onFinish={(res) => { addTrialSeconds('magnet-flip', res.duration || duration); setResult(res); setPhase('result'); tracker.stopTracking(); tracker.stopRemote(); stopCamera(); pauseMusic(); spotify.pause(); }}
           onBackToMenu={() => { tracker.stopTracking(); tracker.stopRemote(); stopCamera(); pauseMusic(); spotify.pause(); setPhase('setup'); }}
         />
         <button onClick={() => { tracker.stopTracking(); tracker.stopRemote(); stopCamera(); pauseMusic(); spotify.pause(); setPhase('setup'); }}
@@ -263,11 +267,16 @@ export default function MagnetFlipPage() {
 
           <BackgroundMusic spotify={spotify} onSelect={setBgTrack} selectedTrack={bgTrack} autoOpen={spotifyReturned} />
 
+          {!isGameFree('magnet-flip') && getTrialRemaining('magnet-flip') > 0 && (
+            <p className="text-xs text-white/30 text-center">{Math.ceil(getTrialRemaining('magnet-flip') / 60)} min free trial remaining</p>
+          )}
+
           {/* Start */}
           <button onClick={startGame} className="w-full text-white font-bold text-lg py-4 rounded-full transition-all hover:brightness-110" style={{ backgroundColor: accent }}>
             Start flipping
           </button>
         </div>
+        {showPaywall && <Paywall gameSlug="magnet-flip" onDismiss={() => setShowPaywall(false)} />}
       </div>
     </div>
   );

@@ -12,6 +12,8 @@ import { SpotifyTrack } from '@/lib/spotify';
 import Link from 'next/link';
 import { useEngagement } from '@/hooks/useEngagement';
 import MascotGlow from '@/components/ui/MascotGlow';
+import { canPlayGame, addTrialSeconds, isGameFree, getTrialRemaining } from '@/lib/subscription';
+import Paywall from '@/components/ui/Paywall';
 
 const CalibrationWizard = dynamic(() => import('@/components/tracking/CalibrationWizard'), { ssr: false });
 const OrbitHopGame = dynamic(() => import('@/components/games/OrbitHopGame'), { ssr: false });
@@ -29,6 +31,7 @@ export default function OrbitHopPage() {
   const [bgTrack, setBgTrack] = useState<SpotifyTrack | null>(null);
   const [spotifyReturned, setSpotifyReturned] = useState(false);
   const [hopSide, setHopSide] = useState<'left' | 'right'>('right');
+  const [showPaywall, setShowPaywall] = useState(false);
 
   const { recordGame } = useEngagement();
   const tracker = useTracker(inputMode);
@@ -52,6 +55,7 @@ export default function OrbitHopPage() {
   const [gameKey, setGameKey] = useState(0);
 
   const startGame = useCallback(async () => {
+    if (!canPlayGame('orbit-hop')) { setShowPaywall(true); return; }
     if (inputMode === 'demo') { tracker.startDemo(); if (bgTrack) playMusic(bgTrack); setPhase('playing'); return; }
     if (inputMode === 'remote') {
       const sid = localStorage.getItem('hb_remote_session');
@@ -175,7 +179,7 @@ export default function OrbitHopPage() {
         <OrbitHopGame
           duration={duration} difficulty={difficulty} inputMode={inputMode}
           getGameInput={tracker.getGameInput}
-          onFinish={(res) => { setResult(res); setPhase('result'); tracker.stopTracking(); tracker.stopRemote(); stopCamera(); pauseMusic(); spotify.pause(); }}
+          onFinish={(res) => { addTrialSeconds('orbit-hop', res.duration || duration); setResult(res); setPhase('result'); tracker.stopTracking(); tracker.stopRemote(); stopCamera(); pauseMusic(); spotify.pause(); }}
           onBackToMenu={() => { tracker.stopTracking(); tracker.stopRemote(); stopCamera(); pauseMusic(); spotify.pause(); setPhase('setup'); }}
           hopSide={hopSide}
         />
@@ -275,11 +279,16 @@ export default function OrbitHopPage() {
 
           <BackgroundMusic spotify={spotify} onSelect={setBgTrack} selectedTrack={bgTrack} autoOpen={spotifyReturned} />
 
+          {!isGameFree('orbit-hop') && getTrialRemaining('orbit-hop') > 0 && (
+            <p className="text-xs text-white/30 text-center">{Math.ceil(getTrialRemaining('orbit-hop') / 60)} min free trial remaining</p>
+          )}
+
           {/* Start */}
           <button onClick={startGame} className="w-full text-white font-bold text-lg py-4 rounded-full transition-all hover:brightness-110" style={{ backgroundColor: accent }}>
             Start hopping
           </button>
         </div>
+        {showPaywall && <Paywall gameSlug="orbit-hop" onDismiss={() => setShowPaywall(false)} />}
       </div>
     </div>
   );

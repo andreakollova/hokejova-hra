@@ -12,6 +12,8 @@ import { SpotifyTrack } from '@/lib/spotify';
 import Link from 'next/link';
 import { useEngagement } from '@/hooks/useEngagement';
 import MascotGlow from '@/components/ui/MascotGlow';
+import { canPlayGame, addTrialSeconds, isGameFree, getTrialRemaining } from '@/lib/subscription';
+import Paywall from '@/components/ui/Paywall';
 
 const CalibrationWizard = dynamic(() => import('@/components/tracking/CalibrationWizard'), { ssr: false });
 const JellyStackGame = dynamic(() => import('@/components/games/JellyStackGame'), { ssr: false });
@@ -30,6 +32,7 @@ export default function JellyStackPage() {
   const [spotifyReturned, setSpotifyReturned] = useState(false);
   const [dropSide, setDropSide] = useState<'center' | 'left' | 'right'>('center');
   const [gameKey, setGameKey] = useState(0);
+  const [showPaywall, setShowPaywall] = useState(false);
 
   const { recordGame } = useEngagement();
   const tracker = useTracker(inputMode);
@@ -51,6 +54,7 @@ export default function JellyStackPage() {
   }, []);
 
   const startGame = useCallback(async () => {
+    if (!canPlayGame('jelly-stack')) { setShowPaywall(true); return; }
     if (inputMode === 'demo') { tracker.startDemo(); if (bgTrack) playMusic(bgTrack); setGameKey(k => k + 1); setPhase('playing'); return; }
     if (inputMode === 'remote') {
       const sid = localStorage.getItem('hb_remote_session');
@@ -174,7 +178,7 @@ export default function JellyStackPage() {
         <JellyStackGame
           duration={duration} difficulty={difficulty} inputMode={inputMode}
           getGameInput={tracker.getGameInput}
-          onFinish={(res) => { setResult(res); setPhase('result'); tracker.stopTracking(); tracker.stopRemote(); stopCamera(); pauseMusic(); spotify.pause(); }}
+          onFinish={(res) => { addTrialSeconds('jelly-stack', res.duration || duration); setResult(res); setPhase('result'); tracker.stopTracking(); tracker.stopRemote(); stopCamera(); pauseMusic(); spotify.pause(); }}
           onBackToMenu={() => { tracker.stopTracking(); tracker.stopRemote(); stopCamera(); pauseMusic(); spotify.pause(); setPhase('setup'); }}
           dropSide={dropSide}
         />
@@ -269,11 +273,16 @@ export default function JellyStackPage() {
 
           <BackgroundMusic spotify={spotify} onSelect={setBgTrack} selectedTrack={bgTrack} autoOpen={spotifyReturned} />
 
+          {!isGameFree('jelly-stack') && getTrialRemaining('jelly-stack') > 0 && (
+            <p className="text-xs text-white/30 text-center">{Math.ceil(getTrialRemaining('jelly-stack') / 60)} min free trial remaining</p>
+          )}
+
           {/* Start */}
           <button onClick={startGame} className="w-full text-white font-bold text-lg py-4 rounded-full transition-all hover:brightness-110" style={{ backgroundColor: accent }}>
             Start stacking
           </button>
         </div>
+        {showPaywall && <Paywall gameSlug="jelly-stack" onDismiss={() => setShowPaywall(false)} />}
       </div>
     </div>
   );

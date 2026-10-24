@@ -12,6 +12,8 @@ import { SpotifyTrack } from '@/lib/spotify';
 import Link from 'next/link';
 import { useEngagement } from '@/hooks/useEngagement';
 import MascotGlow from '@/components/ui/MascotGlow';
+import { canPlayGame, addTrialSeconds, isGameFree, getTrialRemaining } from '@/lib/subscription';
+import Paywall from '@/components/ui/Paywall';
 
 const CalibrationWizard = dynamic(() => import('@/components/tracking/CalibrationWizard'), { ssr: false });
 const NeonDriftGame = dynamic(() => import('@/components/games/NeonDriftGame'), { ssr: false });
@@ -29,6 +31,7 @@ export default function NeonDriftPage() {
   const [bgTrack, setBgTrack] = useState<SpotifyTrack | null>(null);
   const [spotifyReturned, setSpotifyReturned] = useState(false);
   const [gameKey, setGameKey] = useState(0);
+  const [showPaywall, setShowPaywall] = useState(false);
 
   const { recordGame } = useEngagement();
   const tracker = useTracker(inputMode);
@@ -50,6 +53,7 @@ export default function NeonDriftPage() {
   }, []);
 
   const startGame = useCallback(async () => {
+    if (!canPlayGame('neon-drift')) { setShowPaywall(true); return; }
     if (inputMode === 'demo') { tracker.startDemo(); if (bgTrack) playMusic(bgTrack); setGameKey(k => k + 1); setPhase('playing'); return; }
     if (inputMode === 'remote') {
       const sid = localStorage.getItem('hb_remote_session');
@@ -173,7 +177,7 @@ export default function NeonDriftPage() {
         <NeonDriftGame
           duration={duration} difficulty={difficulty} inputMode={inputMode}
           getGameInput={tracker.getGameInput}
-          onFinish={(res) => { setResult(res); setPhase('result'); tracker.stopTracking(); tracker.stopRemote(); stopCamera(); pauseMusic(); spotify.pause(); }}
+          onFinish={(res) => { addTrialSeconds('neon-drift', res.duration || duration); setResult(res); setPhase('result'); tracker.stopTracking(); tracker.stopRemote(); stopCamera(); pauseMusic(); spotify.pause(); }}
           onBackToMenu={() => { tracker.stopTracking(); tracker.stopRemote(); stopCamera(); pauseMusic(); spotify.pause(); setPhase('setup'); }}
         />
         <button
@@ -266,11 +270,16 @@ export default function NeonDriftPage() {
 
           <BackgroundMusic spotify={spotify} onSelect={setBgTrack} selectedTrack={bgTrack} autoOpen={spotifyReturned} />
 
+          {!isGameFree('neon-drift') && getTrialRemaining('neon-drift') > 0 && (
+            <p className="text-xs text-white/30 text-center">{Math.ceil(getTrialRemaining('neon-drift') / 60)} min free trial remaining</p>
+          )}
+
           {/* Start */}
           <button onClick={startGame} className="w-full text-white font-bold text-lg py-4 rounded-full transition-all hover:brightness-110" style={{ backgroundColor: accent }}>
             Start drifting
           </button>
         </div>
+        {showPaywall && <Paywall gameSlug="neon-drift" onDismiss={() => setShowPaywall(false)} />}
       </div>
     </div>
   );
