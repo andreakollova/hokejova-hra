@@ -52,6 +52,22 @@ export async function GET(req: NextRequest) {
 
   const dateStr = today.toLocaleDateString('en-GB', { weekday: 'long', day: 'numeric', month: 'long' });
 
+  // --- Database health check ---
+  const tables = ['user_data', 'scores', 'page_views', 'beat_maps'];
+  const tableCounts: Record<string, number> = {};
+  for (const table of tables) {
+    const { count } = await supabase.from(table).select('*', { count: 'exact', head: true });
+    tableCounts[table] = count || 0;
+  }
+  const totalRows = Object.values(tableCounts).reduce((a, b) => a + b, 0);
+  const tableStats = Object.entries(tableCounts).map(([t, c]) => `  ${t}: ${c.toLocaleString()} rows`).join('\n');
+
+  // Warnings
+  const warnings: string[] = [];
+  if (totalRows > 50000) warnings.push('Total rows exceeding 50k - consider cleanup');
+  if ((tableCounts['page_views'] || 0) > 30000) warnings.push('page_views table is large - consider archiving old data');
+  if ((tableCounts['scores'] || 0) > 10000) warnings.push('scores table growing - monitor');
+
   await sendSlackMessage(
     `Daily Report - ${dateStr}`,
     [
@@ -74,8 +90,16 @@ export async function GET(req: NextRequest) {
         type: 'section',
         text: { type: 'mrkdwn', text: `*Top Pages*\n\`\`\`\n${topPages}\n\`\`\`` },
       }] : []),
+      {
+        type: 'section',
+        text: { type: 'mrkdwn', text: `*Database*\n\`\`\`\n${tableStats}\n  ──────────\n  Total: ${totalRows.toLocaleString()} rows\n\`\`\`` },
+      },
+      ...(warnings.length > 0 ? [{
+        type: 'section',
+        text: { type: 'mrkdwn', text: `⚠️ *Warnings*\n${warnings.map(w => `• ${w}`).join('\n')}` },
+      }] : []),
     ]
   );
 
-  return NextResponse.json({ ok: true, views: totalViews, uniqueUsers: uniqueUsernames.size });
+  return NextResponse.json({ ok: true, views: totalViews, uniqueUsers: uniqueUsernames.size, totalRows });
 }
