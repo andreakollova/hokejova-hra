@@ -22,6 +22,8 @@ export default function Home() {
   const [authEmail, setAuthEmail] = useState('');
   const [authPassword, setAuthPassword] = useState('');
   const [authName, setAuthName] = useState('');
+  const [authAge, setAuthAge] = useState<'16plus' | 'under16' | ''>('');
+  const [parentEmail, setParentEmail] = useState('');
   const [authError, setAuthError] = useState('');
   const [authSuccess, setAuthSuccess] = useState('');
   const [authLoading, setAuthLoading] = useState(false);
@@ -39,9 +41,23 @@ export default function Home() {
     setAuthSuccess('');
     setAuthLoading(true);
     if (authMode === 'signup') {
+      if (!authAge) { setAuthError('Please select your age range.'); setAuthLoading(false); return; }
+      if (authAge === 'under16' && !parentEmail.trim()) { setAuthError('Please enter your parent or guardian\'s email.'); setAuthLoading(false); return; }
       const err = await auth.signUpWithEmail(authEmail, authPassword, authName);
-      if (err) setAuthError(err);
-      else setAuthSuccess('Check your email to confirm your account.');
+      if (err) { setAuthError(err); }
+      else {
+        // If under 16, request parental consent
+        if (authAge === 'under16' && parentEmail.trim()) {
+          await fetch('/api/parental-consent', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ childUsername: authName, childEmail: authEmail, parentEmail: parentEmail.trim() }),
+          }).catch(() => {});
+          setAuthSuccess('Account created! We sent a consent request to your parent. Check your email to verify your account.');
+        } else {
+          setAuthSuccess('Check your email to confirm your account.');
+        }
+      }
     } else if (authMode === 'login') {
       const err = await auth.signInWithEmail(authEmail, authPassword);
       if (err) setAuthError(err);
@@ -605,15 +621,38 @@ export default function Home() {
                 <input type="password" value={authPassword} onChange={e => setAuthPassword(e.target.value)} className="input-field" placeholder="Password" required minLength={6} />
               )}
               {authMode === 'signup' && (
-                <div className="space-y-2.5 bg-gray-50 rounded-xl p-3.5">
-                  <p className="text-[10px] font-bold text-gray-400 uppercase tracking-wider">Age requirement</p>
+                <div className="space-y-3 bg-gray-50 rounded-xl p-3.5">
+                  <p className="text-[10px] font-bold text-gray-400 uppercase tracking-wider">Age</p>
+                  <div className="flex gap-2">
+                    <button type="button" onClick={() => setAuthAge('16plus')}
+                      className={`flex-1 py-2.5 rounded-xl text-xs font-semibold border-2 transition-all ${authAge === '16plus' ? 'border-emerald-500 bg-emerald-50 text-emerald-600' : 'border-gray-200 text-gray-500'}`}>
+                      16 or older
+                    </button>
+                    <button type="button" onClick={() => setAuthAge('under16')}
+                      className={`flex-1 py-2.5 rounded-xl text-xs font-semibold border-2 transition-all ${authAge === 'under16' ? 'border-amber-500 bg-amber-50 text-amber-600' : 'border-gray-200 text-gray-500'}`}>
+                      13–15 years old
+                    </button>
+                  </div>
+
+                  {authAge === 'under16' && (
+                    <div className="space-y-2">
+                      <p className="text-xs text-amber-700 bg-amber-50 rounded-lg p-2.5">
+                        Because you are under 16, we need your parent or guardian to approve your account before you can use Hockey Beats.
+                      </p>
+                      <input
+                        type="email"
+                        value={parentEmail}
+                        onChange={e => setParentEmail(e.target.value)}
+                        className="input-field text-sm"
+                        placeholder="Parent or guardian's email"
+                        required
+                      />
+                    </div>
+                  )}
+
                   <label className="flex items-start gap-2 cursor-pointer">
                     <input type="checkbox" required className="mt-0.5 accent-emerald-500" />
                     <span className="text-xs text-gray-500">I am at least 13 years old.</span>
-                  </label>
-                  <label className="flex items-start gap-2 cursor-pointer">
-                    <input type="checkbox" required className="mt-0.5 accent-emerald-500" />
-                    <span className="text-xs text-gray-500">If I am under 16, I have permission from my parent or legal guardian to use Hockey Beats.</span>
                   </label>
                   <label className="flex items-start gap-2 cursor-pointer">
                     <input type="checkbox" required className="mt-0.5 accent-emerald-500" />
