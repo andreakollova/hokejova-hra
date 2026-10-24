@@ -70,25 +70,49 @@ export default function Onboarding({ onComplete, defaultName }: OnboardingProps)
 
         {/* Step 2: Mascot */}
         {step === 2 && (
-          <div className="text-center">
-            <h1 className="text-3xl font-extrabold text-white tracking-tight mb-2">Choose your mascot</h1>
-            <p className="text-white/50 text-sm mb-8">This will be your profile picture</p>
-            <div className="grid grid-cols-3 gap-3 mb-6">
-              {MASCOTS.map(m => (
-                <button
-                  key={m.id}
-                  onClick={() => setMascotId(m.id)}
-                  className={`rounded-2xl p-3 border-2 transition-all flex flex-col items-center gap-2 ${mascotId === m.id ? 'border-emerald-500 bg-emerald-500/10' : 'border-white/8 bg-white/3 hover:border-white/15'}`}
-                >
-                  <Image src={m.image} alt={m.name} width={64} height={64} className="rounded-xl" />
-                  <div>
-                    <div className="text-xs font-bold text-white">{m.name}</div>
-                    <div className="text-[9px] text-white/40">{m.adjective}</div>
-                  </div>
-                </button>
-              ))}
+          <div>
+            <div className="text-center mb-6">
+              <h1 className="text-3xl font-extrabold text-white tracking-tight mb-2">Join the crew</h1>
+              <p className="text-white/50 text-sm">Pick your character. You can always switch later.</p>
             </div>
-            <div className="flex gap-3">
+            <div className="flex flex-col sm:flex-row gap-6">
+              {/* Selected mascot - large */}
+              <div className="flex-1 flex flex-col items-center justify-center">
+                {mascotId ? (() => {
+                  const m = MASCOTS.find(x => x.id === mascotId)!;
+                  return (
+                    <div className="flex flex-col items-center">
+                      <div className="relative mb-4">
+                        <div className="absolute inset-0 rounded-full animate-pulse-glow" style={{ background: 'radial-gradient(circle, #22c55e40 0%, transparent 70%)', transform: 'scale(2)' }} />
+                        <Image src={m.imageHappy} alt={m.name} width={160} height={160} className="relative z-10 rounded-2xl" />
+                      </div>
+                      <div className="text-xl font-extrabold text-white">{m.name}</div>
+                      <div className="text-sm text-emerald-400 font-bold">{m.adjective}</div>
+                    </div>
+                  );
+                })() : (
+                  <div className="w-40 h-40 rounded-2xl bg-white/5 border-2 border-dashed border-white/10 flex items-center justify-center">
+                    <p className="text-white/20 text-sm">Pick one</p>
+                  </div>
+                )}
+              </div>
+              {/* Grid of all mascots */}
+              <div className="sm:w-64">
+                <div className="grid grid-cols-4 sm:grid-cols-3 gap-2">
+                  {MASCOTS.map(m => (
+                    <button
+                      key={m.id}
+                      onClick={() => setMascotId(m.id)}
+                      className={`rounded-xl p-2 border-2 transition-all flex flex-col items-center gap-1 ${mascotId === m.id ? 'border-emerald-500 bg-emerald-500/10' : 'border-white/8 bg-white/3 hover:border-white/15'}`}
+                    >
+                      <Image src={m.image} alt={m.name} width={44} height={44} className="rounded-lg" />
+                      <div className="text-[9px] font-bold text-white/60 truncate w-full text-center">{m.name}</div>
+                    </button>
+                  ))}
+                </div>
+              </div>
+            </div>
+            <div className="flex gap-3 mt-6">
               <button onClick={() => setStep(1)} className="flex-1 py-3.5 rounded-full border-2 border-white/8 text-white/50 text-sm font-semibold transition-all hover:border-white/15">Back</button>
               <button onClick={() => { if (mascotId) setStep(3); }} disabled={!mascotId} className="flex-1 py-3.5 rounded-full bg-emerald-500 text-white text-sm font-bold transition-all disabled:opacity-30 hover:bg-emerald-400">Next</button>
             </div>
