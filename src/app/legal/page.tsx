@@ -61,6 +61,12 @@ const DOCUMENTS = [
     href: '/club-terms',
     desc: 'Club Premium packages, activation codes, license management, billing, and organizational access.',
   },
+  {
+    title: 'Copyright & Intellectual Property Policy',
+    version: 'v1.0',
+    href: '/copyright',
+    desc: 'Ownership, permitted use, third-party content, music licensing, and infringement reporting.',
+  },
 ];
 
 export default function LegalPage() {
