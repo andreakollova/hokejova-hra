@@ -72,7 +72,7 @@ export const DEFAULT_TRACKING_CONFIG: TrackingConfig = {
   maxBlobArea: 500000,
 };
 
-export type InputMode = 'camera' | 'demo';
+export type InputMode = 'camera' | 'demo' | 'remote';
 
 export interface GameInput {
   /** Normalized X [0, 1] */

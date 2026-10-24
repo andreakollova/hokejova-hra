@@ -4,6 +4,7 @@ import { useState, useRef, useCallback, useEffect } from 'react';
 import { useCamera } from '@/hooks/useCamera';
 import { BallTracker, rgbToHsv } from '@/lib/ball-tracker';
 import { CalibrationData, Point2D } from '@/lib/tracking';
+import QRCode from 'qrcode';
 
 interface CalibrationWizardProps {
   onComplete: (calibration: CalibrationData) => void;
@@ -50,6 +51,9 @@ export default function CalibrationWizard({
   const [mirrorX, setMirrorX] = useState(false);
   const [movementRange, setMovementRange] = useState({ left: 0.2, right: 0.8 });
   const [testResult, setTestResult] = useState<'idle' | 'tracking' | 'lost'>('idle');
+  const [showPhoneQR, setShowPhoneQR] = useState(false);
+  const [phoneSessionId] = useState(() => crypto.randomUUID().slice(0, 8));
+  const [qrDataUrl, setQrDataUrl] = useState('');
 
   const trackerRef = useRef<BallTracker | null>(null);
   const rafRef = useRef(0);
@@ -296,6 +300,30 @@ export default function CalibrationWizard({
                 Camera access is denied. Check your browser settings.
               </p>
             )}
+
+            {/* Phone camera option */}
+            <div className="border-t border-gray-200 pt-6 mt-6">
+              <button
+                onClick={async () => {
+                  setShowPhoneQR(true);
+                  const url = `${window.location.origin}/remote-camera?session=${phoneSessionId}`;
+                  const dataUrl = await QRCode.toDataURL(url, { width: 200, margin: 2, color: { dark: '#111827', light: '#ffffff' } });
+                  setQrDataUrl(dataUrl);
+                }}
+                className="text-sm font-medium text-gray-500 hover:text-gray-900 transition-colors"
+              >
+                Or use your phone as a camera &rarr;
+              </button>
+
+              {showPhoneQR && qrDataUrl && (
+                <div className="mt-4 bg-gray-50 rounded-2xl p-6 text-center">
+                  <img src={qrDataUrl} alt="QR Code" className="mx-auto mb-3" />
+                  <p className="text-sm font-medium text-gray-900 mb-1">Scan with your phone</p>
+                  <p className="text-xs text-gray-400">Point your phone camera at the training area. The ball position will be sent to this screen.</p>
+                  <p className="text-[10px] text-gray-300 mt-2 font-mono break-all">{window.location.origin}/remote-camera?session={phoneSessionId}</p>
+                </div>
+              )}
+            </div>
           </div>
         );
 
