@@ -312,24 +312,22 @@ export default function Home() {
               <p className="text-xs font-bold uppercase tracking-[0.2em] text-gray-400 mb-4">06 / How it works</p>
               <h2 className="text-3xl sm:text-5xl font-extrabold text-[#101828] leading-[1.08] tracking-tight">Three steps to your next high score.</h2>
             </div>
-            <div className="grid sm:grid-cols-3 gap-8">
+            <div className="grid sm:grid-cols-3 gap-6">
               {[
-                { step: '01', title: 'Grab your gear', desc: 'Get your hockey stick and ball ready.', img: '/images/step-gear.jpg' },
-                { step: '02', title: 'Set up your camera', desc: 'Let Hockey Beats track your ball as you play.', img: '/images/step-camera.jpg' },
-                { step: '03', title: 'Play the beat', desc: 'Follow the challenges, score points and level up.', img: '/images/step-play.jpg' },
+                { step: '1', title: 'Grab your gear', desc: 'Get your hockey stick and ball ready.', img: '/images/step-gear.jpg' },
+                { step: '2', title: 'Set up your camera', desc: 'Let Hockey Beats track your ball as you play.', img: '/images/step-camera.jpg' },
+                { step: '3', title: 'Play the beat', desc: 'Follow the challenges, score points and level up.', img: '/images/step-play.jpg' },
               ].map(item => (
-                <div key={item.step} className="group">
-                  <div className="rounded-2xl overflow-hidden mb-5">
-                    <Image src={item.img} alt={item.title} width={400} height={300} className="w-full h-48 object-cover group-hover:scale-105 transition-transform duration-500" />
+                <div key={item.step} className="group bg-white rounded-2xl overflow-hidden border border-gray-100 hover:shadow-lg transition-all duration-300">
+                  <div className="overflow-hidden">
+                    <Image src={item.img} alt={item.title} width={400} height={250} className="w-full h-44 object-cover group-hover:scale-105 transition-transform duration-500" />
                   </div>
-                  <div className="flex items-start gap-3">
-                    <div className="w-10 h-10 rounded-xl bg-emerald-500 flex items-center justify-center flex-shrink-0 shadow-md shadow-emerald-500/20">
-                      <span className="text-sm font-black text-white">{item.step}</span>
+                  <div className="p-5">
+                    <div className="flex items-center gap-3 mb-2">
+                      <span className="text-3xl font-black text-emerald-500">{item.step}</span>
+                      <h3 className="text-base font-extrabold text-[#101828] tracking-tight">{item.title}</h3>
                     </div>
-                    <div>
-                      <h3 className="text-lg font-extrabold text-[#101828] tracking-tight">{item.title}</h3>
-                      <p className="text-sm text-gray-500 mt-1">{item.desc}</p>
-                    </div>
+                    <p className="text-sm text-gray-500">{item.desc}</p>
                   </div>
                 </div>
               ))}
