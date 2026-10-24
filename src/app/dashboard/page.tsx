@@ -79,16 +79,6 @@ export default function DashboardPage() {
       const saved = localStorage.getItem('hb_friends');
       if (saved) {
         setFriends(JSON.parse(saved));
-      } else {
-        const mock = [
-          { username: 'matej_k', online: true, lastPlayed: '2 min ago', totalTime: '10h 12m', lastSong: 'Blinding Lights', lastGame: 'HockeyBeats', pending: false, incoming: false },
-          { username: 'zuzka99', online: false, lastPlayed: '3 hours ago', totalTime: '8h 54m', lastSong: 'Levitating', lastGame: 'Space Invaders', pending: false, incoming: false },
-          { username: 'hockeyboy', online: true, lastPlayed: '1 min ago', totalTime: '14h 7m', lastSong: 'Flowers', lastGame: 'Neon Drift', pending: false, incoming: false },
-          { username: 'petra_h', online: false, lastPlayed: 'Yesterday', totalTime: '6h 29m', lastSong: 'Unholy', lastGame: 'Jelly Stack', pending: false, incoming: false },
-          { username: 'tomas_s', online: false, lastPlayed: '2 days ago', totalTime: '4h 36m', lastSong: 'As It Was', lastGame: 'Orbit Hop', pending: false, incoming: true },
-        ];
-        setFriends(mock);
-        localStorage.setItem('hb_friends', JSON.stringify(mock));
       }
     } catch {}
     // Sync from cloud
@@ -399,13 +389,7 @@ export default function DashboardPage() {
             <div>
               <h3 className="text-sm font-bold text-white/90 mb-3">Favourites</h3>
               <div className="space-y-2">
-                {(favorites.length > 0 ? favorites : [
-                  { track: { id: 'b1', name: 'Blinding Lights', artists: 'The Weeknd', albumArt: '' }, playCount: 24 },
-                  { track: { id: 'l1', name: 'Levitating', artists: 'Dua Lipa', albumArt: '' }, playCount: 18 },
-                  { track: { id: 'f1', name: 'Flowers', artists: 'Miley Cyrus', albumArt: '' }, playCount: 12 },
-                  { track: { id: 'a1', name: 'Anti-Hero', artists: 'Taylor Swift', albumArt: '' }, playCount: 9 },
-                  { track: { id: 'u1', name: 'Unholy', artists: 'Sam Smith, Kim Petras', albumArt: '' }, playCount: 7 },
-                ] as TrackRecord[]).slice(0, 5).map((rec) => (
+                {favorites.slice(0, 5).map((rec) => (
                   <button key={rec.track.id} onClick={() => handleSongClick({ name: rec.track.name, artist: rec.track.artists, id: rec.track.id, albumArt: rec.track.albumArt })}
                     className="w-full flex items-center gap-3 rounded-2xl p-3 bg-white/5 border border-white/5 hover:bg-white/10 hover:border-white/10 transition-all text-left">
                     {rec.track.albumArt ? <img src={rec.track.albumArt} alt="" className="w-10 h-10 rounded-lg object-cover" /> : (
@@ -427,13 +411,7 @@ export default function DashboardPage() {
             <div>
               <h3 className="text-sm font-bold text-white/90 mb-3">Recently played</h3>
               <div className="space-y-2">
-                {(recent.length > 0 ? recent : [
-                  { track: { id: 'r1', name: 'As It Was', artists: 'Harry Styles', albumArt: '' }, playCount: 1, lastPlayed: 0 },
-                  { track: { id: 'r2', name: 'Heat Waves', artists: 'Glass Animals', albumArt: '' }, playCount: 1, lastPlayed: 0 },
-                  { track: { id: 'r3', name: 'Shivers', artists: 'Ed Sheeran', albumArt: '' }, playCount: 1, lastPlayed: 0 },
-                  { track: { id: 'r4', name: 'Stay', artists: 'The Kid LAROI, Justin Bieber', albumArt: '' }, playCount: 1, lastPlayed: 0 },
-                  { track: { id: 'r5', name: 'Peaches', artists: 'Justin Bieber', albumArt: '' }, playCount: 1, lastPlayed: 0 },
-                ] as TrackRecord[]).slice(0, 5).map((rec) => (
+                {recent.slice(0, 5).map((rec) => (
                   <button key={rec.track.id} onClick={() => handleSongClick({ name: rec.track.name, artist: rec.track.artists, id: rec.track.id, albumArt: rec.track.albumArt })}
                     className="w-full flex items-center gap-3 rounded-2xl p-3 bg-white/5 border border-white/5 hover:bg-white/10 hover:border-white/10 transition-all text-left">
                     {rec.track.albumArt ? <img src={rec.track.albumArt} alt="" className="w-10 h-10 rounded-lg object-cover" /> : (
@@ -463,13 +441,7 @@ export default function DashboardPage() {
             <div>
               <h3 className="text-sm font-bold text-white/90 mb-3">Best score</h3>
               <div className="space-y-2">
-                {(topScores.length > 0 ? topScores.slice(0, 5) : [
-                  { id: 'm1', username: 'matej_k', score: 2840, song_name: 'Blinding Lights' },
-                  { id: 'm2', username: 'zuzka99', score: 2510, song_name: 'Levitating' },
-                  { id: 'm3', username: 'hockeyboy', score: 2280, song_name: 'Flowers' },
-                  { id: 'm4', username: settings.username, score: 1950, song_name: favorites.length > 0 ? favorites[0].track.name : 'Slalom' },
-                  { id: 'm5', username: 'petra_h', score: 1720, song_name: 'Unholy' },
-                ] as { id: string; username: string; score: number; song_name: string }[]).map((entry, idx) => {
+                {(topScores.length > 0 ? topScores.slice(0, 5) : [] as { id: string; username: string; score: number; song_name: string }[]).map((entry, idx) => {
                   const isMe = entry.username === settings.username;
                   return (
                     <div key={entry.id} className={`flex items-center gap-3 rounded-2xl p-3 ${isMe ? 'bg-emerald-500/10 border border-emerald-500/20' : 'bg-white/5 border border-white/5'}`}>
@@ -504,11 +476,7 @@ export default function DashboardPage() {
                     return `${s}s`;
                   };
                   const entries = [
-                    { name: 'hockeyboy', secs: 847 * 60 + 23 },
-                    { name: 'matej_k', secs: 612 * 60 + 45 },
-                    { name: 'zuzka99', secs: 534 * 60 + 12 },
                     { name: settings.username, secs: mySecs },
-                    { name: 'petra_h', secs: 389 * 60 + 8 },
                   ].sort((a, b) => b.secs - a.secs);
                   return entries.map((entry, idx) => {
                     const isMe = entry.name === settings.username;

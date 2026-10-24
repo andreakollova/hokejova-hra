@@ -24,25 +24,7 @@ interface TimeEntry {
   totalMinutes: number;
 }
 
-const MOCK_SCORES: ScoreEntry[] = [
-  { id: 'm1', username: 'matej_k', score: 2840, accuracy: 96, longest_streak: 34, song_name: 'Blinding Lights', song_artist: 'The Weeknd', difficulty: 'hard', duration_seconds: 60, created_at: '2026-10-19T14:30:00Z' },
-  { id: 'm2', username: 'zuzka99', score: 2510, accuracy: 91, longest_streak: 28, song_name: 'Levitating', song_artist: 'Dua Lipa', difficulty: 'hard', duration_seconds: 60, created_at: '2026-10-18T16:45:00Z' },
-  { id: 'm3', username: 'hockeyboy', score: 2280, accuracy: 88, longest_streak: 25, song_name: 'Flowers', song_artist: 'Miley Cyrus', difficulty: 'medium', duration_seconds: 90, created_at: '2026-10-20T09:15:00Z' },
-  { id: 'm5', username: 'petra_h', score: 1720, accuracy: 82, longest_streak: 19, song_name: 'Unholy', song_artist: 'Sam Smith', difficulty: 'medium', duration_seconds: 60, created_at: '2026-10-17T11:20:00Z' },
-  { id: 'm6', username: 'tomas_s', score: 1580, accuracy: 79, longest_streak: 16, song_name: 'As It Was', song_artist: 'Harry Styles', difficulty: 'easy', duration_seconds: 90, created_at: '2026-10-16T19:00:00Z' },
-  { id: 'm7', username: 'lenka22', score: 1350, accuracy: 76, longest_streak: 14, song_name: 'Heat Waves', song_artist: 'Glass Animals', difficulty: 'medium', duration_seconds: 60, created_at: '2026-10-15T15:30:00Z' },
-  { id: 'm8', username: 'adam_pro', score: 1120, accuracy: 73, longest_streak: 12, song_name: 'Shivers', song_artist: 'Ed Sheeran', difficulty: 'easy', duration_seconds: 60, created_at: '2026-10-14T20:10:00Z' },
-];
-
-const MOCK_TIME: TimeEntry[] = [
-  { username: 'hockeyboy', totalMinutes: 847 },
-  { username: 'matej_k', totalMinutes: 612 },
-  { username: 'zuzka99', totalMinutes: 534 },
-  { username: 'petra_h', totalMinutes: 389 },
-  { username: 'tomas_s', totalMinutes: 276 },
-  { username: 'lenka22', totalMinutes: 198 },
-  { username: 'adam_pro', totalMinutes: 142 },
-];
+// No mock data - leaderboard shows real scores only
 
 function formatTime(minutes: number): string {
   if (minutes < 60) return `${minutes}m`;
@@ -73,19 +55,7 @@ export default function RebricekPage() {
       const res = await fetch(`/api/leaderboard${params}`);
       const data = await res.json();
       const real = data.scores || [];
-      if (real.length > 0) {
-        setScores(real);
-      } else if (tab === 'overall') {
-        const mock = [...MOCK_SCORES];
-        mock.splice(3, 0, { id: 'me', username: settings.username, score: 1950, accuracy: 85, longest_streak: 21, song_name: 'Anti-Hero', song_artist: 'Taylor Swift', difficulty: 'medium', duration_seconds: 60, created_at: '2026-10-20T12:00:00Z' });
-        setScores(mock);
-      } else {
-        setScores([
-          { id: 'p1', username: settings.username, score: 1950, accuracy: 85, longest_streak: 21, song_name: 'Anti-Hero', song_artist: 'Taylor Swift', difficulty: 'medium', duration_seconds: 60, created_at: '2026-10-20T12:00:00Z' },
-          { id: 'p2', username: settings.username, score: 1680, accuracy: 80, longest_streak: 18, song_name: 'Blinding Lights', song_artist: 'The Weeknd', difficulty: 'hard', duration_seconds: 30, created_at: '2026-10-19T10:30:00Z' },
-          { id: 'p3', username: settings.username, score: 1420, accuracy: 77, longest_streak: 15, song_name: 'Levitating', song_artist: 'Dua Lipa', difficulty: 'easy', duration_seconds: 90, created_at: '2026-10-18T14:00:00Z' },
-        ]);
-      }
+      setScores(real);
     } catch {}
     setLoading(false);
   };
@@ -93,16 +63,11 @@ export default function RebricekPage() {
   const loadTimeRanking = () => {
     setLoading(true);
     const myMinutes = engLoaded ? (engData.totalMinutesPlayed || 0) : 0;
-    const mock = [...MOCK_TIME];
-    // Insert user at correct position
-    const myEntry: TimeEntry = { username: settings.username, totalMinutes: myMinutes || 215 };
-    const insertIdx = mock.findIndex(e => e.totalMinutes < myEntry.totalMinutes);
-    if (insertIdx >= 0) {
-      mock.splice(insertIdx, 0, myEntry);
-    } else {
-      mock.push(myEntry);
+    const entries: TimeEntry[] = [];
+    if (isLoggedIn && myMinutes > 0) {
+      entries.push({ username: settings.username, totalMinutes: myMinutes });
     }
-    setTimeRanking(mock);
+    setTimeRanking(entries);
     setLoading(false);
   };
 

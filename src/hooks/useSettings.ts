@@ -5,8 +5,7 @@ import { SpotifyTrack } from '@/lib/spotify';
 
 const STORAGE_KEY = 'sportqo_user_settings';
 
-const HARDCODED_USERNAME = 'andrea';
-const HARDCODED_PASSWORD = 'andrea';
+// Legacy hardcoded login removed - using Supabase Auth now
 
 export interface UserSettings {
   loggedIn: boolean;
@@ -75,26 +74,12 @@ export function useSettings() {
     [settings, persist],
   );
 
+  // Legacy login kept for backward compat - real auth is via useAuth/Supabase
   const login = useCallback(
-    (username: string, password: string): string | null => {
-      if (
-        username.toLowerCase() === HARDCODED_USERNAME &&
-        password === HARDCODED_PASSWORD
-      ) {
-        const next: UserSettings = {
-          ...settings,
-          loggedIn: true,
-          username: username.toLowerCase(),
-        };
-        persist(next);
-        document.cookie = `hb_username=${username.toLowerCase()}; path=/; max-age=${60 * 60 * 24 * 365}`;
-        // Slack notification
-        fetch('/api/slack-notify', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ type: 'login', username: username.toLowerCase() }) }).catch(() => {});
-        return null;
-      }
-      return 'Wrong username or password';
+    (_username: string, _password: string): string | null => {
+      return 'Please use Google, Apple, or email sign-in.';
     },
-    [settings, persist],
+    [],
   );
 
   const logout = useCallback(() => {
