@@ -125,7 +125,7 @@ export default function Home() {
         <section className="py-20 sm:py-28">
           <div className="max-w-6xl mx-auto px-6 sm:px-10 text-center">
             <p className="text-xs font-bold uppercase tracking-[0.2em] text-gray-400 mb-4">01 / The game</p>
-            <h2 className="text-3xl sm:text-5xl font-extrabold text-[#101828] leading-[1.08] tracking-tight">Your stick is the controller.<br />Your hockey skills are the game.</h2>
+            <h2 className="text-3xl sm:text-5xl font-extrabold text-[#101828] leading-[1.08] tracking-tight">Turn your hockey stick<br />into a game controller.</h2>
             <p className="mt-6 text-lg text-gray-500 max-w-2xl mx-auto leading-relaxed">Meet Hockey Beats, the rhythm-based hockey game where you play with a real stick and ball. Follow the beat, hit your targets and turn every session into a new high score.</p>
             <div className="mt-8 flex flex-wrap gap-4 justify-center">
               <Link href="/dashboard" className="btn-primary px-8 py-4">Play Now</Link>
@@ -140,9 +140,13 @@ export default function Home() {
             <div className="grid lg:grid-cols-2 gap-12 items-center">
               <div>
                 <p className="text-xs font-bold uppercase tracking-[0.2em] text-gray-400 mb-4">02 / The game</p>
-                <h2 className="text-3xl sm:text-5xl font-extrabold text-[#101828] leading-[1.08] tracking-tight">Less drills. More thrills.</h2>
-                <p className="mt-6 text-lg text-gray-500 leading-relaxed">Who said stickhandling practice had to be boring? Play to the music, chase your next high score and take on challenges that keep you coming back for more.</p>
-                <p className="mt-3 text-base text-gray-400 italic">Every move is yours. Every point is earned.</p>
+                <h2 className="text-3xl sm:text-5xl font-extrabold text-[#101828] leading-[1.08] tracking-tight">Practice your coach will notice.</h2>
+                <p className="mt-6 text-lg text-gray-500 leading-relaxed">Hockey Beats makes stickhandling practice something you&apos;ll actually look forward to. Play rhythm-based challenges with your real stick and ball, improve your control and coordination, and build the confidence to keep your head up on the pitch.</p>
+                <div className="mt-6 flex items-center gap-4">
+                  <div className="text-4xl font-black text-emerald-500">80%</div>
+                  <p className="text-sm text-gray-400 text-left">Reported improvement in stickhandling after one month of playing Hockey Beats.</p>
+                </div>
+                <p className="mt-4 text-base text-[#101828] font-bold italic">More practice, better habits, stronger skills.</p>
               </div>
               <div className="relative">
                 <div className="rounded-3xl overflow-hidden">
@@ -195,7 +199,7 @@ export default function Home() {
               </div>
               <div className="order-1 lg:order-2">
                 <p className="text-xs font-bold uppercase tracking-[0.2em] text-gray-400 mb-4">04 / Real skills</p>
-                <h2 className="text-3xl sm:text-5xl font-extrabold text-[#101828] leading-[1.08] tracking-tight">Eyes up. Game on.</h2>
+                <h2 className="text-3xl sm:text-5xl font-extrabold text-[#101828] leading-[1.08] tracking-tight">Train your stickhandling while keeping your head up.</h2>
                 <p className="mt-6 text-lg text-gray-500 leading-relaxed">This isn&apos;t another game you play with your thumbs. Hockey Beats gets you moving with your actual hockey stick and ball, encouraging better ball control, coordination, reactions and heads-up stickhandling.</p>
                 <p className="mt-3 text-base text-gray-400 italic">The more you play, the more you practice.</p>
               </div>
