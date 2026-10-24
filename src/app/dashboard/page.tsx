@@ -351,7 +351,7 @@ export default function DashboardPage() {
             <div className="flex-1 overflow-y-auto space-y-1.5" style={{ maxHeight: '280px' }}>
               {friends.filter(f => !f.incoming).length === 0 && !showAddFriend && (
                 <div className="text-center py-6">
-                  <div className="text-sm text-white/20 mb-2">No friends yet</div>
+                  <div className="text-sm text-white mb-2">No friends yet</div>
                   <button onClick={() => setShowAddFriend(true)} className="text-xs font-bold text-emerald-400 hover:text-emerald-300">Add a friend</button>
                 </div>
               )}
