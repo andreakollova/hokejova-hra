@@ -660,7 +660,7 @@ function HeroBanner({ isLoggedIn, onLoginClick }: { isLoggedIn: boolean; onLogin
               <Image src="/images/badge-2.png" alt="Free to Play" width={90} height={60} className="w-20 h-auto sm:w-28 sm:h-auto drop-shadow-lg" />
             </div>
           </div>
-          <div className="flex flex-wrap items-center gap-4 px-6 sm:px-10" style={{ marginTop: '-50px', marginLeft: '15px' }}>
+          <div className="flex flex-wrap items-center gap-4 px-6 sm:px-10 relative z-10" style={{ marginTop: '-80px', marginLeft: '20px' }}>
             <button
               onClick={() => {
                 if (isLoggedIn) { window.location.href = '/dashboard'; }
