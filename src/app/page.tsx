@@ -362,12 +362,39 @@ export default function Home() {
         </section>
 
         {/* 10 - Final CTA */}
-        <section className="bg-[#101828] py-20 sm:py-28">
+        <section className="py-20 sm:py-28">
           <div className="max-w-3xl mx-auto px-6 sm:px-10 text-center">
-            <h2 className="text-3xl sm:text-5xl font-extrabold text-white tracking-tight leading-[1.08]">One more game?</h2>
-            <p className="mt-5 text-lg text-white/50">Grab your stick. Your next high score isn&apos;t going to beat itself.</p>
+            <h2 className="text-3xl sm:text-5xl font-extrabold text-[#101828] tracking-tight leading-[1.08]">One more game?</h2>
+            <p className="mt-5 text-lg text-gray-500">Grab your stick. Your next high score isn&apos;t going to beat itself.</p>
             <div className="mt-10">
-              <Link href="/dashboard" className="inline-block bg-emerald-500 hover:bg-emerald-400 text-white font-bold text-lg px-10 py-5 rounded-full transition-all">Play Hockey Beats</Link>
+              <Link href="/dashboard" className="inline-block bg-[#101828] hover:bg-[#1a2540] text-white font-bold text-lg px-10 py-5 rounded-full transition-all">Play Hockey Beats</Link>
+            </div>
+          </div>
+        </section>
+
+        {/* FAQ */}
+        <section className="bg-gray-50/50 py-20 sm:py-28">
+          <div className="max-w-3xl mx-auto px-6 sm:px-10">
+            <h2 className="text-3xl sm:text-4xl font-extrabold text-[#101828] mb-10 text-center tracking-tight">Frequently asked questions</h2>
+            <div className="space-y-3">
+              {[
+                { q: 'What is Hockey Beats?', a: 'Hockey Beats is an interactive training game for stick-and-ball practice. Players use real movements to play games on screen, build scores and compete in rankings.' },
+                { q: 'Which sports is it for?', a: 'Hockey Beats is designed for ice hockey, field hockey and floorball. Ice hockey players use it for off-ice stickhandling practice.' },
+                { q: 'How does it work?', a: 'Set up your camera, grab your stick and ball, and follow the challenges on screen. The camera tracks your ball as you play.' },
+                { q: 'Do I need special equipment?', a: 'Just your hockey stick, a suitable training ball, and a device with a camera. No special sensors or training machines needed.' },
+                { q: 'Can I listen to my own music?', a: 'Yes. You can connect Spotify or Apple Music and listen to your choice of songs while playing.' },
+                { q: 'Is it free?', a: 'The core HockeyBeats Slalom game is free forever. Premium unlocks all 12+ games with a 7-day free trial.' },
+                { q: 'Can I compete with teammates?', a: 'Yes. Scores and leaderboards let you compare results with friends and teammates.' },
+                { q: 'Is it safe for children?', a: 'Hockey Beats is designed for players aged 13+. We have parental consent processes and privacy protections for younger players.' },
+              ].map((faq) => (
+                <details key={faq.q} className="faq-item rounded-2xl p-6 group">
+                  <summary className="font-bold text-[#101828] cursor-pointer list-none flex justify-between items-center tracking-tight">
+                    {faq.q}
+                    <span className="text-gray-300 group-open:rotate-45 transition-transform duration-300 text-xl font-light">+</span>
+                  </summary>
+                  <p className="mt-4 text-sm text-gray-500 leading-relaxed">{faq.a}</p>
+                </details>
+              ))}
             </div>
           </div>
         </section>
@@ -625,9 +652,9 @@ function MascotsShowcase() {
   const mascot = MASCOTS[selected];
 
   return (
-    <section className="py-24 sm:py-32 bg-[#101828]">
+    <section className="py-16 sm:py-20 bg-[#101828]">
       <div className="max-w-6xl mx-auto px-6 sm:px-10">
-        <div className="text-center mb-14">
+        <div className="text-center mb-10">
           <h2 className="text-3xl sm:text-5xl font-extrabold text-white leading-tight tracking-tight">Choose your favorite</h2>
           <p className="mt-4 text-lg text-white/40 max-w-xl mx-auto">Discover a crew of bold characters, each with a game of their own.</p>
         </div>
@@ -652,8 +679,8 @@ function MascotsShowcase() {
           </div>
 
           {/* Sidebar with all mascots */}
-          <div className="lg:w-80">
-            <div className="grid grid-cols-4 sm:grid-cols-5 lg:grid-cols-3 gap-2">
+          <div className="lg:w-[420px]">
+            <div className="grid grid-cols-4 sm:grid-cols-5 lg:grid-cols-4 gap-2">
               {MASCOTS.map((m, i) => (
                 <button
                   key={m.id}
