@@ -310,6 +310,9 @@ export default function Home() {
           </div>
         </section>
 
+        {/* Mascots */}
+        <MascotsShowcase />
+
         {/* 07 - For players, coaches, parents */}
         <div id="coaches"><AudienceTabs /></div>
 
@@ -359,9 +362,6 @@ export default function Home() {
           </div>
         </section>
 
-
-        {/* Mascots */}
-        <MascotsShowcase />
 
         {/* Reviews */}
         <section className="py-14 sm:py-20 bg-gray-50/50">
