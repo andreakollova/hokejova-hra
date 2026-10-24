@@ -280,9 +280,23 @@ export default function JellyStackPage() {
             <p className="text-xs text-gray-400 text-center">{Math.ceil(getTrialRemaining('jelly-stack') / 60)} min free trial remaining</p>
           )}
 
+          {/* Demo toggle */}
+          <label className="flex items-center gap-3 cursor-pointer mt-2">
+            <button
+              onClick={() => setInputMode(inputMode === 'demo' ? 'camera' : 'demo')}
+              className={`relative w-10 h-5 rounded-full transition-colors ${inputMode === 'demo' ? 'bg-emerald-500' : 'bg-gray-200'}`}
+            >
+              <div className={`absolute top-0.5 left-0.5 w-4 h-4 bg-white rounded-full shadow transition-transform ${inputMode === 'demo' ? 'translate-x-5' : ''}`} />
+            </button>
+            <div>
+              <span className="text-sm font-medium text-gray-700">Demo mode</span>
+              <span className="text-xs text-gray-400 ml-2">Play with mouse - scores won&apos;t count</span>
+            </div>
+          </label>
+
           {/* Start */}
           <button onClick={startGame} className="w-full text-white font-bold text-lg py-4 rounded-full transition-all hover:brightness-110" style={{ backgroundColor: accent }}>
-            Start stacking
+            {inputMode === 'demo' ? 'Start demo' : 'Start stacking'}
           </button>
         </div>
         {showPaywall && <Paywall gameSlug="jelly-stack" onDismiss={() => setShowPaywall(false)} />}

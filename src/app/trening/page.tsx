@@ -632,9 +632,23 @@ export default function TreningPage() {
           {/* Music */}
           <BackgroundMusic spotify={spotify} onSelect={(track) => { if (track) handleSelectTrack(track); else setMusicConfig(null); }} selectedTrack={musicConfig?.track || null} />
 
+          {/* Demo toggle */}
+          <label className="flex items-center gap-3 cursor-pointer mt-2">
+            <button
+              onClick={() => setInputMode(inputMode === 'demo' ? 'camera' : 'demo')}
+              className={`relative w-10 h-5 rounded-full transition-colors ${inputMode === 'demo' ? 'bg-emerald-500' : 'bg-gray-200'}`}
+            >
+              <div className={`absolute top-0.5 left-0.5 w-4 h-4 bg-white rounded-full shadow transition-transform ${inputMode === 'demo' ? 'translate-x-5' : ''}`} />
+            </button>
+            <div>
+              <span className="text-sm font-medium text-gray-700">Demo mode</span>
+              <span className="text-xs text-gray-400 ml-2">Play with mouse - scores won&apos;t count</span>
+            </div>
+          </label>
+
           {/* Start button */}
           <button onClick={startGame} className="w-full text-white font-bold text-lg py-4 rounded-full transition-all hover:brightness-110 mt-2" style={{ backgroundColor: '#22c55e' }}>
-            {musicConfig ? `Play at ${musicConfig.bpm} BPM` : 'Start training'}
+            {inputMode === 'demo' ? 'Start demo' : musicConfig ? `Play at ${musicConfig.bpm} BPM` : 'Start training'}
           </button>
 
         </div>
