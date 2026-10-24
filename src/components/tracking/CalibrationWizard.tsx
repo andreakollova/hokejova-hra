@@ -61,11 +61,22 @@ export default function CalibrationWizard({
   const trackerRef = useRef<BallTracker | null>(null);
   const rafRef = useRef(0);
 
-  // Step 1: Request permission
+  // Step 1: Request permission and auto-start
   const handleRequestPermission = async () => {
     const ok = await requestPermission();
     if (ok) {
-      await enumerateDevices();
+      const devs = await enumerateDevices();
+      // Auto-select and start first camera
+      if (devs && devs.length > 0) {
+        setSelectedDevice(devs[0].deviceId);
+        // Auto-start camera after a tick so videoRef is available
+        setTimeout(async () => {
+          if (videoRef.current) {
+            const info = await startCamera(devs[0].deviceId, videoRef.current);
+            if (info) setStep('preview');
+          }
+        }, 100);
+      }
     }
   };
 
@@ -75,6 +86,17 @@ export default function CalibrationWizard({
       setSelectedDevice(devices[0].deviceId);
     }
   }, [devices]);
+
+  // Check permission on mount (may already be granted)
+  useEffect(() => {
+    navigator.mediaDevices.enumerateDevices().then(devs => {
+      const hasLabels = devs.some(d => d.kind === 'videoinput' && d.label);
+      if (hasLabels) {
+        // Permission already granted from previous session
+        enumerateDevices();
+      }
+    }).catch(() => {});
+  }, []);
 
   // Generate QR code on mount
   useEffect(() => {
