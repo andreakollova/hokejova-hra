@@ -109,7 +109,7 @@ export default function Home() {
           <Link href="/" className="flex items-center gap-2">
             <Image src="/images/hb-logo-hero-dark.png" alt="Hockey Beats" width={240} height={64} className="h-10 sm:h-12 w-auto" />
           </Link>
-          <nav className="flex items-center gap-4 sm:gap-5">
+          <nav className="flex items-center gap-5 sm:gap-8">
             <a href="#games" className="text-sm font-medium text-gray-600 hover:text-[#101828] transition-colors hidden lg:block">Games</a>
             <a href="#how-it-works" className="text-sm font-medium text-gray-600 hover:text-[#101828] transition-colors hidden lg:block">How to play</a>
             <a href="#players" className="text-sm font-medium text-gray-600 hover:text-[#101828] transition-colors hidden lg:block">Players</a>
@@ -222,12 +222,12 @@ export default function Home() {
                 { title: 'Daily Streaks', desc: 'Play every day to build your streak', color: '#ef4444', icon: <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M17.657 18.657A8 8 0 016.343 7.343S7 9 9 10c0-2 .5-5 2.986-7C14 5 16.09 5.777 17.656 7.343A7.975 7.975 0 0120 13a7.975 7.975 0 01-2.343 5.657z" /><path strokeLinecap="round" strokeLinejoin="round" d="M9.879 16.121A3 3 0 1012.015 11L11 14H9c0 .768.293 1.536.879 2.121z" /></svg> },
                 { title: 'Leaderboards', desc: 'Compete with friends and teammates', color: '#3b82f6', icon: <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M3 10h4v11H3zM10 3h4v18h-4zM17 7h4v14h-4z" /></svg> },
               ].map(item => (
-                <div key={item.title} className="flex items-start gap-3 p-2">
-                  <div className="flex-shrink-0 mt-0.5" style={{ color: item.color }}>{item.icon}</div>
-                  <div>
+                <div key={item.title} className="p-2">
+                  <div className="flex items-center gap-2.5 mb-1.5">
+                    <div className="flex-shrink-0" style={{ color: item.color }}>{item.icon}</div>
                     <h3 className="text-sm font-extrabold text-[#101828] tracking-tight">{item.title}</h3>
-                    <p className="text-xs text-gray-400 mt-0.5 leading-relaxed">{item.desc}</p>
                   </div>
+                  <p className="text-xs text-gray-400 leading-relaxed">{item.desc}</p>
                 </div>
               ))}
             </div>
