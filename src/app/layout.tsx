@@ -17,7 +17,7 @@ export const metadata: Metadata = {
   },
   description: "Hockey training games with music. Play along to Spotify, build your score and rank against teammates. Field hockey, ice hockey and floorball.",
   keywords: ["hockey", "training", "game", "field hockey", "ice hockey", "floorball", "music", "Spotify", "practice"],
-  icons: { icon: '/images/hb-favicon.png' },
+  icons: { icon: [{ url: '/favicon.ico' }, { url: '/images/hb-favicon.png', type: 'image/png' }] },
   metadataBase: new URL('https://www.hockeybeats.app'),
   openGraph: {
     title: "HockeyBeats - Get better at hockey to the music you love",
