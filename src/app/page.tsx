@@ -181,7 +181,6 @@ export default function Home() {
             <div className="text-center mb-16">
               <p className="text-xs font-bold uppercase tracking-[0.2em] text-gray-400 mb-4">Game library</p>
               <h2 className="text-3xl sm:text-5xl font-extrabold text-gray-900 leading-[1.08] tracking-tight">Different games keep practice interesting.</h2>
-              <p className="mt-8 text-2xl sm:text-3xl font-extrabold text-gray-900 tracking-tight">hockey beats</p>
               <p className="mt-5 text-base text-gray-500">Start with HockeyBeats, then explore extra games that give you another reason to pick up your stick.</p>
             </div>
 
