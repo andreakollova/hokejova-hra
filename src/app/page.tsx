@@ -127,10 +127,6 @@ export default function Home() {
         {/* Games */}
         <section id="games" className="py-14 sm:py-20">
           <div className="max-w-6xl mx-auto px-6 sm:px-10">
-            <div className="text-center mb-14">
-              <p className="text-xs font-bold uppercase tracking-[0.2em] text-gray-400 mb-4">Game library</p>
-              <h2 className="text-3xl sm:text-5xl font-extrabold text-[#101828] leading-[1.08] tracking-tight">Different games keep practice interesting.</h2>
-            </div>
             <div className="relative -mx-6 sm:-mx-10">
               <div className="flex gap-5 overflow-x-auto px-6 sm:px-10 pb-4 snap-x snap-mandatory scrollbar-hide" style={{ scrollbarWidth: 'none', msOverflowStyle: 'none', WebkitOverflowScrolling: 'touch' }}>
                 {[
