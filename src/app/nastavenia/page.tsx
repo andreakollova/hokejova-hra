@@ -396,6 +396,31 @@ export default function NastaveniaPage() {
           </div>
         </section>
 
+        {/* Cookie preferences */}
+        <section className="mb-10">
+          <h2 className="text-sm font-medium text-gray-400 uppercase tracking-wider mb-3">Cookie preferences</h2>
+          <div className="card p-6">
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-sm font-medium text-gray-900">Analytics &amp; visit tracking</p>
+                <p className="text-xs text-gray-400 mt-0.5">
+                  {typeof window !== 'undefined' && localStorage.getItem('hb_cookie_consent') === 'accepted' ? 'Accepted' : 'Essential only'}
+                </p>
+              </div>
+              <button
+                onClick={() => {
+                  localStorage.removeItem('hb_cookie_consent');
+                  window.location.reload();
+                }}
+                className="text-xs font-medium text-gray-500 hover:text-gray-700 bg-gray-100 hover:bg-gray-200 px-3 py-1.5 rounded-lg transition-all"
+              >
+                Reset preferences
+              </button>
+            </div>
+            <p className="text-xs text-gray-400 mt-3">Read our <a href="/cookies" className="underline hover:text-gray-600">Cookie Policy</a>.</p>
+          </div>
+        </section>
+
         {/* Data retention info */}
         <section className="mb-10">
           <h2 className="text-sm font-medium text-gray-400 uppercase tracking-wider mb-3">Your data</h2>
