@@ -13,19 +13,45 @@ function AuthCompleteContent() {
   useEffect(() => {
     const code = params.get('code');
     const next = params.get('next') || '/dashboard';
+    const supabase = getSupabaseBrowser();
 
-    if (code) {
-      getSupabaseBrowser().auth.exchangeCodeForSession(code).then(({ error }) => {
-        if (error) {
-          console.error('Auth error:', error);
-          router.push('/');
-        } else {
+    const handleAuth = async () => {
+      // Try code exchange
+      if (code) {
+        const { error } = await supabase.auth.exchangeCodeForSession(code);
+        if (!error) {
           router.push(next);
+          return;
         }
-      });
-    } else {
+        console.error('Code exchange failed:', error);
+      }
+
+      // Check if session already exists (from hash or cookies)
+      const { data: { session } } = await supabase.auth.getSession();
+      if (session) {
+        router.push(next);
+        return;
+      }
+
+      // Check URL hash for tokens (implicit flow)
+      if (window.location.hash) {
+        // Supabase auto-detects hash tokens
+        setTimeout(async () => {
+          const { data: { session: s } } = await supabase.auth.getSession();
+          if (s) {
+            router.push(next);
+          } else {
+            router.push('/');
+          }
+        }, 1000);
+        return;
+      }
+
+      // Nothing worked
       router.push('/');
-    }
+    };
+
+    handleAuth();
   }, [params, router]);
 
   return (
