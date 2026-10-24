@@ -33,8 +33,19 @@ export default function Home() {
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 10);
     window.addEventListener('scroll', onScroll, { passive: true });
+
+    // Check if redirected for onboarding after OAuth
+    const params = new URLSearchParams(window.location.search);
+    if (params.get('onboarding') === 'true') {
+      const profile = getProfile();
+      if (!profile.onboarded && auth.isLoggedIn) {
+        setShowOnboarding(true);
+        window.history.replaceState({}, '', '/');
+      }
+    }
+
     return () => window.removeEventListener('scroll', onScroll);
-  }, []);
+  }, [auth.isLoggedIn]); // eslint-disable-line react-hooks/exhaustive-deps
 
   const handleEmailAuth = async (e: React.FormEvent) => {
     e.preventDefault();

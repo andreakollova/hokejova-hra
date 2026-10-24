@@ -15,12 +15,28 @@ function AuthCompleteContent() {
     const next = params.get('next') || '/dashboard';
     const supabase = getSupabaseBrowser();
 
+    const goToNextOrOnboarding = () => {
+      // Check if onboarding is needed
+      try {
+        const raw = localStorage.getItem('sportqo_engagement');
+        if (raw) {
+          const eng = JSON.parse(raw);
+          if (eng.profile?.onboarded) {
+            router.push(next);
+            return;
+          }
+        }
+      } catch {}
+      // Not onboarded - go to homepage which shows onboarding
+      router.push('/?onboarding=true');
+    };
+
     const handleAuth = async () => {
       // Try code exchange
       if (code) {
         const { error } = await supabase.auth.exchangeCodeForSession(code);
         if (!error) {
-          router.push(next);
+          goToNextOrOnboarding();
           return;
         }
         console.error('Code exchange failed:', error);
@@ -29,7 +45,7 @@ function AuthCompleteContent() {
       // Check if session already exists (from hash or cookies)
       const { data: { session } } = await supabase.auth.getSession();
       if (session) {
-        router.push(next);
+        goToNextOrOnboarding();
         return;
       }
 
