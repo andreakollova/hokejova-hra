@@ -35,7 +35,7 @@ export default function SettingsPage() {
   if (!loaded || !engLoaded) {
     return (
       <div className="min-h-screen bg-[#0a0a0f] flex items-center justify-center">
-        <p className="text-white/60">Loading...</p>
+        <p className="text-white">Loading...</p>
       </div>
     );
   }
@@ -83,7 +83,7 @@ export default function SettingsPage() {
           <Link href="/dashboard">
             <Image src="/images/hb-logo-white.png" alt="Hockey Beats" width={160} height={36} className="h-8 w-auto" />
           </Link>
-          <Link href="/dashboard" className="text-sm text-white/70 hover:text-white transition-colors">
+          <Link href="/dashboard" className="text-sm text-white hover:text-white transition-colors">
             Dashboard
           </Link>
         </div>
@@ -94,7 +94,7 @@ export default function SettingsPage() {
 
         {/* Profile with Mascot */}
         <section className="mb-10">
-          <h2 className="text-xs font-medium text-white/60 uppercase tracking-wider mb-3">Profile</h2>
+          <h2 className="text-xs font-medium text-white uppercase tracking-wider mb-3">Profile</h2>
           <div className="rounded-2xl bg-white/5 border border-white/8 p-6">
             <div className="flex items-center gap-4">
               {(() => {
@@ -105,44 +105,20 @@ export default function SettingsPage() {
               })()}
               <div>
                 <p className="text-lg font-semibold text-white">{settings.username}</p>
-                <p className="text-sm text-white/60">Logged in user</p>
-                <div className="flex gap-3 mt-2">
-                  <button
-                    onClick={() => fileInputRef.current?.click()}
-                    className="text-xs font-medium text-emerald-400 hover:text-emerald-300 bg-emerald-500/10 hover:bg-emerald-500/20 px-3 py-1.5 rounded-lg transition-all"
-                  >
-                    {avatar ? 'Change photo' : 'Upload photo'}
-                  </button>
-                  {avatar && (
-                    <button
-                      onClick={() => setAvatar(null)}
-                      className="text-xs text-white/60 hover:text-red-400 transition-colors px-3 py-1.5"
-                    >
-                      Remove
-                    </button>
-                  )}
-                </div>
+                <p className="text-sm text-white">Logged in user</p>
               </div>
             </div>
           </div>
         </section>
 
-        <input
-          ref={fileInputRef}
-          type="file"
-          accept="image/*"
-          className="hidden"
-          onChange={handleAvatarUpload}
-        />
-
         {/* Streak */}
         <section className="mb-10">
-          <h2 className="text-xs font-medium text-white/60 uppercase tracking-wider mb-3">Streak</h2>
+          <h2 className="text-xs font-medium text-white uppercase tracking-wider mb-3">Streak</h2>
           <div className="rounded-2xl bg-white/5 border border-white/8 p-6">
             <div className="flex items-center justify-between mb-4">
               <StreakBadge currentStreak={streak.currentStreak} frozen={streak.frozen} />
               {streak.currentStreak > 0 && (
-                <span className="text-sm text-white/60">{streak.currentStreak} {streak.currentStreak === 1 ? 'day' : 'days'}</span>
+                <span className="text-sm text-white">{streak.currentStreak} {streak.currentStreak === 1 ? 'day' : 'days'}</span>
               )}
             </div>
             {streak.frozen && (
@@ -154,17 +130,17 @@ export default function SettingsPage() {
               </div>
             )}
             {!streak.frozen && streak.currentStreak === 0 && (
-              <p className="text-sm text-white/60">Play a game to start your streak!</p>
+              <p className="text-sm text-white">Play a game to start your streak!</p>
             )}
             {!streak.frozen && streak.currentStreak > 0 && (
-              <p className="text-sm text-white/60">Keep it going! Play every day to grow your streak.</p>
+              <p className="text-sm text-white">Keep it going! Play every day to grow your streak.</p>
             )}
           </div>
         </section>
 
         {/* XP & Level */}
         <section className="mb-10">
-          <h2 className="text-xs font-medium text-white/60 uppercase tracking-wider mb-3">Level & XP</h2>
+          <h2 className="text-xs font-medium text-white uppercase tracking-wider mb-3">Level & XP</h2>
           <div className="rounded-2xl bg-white/5 border border-white/8 p-6">
             <XPBar
               level={levelInfo.level}
@@ -176,15 +152,15 @@ export default function SettingsPage() {
             <div className="grid grid-cols-3 gap-3 mt-5">
               <div className="text-center">
                 <p className="text-xl font-bold text-white tabular-nums">{data.totalGamesPlayed || 0}</p>
-                <p className="text-xs text-white/60">Games</p>
+                <p className="text-xs text-white">Games</p>
               </div>
               <div className="text-center">
                 <p className="text-xl font-bold text-white tabular-nums">{data.totalMinutesPlayed || 0}</p>
-                <p className="text-xs text-white/60">Minutes</p>
+                <p className="text-xs text-white">Minutes</p>
               </div>
               <div className="text-center">
                 <p className="text-xl font-bold text-white tabular-nums">{levelInfo.currentXP.toLocaleString()}</p>
-                <p className="text-xs text-white/60">Total XP</p>
+                <p className="text-xs text-white">Total XP</p>
               </div>
             </div>
           </div>
@@ -192,16 +168,16 @@ export default function SettingsPage() {
 
         {/* Platform toggle */}
         <section className="mb-10">
-          <h2 className="text-xs font-medium text-white/60 uppercase tracking-wider mb-3">Platform</h2>
+          <h2 className="text-xs font-medium text-white uppercase tracking-wider mb-3">Platform</h2>
           <div className="rounded-2xl bg-white/5 border border-white/8 p-6">
-            <p className="text-sm text-white/60 mb-4">Select the device you train on.</p>
+            <p className="text-sm text-white mb-4">Select the device you train on.</p>
             <div className="flex gap-3">
               <button
                 onClick={() => updateSettings({ platform: 'desktop' })}
                 className={`flex-1 py-3 rounded-full text-sm font-medium transition-all duration-200 ${
                   settings.platform === 'desktop'
                     ? 'bg-white text-[#0a0a0f]'
-                    : 'bg-white/5 text-white/70 hover:bg-white/10 border border-white/8'
+                    : 'bg-white/5 text-white hover:bg-white/10 border border-white/8'
                 }`}
               >
                 Desktop
@@ -211,7 +187,7 @@ export default function SettingsPage() {
                 className={`flex-1 py-3 rounded-full text-sm font-medium transition-all duration-200 ${
                   settings.platform === 'mobile'
                     ? 'bg-white text-[#0a0a0f]'
-                    : 'bg-white/5 text-white/70 hover:bg-white/10 border border-white/8'
+                    : 'bg-white/5 text-white hover:bg-white/10 border border-white/8'
                 }`}
               >
                 Mobile
@@ -222,9 +198,9 @@ export default function SettingsPage() {
 
         {/* Music source */}
         <section className="mb-10">
-          <h2 className="text-xs font-medium text-white/60 uppercase tracking-wider mb-3">Music source</h2>
+          <h2 className="text-xs font-medium text-white uppercase tracking-wider mb-3">Music source</h2>
           <div className="rounded-2xl bg-white/5 border border-white/8 p-6">
-            <p className="text-sm text-white/60 mb-4">Default music source for games.</p>
+            <p className="text-sm text-white mb-4">Default music source for games.</p>
             <div className="grid grid-cols-2 gap-3">
               {([
                 { id: 'spotify' as const, label: 'Spotify' },
@@ -244,7 +220,7 @@ export default function SettingsPage() {
                   className={`py-3 rounded-full text-sm font-medium transition-all duration-200 ${
                     settings.musicService === opt.id
                       ? 'bg-white text-[#0a0a0f]'
-                      : 'bg-white/5 text-white/70 hover:bg-white/10 border border-white/8'
+                      : 'bg-white/5 text-white hover:bg-white/10 border border-white/8'
                   }`}
                 >
                   {opt.label}
@@ -256,7 +232,7 @@ export default function SettingsPage() {
 
         {/* Change Mascot */}
         <section className="mb-10">
-          <h2 className="text-xs font-medium text-white/60 uppercase tracking-wider mb-3">Mascot</h2>
+          <h2 className="text-xs font-medium text-white uppercase tracking-wider mb-3">Mascot</h2>
           <div className="rounded-2xl bg-white/5 border border-white/8 p-6">
             <div className="grid grid-cols-4 sm:grid-cols-6 gap-2">
               {MASCOTS.map(m => {
@@ -266,7 +242,7 @@ export default function SettingsPage() {
                   <button key={m.id} onClick={() => setProfile({ ...p, mascotId: m.id })}
                     className={`rounded-xl p-2 border-2 transition-all flex flex-col items-center gap-1 ${isSelected ? 'border-emerald-500 bg-emerald-500/10' : 'border-white/8 hover:border-white/15'}`}>
                     <Image src={m.image} alt={m.name} width={48} height={48} className="rounded-lg" />
-                    <div className={`text-[9px] font-bold truncate w-full text-center ${isSelected ? 'text-white' : 'text-white/70'}`}>{m.name}</div>
+                    <div className={`text-[9px] font-bold truncate w-full text-center ${isSelected ? 'text-white' : 'text-white'}`}>{m.name}</div>
                   </button>
                 );
               })}
@@ -276,7 +252,7 @@ export default function SettingsPage() {
 
         {/* Change Color */}
         <section className="mb-10">
-          <h2 className="text-xs font-medium text-white/60 uppercase tracking-wider mb-3">Profile color</h2>
+          <h2 className="text-xs font-medium text-white uppercase tracking-wider mb-3">Profile color</h2>
           <div className="rounded-2xl bg-white/5 border border-white/8 p-6">
             <div className="flex flex-wrap gap-3">
               {PROFILE_COLORS.map(c => {
@@ -286,7 +262,7 @@ export default function SettingsPage() {
                   <button key={c.id} onClick={() => setProfile({ ...p, color: c.value })}
                     className={`flex flex-col items-center gap-1.5 rounded-xl p-2.5 border-2 transition-all ${isSelected ? 'border-white/40 bg-white/5' : 'border-white/8 hover:border-white/15'}`}>
                     <div className="w-8 h-8 rounded-full" style={{ backgroundColor: c.value, boxShadow: isSelected ? `0 0 16px ${c.value}50` : 'none' }} />
-                    <div className="text-[9px] font-bold text-white/60">{c.label}</div>
+                    <div className="text-[9px] font-bold text-white">{c.label}</div>
                   </button>
                 );
               })}
@@ -296,12 +272,12 @@ export default function SettingsPage() {
 
         {/* Profile privacy */}
         <section className="mb-10">
-          <h2 className="text-xs font-medium text-white/60 uppercase tracking-wider mb-3">Profile privacy</h2>
+          <h2 className="text-xs font-medium text-white uppercase tracking-wider mb-3">Profile privacy</h2>
           <div className="rounded-2xl bg-white/5 border border-white/8 p-6">
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm font-medium text-white">Private profile</p>
-                <p className="text-xs text-white/60 mt-0.5">Hide your username from public leaderboards and social features. Only your mascot and score will be visible.</p>
+                <p className="text-xs text-white mt-0.5">Hide your username from public leaderboards and social features. Only your mascot and score will be visible.</p>
               </div>
               <button
                 onClick={() => {
@@ -323,17 +299,17 @@ export default function SettingsPage() {
 
         {/* Calibration status */}
         <section className="mb-10">
-          <h2 className="text-xs font-medium text-white/60 uppercase tracking-wider mb-3">Camera calibration</h2>
+          <h2 className="text-xs font-medium text-white uppercase tracking-wider mb-3">Camera calibration</h2>
           <div className="rounded-2xl bg-white/5 border border-white/8 p-6">
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-3">
                 <div className={`w-3 h-3 rounded-full ${calibration ? 'bg-emerald-500' : 'bg-white/20'}`} />
                 <div>
-                  <p className="text-sm text-white/70">
+                  <p className="text-sm text-white">
                     {calibration ? 'Camera is calibrated' : 'Camera is not yet calibrated'}
                   </p>
                   {calibration && (
-                    <p className="text-xs text-white/60 mt-0.5">
+                    <p className="text-xs text-white mt-0.5">
                       {calibration.resolution?.width}x{calibration.resolution?.height}
                     </p>
                   )}
@@ -353,7 +329,7 @@ export default function SettingsPage() {
                   sessionStorage.removeItem('ballTracker_calibration');
                   setCalibration(null);
                 }}
-                className="mt-4 text-sm text-white/60 hover:text-red-400 transition-colors"
+                className="mt-4 text-sm text-white hover:text-red-400 transition-colors"
               >
                 Reset calibration
               </button>
@@ -364,7 +340,7 @@ export default function SettingsPage() {
         {/* Change Password */}
         {auth.isLoggedIn && auth.user?.app_metadata?.provider === 'email' && (
           <section className="mb-10">
-            <h2 className="text-xs font-medium text-white/60 uppercase tracking-wider mb-3">Change password</h2>
+            <h2 className="text-xs font-medium text-white uppercase tracking-wider mb-3">Change password</h2>
             <div className="rounded-2xl bg-white/5 border border-white/8 p-6">
               <form onSubmit={async (e) => {
                 e.preventDefault();
@@ -385,22 +361,22 @@ export default function SettingsPage() {
         {/* Account info */}
         {auth.isLoggedIn && auth.user?.email && (
           <section className="mb-10">
-            <h2 className="text-xs font-medium text-white/60 uppercase tracking-wider mb-3">Account</h2>
+            <h2 className="text-xs font-medium text-white uppercase tracking-wider mb-3">Account</h2>
             <div className="rounded-2xl bg-white/5 border border-white/8 p-6">
-              <p className="text-sm text-white/70">{auth.user.email}</p>
-              <p className="text-xs text-white/60 mt-1">Signed in via {auth.user.app_metadata?.provider || 'email'}</p>
+              <p className="text-sm text-white">{auth.user.email}</p>
+              <p className="text-xs text-white mt-1">Signed in via {auth.user.app_metadata?.provider || 'email'}</p>
             </div>
           </section>
         )}
 
         {/* Subscription Management */}
         <section className="mb-10">
-          <h2 className="text-xs font-medium text-white/60 uppercase tracking-wider mb-3">Subscription</h2>
+          <h2 className="text-xs font-medium text-white uppercase tracking-wider mb-3">Subscription</h2>
           <div className="rounded-2xl bg-white/5 border border-white/8 p-6">
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm font-medium text-white">Manage your subscription</p>
-                <p className="text-xs text-white/60 mt-0.5">View billing history, update payment method, or cancel your subscription.</p>
+                <p className="text-xs text-white mt-0.5">View billing history, update payment method, or cancel your subscription.</p>
               </div>
               <button
                 onClick={async () => {
@@ -427,9 +403,9 @@ export default function SettingsPage() {
 
         {/* Club Membership */}
         <section className="mb-10">
-          <h2 className="text-xs font-medium text-white/60 uppercase tracking-wider mb-3">Club membership</h2>
+          <h2 className="text-xs font-medium text-white uppercase tracking-wider mb-3">Club membership</h2>
           <div className="rounded-2xl bg-white/5 border border-white/8 p-6">
-            <p className="text-xs text-white/60 mb-3">Enter a club code from your team or organization to unlock Premium and connect with teammates.</p>
+            <p className="text-xs text-white mb-3">Enter a club code from your team or organization to unlock Premium and connect with teammates.</p>
             <form onSubmit={async (e) => {
               e.preventDefault();
               const input = (e.target as HTMLFormElement).querySelector('input') as HTMLInputElement;
@@ -471,12 +447,12 @@ export default function SettingsPage() {
 
         {/* Connected services */}
         <section className="mb-10">
-          <h2 className="text-xs font-medium text-white/60 uppercase tracking-wider mb-3">Connected services</h2>
+          <h2 className="text-xs font-medium text-white uppercase tracking-wider mb-3">Connected services</h2>
           <div className="rounded-2xl bg-white/5 border border-white/8 p-6 space-y-4">
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm font-medium text-white">Spotify</p>
-                <p className="text-xs text-white/60 mt-0.5">Music playback and history</p>
+                <p className="text-xs text-white mt-0.5">Music playback and history</p>
               </div>
               <button
                 onClick={async () => {
@@ -493,7 +469,7 @@ export default function SettingsPage() {
             <div className="border-t border-white/5 pt-4 flex items-center justify-between">
               <div>
                 <p className="text-sm font-medium text-white">Apple Music</p>
-                <p className="text-xs text-white/60 mt-0.5">Music playback and history</p>
+                <p className="text-xs text-white mt-0.5">Music playback and history</p>
               </div>
               <button
                 onClick={async () => {
@@ -513,12 +489,12 @@ export default function SettingsPage() {
 
         {/* Cookie preferences */}
         <section className="mb-10">
-          <h2 className="text-xs font-medium text-white/60 uppercase tracking-wider mb-3">Cookie preferences</h2>
+          <h2 className="text-xs font-medium text-white uppercase tracking-wider mb-3">Cookie preferences</h2>
           <div className="rounded-2xl bg-white/5 border border-white/8 p-6">
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm font-medium text-white">Analytics & visit tracking</p>
-                <p className="text-xs text-white/60 mt-0.5">
+                <p className="text-xs text-white mt-0.5">
                   {typeof window !== 'undefined' && localStorage.getItem('hb_cookie_consent') === 'accepted' ? 'Accepted' : 'Essential only'}
                 </p>
               </div>
@@ -527,22 +503,22 @@ export default function SettingsPage() {
                   localStorage.removeItem('hb_cookie_consent');
                   window.location.reload();
                 }}
-                className="text-xs font-medium text-white/70 hover:text-white/70 bg-white/5 hover:bg-white/10 px-3 py-1.5 rounded-lg transition-all"
+                className="text-xs font-medium text-white hover:text-white bg-white/5 hover:bg-white/10 px-3 py-1.5 rounded-lg transition-all"
               >
                 Reset preferences
               </button>
             </div>
-            <p className="text-xs text-white/60 mt-3">Read our <a href="/cookies" className="underline hover:text-white/60">Cookie Policy</a>.</p>
+            <p className="text-xs text-white mt-3">Read our <a href="/cookies" className="underline hover:text-white">Cookie Policy</a>.</p>
           </div>
         </section>
 
         {/* Data retention info */}
         <section className="mb-10">
-          <h2 className="text-xs font-medium text-white/60 uppercase tracking-wider mb-3">Your data</h2>
+          <h2 className="text-xs font-medium text-white uppercase tracking-wider mb-3">Your data</h2>
           <div className="rounded-2xl bg-white/5 border border-white/8 p-6 space-y-2">
-            <p className="text-xs text-white/60">Page visit logs are automatically deleted after <strong className="text-white/60">90 days</strong>.</p>
-            <p className="text-xs text-white/60">Game scores and achievements are kept as long as your account exists.</p>
-            <p className="text-xs text-white/60">You can delete all your data at any time using the button below.</p>
+            <p className="text-xs text-white">Page visit logs are automatically deleted after <strong className="text-white">90 days</strong>.</p>
+            <p className="text-xs text-white">Game scores and achievements are kept as long as your account exists.</p>
+            <p className="text-xs text-white">You can delete all your data at any time using the button below.</p>
           </div>
         </section>
 
