@@ -1,11 +1,19 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, Suspense } from 'react';
 import { useSearchParams } from 'next/navigation';
 import Image from 'next/image';
 import Link from 'next/link';
 
 export default function ParentalVerifyPage() {
+  return (
+    <Suspense fallback={<div className="min-h-screen bg-white flex items-center justify-center"><p className="text-gray-400">Loading...</p></div>}>
+      <ParentalVerifyContent />
+    </Suspense>
+  );
+}
+
+function ParentalVerifyContent() {
   const params = useSearchParams();
   const token = params.get('token');
   const [status, setStatus] = useState<'loading' | 'ready' | 'approved' | 'denied' | 'error' | 'already'>('loading');

@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useRef, useEffect, useCallback } from 'react';
+import { useState, useRef, useEffect, useCallback, Suspense } from 'react';
 import { useSearchParams } from 'next/navigation';
 import { BallTracker } from '@/lib/ball-tracker';
 import { CalibrationData, Point2D } from '@/lib/tracking';
@@ -10,6 +10,14 @@ import Image from 'next/image';
 type Phase = 'setup' | 'corners' | 'color' | 'tracking';
 
 export default function RemoteCameraPage() {
+  return (
+    <Suspense fallback={<div className="min-h-screen bg-[#0a0a0f] flex items-center justify-center"><p className="text-white/50">Loading...</p></div>}>
+      <RemoteCameraContent />
+    </Suspense>
+  );
+}
+
+function RemoteCameraContent() {
   const searchParams = useSearchParams();
   const sessionId = searchParams.get('session') || '';
   const { ready, sendPosition } = useRemoteCameraSender(sessionId);
