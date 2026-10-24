@@ -67,6 +67,12 @@ const DOCUMENTS = [
     href: '/copyright',
     desc: 'Ownership, permitted use, third-party content, music licensing, and infringement reporting.',
   },
+  {
+    title: 'Complaints, Consumer Rights & Dispute Resolution',
+    version: 'v1.0',
+    href: '/complaints',
+    desc: 'How to submit complaints, refund requests, statutory withdrawal, and alternative dispute resolution.',
+  },
 ];
 
 export default function LegalPage() {
