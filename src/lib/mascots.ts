@@ -17,9 +17,9 @@ export const MASCOTS: MascotDef[] = [
   { id: 'magno', name: 'Magno', adjective: 'The Electric', image: '/images/mascots/mascot-magnet-flip.webp', imageHappy: '/images/mascots/mascot-magnet-flip-happy.webp' },
   { id: 'laserjaw', name: 'Laserjaw', adjective: 'The Sharp', image: '/images/mascots/mascot-laser-maze.webp', imageHappy: '/images/mascots/mascot-laser-maze-happy.webp' },
   { id: 'chromer', name: 'Chromer', adjective: 'The Fast', image: '/images/mascots/mascot-color-catch.webp', imageHappy: '/images/mascots/mascot-color-catch-happy.webp' },
-  { id: 'fieldster', name: 'Fieldster', adjective: 'The Classic', image: '/images/mascots/mascot-targets.webp', imageHappy: '/images/mascots/mascot-targets-happy.webp' },
-  { id: 'icebreaker', name: 'Icebreaker', adjective: 'The Cool', image: '/images/mascots/mascot-ice-hockey.webp', imageHappy: '/images/mascots/mascot-ice-hockey-happy.webp' },
   { id: 'floorboss', name: 'Floorboss', adjective: 'The Bold', image: '/images/mascots/mascot-floorball.webp', imageHappy: '/images/mascots/mascot-floorball-happy.webp' },
+  { id: 'icebreaker', name: 'Icebreaker', adjective: 'The Cool', image: '/images/mascots/mascot-ice-hockey.webp', imageHappy: '/images/mascots/mascot-ice-hockey-happy.webp' },
+  { id: 'fieldster', name: 'Fieldster', adjective: 'The Classic', image: '/images/mascots/mascot-targets.webp', imageHappy: '/images/mascots/mascot-targets-happy.webp' },
 ];
 
 export const PROFILE_COLORS = [

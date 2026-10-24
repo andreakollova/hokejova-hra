@@ -367,30 +367,6 @@ export default function Home() {
         {/* Mascots */}
         <MascotsShowcase />
 
-        {/* Sports */}
-        <section id="sports" className="py-14 sm:py-20">
-          <div className="max-w-6xl mx-auto px-6 sm:px-10">
-            <div className="text-center mb-14">
-              <h2 className="text-3xl sm:text-5xl font-extrabold text-[#101828] leading-[1.08] tracking-tight">Three sports. One game.</h2>
-            </div>
-            <div className="grid sm:grid-cols-3 gap-8">
-              {[
-                { img: '/images/sport-icehockey.png', name: 'Ice hockey', color: '#3b82f6' },
-                { img: '/images/sport-fieldhockey.png', name: 'Field hockey', color: '#22c55e' },
-                { img: '/images/sport-floorball.png', name: 'Floorball', color: '#f59e0b' },
-              ].map(sport => (
-                <div key={sport.name} className="flex flex-col items-center text-center group">
-                  <div className="relative mb-4">
-                    <div className="absolute inset-0 rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-500" style={{ background: `radial-gradient(circle, ${sport.color}30 0%, transparent 70%)`, transform: 'scale(1.8)' }} />
-                    <Image src={sport.img} alt={sport.name} width={160} height={160} className="w-32 h-32 relative z-10 group-hover:scale-110 transition-transform duration-500 drop-shadow-lg" />
-                  </div>
-                  <h3 className="text-xl font-extrabold text-[#101828] tracking-tight">{sport.name}</h3>
-                </div>
-              ))}
-            </div>
-          </div>
-        </section>
-
         {/* 10 - Final CTA */}
         <section className="py-14 sm:py-20">
           <div className="max-w-3xl mx-auto px-6 sm:px-10 text-center">
@@ -686,10 +662,10 @@ function StartNowSection() {
             {expanded === 'mobile' && (
               <div className="mt-2 space-y-2 animate-[fadeIn_0.2s_ease-out]">
                 <div className="flex items-center gap-3 bg-white/5 border border-white/8 rounded-xl px-5 py-3">
-                  <div><div className="text-sm font-medium text-white/40">App Store</div><div className="text-[10px] text-white/20">Coming soon</div></div>
+                  <div><div className="text-sm font-medium text-white/70">App Store</div><div className="text-[10px] text-white/20">Coming soon</div></div>
                 </div>
                 <div className="flex items-center gap-3 bg-white/5 border border-white/8 rounded-xl px-5 py-3">
-                  <div><div className="text-sm font-medium text-white/40">Google Play</div><div className="text-[10px] text-white/20">Coming soon</div></div>
+                  <div><div className="text-sm font-medium text-white/70">Google Play</div><div className="text-[10px] text-white/20">Coming soon</div></div>
                 </div>
               </div>
             )}
@@ -722,7 +698,7 @@ function StartNowSection() {
             {expanded === 'tv' && (
               <div className="mt-2 animate-[fadeIn_0.2s_ease-out]">
                 <div className="flex items-center gap-3 bg-white/5 border border-white/8 rounded-xl px-5 py-3">
-                  <div><div className="text-sm font-medium text-white/40">Smart TV</div><div className="text-[10px] text-white/20">Coming soon</div></div>
+                  <div><div className="text-sm font-medium text-white/70">Smart TV</div><div className="text-[10px] text-white/20">Coming soon</div></div>
                 </div>
               </div>
             )}
@@ -779,7 +755,7 @@ function MascotsShowcase() {
       <div className="max-w-6xl mx-auto px-6 sm:px-10">
         <div className="text-center mb-10">
           <h2 className="text-3xl sm:text-5xl font-extrabold text-white leading-tight tracking-tight">Choose your favorite</h2>
-          <p className="mt-4 text-lg text-white/40 max-w-xl mx-auto">Discover a crew of bold characters, each with a game of their own.</p>
+          <p className="mt-4 text-lg text-white/70 max-w-xl mx-auto">Discover a crew of bold characters, each with a game of their own.</p>
         </div>
 
         <div className="flex flex-col lg:flex-row gap-8 lg:gap-12">
@@ -811,7 +787,7 @@ function MascotsShowcase() {
                   className={`flex flex-col items-center gap-1.5 rounded-xl p-2.5 transition-all duration-300 ${selected === i ? 'bg-white/10 border border-emerald-500/50' : 'bg-white/3 border border-transparent hover:bg-white/5'}`}
                 >
                   <Image src={selected === i ? m.imageHappy : m.image} alt={m.name} width={56} height={56} className="rounded-lg" />
-                  <div className={`text-[10px] font-bold truncate w-full text-center ${selected === i ? 'text-white' : 'text-white/40'}`}>{m.name}</div>
+                  <div className={`text-[10px] font-bold truncate w-full text-center ${selected === i ? 'text-white' : 'text-white/70'}`}>{m.name}</div>
                 </button>
               ))}
             </div>
