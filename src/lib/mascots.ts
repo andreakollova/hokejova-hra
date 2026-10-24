@@ -34,9 +34,9 @@ export const PROFILE_COLORS = [
 ];
 
 export const SPORTS = [
-  { id: 'field-hockey', label: 'Field Hockey', icon: '🏑' },
-  { id: 'ice-hockey', label: 'Ice Hockey', icon: '🏒' },
-  { id: 'floorball', label: 'Floorball', icon: '🥍' },
+  { id: 'field-hockey', label: 'Field Hockey', icon: '🏑', image: '/images/icon-fieldhockey.png' },
+  { id: 'ice-hockey', label: 'Ice Hockey', icon: '🏒', image: '/images/icon-icehockey.png' },
+  { id: 'floorball', label: 'Floorball', icon: '🥍', image: '/images/icon-floorball.png' },
 ];
 
 export function getMascotById(id: string): MascotDef | undefined {

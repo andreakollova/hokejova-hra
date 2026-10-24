@@ -59,7 +59,7 @@ export default function Onboarding({ onComplete, defaultName }: OnboardingProps)
                   onClick={() => { setSport(s.id); setStep(2); }}
                   className={`w-full flex items-center gap-4 rounded-2xl p-5 border-2 transition-all text-left ${sport === s.id ? 'border-emerald-500 bg-emerald-500/10' : 'border-white/8 bg-white/3 hover:border-white/15'}`}
                 >
-                  <span className="text-3xl">{s.icon}</span>
+                  <Image src={s.image} alt={s.label} width={48} height={48} className="w-12 h-12 rounded-xl" />
                   <span className="text-lg font-bold text-white">{s.label}</span>
                 </button>
               ))}
