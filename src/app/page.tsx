@@ -121,6 +121,20 @@ export default function Home() {
         {/* 1. Hero banner - fullscreen with photo */}
         <HeroBanner isLoggedIn={isLoggedIn} onLoginClick={() => setShowAuth(true)} />
 
+        {/* Start Now */}
+        <section className="relative bg-[#101828] py-14 sm:py-20 overflow-hidden">
+          <div className="max-w-6xl mx-auto px-6 sm:px-10 text-center">
+            <Image src="/images/logo-startnow.png" alt="Start Now" width={300} height={100} className="h-16 sm:h-20 w-auto mx-auto" />
+            <p className="mt-3 text-white/60 text-sm">Free on desktop browser. Mobile &amp; TV coming soon.</p>
+            <div className="mt-6">
+              <Link href="/dashboard" className="inline-flex items-center gap-2 bg-emerald-500 hover:bg-emerald-400 text-white font-bold px-8 py-4 rounded-full transition-all">
+                <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+                Play in browser
+              </Link>
+            </div>
+          </div>
+        </section>
+
         {/* 01 - Hero subtitle */}
         <section className="py-20 sm:py-28">
           <div className="max-w-6xl mx-auto px-6 sm:px-10 text-center">
