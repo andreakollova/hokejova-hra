@@ -255,35 +255,34 @@ export default function CalibrationWizard({
           <div className="space-y-6">
             <h2 className="text-2xl font-semibold text-gray-900">Camera setup</h2>
             <p className="text-gray-500">
-              Allow camera access and select a device. Place the camera lower and point it
-              at the training area.
+              Position a camera to track your ball as you play. A phone works great as a camera.
             </p>
 
-            {/* Phone camera setup guide */}
-            <div className="bg-emerald-50 rounded-2xl p-5 border border-emerald-100">
-              <h3 className="text-sm font-bold text-emerald-800 mb-3 flex items-center gap-2">
-                <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><rect x="6" y="2" width="12" height="20" rx="2" /><line x1="10" y1="18" x2="14" y2="18" /></svg>
-                Using your phone as a camera?
+            {/* Phone positioning guide */}
+            <div className="bg-gray-50 rounded-2xl p-5 border border-gray-100">
+              <h3 className="text-sm font-bold text-gray-900 mb-3 flex items-center gap-2">
+                <svg className="w-5 h-5 text-emerald-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><rect x="6" y="2" width="12" height="20" rx="2" /><line x1="10" y1="18" x2="14" y2="18" /></svg>
+                How to position your camera
               </h3>
-              <ol className="text-xs text-emerald-700 space-y-2 list-decimal list-inside">
-                <li>Place your phone on a stable surface (tripod, shelf, or stack of books)</li>
+              <ol className="text-xs text-gray-600 space-y-2 list-decimal list-inside">
+                <li>Place your phone or webcam on a stable surface (tripod, shelf, or stack of books)</li>
                 <li>Position it <strong>behind and below</strong> your playing area, angled slightly up</li>
                 <li>Make sure the camera can see the entire training area and your ball</li>
-                <li>Keep the phone plugged in so it doesn&apos;t run out of battery</li>
                 <li>Use good lighting - avoid backlighting or strong shadows</li>
               </ol>
               <div className="mt-3 flex items-center gap-2">
                 <svg className="w-4 h-4 text-emerald-500" fill="currentColor" viewBox="0 0 20 20"><path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clipRule="evenodd" /></svg>
-                <span className="text-[11px] text-emerald-600">Tip: A phone tripod or a book stand works great for positioning.</span>
+                <span className="text-[11px] text-gray-500">Tip: A phone tripod or a book stand works great for positioning.</span>
               </div>
             </div>
 
+            {/* Camera access */}
             {permission !== 'granted' ? (
               <button
                 onClick={handleRequestPermission}
-                className="btn-primary"
+                className="btn-primary w-full"
               >
-                Allow camera
+                Allow camera access
               </button>
             ) : (
               <div className="space-y-4">
@@ -303,7 +302,7 @@ export default function CalibrationWizard({
                 <button
                   onClick={handleStartCamera}
                   disabled={!selectedDevice}
-                  className="btn-primary disabled:opacity-50"
+                  className="btn-primary w-full disabled:opacity-50"
                 >
                   Start camera
                 </button>
@@ -319,31 +318,6 @@ export default function CalibrationWizard({
                 Camera access is denied. Check your browser settings.
               </p>
             )}
-
-            {/* Phone camera option */}
-            <div className="border-t border-gray-200 pt-6 mt-6">
-              <button
-                onClick={async () => {
-                  setShowPhoneQR(true);
-                  localStorage.setItem('hb_remote_session', phoneSessionId);
-                  const url = `${window.location.origin}/remote-camera?session=${phoneSessionId}`;
-                  const dataUrl = await QRCode.toDataURL(url, { width: 200, margin: 2, color: { dark: '#111827', light: '#ffffff' } });
-                  setQrDataUrl(dataUrl);
-                }}
-                className="text-sm font-medium text-gray-500 hover:text-gray-900 transition-colors"
-              >
-                Or use your phone as a camera &rarr;
-              </button>
-
-              {showPhoneQR && qrDataUrl && (
-                <div className="mt-4 bg-gray-50 rounded-2xl p-6 text-center">
-                  <img src={qrDataUrl} alt="QR Code" className="mx-auto mb-3" />
-                  <p className="text-sm font-medium text-gray-900 mb-1">Scan with your phone</p>
-                  <p className="text-xs text-gray-400">Point your phone camera at the training area. The ball position will be sent to this screen.</p>
-                  <p className="text-[10px] text-gray-300 mt-2 font-mono break-all">{window.location.origin}/remote-camera?session={phoneSessionId}</p>
-                </div>
-              )}
-            </div>
           </div>
         );
 

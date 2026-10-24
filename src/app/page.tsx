@@ -222,12 +222,12 @@ export default function Home() {
                 { title: 'Daily Streaks', desc: 'Play every day to build your streak', color: '#ef4444', icon: <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M17.657 18.657A8 8 0 016.343 7.343S7 9 9 10c0-2 .5-5 2.986-7C14 5 16.09 5.777 17.656 7.343A7.975 7.975 0 0120 13a7.975 7.975 0 01-2.343 5.657z" /><path strokeLinecap="round" strokeLinejoin="round" d="M9.879 16.121A3 3 0 1012.015 11L11 14H9c0 .768.293 1.536.879 2.121z" /></svg> },
                 { title: 'Leaderboards', desc: 'Compete with friends and teammates', color: '#3b82f6', icon: <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M3 10h4v11H3zM10 3h4v18h-4zM17 7h4v14h-4z" /></svg> },
               ].map(item => (
-                <div key={item.title} className="flex items-center gap-4 bg-white rounded-2xl p-5 border border-gray-100 hover:border-gray-200 hover:shadow-md transition-all">
-                  <div className="flex-1 min-w-0">
+                <div key={item.title} className="flex items-start gap-3 p-2">
+                  <div className="flex-shrink-0 mt-0.5" style={{ color: item.color }}>{item.icon}</div>
+                  <div>
                     <h3 className="text-sm font-extrabold text-[#101828] tracking-tight">{item.title}</h3>
                     <p className="text-xs text-gray-400 mt-0.5 leading-relaxed">{item.desc}</p>
                   </div>
-                  <div className="w-10 h-10 rounded-xl flex items-center justify-center flex-shrink-0" style={{ backgroundColor: item.color + '15', color: item.color }}>{item.icon}</div>
                 </div>
               ))}
             </div>
@@ -576,7 +576,7 @@ function HeroBanner({ isLoggedIn, onLoginClick }: { isLoggedIn: boolean; onLogin
               <Image src="/images/badge-2.png" alt="Free to Play" width={90} height={60} className="w-20 h-auto sm:w-28 sm:h-auto drop-shadow-lg" />
             </div>
           </div>
-          <div className="flex flex-wrap justify-center items-center gap-4 mt-8">
+          <div className="flex flex-wrap items-center gap-4 px-6 sm:px-10 mt-8">
             <button
               onClick={() => {
                 if (isLoggedIn) { window.location.href = '/dashboard'; }

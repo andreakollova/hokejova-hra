@@ -86,6 +86,7 @@ const SlalomGame = dynamic(() => import('@/components/games/SlalomGame'), {
 const ResultScreen = dynamic(() => import('@/components/ui/ResultScreen'), {
   ssr: false,
 });
+const BackgroundMusic = dynamic(() => import('@/components/music/BackgroundMusic'), { ssr: false });
 const MusicSelector = dynamic(() => import('@/components/music/MusicSelector'), {
   ssr: false,
 });
@@ -553,62 +554,48 @@ export default function TreningPage() {
 
   // Setup phase
   return (
-    <div className="min-h-screen bg-[#0a0a0f] px-6 py-8">
+    <div className="min-h-screen bg-gray-50/50 px-6 py-8">
       <div className="max-w-lg mx-auto">
-        <Link href="/dashboard" className="inline-flex items-center gap-1.5 text-sm text-white/40 hover:text-white/70 transition-colors mb-8">
+        <Link href="/dashboard" className="inline-flex items-center gap-1.5 text-sm text-gray-400 hover:text-gray-600 transition-colors mb-8">
           <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M15 19l-7-7 7-7" /></svg>
           Back
         </Link>
 
         {/* Logo + Mascot */}
         <Link href="/dashboard" className="block mb-4">
-          <Image src="/images/hb-logo-white.png" alt="Hockey Beats" width={120} height={32} className="h-6 w-auto opacity-40" />
+          <Image src="/images/hb-logo-hero-dark.png" alt="Hockey Beats" width={120} height={32} className="h-6 w-auto opacity-40" />
         </Link>
         <div className="flex items-center gap-5 mb-8">
           <MascotGlow src="/images/mascots/mascot-slalom.webp" color="#22c55e" size={90} />
           <div>
-            <h1 className="text-3xl font-extrabold text-white tracking-tight">HockeyBeats Slalom</h1>
-            <p className="text-white/70 text-sm mt-1">Dodge the cones left and right</p>
+            <h1 className="text-3xl font-extrabold text-[#101828] tracking-tight">HockeyBeats Slalom</h1>
+            <p className="text-gray-500 text-sm mt-1">Dodge the cones left and right</p>
           </div>
         </div>
 
         <div className="space-y-5">
-          {/* Mode */}
-          <div>
-            <label className="text-[10px] font-bold text-white/30 uppercase tracking-[0.2em] mb-2.5 block">Mode</label>
-            <div className="flex gap-2.5">
-              {(['camera', 'demo', 'remote'] as const).map(m => (
-                <button key={m} onClick={() => setInputMode(m)} className="flex-1 rounded-2xl py-3.5 border-2 transition-all text-sm font-semibold" style={inputMode === m ? { borderColor: '#22c55e', backgroundColor: '#22c55e15', color: '#22c55e' } : { borderColor: 'rgba(255,255,255,0.08)', backgroundColor: 'rgba(255,255,255,0.02)', color: 'rgba(255,255,255,0.5)' }}>
-                  {m === 'camera' ? 'Camera' : m === 'demo' ? 'Demo' : 'Phone'}
-                </button>
-              ))}
-            </div>
-          </div>
-
           {/* Calibration */}
-          {inputMode === 'camera' && (
-            <div className="flex items-center justify-between bg-white/3 border border-white/8 rounded-2xl p-4">
-              <div>
-                <div className="text-sm font-semibold text-white">Calibration</div>
-                <div className="text-xs text-white/30 mt-0.5">
-                  {calibration ? 'Saved' : 'Not configured'}
-                </div>
+          <div className="flex items-center justify-between bg-white border border-gray-100 rounded-2xl p-4">
+            <div>
+              <div className="text-sm font-semibold text-[#101828]">Camera</div>
+              <div className="text-xs text-gray-400 mt-0.5">
+                {calibration ? 'Calibrated' : 'Not configured'}
               </div>
-              <button
-                onClick={() => setPhase('calibration')}
-                className="text-xs font-bold px-4 py-2 rounded-xl transition-all" style={{ color: '#22c55e', backgroundColor: '#22c55e15' }}
-              >
-                {calibration ? 'Recalibrate' : 'Calibrate'}
-              </button>
             </div>
-          )}
+            <button
+              onClick={() => setPhase('calibration')}
+              className="text-xs font-bold px-4 py-2 rounded-xl transition-all bg-emerald-50 text-emerald-600 hover:bg-emerald-100"
+            >
+              {calibration ? 'Recalibrate' : 'Calibrate'}
+            </button>
+          </div>
 
           {/* Difficulty */}
           <div>
-            <label className="text-[10px] font-bold text-white/30 uppercase tracking-[0.2em] mb-2.5 block">Difficulty</label>
+            <label className="text-[10px] font-bold text-gray-400 uppercase tracking-[0.2em] mb-2.5 block">Difficulty</label>
             <div className="flex gap-2.5">
               {(['easy', 'medium', 'hard'] as const).map((d) => (
-                <button key={d} onClick={() => setDifficulty(d)} className="flex-1 rounded-2xl py-3.5 border-2 transition-all text-sm font-semibold" style={difficulty === d ? { borderColor: '#22c55e', backgroundColor: '#22c55e15', color: '#22c55e' } : { borderColor: 'rgba(255,255,255,0.08)', backgroundColor: 'rgba(255,255,255,0.02)', color: 'rgba(255,255,255,0.5)' }}>
+                <button key={d} onClick={() => setDifficulty(d)} className={`flex-1 rounded-2xl py-3.5 border-2 transition-all text-sm font-semibold ${difficulty === d ? 'border-emerald-500 bg-emerald-50 text-emerald-600' : 'border-gray-100 bg-white text-gray-400 hover:border-gray-200'}`}>
                   {d === 'easy' ? 'Easy' : d === 'medium' ? 'Medium' : 'Hard'}
                 </button>
               ))}
@@ -617,10 +604,10 @@ export default function TreningPage() {
 
           {/* Duration */}
           <div>
-            <label className="text-[10px] font-bold text-white/30 uppercase tracking-[0.2em] mb-2.5 block">Duration</label>
+            <label className="text-[10px] font-bold text-gray-400 uppercase tracking-[0.2em] mb-2.5 block">Duration</label>
             <div className="flex gap-2.5">
               {([30, 60, 90] as const).map((d) => (
-                <button key={d} onClick={() => setDuration(d)} className="flex-1 rounded-2xl py-3.5 border-2 transition-all text-sm font-semibold" style={duration === d ? { borderColor: '#22c55e', backgroundColor: '#22c55e15', color: '#22c55e' } : { borderColor: 'rgba(255,255,255,0.08)', backgroundColor: 'rgba(255,255,255,0.02)', color: 'rgba(255,255,255,0.5)' }}>
+                <button key={d} onClick={() => setDuration(d)} className={`flex-1 rounded-2xl py-3.5 border-2 transition-all text-sm font-semibold ${duration === d ? 'border-emerald-500 bg-emerald-50 text-emerald-600' : 'border-gray-100 bg-white text-gray-400 hover:border-gray-200'}`}>
                   {d}s
                 </button>
               ))}
@@ -628,170 +615,7 @@ export default function TreningPage() {
           </div>
 
           {/* Music */}
-          <div>
-            <label className="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-3 block">
-              Music
-            </label>
-
-            {/* Selected song */}
-            {musicConfig ? (
-              <div className="rounded-2xl p-4 border-2 border-green-500 bg-green-50 flex items-center gap-3">
-                {musicConfig.track?.albumArt && (
-                  <img src={musicConfig.track.albumArt} alt="" className="w-10 h-10 rounded-lg object-cover" />
-                )}
-                <div className="flex-1 min-w-0">
-                  <div className="text-sm font-semibold text-gray-900 truncate">{musicConfig.track?.name || `${musicConfig.bpm} BPM`}</div>
-                  <div className="text-xs text-gray-500 truncate">{musicConfig.track?.artists} - {musicConfig.bpm} BPM</div>
-                </div>
-                <button onClick={() => { setMusicConfig(null); setShowMusic(true); }} className="text-xs text-green-600 font-medium">Change</button>
-              </div>
-            ) : (
-              <button
-                onClick={() => setShowMusic(!showMusic)}
-                className={`w-full rounded-2xl p-4 border-2 transition-all text-left ${showMusic ? 'border-green-500 bg-green-50' : 'border-gray-200 bg-white hover:border-gray-300'}`}
-              >
-                <div className="flex items-center justify-between">
-                  <div>
-                    <div className="text-sm font-semibold text-gray-900">Choose a song</div>
-                    <div className="text-xs text-gray-500 mt-0.5">Cones sync to the rhythm</div>
-                  </div>
-                  <svg className={`w-4 h-4 text-gray-400 transition-transform ${showMusic ? 'rotate-180' : ''}`} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M19 9l-7 7-7-7" /></svg>
-                </div>
-              </button>
-            )}
-
-            {/* Inline music panel */}
-            {showMusic && !musicConfig && (
-              <div className="mt-3 space-y-4">
-                {!spotify.isConnected ? (
-                  <div className="text-center py-4 bg-white rounded-2xl border border-gray-100">
-                    <p className="text-sm text-gray-500 mb-3">Connect Spotify Premium to play music.</p>
-                    <button onClick={spotify.connect} className="btn-primary text-sm">Connect Spotify</button>
-                  </div>
-                ) : (
-                  <>
-                    {/* Favorites */}
-                    {favorites.length > 0 && !searchQuery && (
-                      <div>
-                        <div className="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-2">Favourites</div>
-                        <div className="space-y-1.5">
-                          {favorites.map((rec) => (
-                            <button key={rec.track.id} onClick={() => handleSelectTrack(rec.track)}
-                              className="w-full flex items-center gap-2.5 rounded-xl p-2.5 text-left bg-white border border-gray-100 hover:border-gray-300 hover:shadow-sm transition-all">
-                              {rec.track.albumArt && <img src={rec.track.albumArt} alt="" className="w-9 h-9 rounded-lg object-cover" />}
-                              <div className="flex-1 min-w-0">
-                                <div className="text-sm font-medium text-gray-900 truncate">
-                                  {mappedIds.has(rec.track.id) && <span className="text-yellow-500 mr-1">&#9733;</span>}
-                                  {rec.track.name}
-                                </div>
-                                <div className="text-xs text-gray-500 truncate">{rec.track.artists}</div>
-                              </div>
-                              <div className="text-xs text-gray-400">{rec.playCount}x</div>
-                            </button>
-                          ))}
-                        </div>
-                      </div>
-                    )}
-
-                    {/* Recent */}
-                    {recent.length > 0 && !searchQuery && (
-                      <div>
-                        <div className="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-2">Recent</div>
-                        <div className="space-y-1.5">
-                          {recent.map((rec) => (
-                            <button key={rec.track.id} onClick={() => handleSelectTrack(rec.track)}
-                              className="w-full flex items-center gap-2.5 rounded-xl p-2.5 text-left bg-white border border-gray-100 hover:border-gray-300 hover:shadow-sm transition-all">
-                              {rec.track.albumArt && <img src={rec.track.albumArt} alt="" className="w-9 h-9 rounded-lg object-cover" />}
-                              <div className="flex-1 min-w-0">
-                                <div className="text-sm font-medium text-gray-900 truncate">{rec.track.name}</div>
-                                <div className="text-xs text-gray-500 truncate">{rec.track.artists}</div>
-                              </div>
-                            </button>
-                          ))}
-                        </div>
-                      </div>
-                    )}
-
-                    {/* Recommended (admin beat maps) */}
-                    {beatMaps.length > 0 && !searchQuery && favorites.length === 0 && (
-                      <div>
-                        <div className="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-2">Recommended</div>
-                        <div className="space-y-1.5">
-                          {beatMaps.map((song) => (
-                            <button key={song.id} onClick={() => handleSelectTrack({ id: song.spotify_track_id, name: song.track_name, artists: song.track_artist, album: '', albumArt: song.track_album_art, durationMs: song.track_duration_ms, uri: `spotify:track:${song.spotify_track_id}` })}
-                              className="w-full flex items-center gap-2.5 rounded-xl p-2.5 text-left bg-white border border-gray-100 hover:border-gray-300 hover:shadow-sm transition-all">
-                              {song.track_album_art && <img src={song.track_album_art} alt="" className="w-9 h-9 rounded-lg object-cover" />}
-                              <div className="flex-1 min-w-0">
-                                <div className="text-sm font-medium text-gray-900 truncate"><span className="text-yellow-500 mr-1">&#9733;</span>{song.track_name}</div>
-                                <div className="text-xs text-gray-500 truncate">{song.track_artist}</div>
-                              </div>
-                              <div className="text-xs text-gray-400">{song.bpm} BPM</div>
-                            </button>
-                          ))}
-                        </div>
-                      </div>
-                    )}
-
-                    {/* Search */}
-                    <input
-                      type="text"
-                      value={searchQuery}
-                      onChange={(e) => handleSearch(e.target.value)}
-                      className="input-field"
-                      placeholder="Search for a song..."
-                    />
-
-                    {/* BPM picker */}
-                    {bpmPickerTrack && (
-                      <div className="bg-white rounded-2xl border border-gray-200 p-4 space-y-3">
-                        <div className="flex items-center gap-3">
-                          {bpmPickerTrack.albumArt && <img src={bpmPickerTrack.albumArt} alt="" className="w-10 h-10 rounded-xl object-cover" />}
-                          <div className="flex-1 min-w-0">
-                            <div className="text-sm font-semibold text-gray-900 truncate">{bpmPickerTrack.name}</div>
-                            <div className="text-xs text-gray-500 truncate">{bpmPickerTrack.artists}</div>
-                          </div>
-                        </div>
-                        <div className="flex gap-2">
-                          {BPM_TEMPLATES.map((bpm) => (
-                            <button key={bpm} onClick={() => setSelectedBpm(bpm)}
-                              className={`flex-1 rounded-full py-2 text-sm font-medium transition-all ${selectedBpm === bpm ? 'bg-gray-900 text-white' : 'bg-gray-100 text-gray-500 hover:bg-gray-200'}`}>
-                              {bpm}
-                            </button>
-                          ))}
-                        </div>
-                        <button onClick={handleConfirmBpm} className="btn-primary w-full">Play at {selectedBpm} BPM</button>
-                      </div>
-                    )}
-
-                    {spotify.searching && <div className="text-center text-gray-400 text-xs py-2">Searching...</div>}
-
-                    {searchQuery && spotify.searchResults.length > 0 && (
-                      <div className="space-y-1.5 max-h-48 overflow-y-auto">
-                        {spotify.searchResults.map((track) => (
-                          <button key={track.id} onClick={() => handleSelectTrack(track)}
-                            className={`w-full flex items-center gap-2.5 rounded-xl p-2.5 text-left transition-all ${
-                              bpmPickerTrack?.id === track.id ? 'bg-gray-100 border-2 border-gray-300' : 'bg-white border border-gray-100 hover:border-gray-300 hover:shadow-sm'
-                            }`}>
-                            {track.albumArt && <img src={track.albumArt} alt="" className="w-9 h-9 rounded-lg object-cover" />}
-                            <div className="flex-1 min-w-0">
-                              <div className="text-sm font-medium text-gray-900 truncate">
-                                {mappedIds.has(track.id) && <span className="text-yellow-500 mr-1">&#9733;</span>}
-                                {track.name}
-                              </div>
-                              <div className="text-xs text-gray-500 truncate">{track.artists}</div>
-                            </div>
-                            <div className="text-xs text-gray-400">
-                              {Math.floor(track.durationMs / 60000)}:{String(Math.floor((track.durationMs % 60000) / 1000)).padStart(2, '0')}
-                            </div>
-                          </button>
-                        ))}
-                      </div>
-                    )}
-                  </>
-                )}
-              </div>
-            )}
-          </div>
+          <BackgroundMusic spotify={spotify} onSelect={(track) => { if (track) handleSelectTrack(track); else setMusicConfig(null); }} selectedTrack={musicConfig?.track || null} />
 
           {/* Start button */}
           <button onClick={startGame} className="w-full text-white font-bold text-lg py-4 rounded-full transition-all hover:brightness-110 mt-2" style={{ backgroundColor: '#22c55e' }}>
