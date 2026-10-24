@@ -310,7 +310,7 @@ export default function Home() {
           <div className="max-w-6xl mx-auto px-6 sm:px-10">
             <div className="text-center mb-14">
               <p className="text-xs font-bold uppercase tracking-[0.2em] text-gray-400 mb-4">06 / How it works</p>
-              <h2 className="text-3xl sm:text-5xl font-extrabold text-[#101828] leading-[1.08] tracking-tight">Three steps to your next high score.</h2>
+              <h2 className="text-3xl sm:text-5xl font-extrabold text-[#101828] leading-[1.08] tracking-tight">The easiest setup you&apos;ll ever need.</h2>
             </div>
             <div className="grid sm:grid-cols-3 gap-6">
               {[
