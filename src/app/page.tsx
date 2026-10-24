@@ -94,12 +94,12 @@ export default function Home() {
         <div className="max-w-7xl mx-auto px-6 sm:px-10 py-4 flex justify-between items-center">
           <Link href="/" className="flex items-center gap-2">
             <Image src="/images/hb-icon.png" alt="" width={36} height={36} className="h-8 w-auto" />
-            <span className="text-base font-black tracking-tight text-gray-900">hockey beats</span>
+            <span className="text-base font-black tracking-tight text-[#101828]">hockey beats</span>
           </Link>
           <nav className="flex items-center gap-5 sm:gap-7">
-            <a href="#how-it-works" className="text-sm font-medium text-gray-600 hover:text-gray-900 transition-colors hidden sm:block">How it works</a>
-            <a href="#games" className="text-sm font-medium text-gray-600 hover:text-gray-900 transition-colors hidden sm:block">Games</a>
-            <a href="#platforms" className="text-sm font-medium text-gray-600 hover:text-gray-900 transition-colors hidden sm:block">Play anywhere</a>
+            <a href="#how-it-works" className="text-sm font-medium text-gray-600 hover:text-[#101828] transition-colors hidden sm:block">How it works</a>
+            <a href="#games" className="text-sm font-medium text-gray-600 hover:text-[#101828] transition-colors hidden sm:block">Games</a>
+            <a href="#platforms" className="text-sm font-medium text-gray-600 hover:text-[#101828] transition-colors hidden sm:block">Play anywhere</a>
             {isLoggedIn ? (
               <>
                 {engLoaded && getStreak().currentStreak > 0 && (
@@ -109,7 +109,7 @@ export default function Home() {
               </>
             ) : (
               <div className="flex items-center gap-3">
-                <button onClick={() => setShowAuth(true)} className="text-sm font-medium text-gray-600 hover:text-gray-900 transition-colors hidden sm:block">Log in</button>
+                <button onClick={() => setShowAuth(true)} className="text-sm font-medium text-gray-600 hover:text-[#101828] transition-colors hidden sm:block">Log in</button>
                 <button onClick={() => setShowAuth(true)} className="text-sm font-bold px-5 py-2.5 rounded-full bg-gray-900 text-white hover:bg-gray-800 transition-all duration-300">Sign up</button>
               </div>
             )}
@@ -130,7 +130,7 @@ export default function Home() {
           <div className="max-w-6xl mx-auto px-6 sm:px-10">
             <div className="grid lg:grid-cols-2 gap-12 items-center">
               <div>
-                <h2 className="text-3xl sm:text-5xl font-extrabold text-gray-900 leading-[1.08] tracking-tight">Better play starts with keeping your head up.</h2>
+                <h2 className="text-3xl sm:text-5xl font-extrabold text-[#101828] leading-[1.08] tracking-tight">Better play starts with keeping your head up.</h2>
                 <p className="mt-6 text-lg text-gray-500 leading-relaxed">
                   When you&apos;re always watching the ball, you miss what&apos;s happening around you.
                 </p>
@@ -165,7 +165,7 @@ export default function Home() {
               </div>
               <div className="order-1 lg:order-2">
                 <p className="text-xs font-bold uppercase tracking-[0.2em] text-gray-400 mb-4">Audio</p>
-                <h2 className="text-3xl sm:text-5xl font-extrabold text-gray-900 leading-[1.08] tracking-tight">Your favourite music can come to training, too.</h2>
+                <h2 className="text-3xl sm:text-5xl font-extrabold text-[#101828] leading-[1.08] tracking-tight">Your favourite music can come to training, too.</h2>
                 <p className="mt-6 text-lg text-gray-500 leading-relaxed">
                   Connect Spotify or Apple Music and listen to any song while you play. Put on your usual playlist, find something that gets you moving or listen to the same favourite again.
                 </p>
@@ -180,7 +180,7 @@ export default function Home() {
           <div className="max-w-6xl mx-auto px-6 sm:px-10">
             <div className="text-center mb-16">
               <p className="text-xs font-bold uppercase tracking-[0.2em] text-gray-400 mb-4">Game library</p>
-              <h2 className="text-3xl sm:text-5xl font-extrabold text-gray-900 leading-[1.08] tracking-tight">Different games keep practice interesting.</h2>
+              <h2 className="text-3xl sm:text-5xl font-extrabold text-[#101828] leading-[1.08] tracking-tight">Different games keep practice interesting.</h2>
               <p className="mt-5 text-base text-gray-500">Start with HockeyBeats, then explore extra games that give you another reason to pick up your stick.</p>
             </div>
 
@@ -305,7 +305,7 @@ export default function Home() {
           <div className="max-w-6xl mx-auto px-6 sm:px-10">
             <div className="text-center mb-16">
               <p className="text-xs font-bold uppercase tracking-[0.2em] text-gray-400 mb-4">Select your sport</p>
-              <h2 className="text-3xl sm:text-5xl font-extrabold text-gray-900 leading-[1.08] tracking-tight">Three sports. A shared reason to keep practising.</h2>
+              <h2 className="text-3xl sm:text-5xl font-extrabold text-[#101828] leading-[1.08] tracking-tight">Three sports. A shared reason to keep practising.</h2>
               <p className="mt-5 text-lg text-gray-500 max-w-xl mx-auto">
                 Whether you play on ice, on the pitch or in the sports hall, time with your stick matters.
               </p>
@@ -313,17 +313,17 @@ export default function Home() {
             <div className="grid sm:grid-cols-3 gap-6">
               <div className="sport-card flex flex-col items-center text-center">
                 <Image src="/images/sport-icehockey.png" alt="Ice hockey puck" width={120} height={120} className="w-24 h-24 mb-5" />
-                <h3 className="text-lg font-extrabold text-gray-900 mb-3 tracking-tight">Ice hockey</h3>
+                <h3 className="text-lg font-extrabold text-[#101828] mb-3 tracking-tight">Ice hockey</h3>
                 <p className="text-sm text-gray-500 leading-relaxed">Keep working on your stickhandling away from the rink, with off-ice practice that gets you moving and looking ahead.</p>
               </div>
               <div className="sport-card flex flex-col items-center text-center">
                 <Image src="/images/sport-fieldhockey.png" alt="Field hockey ball" width={120} height={120} className="w-24 h-24 mb-5" />
-                <h3 className="text-lg font-extrabold text-gray-900 mb-3 tracking-tight">Field hockey</h3>
+                <h3 className="text-lg font-extrabold text-[#101828] mb-3 tracking-tight">Field hockey</h3>
                 <p className="text-sm text-gray-500 leading-relaxed">Spend more time on ball control and practise lifting your eyes while your stick stays involved.</p>
               </div>
               <div className="sport-card flex flex-col items-center text-center">
                 <Image src="/images/sport-floorball.png" alt="Floorball" width={120} height={120} className="w-24 h-24 mb-5" />
-                <h3 className="text-lg font-extrabold text-gray-900 mb-3 tracking-tight">Floorball</h3>
+                <h3 className="text-lg font-extrabold text-[#101828] mb-3 tracking-tight">Floorball</h3>
                 <p className="text-sm text-gray-500 leading-relaxed">Give your stick skills extra attention outside team training, with games that keep you engaged in every movement.</p>
               </div>
             </div>
@@ -334,7 +334,7 @@ export default function Home() {
         <section className="bg-gray-50/50 py-24 sm:py-32">
           <div className="max-w-6xl mx-auto px-6 sm:px-10">
             <div className="max-w-2xl mb-16">
-              <h2 className="text-3xl sm:text-5xl font-extrabold text-gray-900 leading-[1.08] tracking-tight">Make practice something you look forward to.</h2>
+              <h2 className="text-3xl sm:text-5xl font-extrabold text-[#101828] leading-[1.08] tracking-tight">Make practice something you look forward to.</h2>
               <p className="mt-6 text-lg text-gray-500 leading-relaxed">
                 Getting better takes repetition. Finding the motivation to repeat the same movements can be the harder part. HockeyBeats gives those movements a purpose inside a game.
               </p>
@@ -344,21 +344,21 @@ export default function Home() {
                 <div className="w-10 h-10 rounded-2xl bg-gray-100 flex items-center justify-center mb-4">
                   <span className="text-sm font-black text-gray-400">01</span>
                 </div>
-                <h3 className="text-base font-extrabold text-gray-900 mb-2 tracking-tight">Build control through repetition</h3>
+                <h3 className="text-base font-extrabold text-[#101828] mb-2 tracking-tight">Build control through repetition</h3>
                 <p className="text-sm text-gray-500 leading-relaxed">Give yourself more opportunities to get comfortable with your stick and ball.</p>
               </div>
               <div className="bg-white rounded-3xl p-7 border border-gray-100 hover:border-gray-200 hover:shadow-md transition-all duration-300">
                 <div className="w-10 h-10 rounded-2xl bg-gray-100 flex items-center justify-center mb-4">
                   <span className="text-sm font-black text-gray-400">02</span>
                 </div>
-                <h3 className="text-base font-extrabold text-gray-900 mb-2 tracking-tight">Practise looking ahead</h3>
+                <h3 className="text-base font-extrabold text-[#101828] mb-2 tracking-tight">Practise looking ahead</h3>
                 <p className="text-sm text-gray-500 leading-relaxed">Follow the screen while keeping the ball moving, rather than watching your stick the whole time.</p>
               </div>
               <div className="bg-white rounded-3xl p-7 border border-gray-100 hover:border-gray-200 hover:shadow-md transition-all duration-300">
                 <div className="w-10 h-10 rounded-2xl bg-gray-100 flex items-center justify-center mb-4">
                   <span className="text-sm font-black text-gray-400">03</span>
                 </div>
-                <h3 className="text-base font-extrabold text-gray-900 mb-2 tracking-tight">Build a habit that lasts</h3>
+                <h3 className="text-base font-extrabold text-[#101828] mb-2 tracking-tight">Build a habit that lasts</h3>
                 <p className="text-sm text-gray-500 leading-relaxed">Make individual practice easier to return to with different games, personal bests and friendly competition.</p>
               </div>
             </div>
@@ -368,7 +368,7 @@ export default function Home() {
         <section id="how-it-works" className="bg-gray-50/50 py-24 sm:py-32">
           <div className="max-w-6xl mx-auto px-6 sm:px-10">
             <p className="text-xs font-bold uppercase tracking-[0.2em] text-gray-400 mb-4 text-center">Quest steps</p>
-            <h2 className="text-3xl sm:text-5xl font-extrabold text-gray-900 leading-[1.08] tracking-tight text-center mb-16">Set up at home and get straight into practice.</h2>
+            <h2 className="text-3xl sm:text-5xl font-extrabold text-[#101828] leading-[1.08] tracking-tight text-center mb-16">Set up at home and get straight into practice.</h2>
             <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
               {[
                 { step: '1', title: 'Prepare your space', desc: 'Get your stick, ball and training mat ready, leaving enough clear space to move comfortably.' },
@@ -380,7 +380,7 @@ export default function Home() {
                   <div className="w-12 h-12 rounded-2xl bg-emerald-500 flex items-center justify-center mb-5 shadow-md shadow-emerald-500/20">
                     <span className="text-lg font-black text-white">{item.step}</span>
                   </div>
-                  <h3 className="text-lg font-extrabold text-gray-900 mb-2 tracking-tight">{item.title}</h3>
+                  <h3 className="text-lg font-extrabold text-[#101828] mb-2 tracking-tight">{item.title}</h3>
                   <p className="text-sm text-gray-500 leading-relaxed">{item.desc}</p>
                   {/* Achievement progress bar */}
                   <div className="progress-bar mt-5">
@@ -399,7 +399,7 @@ export default function Home() {
         <section className="py-24 sm:py-32">
           <div className="max-w-6xl mx-auto px-6 sm:px-10 text-center">
             <p className="text-xs font-bold uppercase tracking-[0.2em] text-gray-400 mb-4">Leaderboard</p>
-            <h2 className="text-3xl sm:text-5xl font-extrabold text-gray-900 leading-[1.08] tracking-tight">See your progress. Give your teammates something to chase.</h2>
+            <h2 className="text-3xl sm:text-5xl font-extrabold text-[#101828] leading-[1.08] tracking-tight">See your progress. Give your teammates something to chase.</h2>
             <p className="mt-6 text-base text-gray-500 max-w-lg mx-auto leading-relaxed">
               Your score gives you a clear goal for the next session. Rankings bring your teammates into it, too. Compare results, challenge each other and keep the competition going between training sessions.
             </p>
@@ -411,7 +411,7 @@ export default function Home() {
                 </div>
                 <div className="text-left">
                   <p className="text-xs text-gray-400 font-medium">Rating</p>
-                  <p className="text-sm font-extrabold text-gray-900 tracking-tight">4.8 / 5.0</p>
+                  <p className="text-sm font-extrabold text-[#101828] tracking-tight">4.8 / 5.0</p>
                 </div>
               </div>
               <div className="inline-flex items-center gap-2.5 bg-white border border-gray-100 rounded-2xl px-5 py-3 shadow-sm">
@@ -420,7 +420,7 @@ export default function Home() {
                 </div>
                 <div className="text-left">
                   <p className="text-xs text-gray-400 font-medium">Active players</p>
-                  <p className="text-sm font-extrabold text-gray-900 tracking-tight">Growing daily</p>
+                  <p className="text-sm font-extrabold text-[#101828] tracking-tight">Growing daily</p>
                 </div>
               </div>
             </div>
@@ -433,7 +433,7 @@ export default function Home() {
         {/* 9. Mobile app */}
         <section className="py-24 sm:py-32">
           <div className="max-w-6xl mx-auto px-6 sm:px-10">
-            <h2 className="text-3xl sm:text-5xl font-extrabold text-gray-900 leading-[1.08] tracking-tight mb-4">Your practice starts on your phone.</h2>
+            <h2 className="text-3xl sm:text-5xl font-extrabold text-[#101828] leading-[1.08] tracking-tight mb-4">Your practice starts on your phone.</h2>
             <p className="text-lg text-gray-500 leading-relaxed max-w-2xl mb-14">
               Open HockeyBeats to choose a game, start playing and keep track of your results. During play, your phone becomes the screen you follow.
             </p>
@@ -444,7 +444,7 @@ export default function Home() {
                 { title: 'A connection to your teammates', desc: 'Check the rankings and see how your latest result compares.' },
               ].map((item) => (
                 <div key={item.title} className="bg-white rounded-3xl p-7 border border-gray-100 hover:border-gray-200 hover:shadow-md transition-all duration-300">
-                  <h3 className="text-base font-extrabold text-gray-900 mb-2 tracking-tight">{item.title}</h3>
+                  <h3 className="text-base font-extrabold text-[#101828] mb-2 tracking-tight">{item.title}</h3>
                   <p className="text-sm text-gray-500 leading-relaxed">{item.desc}</p>
                 </div>
               ))}
@@ -458,7 +458,7 @@ export default function Home() {
             <div className="grid lg:grid-cols-2 gap-12 items-center mb-14">
               <div>
                 <p className="text-xs font-bold uppercase tracking-[0.2em] text-gray-400 mb-4">For parents</p>
-                <h2 className="text-3xl sm:text-5xl font-extrabold text-gray-900 leading-[1.08] tracking-tight mb-4">Help them build a practice habit of their own.</h2>
+                <h2 className="text-3xl sm:text-5xl font-extrabold text-[#101828] leading-[1.08] tracking-tight mb-4">Help them build a practice habit of their own.</h2>
                 <p className="text-lg text-gray-500 leading-relaxed">
                   Team training gives children coaching, structure and time with their teammates. Individual practice gives them more opportunities to work with their stick. HockeyBeats makes that extra practice easier to enjoy.
                 </p>
@@ -475,7 +475,7 @@ export default function Home() {
                 { title: 'Motivation they can make their own', desc: 'Whether they enjoy beating a personal best, competing with friends or trying another game, there\'s more than one reason to practise.' },
               ].map((item) => (
                 <div key={item.title} className="bg-white rounded-3xl p-7 border border-gray-100 hover:border-gray-200 hover:shadow-md transition-all duration-300">
-                  <h3 className="text-base font-extrabold text-gray-900 mb-2 tracking-tight">{item.title}</h3>
+                  <h3 className="text-base font-extrabold text-[#101828] mb-2 tracking-tight">{item.title}</h3>
                   <p className="text-sm text-gray-500 leading-relaxed">{item.desc}</p>
                 </div>
               ))}
@@ -490,7 +490,7 @@ export default function Home() {
         <section className="py-24 sm:py-32">
           <div className="max-w-6xl mx-auto px-6 sm:px-10 text-center">
             <p className="text-xs font-bold uppercase tracking-[0.2em] text-gray-400 mb-4">Equipment</p>
-            <h2 className="text-3xl sm:text-5xl font-extrabold text-gray-900 leading-[1.08] tracking-tight">Turn a clear space into a place to practise.</h2>
+            <h2 className="text-3xl sm:text-5xl font-extrabold text-[#101828] leading-[1.08] tracking-tight">Turn a clear space into a place to practise.</h2>
             <p className="mt-6 text-base text-gray-500 max-w-lg mx-auto leading-relaxed">
               You'll need your stick, a suitable training ball, the mat and a supported phone with a camera. Follow the setup instructions for your sport and leave enough space for your movements.
             </p>
@@ -502,7 +502,7 @@ export default function Home() {
           <div className="max-w-6xl mx-auto px-6 sm:px-10">
             <div className="max-w-2xl">
               <p className="text-xs font-bold uppercase tracking-[0.2em] text-gray-400 mb-4">For teams</p>
-              <h2 className="text-3xl sm:text-5xl font-extrabold text-gray-900 leading-[1.08] tracking-tight">Keep players engaged between training sessions.</h2>
+              <h2 className="text-3xl sm:text-5xl font-extrabold text-[#101828] leading-[1.08] tracking-tight">Keep players engaged between training sessions.</h2>
               <p className="mt-6 text-lg text-gray-500 leading-relaxed">
                 HockeyBeats gives individual practice a shared goal. Players can work on their own, compare scores and bring a little friendly competition back to the team.
               </p>
@@ -520,7 +520,7 @@ export default function Home() {
         <section className="py-24 sm:py-32">
           <div className="max-w-3xl mx-auto px-6 sm:px-10">
             <p className="text-xs font-bold uppercase tracking-[0.2em] text-gray-400 mb-4 text-center">Help menu</p>
-            <h2 className="text-3xl sm:text-4xl font-extrabold text-gray-900 mb-14 text-center tracking-tight">Frequently asked questions</h2>
+            <h2 className="text-3xl sm:text-4xl font-extrabold text-[#101828] mb-14 text-center tracking-tight">Frequently asked questions</h2>
             <div className="space-y-3">
               {[
                 { q: 'What is HockeyBeats?', a: 'HockeyBeats is an interactive training app for stick-and-ball practice. Players use real movements to play games on screen, build scores and compete in rankings.' },
@@ -533,7 +533,7 @@ export default function Home() {
                 { q: 'Does it replace team training?', a: 'No. HockeyBeats adds individual practice between team sessions. Coaches remain essential for technical feedback, team play and development.' },
               ].map((faq) => (
                 <details key={faq.q} className="faq-item rounded-2xl p-6 group">
-                  <summary className="font-bold text-gray-900 cursor-pointer list-none flex justify-between items-center tracking-tight">
+                  <summary className="font-bold text-[#101828] cursor-pointer list-none flex justify-between items-center tracking-tight">
                     {faq.q}
                     <span className="text-gray-300 group-open:rotate-45 transition-transform duration-300 text-xl font-light">+</span>
                   </summary>
@@ -547,7 +547,7 @@ export default function Home() {
         {/* 14. Final CTA */}
         <section className="bg-gray-50/50 py-28 sm:py-36">
           <div className="max-w-6xl mx-auto px-6 sm:px-10 text-center">
-            <h2 className="text-3xl sm:text-5xl font-extrabold text-gray-900 tracking-tight leading-[1.08]">Give your next training session a head start.</h2>
+            <h2 className="text-3xl sm:text-5xl font-extrabold text-[#101828] tracking-tight leading-[1.08]">Give your next training session a head start.</h2>
             <p className="mt-5 text-lg text-gray-500 max-w-md mx-auto">
               Pick up your stick, play a game and put in the practice you'll take back to your team.
             </p>
@@ -568,11 +568,11 @@ export default function Home() {
               <p className="text-xs text-gray-400 tracking-wide">Interactive practice for ice hockey, field hockey and floorball.</p>
             </div>
             <div className="flex flex-wrap gap-6 text-sm text-gray-400 font-medium tracking-tight">
-              <a href="#how-it-works" className="hover:text-gray-900 transition-colors duration-300">How it works</a>
-              <a href="#sports" className="hover:text-gray-900 transition-colors duration-300">Sports</a>
-              <a href="#games" className="hover:text-gray-900 transition-colors duration-300">Games</a>
-              <a href="#parents" className="hover:text-gray-900 transition-colors duration-300">For parents</a>
-              <a href="#teams" className="hover:text-gray-900 transition-colors duration-300">For teams</a>
+              <a href="#how-it-works" className="hover:text-[#101828] transition-colors duration-300">How it works</a>
+              <a href="#sports" className="hover:text-[#101828] transition-colors duration-300">Sports</a>
+              <a href="#games" className="hover:text-[#101828] transition-colors duration-300">Games</a>
+              <a href="#parents" className="hover:text-[#101828] transition-colors duration-300">For parents</a>
+              <a href="#teams" className="hover:text-[#101828] transition-colors duration-300">For teams</a>
             </div>
           </div>
           <div className="mt-8 pt-6 border-t border-gray-100">
@@ -592,7 +592,7 @@ export default function Home() {
         <div className="fixed inset-0 bg-black/20 backdrop-blur-md flex items-center justify-center z-50 p-4" onClick={() => setShowAuth(false)}>
           <div className="bg-white rounded-3xl p-8 w-full max-w-sm shadow-2xl shadow-gray-900/10 border border-gray-100" onClick={e => e.stopPropagation()}>
             <div className="flex justify-between items-center mb-6">
-              <h2 className="text-xl font-extrabold text-gray-900 tracking-tight">
+              <h2 className="text-xl font-extrabold text-[#101828] tracking-tight">
                 {authMode === 'login' ? 'Log in' : authMode === 'signup' ? 'Create account' : 'Reset password'}
               </h2>
               <button onClick={() => { setShowAuth(false); setAuthError(''); setAuthSuccess(''); }} className="text-gray-400 hover:text-gray-600 text-xl">&times;</button>
@@ -684,7 +684,7 @@ export default function Home() {
                   </label>
                   <label className="flex items-start gap-2 cursor-pointer">
                     <input type="checkbox" required className="mt-0.5 accent-emerald-500" />
-                    <span className="text-xs text-gray-500">I have read and agree to the <a href="/terms" className="underline hover:text-gray-900">Terms of Service</a> and acknowledge the <a href="/privacy" className="underline hover:text-gray-900">Privacy Policy</a>.</span>
+                    <span className="text-xs text-gray-500">I have read and agree to the <a href="/terms" className="underline hover:text-[#101828]">Terms of Service</a> and acknowledge the <a href="/privacy" className="underline hover:text-[#101828]">Privacy Policy</a>.</span>
                   </label>
                 </div>
               )}
@@ -699,11 +699,11 @@ export default function Home() {
               {authMode === 'login' && (
                 <>
                   <button onClick={() => { setAuthMode('forgot'); setAuthError(''); setAuthSuccess(''); }} className="text-xs text-gray-400 hover:text-gray-600 block mx-auto">Forgot password?</button>
-                  <p className="text-xs text-gray-400">No account? <button onClick={() => { setAuthMode('signup'); setAuthError(''); setAuthSuccess(''); }} className="text-gray-900 font-medium">Sign up</button></p>
+                  <p className="text-xs text-gray-400">No account? <button onClick={() => { setAuthMode('signup'); setAuthError(''); setAuthSuccess(''); }} className="text-[#101828] font-medium">Sign up</button></p>
                 </>
               )}
               {authMode === 'signup' && (
-                <p className="text-xs text-gray-400">Already have an account? <button onClick={() => { setAuthMode('login'); setAuthError(''); setAuthSuccess(''); }} className="text-gray-900 font-medium">Log in</button></p>
+                <p className="text-xs text-gray-400">Already have an account? <button onClick={() => { setAuthMode('login'); setAuthError(''); setAuthSuccess(''); }} className="text-[#101828] font-medium">Log in</button></p>
               )}
               {authMode === 'forgot' && (
                 <button onClick={() => { setAuthMode('login'); setAuthError(''); setAuthSuccess(''); }} className="text-xs text-gray-400 hover:text-gray-600">Back to login</button>
@@ -736,7 +736,7 @@ function HeroBanner({ isLoggedIn, onLoginClick }: { isLoggedIn: boolean; onLogin
             </button>
             <a
               href="#how-it-works"
-              className="font-bold text-base text-gray-900 hover:text-gray-600 transition-colors inline-flex items-center gap-1.5"
+              className="font-bold text-base text-[#101828] hover:text-gray-600 transition-colors inline-flex items-center gap-1.5"
 
             >
               Learn more
@@ -756,7 +756,7 @@ function StartPlayingSection() {
   const [expanded, setExpanded] = useState<'mobile' | 'desktop' | 'tv' | null>('desktop');
 
   return (
-    <section className="relative bg-[#111111] py-14 sm:py-20 overflow-hidden">
+    <section className="relative bg-[#101828] py-14 sm:py-20 overflow-hidden">
       <div className="max-w-6xl mx-auto px-6 sm:px-10">
         <div className="text-center mb-10">
           <Image src="/images/logo-startnow.png" alt="Start Now" width={300} height={100} className="h-16 sm:h-20 w-auto mx-auto" />
@@ -768,11 +768,11 @@ function StartPlayingSection() {
           <div className="flex-1">
             <button
               onClick={() => setExpanded(expanded === 'mobile' ? null : 'mobile')}
-              className={`w-full flex flex-col items-center gap-3 rounded-2xl px-6 py-6 transition-all duration-300 ${expanded === 'mobile' ? 'bg-white text-gray-900 shadow-lg' : 'bg-white/5 hover:bg-white/10 text-white border border-white/8 hover:border-white/15'}`}
+              className={`w-full flex flex-col items-center gap-3 rounded-2xl px-6 py-6 transition-all duration-300 ${expanded === 'mobile' ? 'bg-white text-[#101828] shadow-lg' : 'bg-white/5 hover:bg-white/10 text-white border border-white/8 hover:border-white/15'}`}
             >
-              <svg className={`w-7 h-7 ${expanded === 'mobile' ? 'text-gray-900' : 'text-white/50'}`} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}><rect x="6" y="2" width="12" height="20" rx="2" /><line x1="10" y1="18" x2="14" y2="18" /></svg>
+              <svg className={`w-7 h-7 ${expanded === 'mobile' ? 'text-[#101828]' : 'text-white/50'}`} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}><rect x="6" y="2" width="12" height="20" rx="2" /><line x1="10" y1="18" x2="14" y2="18" /></svg>
               <div className="text-center">
-                <div className={`text-sm font-bold tracking-tight ${expanded === 'mobile' ? 'text-gray-900' : 'text-white'}`}>mobile</div>
+                <div className={`text-sm font-bold tracking-tight ${expanded === 'mobile' ? 'text-[#101828]' : 'text-white'}`}>mobile</div>
                 <div className={`text-[10px] ${expanded === 'mobile' ? 'text-gray-400' : 'text-white/30'}`}>iOS & Android</div>
               </div>
             </button>
@@ -800,11 +800,11 @@ function StartPlayingSection() {
           <div className="flex-1">
             <button
               onClick={() => setExpanded(expanded === 'desktop' ? null : 'desktop')}
-              className={`w-full flex flex-col items-center gap-3 rounded-2xl px-6 py-6 transition-all duration-300 ${expanded === 'desktop' ? 'bg-white text-gray-900 shadow-lg' : 'bg-white/5 hover:bg-white/10 text-white border border-white/8 hover:border-white/15'}`}
+              className={`w-full flex flex-col items-center gap-3 rounded-2xl px-6 py-6 transition-all duration-300 ${expanded === 'desktop' ? 'bg-white text-[#101828] shadow-lg' : 'bg-white/5 hover:bg-white/10 text-white border border-white/8 hover:border-white/15'}`}
             >
-              <svg className={`w-7 h-7 ${expanded === 'desktop' ? 'text-gray-900' : 'text-white/50'}`} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}><rect x="2" y="3" width="20" height="14" rx="2" /><line x1="8" y1="21" x2="16" y2="21" /><line x1="12" y1="17" x2="12" y2="21" /></svg>
+              <svg className={`w-7 h-7 ${expanded === 'desktop' ? 'text-[#101828]' : 'text-white/50'}`} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}><rect x="2" y="3" width="20" height="14" rx="2" /><line x1="8" y1="21" x2="16" y2="21" /><line x1="12" y1="17" x2="12" y2="21" /></svg>
               <div className="text-center">
-                <div className={`text-sm font-bold tracking-tight ${expanded === 'desktop' ? 'text-gray-900' : 'text-white'}`}>desktop</div>
+                <div className={`text-sm font-bold tracking-tight ${expanded === 'desktop' ? 'text-[#101828]' : 'text-white'}`}>desktop</div>
                 <div className={`text-[10px] ${expanded === 'desktop' ? 'text-gray-400' : 'text-white/30'}`}>Mac & Windows</div>
               </div>
             </button>
@@ -822,11 +822,11 @@ function StartPlayingSection() {
           <div className="flex-1">
             <button
               onClick={() => setExpanded(expanded === 'tv' ? null : 'tv')}
-              className={`w-full flex flex-col items-center gap-3 rounded-2xl px-6 py-6 transition-all duration-300 ${expanded === 'tv' ? 'bg-white text-gray-900 shadow-lg' : 'bg-white/5 hover:bg-white/10 text-white border border-white/8 hover:border-white/15'}`}
+              className={`w-full flex flex-col items-center gap-3 rounded-2xl px-6 py-6 transition-all duration-300 ${expanded === 'tv' ? 'bg-white text-[#101828] shadow-lg' : 'bg-white/5 hover:bg-white/10 text-white border border-white/8 hover:border-white/15'}`}
             >
-              <svg className={`w-7 h-7 ${expanded === 'tv' ? 'text-gray-900' : 'text-white/50'}`} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}><rect x="2" y="4" width="20" height="13" rx="2" /><line x1="7" y1="21" x2="17" y2="21" /><line x1="9" y1="17" x2="9" y2="21" /><line x1="15" y1="17" x2="15" y2="21" /></svg>
+              <svg className={`w-7 h-7 ${expanded === 'tv' ? 'text-[#101828]' : 'text-white/50'}`} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}><rect x="2" y="4" width="20" height="13" rx="2" /><line x1="7" y1="21" x2="17" y2="21" /><line x1="9" y1="17" x2="9" y2="21" /><line x1="15" y1="17" x2="15" y2="21" /></svg>
               <div className="text-center">
-                <div className={`text-sm font-bold tracking-tight ${expanded === 'tv' ? 'text-gray-900' : 'text-white'}`}>tv</div>
+                <div className={`text-sm font-bold tracking-tight ${expanded === 'tv' ? 'text-[#101828]' : 'text-white'}`}>tv</div>
                 <div className={`text-[10px] ${expanded === 'tv' ? 'text-gray-400' : 'text-white/30'}`}>Smart TV</div>
               </div>
             </button>
