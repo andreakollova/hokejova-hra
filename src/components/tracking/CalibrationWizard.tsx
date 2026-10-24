@@ -306,6 +306,7 @@ export default function CalibrationWizard({
               <button
                 onClick={async () => {
                   setShowPhoneQR(true);
+                  localStorage.setItem('hb_remote_session', phoneSessionId);
                   const url = `${window.location.origin}/remote-camera?session=${phoneSessionId}`;
                   const dataUrl = await QRCode.toDataURL(url, { width: 200, margin: 2, color: { dark: '#111827', light: '#ffffff' } });
                   setQrDataUrl(dataUrl);
