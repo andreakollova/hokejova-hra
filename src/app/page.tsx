@@ -810,9 +810,9 @@ function StartPlayingSection() {
             </button>
             {expanded === 'desktop' && (
               <div className="mt-2 animate-[fadeIn_0.2s_ease-out]">
-                <Link href="/dashboard" className="flex items-center justify-center gap-2.5 bg-emerald-500 hover:bg-emerald-400 rounded-xl px-5 py-3.5 transition-all">
-                  <svg className="w-5 h-5 text-white" fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
-                  <div className="text-sm font-bold text-white">Play in browser — Play now</div>
+                <Link href="/dashboard" className="flex items-center justify-center gap-2 bg-emerald-500 hover:bg-emerald-400 rounded-xl px-5 py-3.5 transition-all">
+                  <svg className="w-4 h-4 text-white" fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+                  <div className="text-sm font-bold text-white">Play in browser</div>
                 </Link>
               </div>
             )}
