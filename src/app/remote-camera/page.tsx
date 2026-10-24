@@ -36,48 +36,7 @@ function RemoteCameraContent() {
   const rafRef = useRef(0);
   const streamRef = useRef<MediaStream | null>(null);
 
-  // Start camera - first get the stream, then show video
-  const pendingStreamRef = useRef<MediaStream | null>(null);
-
-  const startCamera = useCallback(async () => {
-    try {
-      const stream = await navigator.mediaDevices.getUserMedia({
-        video: { facingMode: 'environment', width: { ideal: 1280 }, height: { ideal: 720 } },
-      });
-      pendingStreamRef.current = stream;
-      streamRef.current = stream;
-      setCameraStarted(true);
-      setPhase('color'); // This renders the video element
-    } catch (e) {
-      alert('Camera access denied. Please allow camera access and try again.');
-    }
-  }, []);
-
-  // Attach stream to video element once it renders
-  useEffect(() => {
-    if (phase !== 'setup' && pendingStreamRef.current && videoRef.current) {
-      const video = videoRef.current;
-      video.srcObject = pendingStreamRef.current;
-      video.setAttribute('playsinline', 'true');
-      video.play().then(() => {
-        // Set corners to full view once video dimensions are available
-        const waitForDimensions = () => {
-          if (video.videoWidth > 0) {
-            setCorners([
-              { x: 0, y: 0 },
-              { x: video.videoWidth, y: 0 },
-              { x: video.videoWidth, y: video.videoHeight },
-              { x: 0, y: video.videoHeight },
-            ]);
-          } else {
-            setTimeout(waitForDimensions, 100);
-          }
-        };
-        waitForDimensions();
-      }).catch(() => {});
-      pendingStreamRef.current = null;
-    }
-  }, [phase]);
+  const [cameraError, setCameraError] = useState('');
 
   // Handle corner tap
   const handleCornerTap = useCallback((e: React.MouseEvent<HTMLVideoElement>) => {
@@ -202,6 +161,17 @@ function RemoteCameraContent() {
         </div>
       </div>
 
+      {/* Video element - ALWAYS in DOM, hidden when not active */}
+      <video
+        ref={videoRef}
+        className={phase === 'setup' ? 'hidden' : 'absolute inset-0 w-full h-full object-cover'}
+        playsInline
+        muted
+        autoPlay
+        onClick={phase === 'color' ? handleColorPick : undefined}
+        style={{ top: '53px' }}
+      />
+
       {phase === 'setup' ? (
         /* Setup: centered on screen */
         <div className="flex-1 flex items-center justify-center p-8">
@@ -211,28 +181,52 @@ function RemoteCameraContent() {
             </div>
             <h2 className="text-xl font-bold mb-2">Remote Camera</h2>
             <p className="text-sm text-white/50 mb-6">Point your phone at the training area. The ball position will be sent to the game on your computer.</p>
-            <button onClick={startCamera} className="w-full bg-emerald-500 hover:bg-emerald-400 text-white font-bold py-4 rounded-full transition-all text-base">
+            <button
+              onClick={async () => {
+                setCameraError('');
+                try {
+                  const stream = await navigator.mediaDevices.getUserMedia({
+                    video: { facingMode: 'environment', width: { ideal: 1280 }, height: { ideal: 720 } },
+                  });
+                  streamRef.current = stream;
+                  const video = videoRef.current;
+                  if (video) {
+                    video.srcObject = stream;
+                    video.setAttribute('playsinline', 'true');
+                    await video.play();
+                    // Wait for video dimensions
+                    const waitDim = () => {
+                      const vw = video.videoWidth;
+                      const vh = video.videoHeight;
+                      if (vw > 0 && vh > 0) {
+                        setCorners([{ x: 0, y: 0 }, { x: vw, y: 0 }, { x: vw, y: vh }, { x: 0, y: vh }]);
+                        setCameraStarted(true);
+                        setPhase('color');
+                      } else {
+                        setTimeout(waitDim, 100);
+                      }
+                    };
+                    waitDim();
+                  }
+                } catch (err) {
+                  setCameraError('Camera access denied. Please allow camera access in your browser settings and try again.');
+                }
+              }}
+              className="w-full bg-emerald-500 hover:bg-emerald-400 text-white font-bold py-4 rounded-full transition-all text-base"
+            >
               Start Camera
             </button>
+            {cameraError && <p className="text-red-400 text-sm mt-3">{cameraError}</p>}
             <p className="text-xs text-white/20 mt-4">Session: {sessionId}</p>
           </div>
         </div>
       ) : (
         <>
-          {/* Camera view */}
+          {/* Camera view overlay */}
           <div className="flex-1 relative">
-            <video
-              ref={videoRef}
-              className="w-full h-full object-cover"
-              playsInline
-              muted
-              autoPlay
-              onClick={phase === 'color' ? handleColorPick : undefined}
-            />
-
             {/* Color pick crosshair overlay */}
             {phase === 'color' && (
-              <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
+              <div className="absolute inset-0 flex items-center justify-center pointer-events-none" style={{ top: '53px' }}>
                 <div className="w-16 h-16 border-2 border-white/30 rounded-full" />
               </div>
             )}
@@ -264,7 +258,7 @@ function RemoteCameraContent() {
                 </div>
                 <p className="text-xs text-white/40">Keep this screen open and your phone pointed at the playing area.</p>
                 <p className="text-xs text-white/40 mt-1">Go back to your computer to start the game.</p>
-                <button onClick={() => { setTrackingActive(false); setCorners([]); setBallColor(null); setPhase('setup'); setCameraStarted(false); if (streamRef.current) { streamRef.current.getTracks().forEach(t => t.stop()); } }}
+                <button onClick={() => { setTrackingActive(false); setCorners([]); setBallColor(null); setPhase('setup'); setCameraStarted(false); if (streamRef.current) { streamRef.current.getTracks().forEach(t => t.stop()); streamRef.current = null; } if (videoRef.current) { videoRef.current.srcObject = null; } }}
                   className="mt-4 text-xs text-white/30 hover:text-white/60 transition-colors">
                   Recalibrate
                 </button>
