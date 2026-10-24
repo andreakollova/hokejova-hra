@@ -49,7 +49,14 @@ function RemoteCameraContent() {
       await video.play();
       streamRef.current = stream;
       setCameraStarted(true);
-      setPhase('corners');
+      // Auto-use full camera view, go straight to color pick
+      setCorners([
+        { x: 0, y: 0 },
+        { x: video.videoWidth, y: 0 },
+        { x: video.videoWidth, y: video.videoHeight },
+        { x: 0, y: video.videoHeight },
+      ]);
+      setPhase('color');
     } catch (e) {
       alert('Camera access denied. Please allow camera access and try again.');
     }
@@ -203,19 +210,15 @@ function RemoteCameraContent() {
               playsInline
               muted
               autoPlay
-              onClick={phase === 'corners' ? handleCornerTap : phase === 'color' ? handleColorPick : undefined}
+              onClick={phase === 'color' ? handleColorPick : undefined}
             />
 
-            {/* Corner markers */}
-            {phase === 'corners' && videoRef.current && corners.map((c, i) => {
-              const video = videoRef.current!;
-              const rect = video.getBoundingClientRect();
-              const sx = (c.x / video.videoWidth) * rect.width;
-              const sy = (c.y / video.videoHeight) * rect.height;
-              return (
-                <div key={i} className="absolute w-4 h-4 bg-emerald-500 rounded-full border-2 border-white" style={{ left: sx - 8, top: sy - 8 + 53 }} />
-              );
-            })}
+            {/* Color pick crosshair overlay */}
+            {phase === 'color' && (
+              <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
+                <div className="w-16 h-16 border-2 border-white/30 rounded-full" />
+              </div>
+            )}
 
             {/* Tracking indicator */}
             {trackingActive && (
@@ -228,43 +231,24 @@ function RemoteCameraContent() {
 
           {/* Instructions overlay at bottom */}
           <div className="p-5 bg-[#111118] safe-area-bottom">
-            {phase === 'corners' && (
-              <div className="text-center space-y-3">
-                <h2 className="text-base font-bold">Set training area</h2>
-                <button
-                  onClick={() => {
-                    const video = videoRef.current;
-                    if (!video) return;
-                    setCorners([
-                      { x: 0, y: 0 },
-                      { x: video.videoWidth, y: 0 },
-                      { x: video.videoWidth, y: video.videoHeight },
-                      { x: 0, y: video.videoHeight },
-                    ]);
-                    setPhase('color');
-                  }}
-                  className="w-full bg-emerald-500 hover:bg-emerald-400 text-white font-bold py-3.5 rounded-full transition-all text-sm"
-                >
-                  Use full camera view
-                </button>
-                <p className="text-xs text-white/30">Or tap 4 corners on the video. {corners.length}/4</p>
-              </div>
-            )}
-
             {phase === 'color' && (
               <div className="text-center">
                 <div className="w-3 h-3 rounded-full bg-amber-400 animate-pulse mx-auto mb-2" />
                 <h2 className="text-base font-bold">Tap your ball</h2>
-                <p className="text-xs text-white/40 mt-1">Tap on the ball in the video to pick its color.</p>
+                <p className="text-xs text-white/40 mt-1">Tap on your ball in the video so we can track its color.</p>
               </div>
             )}
 
             {phase === 'tracking' && (
               <div className="text-center">
-                <h2 className="text-base font-bold text-emerald-400">Tracking Active</h2>
-                <p className="text-xs text-white/40 mt-1">Keep this screen open. Ball position is being sent to the game.</p>
-                <button onClick={() => { setTrackingActive(false); setCorners([]); setBallColor(null); setPhase('setup'); }}
-                  className="mt-3 text-xs text-white/30 hover:text-white/60 transition-colors">
+                <div className="flex items-center justify-center gap-2 mb-2">
+                  <div className="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-pulse" />
+                  <h2 className="text-base font-bold text-emerald-400">Tracking Active</h2>
+                </div>
+                <p className="text-xs text-white/40">Keep this screen open and your phone pointed at the playing area.</p>
+                <p className="text-xs text-white/40 mt-1">Go back to your computer to start the game.</p>
+                <button onClick={() => { setTrackingActive(false); setCorners([]); setBallColor(null); setPhase('setup'); setCameraStarted(false); if (streamRef.current) { streamRef.current.getTracks().forEach(t => t.stop()); } }}
+                  className="mt-4 text-xs text-white/30 hover:text-white/60 transition-colors">
                   Recalibrate
                 </button>
               </div>
