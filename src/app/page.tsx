@@ -643,12 +643,12 @@ function HeroBanner({ isLoggedIn, onLoginClick }: { isLoggedIn: boolean; onLogin
               <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}><path strokeLinecap="round" strokeLinejoin="round" d="M8.25 4.5l7.5 7.5-7.5 7.5" /></svg>
             </a>
             <div className="hidden sm:block w-px h-8 bg-gray-200 mx-2" />
-            <div className="hidden sm:flex items-center gap-5 text-xs text-[#101828]">
-              <span className="text-gray-500 font-medium">Designed to be compatible with</span>
-              <span className="flex items-center gap-1.5 font-medium"><Image src="/images/stick-icehockey-dark.png" alt="Ice Hockey" width={20} height={20} className="w-5 h-5 object-contain" /> Ice Hockey</span>
-              <span className="flex items-center gap-1.5 font-medium"><Image src="/images/stick-fieldhockey-dark.png" alt="Field Hockey" width={20} height={20} className="w-5 h-5 object-contain" /> Field Hockey</span>
-              <span className="flex items-center gap-1.5 font-medium"><Image src="/images/stick-floorball-dark.png" alt="Floorball" width={20} height={20} className="w-5 h-5 object-contain" /> Floorball</span>
-              <span className="flex items-center gap-1.5 font-medium text-gray-500">+ Any Other Hockey Sport</span>
+            <div className="hidden sm:flex items-center gap-5 text-sm text-[#101828] font-medium">
+              <span className="text-[#101828]">Designed to be compatible with</span>
+              <span className="flex items-center gap-1.5"><Image src="/images/stick-icehockey-dark.png" alt="Ice Hockey" width={20} height={20} className="w-5 h-5 object-contain" /> Ice Hockey</span>
+              <span className="flex items-center gap-1.5"><Image src="/images/stick-fieldhockey-dark.png" alt="Field Hockey" width={20} height={20} className="w-5 h-5 object-contain" /> Field Hockey</span>
+              <span className="flex items-center gap-1.5"><Image src="/images/stick-floorball-dark.png" alt="Floorball" width={20} height={20} className="w-5 h-5 object-contain" /> Floorball</span>
+              <span className="flex items-center gap-1.5">... + Any Other Hockey Sport</span>
             </div>
           </div>
         </div>
