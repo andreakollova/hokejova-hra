@@ -647,7 +647,7 @@ function StartNowSection() {
       <div className="max-w-6xl mx-auto px-6 sm:px-10">
         <div className="text-center mb-10">
           <Image src="/images/logo-startnow.png" alt="Start Now" width={300} height={100} className="h-16 sm:h-20 w-auto mx-auto" />
-          <p className="mt-3 text-white/60 text-sm">Free on all platforms.</p>
+          <p className="mt-3 text-white text-sm">Free on all platforms.</p>
         </div>
         <div className="flex flex-col sm:flex-row justify-center gap-4 max-w-2xl mx-auto">
           <div className="flex-1">
