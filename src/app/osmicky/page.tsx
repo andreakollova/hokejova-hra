@@ -10,6 +10,7 @@ import { useSpotify } from '@/hooks/useSpotify';
 import { useMusicPlayer } from '@/hooks/useMusicPlayer';
 import { SpotifyTrack } from '@/lib/spotify';
 import Link from 'next/link';
+import MascotGlow from '@/components/ui/MascotGlow';
 
 const CalibrationWizard = dynamic(
   () => import('@/components/tracking/CalibrationWizard'),
@@ -225,69 +226,47 @@ export default function OsmickyPage() {
     );
   }
 
+  const accent = '#f59e0b';
+
   return (
-    <div className="min-h-screen bg-gray-50/50 p-6">
-      <div className="max-w-2xl mx-auto">
-        <Link
-          href="/"
-          className="text-sm text-gray-400 hover:text-gray-600 transition-colors mb-8 inline-block"
-        >
-          &larr; Back
+    <div className="min-h-screen bg-[#0a0a0f] px-6 py-8">
+      <div className="max-w-lg mx-auto">
+        <Link href="/dashboard" className="inline-flex items-center gap-1.5 text-sm text-white/40 hover:text-white/70 transition-colors mb-8">
+          <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M15 19l-7-7 7-7" /></svg>
+          Back
         </Link>
 
-        <h1 className="text-3xl font-bold text-gray-900 mb-2">Figure 8</h1>
-        <p className="text-gray-500 mb-8">
-          Guide the ball in a figure-8 pattern around two points. The number of
-          completed figure 8s within the chosen time is counted.
-        </p>
-
-        <div className="space-y-6">
-          {/* Input mode */}
+        {/* Mascot + Title */}
+        <div className="flex items-center gap-5 mb-8">
+          <MascotGlow src="/images/mascots/mascot-targets.png" color={accent} size={90} />
           <div>
-            <label className="text-sm font-medium text-gray-500 mb-3 block">
-              Input mode
-            </label>
-            <div className="flex gap-3">
-              <button
-                onClick={() => setInputMode('camera')}
-                className={`flex-1 rounded-xl p-4 border-2 transition-all ${
-                  inputMode === 'camera'
-                    ? 'border-green-500 bg-green-50'
-                    : 'border-gray-200 bg-white hover:border-gray-300'
-                }`}
-              >
-                <div className="text-sm font-medium text-gray-900">Camera</div>
-                <div className="text-xs text-gray-500 mt-1">Track real ball</div>
+            <h1 className="text-3xl font-extrabold text-white tracking-tight">Classic 8s</h1>
+            <p className="text-white/40 text-sm mt-1">Classic figure eight pattern drills</p>
+          </div>
+        </div>
+
+        <div className="space-y-5">
+          {/* Mode */}
+          <div>
+            <label className="text-[10px] font-bold text-white/30 uppercase tracking-[0.2em] mb-2.5 block">Mode</label>
+            <div className="flex gap-2.5">
+              <button onClick={() => setInputMode('camera')} className={`flex-1 rounded-2xl py-3.5 border-2 transition-all text-sm font-semibold ${inputMode === 'camera' ? `border-[${accent}] bg-[${accent}]/10 text-[${accent}]` : 'border-white/8 bg-white/3 text-white/50 hover:border-white/15'}`} style={inputMode === 'camera' ? { borderColor: accent, backgroundColor: accent + '15', color: accent } : {}}>
+                Camera
               </button>
-              <button
-                onClick={() => setInputMode('demo')}
-                className={`flex-1 rounded-xl p-4 border-2 transition-all ${
-                  inputMode === 'demo'
-                    ? 'border-yellow-500 bg-yellow-50'
-                    : 'border-gray-200 bg-white hover:border-gray-300'
-                }`}
-              >
-                <div className="text-sm font-medium text-gray-900">Demo (mouse)</div>
-                <div className="text-xs text-gray-500 mt-1">Testing without camera</div>
+              <button onClick={() => setInputMode('demo')} className={`flex-1 rounded-2xl py-3.5 border-2 transition-all text-sm font-semibold ${inputMode === 'demo' ? `border-[${accent}] bg-[${accent}]/10 text-[${accent}]` : 'border-white/8 bg-white/3 text-white/50 hover:border-white/15'}`} style={inputMode === 'demo' ? { borderColor: accent, backgroundColor: accent + '15', color: accent } : {}}>
+                Demo (mouse)
               </button>
             </div>
           </div>
 
           {/* Calibration */}
           {inputMode === 'camera' && (
-            <div className="flex items-center justify-between bg-white rounded-xl p-4 border border-gray-200 shadow-sm">
+            <div className="flex items-center justify-between bg-white/3 border border-white/8 rounded-2xl p-4">
               <div>
-                <div className="text-sm font-medium text-gray-900">Camera calibration</div>
-                <div className="text-xs text-gray-500 mt-1">
-                  {calibration
-                    ? `Saved (${calibration.resolution.width}x${calibration.resolution.height})`
-                    : 'Not configured'}
-                </div>
+                <div className="text-sm font-semibold text-white">Calibration</div>
+                <div className="text-xs text-white/30 mt-0.5">{calibration ? 'Saved' : 'Not configured'}</div>
               </div>
-              <button
-                onClick={() => setPhase('calibration')}
-                className="text-sm text-green-600 hover:text-green-700 transition-colors"
-              >
+              <button onClick={() => setPhase('calibration')} className="text-xs font-bold px-4 py-2 rounded-xl transition-all" style={{ color: accent, backgroundColor: accent + '15' }}>
                 {calibration ? 'Recalibrate' : 'Calibrate'}
               </button>
             </div>
@@ -295,34 +274,20 @@ export default function OsmickyPage() {
 
           {/* Duration */}
           <div>
-            <label className="text-sm font-medium text-gray-500 mb-3 block">
-              Duration
-            </label>
-            <div className="flex gap-3">
+            <label className="text-[10px] font-bold text-white/30 uppercase tracking-[0.2em] mb-2.5 block">Duration</label>
+            <div className="flex gap-2.5">
               {([30, 60, 90] as const).map((d) => (
-                <button
-                  key={d}
-                  onClick={() => setDuration(d)}
-                  className={`flex-1 rounded-xl py-3 border-2 transition-all text-sm font-medium ${
-                    duration === d
-                      ? 'border-green-500 bg-green-50 text-green-600'
-                      : 'border-gray-200 bg-white text-gray-500 hover:border-gray-300'
-                  }`}
-                >
+                <button key={d} onClick={() => setDuration(d)} className="flex-1 rounded-2xl py-3.5 border-2 transition-all text-sm font-semibold" style={duration === d ? { borderColor: accent, backgroundColor: accent + '15', color: accent } : { borderColor: 'rgba(255,255,255,0.08)', backgroundColor: 'rgba(255,255,255,0.02)', color: 'rgba(255,255,255,0.5)' }}>
                   {d}s
                 </button>
               ))}
             </div>
           </div>
 
-          <div className="bg-gray-50 rounded-xl p-4 border border-gray-100 text-xs text-gray-500">
-            Figure 8 scoring accuracy depends on the quality of colour tracking.
-            For best results use a brightly coloured ball and good lighting.
-          </div>
-
           <BackgroundMusic spotify={spotify} onSelect={setBgTrack} selectedTrack={bgTrack} autoOpen={spotifyReturned} />
 
-          <button onClick={startGame} className="btn-primary w-full text-lg py-4">
+          {/* Start */}
+          <button onClick={startGame} className="w-full text-white font-bold text-lg py-4 rounded-full transition-all hover:brightness-110" style={{ backgroundColor: accent }}>
             Start training
           </button>
         </div>

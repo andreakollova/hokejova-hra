@@ -11,6 +11,7 @@ import { useMusicPlayer } from '@/hooks/useMusicPlayer';
 import { SpotifyTrack } from '@/lib/spotify';
 import Link from 'next/link';
 import { useEngagement } from '@/hooks/useEngagement';
+import MascotGlow from '@/components/ui/MascotGlow';
 
 const CalibrationWizard = dynamic(
   () => import('@/components/tracking/CalibrationWizard'),
@@ -239,55 +240,48 @@ export default function TercikyPage() {
     );
   }
 
+  const accent = '#3b82f6';
+
   // Setup
   return (
-    <div className="min-h-screen bg-gray-50/50 px-6 py-8">
+    <div className="min-h-screen bg-[#0a0a0f] px-6 py-8">
       <div className="max-w-lg mx-auto">
-        <Link href="/" className="inline-flex items-center gap-1.5 text-sm text-gray-400 hover:text-gray-600 transition-colors mb-10">
-          <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-            <path strokeLinecap="round" strokeLinejoin="round" d="M15 19l-7-7 7-7" />
-          </svg>
+        <Link href="/dashboard" className="inline-flex items-center gap-1.5 text-sm text-white/40 hover:text-white/70 transition-colors mb-8">
+          <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M15 19l-7-7 7-7" /></svg>
           Back
         </Link>
 
-        <div className="mb-10">
-          <h1 className="text-4xl font-extrabold text-gray-900 mb-3 tracking-tight">Targets</h1>
-          <p className="text-gray-400 leading-relaxed">
-            Targets appear on the field. Hit them with the ball as fast as possible.
-          </p>
+        {/* Mascot + Title */}
+        <div className="flex items-center gap-5 mb-8">
+          <MascotGlow src="/images/mascots/mascot-targets.png" color={accent} size={90} />
+          <div>
+            <h1 className="text-3xl font-extrabold text-white tracking-tight">Targets</h1>
+            <p className="text-white/40 text-sm mt-1">Hit the targets as fast as you can</p>
+          </div>
         </div>
 
-        <div className="space-y-7">
-          {/* Input mode */}
+        <div className="space-y-5">
+          {/* Mode */}
           <div>
-            <label className="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-3 block">Input mode</label>
-            <div className="flex gap-3">
-              <button
-                onClick={() => setInputMode('camera')}
-                className={`flex-1 rounded-2xl p-4 border-2 transition-all ${inputMode === 'camera' ? 'border-green-500 bg-green-50' : 'border-gray-200 bg-white hover:border-gray-300'}`}
-              >
-                <div className="text-sm font-semibold text-gray-900">Camera</div>
-                <div className="text-xs text-gray-500 mt-1">Track real ball</div>
+            <label className="text-[10px] font-bold text-white/30 uppercase tracking-[0.2em] mb-2.5 block">Mode</label>
+            <div className="flex gap-2.5">
+              <button onClick={() => setInputMode('camera')} className={`flex-1 rounded-2xl py-3.5 border-2 transition-all text-sm font-semibold ${inputMode === 'camera' ? `border-[${accent}] bg-[${accent}]/10 text-[${accent}]` : 'border-white/8 bg-white/3 text-white/50 hover:border-white/15'}`} style={inputMode === 'camera' ? { borderColor: accent, backgroundColor: accent + '15', color: accent } : {}}>
+                Camera
               </button>
-              <button
-                onClick={() => setInputMode('demo')}
-                className={`flex-1 rounded-2xl p-4 border-2 transition-all ${inputMode === 'demo' ? 'border-yellow-500 bg-yellow-50' : 'border-gray-200 bg-white hover:border-gray-300'}`}
-              >
-                <div className="text-sm font-semibold text-gray-900">Demo (mouse)</div>
-                <div className="text-xs text-gray-500 mt-1">Testing without camera</div>
+              <button onClick={() => setInputMode('demo')} className={`flex-1 rounded-2xl py-3.5 border-2 transition-all text-sm font-semibold ${inputMode === 'demo' ? `border-[${accent}] bg-[${accent}]/10 text-[${accent}]` : 'border-white/8 bg-white/3 text-white/50 hover:border-white/15'}`} style={inputMode === 'demo' ? { borderColor: accent, backgroundColor: accent + '15', color: accent } : {}}>
+                Demo (mouse)
               </button>
             </div>
           </div>
 
+          {/* Calibration */}
           {inputMode === 'camera' && (
-            <div className="flex items-center justify-between card p-5">
+            <div className="flex items-center justify-between bg-white/3 border border-white/8 rounded-2xl p-4">
               <div>
-                <div className="text-sm font-semibold text-gray-900">Camera calibration</div>
-                <div className="text-xs text-gray-500 mt-1">
-                  {calibration ? `Saved (${calibration.resolution.width}x${calibration.resolution.height})` : 'Not configured'}
-                </div>
+                <div className="text-sm font-semibold text-white">Calibration</div>
+                <div className="text-xs text-white/30 mt-0.5">{calibration ? 'Saved' : 'Not configured'}</div>
               </div>
-              <button onClick={() => setPhase('calibration')} className="text-sm font-medium text-green-600 bg-green-50 hover:bg-green-100 px-4 py-2 rounded-xl transition-all">
+              <button onClick={() => setPhase('calibration')} className="text-xs font-bold px-4 py-2 rounded-xl transition-all" style={{ color: accent, backgroundColor: accent + '15' }}>
                 {calibration ? 'Recalibrate' : 'Calibrate'}
               </button>
             </div>
@@ -295,16 +289,10 @@ export default function TercikyPage() {
 
           {/* Difficulty */}
           <div>
-            <label className="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-3 block">Difficulty</label>
+            <label className="text-[10px] font-bold text-white/30 uppercase tracking-[0.2em] mb-2.5 block">Difficulty</label>
             <div className="flex gap-2.5">
               {(['easy', 'medium', 'hard'] as const).map((d) => (
-                <button
-                  key={d}
-                  onClick={() => setDifficulty(d)}
-                  className={`flex-1 rounded-2xl py-3.5 border-2 transition-all text-sm font-semibold ${
-                    difficulty === d ? 'border-green-500 bg-green-50 text-green-600' : 'border-gray-200 bg-white text-gray-500 hover:border-gray-300'
-                  }`}
-                >
+                <button key={d} onClick={() => setDifficulty(d)} className="flex-1 rounded-2xl py-3.5 border-2 transition-all text-sm font-semibold" style={difficulty === d ? { borderColor: accent, backgroundColor: accent + '15', color: accent } : { borderColor: 'rgba(255,255,255,0.08)', backgroundColor: 'rgba(255,255,255,0.02)', color: 'rgba(255,255,255,0.5)' }}>
                   {d === 'easy' ? 'Easy' : d === 'medium' ? 'Medium' : 'Hard'}
                 </button>
               ))}
@@ -313,17 +301,11 @@ export default function TercikyPage() {
 
           {/* Duration */}
           <div>
-            <label className="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-3 block">Duration</label>
+            <label className="text-[10px] font-bold text-white/30 uppercase tracking-[0.2em] mb-2.5 block">Duration</label>
             <div className="flex gap-2.5">
               {([30, 60, 90] as const).map((d) => (
-                <button
-                  key={d}
-                  onClick={() => setDuration(d)}
-                  className={`flex-1 rounded-2xl py-3.5 border-2 transition-all text-sm font-semibold ${
-                    duration === d ? 'border-green-500 bg-green-50 text-green-600' : 'border-gray-200 bg-white text-gray-500 hover:border-gray-300'
-                  }`}
-                >
-                  {d} seconds
+                <button key={d} onClick={() => setDuration(d)} className="flex-1 rounded-2xl py-3.5 border-2 transition-all text-sm font-semibold" style={duration === d ? { borderColor: accent, backgroundColor: accent + '15', color: accent } : { borderColor: 'rgba(255,255,255,0.08)', backgroundColor: 'rgba(255,255,255,0.02)', color: 'rgba(255,255,255,0.5)' }}>
+                  {d}s
                 </button>
               ))}
             </div>
@@ -331,7 +313,8 @@ export default function TercikyPage() {
 
           <BackgroundMusic spotify={spotify} onSelect={setBgTrack} selectedTrack={bgTrack} autoOpen={spotifyReturned} />
 
-          <button onClick={startGame} className="btn-primary w-full text-lg py-4 mt-2">
+          {/* Start */}
+          <button onClick={startGame} className="w-full text-white font-bold text-lg py-4 rounded-full transition-all hover:brightness-110" style={{ backgroundColor: accent }}>
             Start training
           </button>
         </div>

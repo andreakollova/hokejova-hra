@@ -26,10 +26,18 @@ interface AvatarData {
   photoBase64: string | null;
 }
 
+interface ProfileData {
+  sport: string;
+  mascotId: string;
+  color: string;
+  onboarded: boolean;
+}
+
 interface EngagementData {
   streak: StreakData;
   xp: XPData;
   avatar: AvatarData;
+  profile: ProfileData;
   personalBest: Record<string, number>;
   totalGamesPlayed: number;
   totalMinutesPlayed: number;
@@ -63,6 +71,12 @@ const defaultEngagement: EngagementData = {
   },
   avatar: {
     photoBase64: null,
+  },
+  profile: {
+    sport: '',
+    mascotId: '',
+    color: '',
+    onboarded: false,
   },
   personalBest: {},
   totalGamesPlayed: 0,
@@ -424,6 +438,16 @@ export function useEngagement() {
     }
   }, [persist]);
 
+  const setProfile = useCallback(
+    (profile: { sport: string; mascotId: string; color: string }) => {
+      const next = { ...data, profile: { ...profile, onboarded: true } };
+      persist(next);
+    },
+    [data, persist],
+  );
+
+  const getProfile = useCallback(() => data.profile || { sport: '', mascotId: '', color: '', onboarded: false }, [data]);
+
   return {
     loaded,
     data,
@@ -438,5 +462,7 @@ export function useEngagement() {
     clearUnfroze,
     getUnlockedAchievements,
     checkAchievementsNow,
+    setProfile,
+    getProfile,
   };
 }
