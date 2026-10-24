@@ -381,6 +381,38 @@ export default function NastaveniaPage() {
           </section>
         )}
 
+        {/* Subscription Management */}
+        <section className="mb-10">
+          <h2 className="text-sm font-medium text-gray-400 uppercase tracking-wider mb-3">Subscription</h2>
+          <div className="card p-6">
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-sm font-medium text-gray-900">Manage your subscription</p>
+                <p className="text-xs text-gray-400 mt-0.5">View billing history, update payment method, or cancel your subscription.</p>
+              </div>
+              <button
+                onClick={async () => {
+                  const email = auth.user?.email;
+                  if (!email) { alert('Please sign in with email to manage your subscription.'); return; }
+                  try {
+                    const res = await fetch('/api/subscription/portal', {
+                      method: 'POST',
+                      headers: { 'Content-Type': 'application/json' },
+                      body: JSON.stringify({ email }),
+                    });
+                    const data = await res.json();
+                    if (data.url) window.location.href = data.url;
+                    else alert(data.error || 'No active subscription found.');
+                  } catch { alert('Connection error'); }
+                }}
+                className="text-sm font-medium text-green-600 bg-green-50 hover:bg-green-100 px-4 py-2 rounded-xl transition-all"
+              >
+                Manage
+              </button>
+            </div>
+          </div>
+        </section>
+
         {/* Club Membership */}
         <section className="mb-10">
           <h2 className="text-sm font-medium text-gray-400 uppercase tracking-wider mb-3">Club membership</h2>
