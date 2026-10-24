@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import Stripe from 'stripe';
 import { getClubPlan } from '@/lib/club-plans';
 
-const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!);
+const getStripe = () => new Stripe(process.env.STRIPE_SECRET_KEY!);
 
 export async function POST(req: NextRequest) {
   try {
@@ -11,7 +11,7 @@ export async function POST(req: NextRequest) {
     if (!plan) return NextResponse.json({ error: 'Invalid plan' }, { status: 400 });
     if (!clubName || !email) return NextResponse.json({ error: 'Missing club name or email' }, { status: 400 });
 
-    const session = await stripe.checkout.sessions.create({
+    const session = await getStripe().checkout.sessions.create({
       mode: 'subscription',
       customer_email: email,
       metadata: { planId, clubName, seats: String(plan.seats) },

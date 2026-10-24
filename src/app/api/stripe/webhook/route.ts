@@ -3,7 +3,7 @@ import Stripe from 'stripe';
 import { createServiceClient } from '@/lib/supabase-server';
 import { sendSlackMessage } from '@/lib/slack';
 
-const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!);
+const getStripe = () => new Stripe(process.env.STRIPE_SECRET_KEY!);
 
 export async function POST(req: NextRequest) {
   const body = await req.text();
@@ -11,7 +11,7 @@ export async function POST(req: NextRequest) {
 
   let event: Stripe.Event;
   try {
-    event = stripe.webhooks.constructEvent(body, sig, process.env.STRIPE_WEBHOOK_SECRET!);
+    event = getStripe().webhooks.constructEvent(body, sig, process.env.STRIPE_WEBHOOK_SECRET!);
   } catch {
     return NextResponse.json({ error: 'Invalid signature' }, { status: 400 });
   }
@@ -132,7 +132,7 @@ export async function POST(req: NextRequest) {
     const sub = invoice.subscription as string;
     if (sub && invoice.billing_reason === 'subscription_cycle') {
       // Recurring payment
-      const subscription = await stripe.subscriptions.retrieve(sub);
+      const subscription = await getStripe().subscriptions.retrieve(sub);
       const username = subscription.metadata?.username;
       if (username) {
         await sendSlackMessage(`💰 *${username}* — recurring payment received (€${((invoice.amount_paid || 0) / 100).toFixed(2)})`);
