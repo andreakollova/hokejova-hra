@@ -615,8 +615,8 @@ function HeroBanner({ isLoggedIn, onLoginClick }: { isLoggedIn: boolean; onLogin
           <div className="relative">
             <Image src="/images/hero-clean.png" alt="Hockey Beats" width={1942} height={809} className="w-full h-auto block rounded-2xl" priority />
             <div className="absolute top-3 right-3 sm:top-5 sm:right-5 flex gap-2">
-              <Image src="/images/badge-1.png" alt="Top 1 Game" width={70} height={70} className="w-12 h-12 sm:w-16 sm:h-16 drop-shadow-lg" />
-              <Image src="/images/badge-2.png" alt="Free to Play" width={90} height={60} className="w-16 h-10 sm:w-20 sm:h-14 drop-shadow-lg" />
+              <Image src="/images/badge-1.png" alt="Top 1 Game" width={70} height={70} className="w-16 h-16 sm:w-24 sm:h-24 drop-shadow-lg" />
+              <Image src="/images/badge-2.png" alt="Free to Play" width={90} height={60} className="w-20 h-auto sm:w-28 sm:h-auto drop-shadow-lg" />
             </div>
           </div>
           <div className="mt-6 flex flex-wrap items-center gap-4 px-6 sm:px-10">
