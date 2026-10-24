@@ -88,14 +88,22 @@ export default function NastaveniaPage() {
               <div>
                 <p className="text-lg font-semibold text-gray-900">{settings.username}</p>
                 <p className="text-sm text-gray-400">Logged in user</p>
-                {avatar && (
+                <div className="flex gap-3 mt-2">
                   <button
-                    onClick={() => setAvatar(null)}
-                    className="text-xs text-gray-400 hover:text-red-500 transition-colors mt-1"
+                    onClick={() => fileInputRef.current?.click()}
+                    className="text-xs font-medium text-green-600 hover:text-green-700 bg-green-50 hover:bg-green-100 px-3 py-1.5 rounded-lg transition-all"
                   >
-                    Remove photo
+                    {avatar ? 'Change photo' : 'Upload photo'}
                   </button>
-                )}
+                  {avatar && (
+                    <button
+                      onClick={() => setAvatar(null)}
+                      className="text-xs text-gray-400 hover:text-red-500 transition-colors px-3 py-1.5"
+                    >
+                      Remove
+                    </button>
+                  )}
+                </div>
               </div>
             </div>
           </div>
