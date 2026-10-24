@@ -33,7 +33,7 @@ export default function Onboarding({ onComplete, defaultName }: OnboardingProps)
         {step === 0 && (
           <div className="text-center">
             <h1 className="text-3xl font-extrabold text-white tracking-tight mb-2">What should we call you?</h1>
-            <p className="text-white/50 text-sm mb-8">Pick a username for your profile and leaderboards.</p>
+            <p className="text-white text-sm mb-8">Pick a username for your profile and leaderboards.</p>
             <input
               type="text"
               value={username}
@@ -43,7 +43,7 @@ export default function Onboarding({ onComplete, defaultName }: OnboardingProps)
               maxLength={20}
             />
             <button onClick={() => { if (username.trim().length >= 2) setStep(1); }} disabled={username.trim().length < 2} className="w-full py-4 rounded-full bg-emerald-500 text-white font-bold transition-all disabled:opacity-30 hover:bg-emerald-400">Next</button>
-            <p className="text-xs text-white/20 mt-3">Min 2 characters. This will be visible to other players.</p>
+            <p className="text-xs text-white/50 mt-3">Min 2 characters. This will be visible to other players.</p>
           </div>
         )}
 
@@ -51,7 +51,7 @@ export default function Onboarding({ onComplete, defaultName }: OnboardingProps)
         {step === 1 && (
           <div className="text-center">
             <h1 className="text-3xl font-extrabold text-white tracking-tight mb-2">What do you play?</h1>
-            <p className="text-white/50 text-sm mb-8">Select your sport</p>
+            <p className="text-white text-sm mb-8">Select your sport</p>
             <div className="space-y-3">
               {SPORTS.map(s => (
                 <button
@@ -73,7 +73,7 @@ export default function Onboarding({ onComplete, defaultName }: OnboardingProps)
           <div>
             <div className="text-center mb-6">
               <h1 className="text-3xl font-extrabold text-white tracking-tight mb-2">Join the crew</h1>
-              <p className="text-white/50 text-sm">Pick your character. You can always switch later.</p>
+              <p className="text-white text-sm">Pick your character. You can always switch later.</p>
             </div>
             <div className="flex flex-col sm:flex-row gap-6">
               {/* Selected mascot - large */}
@@ -113,7 +113,7 @@ export default function Onboarding({ onComplete, defaultName }: OnboardingProps)
               </div>
             </div>
             <div className="flex gap-3 mt-6">
-              <button onClick={() => setStep(1)} className="flex-1 py-3.5 rounded-full border-2 border-white/8 text-white/50 text-sm font-semibold transition-all hover:border-white/15">Back</button>
+              <button onClick={() => setStep(1)} className="flex-1 py-3.5 rounded-full border-2 border-white/8 text-white text-sm font-semibold transition-all hover:border-white/15">Back</button>
               <button onClick={() => { if (mascotId) setStep(3); }} disabled={!mascotId} className="flex-1 py-3.5 rounded-full bg-emerald-500 text-white text-sm font-bold transition-all disabled:opacity-30 hover:bg-emerald-400">Next</button>
             </div>
           </div>
@@ -123,17 +123,21 @@ export default function Onboarding({ onComplete, defaultName }: OnboardingProps)
         {step === 3 && (
           <div className="text-center">
             <h1 className="text-3xl font-extrabold text-white tracking-tight mb-2">Pick your color</h1>
-            <p className="text-white/50 text-sm mb-6">Your profile accent color</p>
+            <p className="text-white text-sm mb-6">Your profile accent color</p>
 
             {/* Preview */}
             {selectedMascot && (
               <div className="mb-6 flex flex-col items-center">
-                <div className="relative w-20 h-20 mb-2">
-                  <div className="absolute inset-0 rounded-full animate-pulse-glow" style={{ background: `radial-gradient(circle, ${color || '#22c55e'}40 0%, transparent 70%)`, transform: 'scale(1.6)' }} />
-                  <Image src={selectedMascot.image} alt={selectedMascot.name} width={80} height={80} className="relative z-10 rounded-xl" />
+                <div className="relative w-24 h-24 mb-3">
+                  {/* Color glow behind mascot */}
+                  <div className="absolute inset-0 rounded-full" style={{ background: color ? `radial-gradient(circle, ${color}60 0%, ${color}20 50%, transparent 70%)` : 'radial-gradient(circle, #22c55e40 0%, transparent 70%)', transform: 'scale(2)' }} />
+                  {color && <div className="absolute inset-0 rounded-full animate-pulse-glow" style={{ background: `radial-gradient(circle, ${color}40 0%, transparent 60%)`, transform: 'scale(2.2)' }} />}
+                  <div className="relative z-10 w-24 h-24 rounded-full overflow-hidden border-3" style={{ borderColor: color || '#22c55e' }}>
+                    <Image src={selectedMascot.imageHappy} alt={selectedMascot.name} width={96} height={96} className="w-full h-full object-cover" />
+                  </div>
                 </div>
                 <div className="text-lg font-bold text-white">{username}</div>
-                <div className="text-sm text-emerald-400 font-bold">{selectedMascot.adjective} {selectedMascot.name}</div>
+                <div className="text-sm font-bold" style={{ color: color || '#22c55e' }}>{selectedMascot.adjective} {selectedMascot.name}</div>
               </div>
             )}
 
@@ -150,7 +154,7 @@ export default function Onboarding({ onComplete, defaultName }: OnboardingProps)
               ))}
             </div>
             <div className="flex gap-3">
-              <button onClick={() => setStep(2)} className="flex-1 py-3.5 rounded-full border-2 border-white/8 text-white/50 text-sm font-semibold transition-all hover:border-white/15">Back</button>
+              <button onClick={() => setStep(2)} className="flex-1 py-3.5 rounded-full border-2 border-white/8 text-white text-sm font-semibold transition-all hover:border-white/15">Back</button>
               <button onClick={() => { if (color) onComplete({ sport, mascotId, color, username: username.trim() }); }} disabled={!color} className="flex-1 py-3.5 rounded-full bg-emerald-500 text-white text-sm font-bold transition-all disabled:opacity-30 hover:bg-emerald-400">Let&apos;s go!</button>
             </div>
           </div>
