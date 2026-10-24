@@ -93,7 +93,7 @@ export default function Home() {
       <header className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${scrolled ? 'bg-white shadow-[0_1px_20px_-6px_rgba(0,0,0,0.08)]' : ''}`}>
         <div className="max-w-7xl mx-auto px-6 sm:px-10 py-4 flex justify-between items-center">
           <Link href="/" className="flex items-center gap-2">
-            <Image src="/images/hb-logo-hero-dark.png" alt="Hockey Beats" width={180} height={48} className="h-8 w-auto" />
+            <Image src="/images/hb-logo-hero-dark.png" alt="Hockey Beats" width={240} height={64} className="h-10 sm:h-12 w-auto" />
           </Link>
           <nav className="flex items-center gap-5 sm:gap-7">
             <a href="#how-it-works" className="text-sm font-medium text-gray-600 hover:text-[#101828] transition-colors hidden sm:block">How it works</a>
