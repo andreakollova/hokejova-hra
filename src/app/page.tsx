@@ -413,7 +413,7 @@ export default function Home() {
           <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-10 mb-14">
             {/* Logo + description */}
             <div className="sm:col-span-2 lg:col-span-1">
-              <Image src="/images/hb-secondary-light.png" alt="Hockey Beats" width={140} height={130} className="h-20 w-auto mb-4" />
+              <Image src="/images/hb-secondary-light.png" alt="Hockey Beats" width={180} height={165} className="h-28 w-auto mb-4" />
               <p className="text-sm text-[#101828]/60 leading-relaxed">Interactive practice for ice hockey, field hockey and floorball.</p>
             </div>
 
@@ -455,7 +455,6 @@ export default function Home() {
 
           <div className="pt-8 border-t border-gray-200">
             <p className="text-sm text-[#101828]/40">© {new Date().getFullYear()} Hockey Beats by <a href="https://drixton.com" target="_blank" rel="noopener noreferrer" className="hover:text-[#101828]/70 transition-colors">DRIXTON s. r. o.</a> All rights reserved.</p>
-            <p className="text-xs text-[#101828]/25 mt-1">Apple Music is a trademark of Apple Inc.</p>
           </div>
         </div>
       </footer>
