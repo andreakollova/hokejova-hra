@@ -140,6 +140,22 @@ export async function POST(req: NextRequest) {
     }
   }
 
+  // Payment failed
+  if (event.type === 'invoice.payment_failed') {
+    const invoice = event.data.object as any;
+    const sub = invoice.subscription as string;
+    if (sub) {
+      try {
+        const subscription = await getStripe().subscriptions.retrieve(sub);
+        const username = subscription.metadata?.username;
+        const clubName = subscription.metadata?.clubName;
+        await sendSlackMessage(`⚠️ *Payment failed*${username ? ` for ${username}` : ''}${clubName ? ` (club: ${clubName})` : ''} — €${((invoice.amount_due || 0) / 100).toFixed(2)}`);
+      } catch {
+        await sendSlackMessage(`⚠️ *Payment failed* for subscription ${sub}`);
+      }
+    }
+  }
+
   // Subscription cancelled
   if (event.type === 'customer.subscription.deleted') {
     const sub = event.data.object as Stripe.Subscription;
