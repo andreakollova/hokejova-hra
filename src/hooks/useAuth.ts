@@ -44,13 +44,14 @@ export function useAuth() {
   }, []);
 
   const signInWithGoogle = useCallback(async () => {
-    await getSupabaseBrowser().auth.signInWithOAuth({
+    const { data, error } = await getSupabaseBrowser().auth.signInWithOAuth({
       provider: 'google',
       options: {
-        redirectTo: window.location.origin + '/auth/callback?next=/dashboard',
-        queryParams: { access_type: 'offline', prompt: 'consent' },
+        redirectTo: window.location.origin + '/auth/callback',
+        skipBrowserRedirect: false,
       },
     });
+    if (error) console.error('Google OAuth error:', error);
   }, []);
 
   const signInWithApple = useCallback(async () => {
