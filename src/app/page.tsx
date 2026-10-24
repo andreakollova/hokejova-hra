@@ -642,11 +642,12 @@ function HeroBanner({ isLoggedIn, onLoginClick }: { isLoggedIn: boolean; onLogin
               <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}><path strokeLinecap="round" strokeLinejoin="round" d="M8.25 4.5l7.5 7.5-7.5 7.5" /></svg>
             </a>
             <div className="hidden sm:block w-px h-8 bg-gray-200 mx-2" />
-            <div className="hidden sm:flex items-center gap-3">
-              <Image src="/images/stick-icehockey-dark.png" alt="Ice Hockey" width={28} height={28} className="w-7 h-7 object-contain opacity-40 hover:opacity-80 transition-opacity" title="Ice Hockey" />
-              <Image src="/images/stick-fieldhockey-dark.png" alt="Field Hockey" width={28} height={28} className="w-7 h-7 object-contain opacity-40 hover:opacity-80 transition-opacity" title="Field Hockey" />
-              <Image src="/images/stick-floorball-dark.png" alt="Floorball" width={28} height={28} className="w-7 h-7 object-contain opacity-40 hover:opacity-80 transition-opacity" title="Floorball" />
-              <span className="text-xs font-medium text-gray-300">+ any stick</span>
+            <div className="hidden sm:flex items-center gap-5 text-xs text-gray-500">
+              <span className="text-gray-400 font-medium">Compatible with</span>
+              <span className="flex items-center gap-1.5"><Image src="/images/stick-icehockey-dark.png" alt="Ice Hockey" width={20} height={20} className="w-5 h-5 object-contain" /> Ice Hockey</span>
+              <span className="flex items-center gap-1.5"><Image src="/images/stick-fieldhockey-dark.png" alt="Field Hockey" width={20} height={20} className="w-5 h-5 object-contain" /> Field Hockey</span>
+              <span className="flex items-center gap-1.5"><Image src="/images/stick-floorball-dark.png" alt="Floorball" width={20} height={20} className="w-5 h-5 object-contain" /> Floorball</span>
+              <span className="flex items-center gap-1.5"><svg className="w-5 h-5 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}><path strokeLinecap="round" strokeLinejoin="round" d="M12 6.75a.75.75 0 110-1.5.75.75 0 010 1.5zM12 12.75a.75.75 0 110-1.5.75.75 0 010 1.5zM12 18.75a.75.75 0 110-1.5.75.75 0 010 1.5z" /></svg> Any Hockey Sport</span>
             </div>
           </div>
         </div>
