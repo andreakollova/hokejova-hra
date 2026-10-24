@@ -172,6 +172,35 @@ export default function Home() {
               <a href="#how-it-works" className="btn-secondary px-8 py-4">How It Works</a>
             </div>
           </div>
+
+          {/* Game carousel inline */}
+          <div className="relative -mx-6 sm:-mx-10 mt-16">
+            <div className="flex gap-5 overflow-x-auto px-6 sm:px-10 pb-4 snap-x snap-mandatory scrollbar-hide" style={{ scrollbarWidth: 'none', msOverflowStyle: 'none', WebkitOverflowScrolling: 'touch' }}>
+              {[
+                { href: '/trening', img: '/images/game-hockeybeats.png', name: 'HockeyBeats', bg: '#e8e0d4' },
+                { href: '/space', img: '/images/game-spaceinvaders.png', name: 'Space Invaders', bg: '#0f172a' },
+                { href: '/jelly-stack', img: '/images/game-jellystack.png', name: 'Jelly Stack', bg: '#2d1b3d' },
+                { href: '/orbit-hop', img: '/images/game-orbithop.png', name: 'Orbit Hop', bg: '#1a2332' },
+                { href: '/neon-drift', img: '/images/game-neondrift.png', name: 'Neon Drift', bg: '#0a1628' },
+                { href: '/brick-rush', img: '/images/game-brickrush.png', name: 'Brick Rush', bg: '#111111' },
+                { href: '/color-catch', img: '/images/game-colorcatch.png', name: 'Color Catch', bg: '#111111' },
+                { href: '/target-smash', img: '/images/game-targets.png', name: 'Target Smash', bg: '#1a1a2e' },
+                { href: '/laser-maze', img: '/images/game-lasermaze.png', name: 'Laser Maze', bg: '#0f1f0f' },
+                { href: '/magnet-flip', img: '/images/game-magnetflip.png', name: 'Magnet Flip', bg: '#1a1025' },
+                { href: '/terciky', img: '/images/game-targets-classic.png', name: 'Targets', bg: '#f3f4f6' },
+              ].map((game) => (
+                <div key={game.href} onClick={() => window.location.href = game.href} className="group block flex-shrink-0 snap-start cursor-pointer" style={{ width: 'clamp(160px, 30vw, 200px)' }}>
+                  <div className="game-tile rounded-2xl overflow-hidden relative aspect-[3/4]" style={{ background: game.bg }}>
+                    <Image src={game.img} alt={game.name} fill className="object-cover group-hover:scale-105 transition-all duration-700" />
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent pointer-events-none" />
+                    <div className="absolute bottom-0 left-0 right-0 p-3 pointer-events-none">
+                      <div className="text-xs font-bold text-white">{game.name}</div>
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
         </section>
 
         {/* 02 - The Game */}
@@ -192,10 +221,10 @@ export default function Home() {
                 <div className="rounded-3xl overflow-hidden">
                   <Image src="/images/hero-indoor.png" alt="Player practising" width={600} height={450} className="w-full h-auto" />
                 </div>
-                <div className="absolute -right-4 -bottom-4 sm:right-4 sm:bottom-4 animate-[float_3s_ease-in-out_infinite]">
+                <div className="absolute -left-6 -bottom-6 sm:left-2 sm:-bottom-4 animate-[float_3s_ease-in-out_infinite]">
                   <div className="relative">
-                    <div className="absolute inset-0 rounded-full" style={{ background: 'radial-gradient(circle, #a855f740 0%, transparent 70%)', transform: 'scale(2)' }} />
-                    <Image src="/images/mascots/mascot-magnet-flip.webp" alt="Magno" width={90} height={90} className="relative z-10 drop-shadow-xl" />
+                    <div className="absolute inset-0 rounded-full" style={{ background: 'radial-gradient(circle, #a855f740 0%, transparent 70%)', transform: 'scale(2.2)' }} />
+                    <Image src="/images/mascots/mascot-magnet-flip.webp" alt="Magno" width={130} height={130} className="relative z-10 drop-shadow-xl" />
                   </div>
                 </div>
               </div>
