@@ -166,18 +166,18 @@ export default function Home() {
 
         {/* 01 - Hero subtitle */}
         <section className="py-14 sm:py-20">
-          <div className="max-w-6xl mx-auto px-6 sm:px-10">
+          <div className="max-w-6xl mx-auto px-6 sm:px-10 text-center">
             <p className="text-xs font-bold uppercase tracking-[0.2em] text-gray-400 mb-4">01 / The game</p>
             <h2 className="text-3xl sm:text-5xl font-extrabold text-[#101828] leading-[1.08] tracking-tight">Turn your hockey stick<br />into a game controller.</h2>
-            <p className="mt-6 text-lg text-gray-500 max-w-2xl leading-relaxed">Meet Hockey Beats, the rhythm-based hockey game where you play with a real stick and ball. Follow the beat, hit your targets and turn every session into a new high score.</p>
-            <div className="mt-8 flex flex-wrap gap-4">
+            <p className="mt-6 text-lg text-gray-500 max-w-2xl mx-auto leading-relaxed">Meet Hockey Beats, the rhythm-based hockey game where you play with a real stick and ball. Follow the beat, hit your targets and turn every session into a new high score.</p>
+            <div className="mt-8 flex flex-wrap gap-4 justify-center">
               <Link href="/dashboard" className="btn-primary px-8 py-4">Play Now</Link>
               <a href="#how-it-works" className="btn-secondary px-8 py-4">How It Works</a>
             </div>
           </div>
 
           {/* Game carousel inline */}
-          <div className="relative -mx-6 sm:-mx-10 mt-16">
+          <div className="max-w-6xl mx-auto mt-16">
             <div className="flex gap-5 overflow-x-auto px-6 sm:px-10 pb-4 snap-x snap-mandatory scrollbar-hide" style={{ scrollbarWidth: 'none', msOverflowStyle: 'none', WebkitOverflowScrolling: 'touch' }}>
               {[
                 { href: '/trening', img: '/images/game-hockeybeats.png', name: 'HockeyBeats', bg: '#e8e0d4' },
